@@ -8,9 +8,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatch;
@@ -36,9 +38,9 @@ public class Database {
     private DatabaseReference mSuperMatchRef;
     private DatabaseReference mTeamRef;
 
-    private String mEventId;
+    private String mEventKey;
 
-    private List<String> mEvents;
+    private static Set<String> mEvents;
     private Map<String, Match> mSchedule;
     private Map<String, TeamInMatch> mPartialMatches;
     private Map<String, SuperMatch> mSuperMatches;
@@ -46,14 +48,14 @@ public class Database {
 
     private static Database mSingleton;
 
-    public static Database getInstance(String eventId)
+    public static Database getInstance(String eventKey)
     {
         if(mSingleton == null)
         {
             mSingleton = new Database();
         }
 
-        mSingleton.setEventId(eventId);
+        mSingleton.setEventKey(eventKey);
         return  mSingleton;
     }
 
@@ -62,6 +64,8 @@ public class Database {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseDatabase.setPersistenceEnabled(true);
         mRootRef = mFirebaseDatabase.getReference();
+
+        mEvents = new HashSet<>();
 
         //Root reference's children are the events
         mRootRef.addChildEventListener(new ChildEventListener() {
@@ -94,12 +98,17 @@ public class Database {
         });
     }
 
-    private void setEventId(String eventId)
+    public static Set<String> getEvents()
     {
-        if(mEventId == eventId)
+        return mEvents;
+    }
+
+    private void setEventKey(String eventKey)
+    {
+        if(eventKey == "" || mEventKey == eventKey)
             return;
 
-        mEventRef = mRootRef.child(eventId);
+        mEventRef = mRootRef.child(eventKey);
 
         mScheduleRef = mEventRef.child("schedule");
         mSchedule = new HashMap<>();
@@ -228,6 +237,8 @@ public class Database {
                 Log.d(TAG, "teams.onCancelled");
             }
         });
+
+        mEventKey = eventKey;
     }
 
     /*
