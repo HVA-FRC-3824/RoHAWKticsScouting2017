@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomScoutView">
+        <attr name="label" format="string" />
+        <attr name="key" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomRadioButtons">
+        <attr name="radio_values" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomSpinner">
+        <attr name="spinner_values" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomAutoCompleteTextView">
+        <attr name="autocomplete_values" format="reference"/>
+    </declare-styleable>
+
+</resources>
