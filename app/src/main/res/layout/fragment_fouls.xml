@@ -7,4 +7,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <frc3824.rohawkticsscouting2017.Views.CustomCounter
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/foul_standard"
+        app:label="Foul:"
+        app:key="foul_standard"/>
+
+    <frc3824.rohawkticsscouting2017.Views.CustomCounter
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/foul_tech"
+        app:label="Tech Foul:"
+        app:key="foul_tech"/>
+
+    <frc3824.rohawkticsscouting2017.Views.CustomCheckbox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/foul_yellow_card"
+        app:label="Yellow card:"
+        app:key="foul_yellow_card"/>
+
+    <frc3824.rohawkticsscouting2017.Views.CustomCheckbox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/foul_red_card"
+        app:label="Red Card:"
+        app:key="foul_red_card"/>
+
 </LinearLayout>

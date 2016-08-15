@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        />
+
+    <item
+        android:id="@+id/match_list"
+        android:title="Match List"
+        />
+
+    <item
+        android:id="@+id/save"
+        android:title="Save"
+        />
+
+    <item
+        android:id="@+id/previous_match"
+        android:title="Previous Match"
+        />
+
+    <item
+        android:id="@+id/next_match"
+        android:title="Next Match"
+        />
+
+</menu>

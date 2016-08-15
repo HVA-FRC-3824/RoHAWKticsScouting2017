@@ -22,7 +22,7 @@ public abstract class ScoutFragment extends Fragment {
     protected ScoutMap mValueMap;
 
     public ScoutFragment() {
-
+        mValueMap = new ScoutMap();
     }
 
     public void setValueMap(ScoutMap map)

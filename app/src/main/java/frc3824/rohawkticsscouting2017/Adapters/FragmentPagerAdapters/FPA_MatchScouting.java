@@ -9,6 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.AutoFragment;
+import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.EndgameFragment;
+import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.FoulsFragment;
+import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.PostMatchFragment;
+import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.TeleopFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
@@ -22,7 +27,7 @@ public class FPA_MatchScouting extends FragmentPagerAdapter {
 
     private final static String TAG = "FPA_MatchScouting";
 
-    private String mTabTitles[] = new String[]{"Autonomous", "Teleop", "Endgame", "Post-Match", "Fouls"};
+    private String mTabTitles[] = new String[]{"Autonomous", "Teleop", "Endgame", "Fouls", "Post-Match"};
 
     //TODO: Check if this works or if individual constructors are needed (weird bug with it last year)
     private Map<Integer, ScoutFragment> mFragments = new HashMap<>();
@@ -43,16 +48,40 @@ public class FPA_MatchScouting extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         ScoutFragment sf = null;
 
-        switch (position){
-            default:
-                assert false;
+        if(mFragments.containsKey(position))
+        {
+            sf = mFragments.get(position);
+        }
+        else {
+            switch (position) {
+                case 0:
+                    sf = new AutoFragment();
+                    break;
+                case 1:
+                    sf = new TeleopFragment();
+                    break;
+                case 2:
+                    sf = new EndgameFragment();
+                    break;
+                case 3:
+                    sf = new FoulsFragment();
+                    break;
+                case 4:
+                    sf = new PostMatchFragment();
+                    break;
+                default:
+                    assert false;
+            }
+
+            // Set the value map that restores values
+            if(mValueMap != null)
+            {
+                sf.setValueMap(mValueMap);
+            }
+
+            mFragments.put(position, sf);
         }
 
-        // Set the value map that restores values
-        if(mValueMap != null)
-        {
-            sf.setValueMap(mValueMap);
-        }
 
         return sf;
     }
@@ -64,6 +93,17 @@ public class FPA_MatchScouting extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return mTabTitles.length;
+    }
+
+    /**
+     *
+     * @param position - the position of the tab
+     * @return the title of the tab
+     */
+    @Override
+    public String getPageTitle(int position)
+    {
+        return mTabTitles[position];
     }
 
     /**

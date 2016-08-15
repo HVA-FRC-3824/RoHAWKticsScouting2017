@@ -59,4 +59,38 @@ public interface Constants {
 
     }
 
+    interface Match_Scouting
+    {
+        interface Autonomous
+        {
+
+        }
+
+        interface Teleop
+        {
+
+        }
+
+        interface Endgame
+        {
+
+        }
+
+        interface Fouls
+        {
+            String FOUL = "foul_standard";
+            String TECH_FOUL = "foul_tech";
+            String YELLOW_CARD = "foul_yellow_card";
+            String RED_CARD = "foul_red_card";
+        }
+
+        interface PostMatch
+        {
+            String DQ = "post_dq";
+            String STOPPED_MOVING = "post_stopped";
+            String NO_SHOW = "post_no_show";
+            String NOTES = "post_notes";
+        }
+    }
+
 }
