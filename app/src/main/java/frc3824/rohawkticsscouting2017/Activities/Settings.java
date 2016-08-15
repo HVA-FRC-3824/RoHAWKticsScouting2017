@@ -30,6 +30,13 @@ import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Team;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TheBlueAlliance;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
+/**
+ * @author frc3824
+ * Created:
+ *
+ * Page that lets the user set all their preferences. Also can pull the event info from
+ * The Blue Alliance
+ */
 public class Settings extends Activity {
 
     private final static String TAG = "Settings";
@@ -208,7 +215,6 @@ public class Settings extends Activity {
 
     public void pullEvent(View view)
     {
-        //TODO: write function to pull the schedule and team list
         mProgressBar.setVisibility(View.VISIBLE);
         new PullEvent().execute(mSharedPreferences.getString(Constants.Settings.EVENT_KEY, ""));
     }
@@ -252,6 +258,7 @@ public class Settings extends Activity {
                     Team team = new Team();
                     team.team_number = tbaTeam.team_number;
                     team.nickname = tbaTeam.nickname;
+                    team.pit_scouted = false;
                     database.setTeam(team);
                     currentIndex++;
                     publishProgress(currentIndex, numberOfTeams);
@@ -290,7 +297,7 @@ public class Settings extends Activity {
                 }
 
             } catch (IOException e) {
-                Log.e(TAG, "Error: pulling event from the blue alliance");
+                Log.e(TAG, "Error: pulling event from The Blue Alliance");
             }
 
             return null;

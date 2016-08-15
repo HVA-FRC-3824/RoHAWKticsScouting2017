@@ -71,6 +71,8 @@ public class ScoutMap {
         return mMap.get(key).getBoolean();
     }
 
+    public void remove(String key) { mMap.remove(key); }
+
     public void clear()
     {
         mMap.clear();

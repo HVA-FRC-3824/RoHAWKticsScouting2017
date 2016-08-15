@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Radio Values -->
+
+
+    <!-- Spinner Values -->
+
+
+    <!-- AutoComplete Values -->
+    <string-array name="programming_language_options">
+        <item>C++</item>
+        <item>Java</item>
+        <item>Labview</item>
+        <!-- The above should really be the only options -->
+        <item>Python</item>
+        <item>C#</item>
+    </string-array>
+
+
+</resources>

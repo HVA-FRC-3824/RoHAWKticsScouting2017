@@ -9,8 +9,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -305,5 +309,61 @@ public class Database {
     public Team getTeam(int team_number)
     {
         return mTeams.get(String.format("T%d", team_number));
+    }
+
+    public ArrayList<Team> getTeams()
+    {
+        ArrayList<Team> teams = new ArrayList<>(mTeams.values());
+        Collections.sort(teams, new Comparator<Team>() {
+            @Override
+            public int compare(Team t1, Team t2) {
+                return Integer.compare(t1.team_number, t2.team_number);
+            }
+        });
+        return teams;
+    }
+
+    public int getTeamNumberBefore(int team_number)
+    {
+        ArrayList<Team> teams = getTeams();
+
+        for(int i = 0; i < teams.size(); i++)
+        {
+            if(teams.get(i).team_number == team_number)
+            {
+                if(i == 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return teams.get(i - 1).team_number;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    public int getTeamNumberAfter(int team_number)
+    {
+        ArrayList<Team> teams = getTeams();
+
+        for(int i = 0; i < teams.size(); i++)
+        {
+            if(teams.get(i).team_number == team_number)
+            {
+                if(i == teams.size() - 1)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return teams.get(i + 1).team_number;
+                }
+            }
+        }
+
+        return 0;
     }
 }

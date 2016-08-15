@@ -17,118 +17,78 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import java.io.File;
 import java.util.List;
 
-import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamInMatch;
+import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
+import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author frc3824
- *         Created: 8/11/16
+ * @author Andrew Messing
+ * Created: 8/15/16
+ *
+ *
  */
-public class MatchScouting extends Activity {
+public class PitScouting extends Activity {
 
+    private final static String TAG = "PitScouting";
 
-    private final static String TAG = "MatchScouting";
-
-    private FPA_MatchScouting mFPA;
-
-    private int mTeamNumber = -1;
-    private int mMatchNumber = -1;
-
-    private boolean mPractice = false;
-
+    private int mTeamNumber;
     private Database mDatabase;
+    private FPA_PitScouting mFPA;
+    private String mEventKey;
+
+    private int mTeamBefore;
+    private int mTeamAfter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_match_scouting);
+        setContentView(R.layout.activity_pit_scouting);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.match_scouting_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.pit_scouting_toolbar);
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
-        mMatchNumber = extras.getInt(Constants.Intent_Extras.MATCH_NUMBER);
+
+        mTeamNumber = extras.getInt(Constants.Intent_Extras.TEAM_NUMBER);
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String allianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
-        int allianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
-        String eventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
+        mEventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
+        mDatabase = Database.getInstance(mEventKey);
 
-        mDatabase = Database.getInstance(eventKey);
-
-        if (mMatchNumber > 0) {
-            if (allianceColor.equals(Constants.Alliance_Colors.BLUE)) {
-                switch (allianceNumber) {
-                    case 1:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).blue1;
-                        break;
-                    case 2:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).blue2;
-                        break;
-                    case 3:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).blue3;
-                        break;
-                    default:
-                        assert false;
-                }
-            } else {
-                switch (allianceNumber) {
-                    case 1:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).red1;
-                        break;
-                    case 2:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).red2;
-                        break;
-                    case 3:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).red3;
-                        break;
-                    default:
-                        assert false;
-                }
-            }
-
-            setTitle(String.format("Match Number: %d Team Number: %d", mMatchNumber, mTeamNumber));
-        }
-        // mMatchNumber is -1 for practice matches
-        else {
-            mPractice = true;
-            setTitle("Practice Match");
-        }
+        setTitle(String.format("Team: %d", mTeamNumber));
 
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager) findViewById(R.id.match_scouting_view_pager);
-        mFPA = new FPA_MatchScouting(getFragmentManager());
-        TeamInMatch tim = mDatabase.getTeamInMatch(mMatchNumber, mTeamNumber);
-        if (tim != null) {
-            mFPA.setValueMap(tim.toMap());
+        ViewPager viewPager = (ViewPager)findViewById(R.id.pit_scouting_view_pager);
+        mFPA = new FPA_PitScouting(getFragmentManager());
+        Team team = mDatabase.getTeam(mTeamNumber);
+        if(team != null && team.pit_scouted)
+        {
+            mFPA.setValueMap(team.pitToMap());
         }
+
         viewPager.setAdapter(mFPA);
-        // Set the off screen page limit to more than the number of fragments
-        viewPager.setOffscreenPageLimit(5);
+        viewPager.setOffscreenPageLimit(4);
 
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.match_scouting_tab_layout);
-        if (allianceColor.equals(Constants.Alliance_Colors.BLUE)) {
-            tabLayout.setBackgroundColor(Color.BLUE);
-        } else {
-            tabLayout.setBackgroundColor(Color.RED);
-        }
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.pit_scouting_tab_layout);
+        tabLayout.setBackgroundColor(Color.BLUE);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     /**
-     * Creates the overflow menu for the toolbar. Removes previous match or next match options if
+     * Creates the overflow menu for the toolbar. Removes previous team or next team options if
      * they do not exist.
      *
      * @param menu The menu that is filled with the overflow menu.
@@ -136,11 +96,13 @@ public class MatchScouting extends Activity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.match_overflow, menu);
-        if (mPractice || mMatchNumber == 1) {
+        getMenuInflater().inflate(R.menu.team_overflow, menu);
+        mTeamBefore = mDatabase.getTeamNumberBefore(mTeamNumber);
+        if (mTeamBefore == 0) {
             menu.removeItem(R.id.previous_match);
         }
-        if (mPractice || mMatchNumber == mDatabase.getNumberOfMatches()) {
+        mTeamAfter = mDatabase.getTeamNumberAfter(mTeamNumber);
+        if (mTeamAfter == 0) {
             menu.removeItem(R.id.next_match);
         }
         return true;
@@ -158,7 +120,7 @@ public class MatchScouting extends Activity {
             case R.id.home:
                 home_press();
                 break;
-            case R.id.match_list:
+            case R.id.team_list:
                 back_press();
                 break;
             case R.id.save:
@@ -181,8 +143,8 @@ public class MatchScouting extends Activity {
      * and takes user to the home screen.
      */
     private void home_press() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScouting.this);
-        builder.setTitle("Save match data?");
+        AlertDialog.Builder builder = new AlertDialog.Builder(PitScouting.this);
+        builder.setTitle("Save pit data?");
 
         // Save option
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -199,15 +161,14 @@ public class MatchScouting extends Activity {
 
                 if (error.equals("")) {
                     Log.d(TAG, "Saving values");
-                    if (!mPractice) {
-                        new SaveTask().execute(data);
-                    }
+
+                    new SaveTask().execute(data);
 
                     // Go to the next match
-                    Intent intent = new Intent(MatchScouting.this, Home.class);
+                    Intent intent = new Intent(PitScouting.this, Home.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MatchScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PitScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -226,7 +187,7 @@ public class MatchScouting extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Go to the next match
-                Intent intent = new Intent(MatchScouting.this, Home.class);
+                Intent intent = new Intent(PitScouting.this, Home.class);
                 startActivity(intent);
             }
         });
@@ -238,8 +199,8 @@ public class MatchScouting extends Activity {
      * and takes user to the match list.
      */
     private void back_press() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScouting.this);
-        builder.setTitle("Save match data?");
+        AlertDialog.Builder builder = new AlertDialog.Builder(PitScouting.this);
+        builder.setTitle("Save pit data?");
 
         // Save option
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -256,15 +217,14 @@ public class MatchScouting extends Activity {
 
                 if (error.equals("")) {
                     Log.d(TAG, "Saving values");
-                    if (!mPractice) {
-                        new SaveTask().execute(data);
-                    }
 
-                    Intent intent = new Intent(MatchScouting.this, MatchList.class);
-                    intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.MATCH_SCOUTING);
+                    new SaveTask().execute(data);
+
+                    Intent intent = new Intent(PitScouting.this, TeamList.class);
+                    intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.PIT_SCOUTING);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MatchScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PitScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -281,8 +241,8 @@ public class MatchScouting extends Activity {
         builder.setNegativeButton("Continue w/o Saving", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(MatchScouting.this, MatchList.class);
-                intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.MATCH_SCOUTING);
+                Intent intent = new Intent(PitScouting.this, TeamList.class);
+                intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.PIT_SCOUTING);
                 startActivity(intent);
             }
         });
@@ -303,11 +263,11 @@ public class MatchScouting extends Activity {
 
         if (error.equals("")) {
             Log.d(TAG, "Saving values");
-            if (!mPractice) {
-                new SaveTask().execute(data);
-            }
+
+            new SaveTask().execute(data);
+
         } else {
-            Toast.makeText(MatchScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
+            Toast.makeText(PitScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -316,9 +276,9 @@ public class MatchScouting extends Activity {
      * and takes user to match scout the previous match.
      */
     private void previous_press() {
-        Log.d(TAG, "previous match pressed");
-        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScouting.this);
-        builder.setTitle("Save match data?");
+        Log.d(TAG, "previous team pressed");
+        AlertDialog.Builder builder = new AlertDialog.Builder(PitScouting.this);
+        builder.setTitle("Save pit data?");
 
         // Save option
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -335,20 +295,13 @@ public class MatchScouting extends Activity {
 
                 if (error.equals("")) {
                     Log.d(TAG, "Saving values");
-                    if (!mPractice) {
-                        new SaveTask().execute(data);
-                    }
+                    new SaveTask().execute(data);
 
-                    // Go to the next match
-                    Intent intent = new Intent(MatchScouting.this, MatchScouting.class);
-                    if (mPractice) {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
-                    } else {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber - 1);
-                    }
+                    Intent intent = new Intent(PitScouting.this, PitScouting.class);
+                    intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, mTeamBefore);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MatchScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PitScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -365,13 +318,9 @@ public class MatchScouting extends Activity {
         builder.setNegativeButton("Continue w/o Saving", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Go to the next match
-                Intent intent = new Intent(MatchScouting.this, MatchScouting.class);
-                if (mPractice) {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
-                } else {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber - 1);
-                }
+                // Go to the next team
+                Intent intent = new Intent(PitScouting.this, PitScouting.class);
+                intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, mTeamBefore);
                 startActivity(intent);
             }
         });
@@ -379,14 +328,13 @@ public class MatchScouting extends Activity {
     }
 
     /**
-     * The action that happens when the next match button is pressed. Brings up dialog with options to save
-     * and takes user to match scout the next match.
+     * The action that happens when the previous match button is pressed. Brings up dialog with options to save
+     * and takes user to match scout the previous match.
      */
     private void next_press() {
-        Log.d(TAG, "next match pressed");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScouting.this);
-        builder.setTitle("Save match data?");
+        Log.d(TAG, "next team pressed");
+        AlertDialog.Builder builder = new AlertDialog.Builder(PitScouting.this);
+        builder.setTitle("Save pit data?");
 
         // Save option
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -403,20 +351,13 @@ public class MatchScouting extends Activity {
 
                 if (error.equals("")) {
                     Log.d(TAG, "Saving values");
-                    if (!mPractice) {
-                        new SaveTask().execute(data);
-                    }
+                    new SaveTask().execute(data);
 
-                    // Go to the next match
-                    Intent intent = new Intent(MatchScouting.this, MatchScouting.class);
-                    if (mPractice) {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
-                    } else {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber + 1);
-                    }
+                    Intent intent = new Intent(PitScouting.this, PitScouting.class);
+                    intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, mTeamAfter);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MatchScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(PitScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -433,13 +374,9 @@ public class MatchScouting extends Activity {
         builder.setNegativeButton("Continue w/o Saving", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Go to the next match
-                Intent intent = new Intent(MatchScouting.this, MatchScouting.class);
-                if (mPractice) {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
-                } else {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber + 1);
-                }
+                // Go to the next team
+                Intent intent = new Intent(PitScouting.this, PitScouting.class);
+                intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, mTeamAfter);
                 startActivity(intent);
             }
         });
@@ -456,10 +393,32 @@ public class MatchScouting extends Activity {
         @Override
         protected Void doInBackground(ScoutMap... scoutMaps) {
             ScoutMap map = scoutMaps[0];
-            map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
-            TeamInMatch tim = new TeamInMatch(map);
-            mDatabase.setTeamInMatch(tim);
+            map.put(Constants.Pit_Scouting.PIT_SCOUTED, true);
+
+            // Change picture filename to use event id and team number
+            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME)) {
+                String picture_filename = null;
+                try {
+                    picture_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME);
+                    File picture = new File(getFilesDir(), picture_filename);
+                    if (picture.exists() && picture.length() > 0) {
+                        String newPathName = String.format("%s_%d.jpg", mEventKey, mTeamNumber);
+                        File newPath = new File(getFilesDir(), newPathName);
+                        picture.renameTo(newPath);
+                        map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME);
+                        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME, newPathName);
+                    } else {
+                        map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME);
+                    }
+                } catch (ScoutValue.TypeException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
+            Team t = mDatabase.getTeam(mTeamNumber);
+            t.pitFromMap(map);
+            mDatabase.setTeam(t);
 
             //TODO: add Bluetooth and Syncing
 
@@ -470,7 +429,8 @@ public class MatchScouting extends Activity {
         protected void onProgressUpdate(String... values) {
             String text = values[0];
             Log.d(TAG, text);
-            Toast.makeText(MatchScouting.this, text, Toast.LENGTH_SHORT).show();
+            Toast.makeText(PitScouting.this, text, Toast.LENGTH_SHORT).show();
         }
     }
+
 }

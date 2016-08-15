@@ -16,6 +16,8 @@
         <activity android:name=".Activities.Settings"/>
         <activity android:name=".Activities.MatchList"/>
         <activity android:name=".Activities.MatchScouting"/>
+        <activity android:name=".Activities.TeamList"/>
+        <activity android:name=".Activities.PitScouting"/>
     </application>
 
 </manifest>

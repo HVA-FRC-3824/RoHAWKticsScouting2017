@@ -8,13 +8,12 @@ public interface Constants {
 
     String APP_DATA = "appData";
 
-    /*
+    /**
         Version number changing rules
         - right most number get changed for major changes (after alpha version is finished)
         - middle number is changed after events
         - left most number is changed after the season
-     */
-
+    */
     String VERSION = "2.0.1";
     int OUR_TEAM_NUMBER = 3824;
 
@@ -51,11 +50,15 @@ public interface Constants {
         String MATCH_NUMBER = "match_number";
         String NEXT_PAGE = "next_page";
         String MATCH_SCOUTING = "match_scouting";
+        String SUPER_SCOUTING = "super_scouting";
+        String PIT_SCOUTING = "pit_scouting";
+        String MATCH_VIEWING = "match_viewing";
+        String TEAM_VIEWING = "team_viewing";
     }
 
     interface The_Blue_Alliance {
         String TBA_Header_NAME = "X-TBA-App-Id";
-        String TBA_Header_VALUE ="frc3824:scouting-system:" + VERSION;
+        String TBA_Header_VALUE = "frc3824:scouting-system:" + VERSION;
 
     }
 
@@ -91,6 +94,33 @@ public interface Constants {
             String NO_SHOW = "post_no_show";
             String NOTES = "post_notes";
         }
+    }
+
+    interface Pit_Scouting
+    {
+        String PIT_SCOUTED = "pit_scouted";
+
+        String ROBOT_PICTURE_FILENAME = "robot_picture_filename";
+
+        interface Dimensions
+        {
+            String WIDTH = "width";
+            String LENGTH = "length";
+            String HEIGHT = "height";
+            String WEIGHT = "weight";
+        }
+
+        interface Miscellaneous
+        {
+            String PROGRAMMING_LANGUAGE = "programming_language";
+        }
+
+        String NOTES = "pit_notes";
+    }
+
+    interface Team
+    {
+        String NICKNAME = "nickname";
     }
 
 }

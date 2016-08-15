@@ -21,7 +21,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * @author Andrew Messing
  * Created: 8/13/16
  *
- *
+ * List of matches which forward to match scouting, super scouting, or match view
  */
 public class MatchList extends Activity implements View.OnClickListener{
 
@@ -39,8 +39,6 @@ public class MatchList extends Activity implements View.OnClickListener{
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
-        String allianceColor = sharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
-        int allianceNumber = sharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
 
         Database database = Database.getInstance(eventKey);
 
@@ -70,6 +68,8 @@ public class MatchList extends Activity implements View.OnClickListener{
                 // Also it color is set based on the alliance color
                 case Constants.Intent_Extras.MATCH_SCOUTING:
                     int team_number = -1;
+                    String allianceColor = sharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
+                    int allianceNumber = sharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
                     if (allianceColor == Constants.Alliance_Colors.BLUE) {
                         switch (allianceNumber) {
                             case 1:
