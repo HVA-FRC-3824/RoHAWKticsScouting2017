@@ -29,7 +29,9 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**
  * @author frc3824
- *         Created: 8/11/16
+ * Created: 8/11/16
+ *
+ * Activity that handles match scouting. Also takes care of saving, and switching between matches.
  */
 public class MatchScouting extends Activity {
 

@@ -35,6 +35,8 @@ import frc3824.rohawkticsscouting2017.Utilities.Utilities;
  * Created: 8/15/16
  *
  * Fragment for Pit Scouting that handles taking a picture of the robot
+ *
+ * https://developer.android.com/training/camera/photobasics.html
  */
 //TODO: setup taking a picture and firebase storage
 public class RobotPictureFragment extends ScoutFragment implements View.OnClickListener

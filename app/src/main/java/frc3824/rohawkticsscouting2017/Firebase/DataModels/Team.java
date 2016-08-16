@@ -32,6 +32,7 @@ public class Team {
 
     // Robot Image
     public String robot_image_filepath;
+    public String robot_image_url;
 
     // Dimensions
     public double weight;

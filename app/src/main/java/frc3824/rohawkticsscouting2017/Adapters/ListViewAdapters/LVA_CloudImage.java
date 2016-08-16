@@ -1,0 +1,205 @@
+package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
+import frc3824.rohawkticsscouting2017.Firebase.Database;
+import frc3824.rohawkticsscouting2017.Firebase.Storage;
+import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
+
+/**
+ * @author Andrew Messing
+ * Created: 8/15/16
+ *
+ *
+ */
+public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
+
+    private final static String TAG = "LVA_CloudImage";
+
+    private ArrayList<CloudImage> mCloudFiles;
+    private Context mContext;
+    private Storage mStorage;
+    private Database mDatabase;
+    private int mImageType;
+
+    public LVA_CloudImage(Context context, int resource, ArrayList<CloudImage> objects, Storage storage, Database database, int imageType) {
+        super(context, resource, objects);
+        mCloudFiles = objects;
+        mContext = context;
+        mStorage = storage;
+        mDatabase = database;
+        mImageType = imageType;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.list_item_cloud_image, null);
+        }
+
+        final CloudImage ci = mCloudFiles.get(position);
+        Button upload = (Button) convertView.findViewById(R.id.upload);
+        Button download = (Button)convertView.findViewById(R.id.download);
+        ImageView image = (ImageView)convertView.findViewById(R.id.image);
+        TextView filepath = (TextView)convertView.findViewById(R.id.filename);
+        String filename;
+        if(ci.filepath != null) {
+            filename = ci.filepath.substring(ci.filepath.lastIndexOf('/') + 1);
+        }
+        else
+        {
+            switch (mImageType)
+            {
+                case Constants.Cloud.ROBOT_PICTURE:
+                    filename = String.format("%d: No Image",ci.team_number);
+                    break;
+                default:
+                    filename = "No Image";
+            }
+
+        }
+        filepath.setText(filename);
+
+        final TextView message = (TextView) convertView.findViewById(R.id.message);
+        final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progress_bar);
+
+        if(ci.local )
+        {
+            if(ci.internet) {
+                upload.setEnabled(true);
+                upload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UploadTask uploadTask = mStorage.uploadRobotPicture(ci.filepath);
+                        progressBar.setVisibility(View.VISIBLE);
+                        message.setVisibility(View.GONE);
+                        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                double progress = (double)taskSnapshot.getBytesTransferred() * 100 / (double)taskSnapshot.getTotalByteCount();
+                                int progress_int = (int)progress;
+                                progressBar.setProgress(progress_int);
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "Upload failure");
+                                message.setText("Upload failure");
+                                message.setTextColor(Color.RED);
+                                message.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d(TAG, "Upload success");
+                                message.setText("Upload success");
+                                message.setTextColor(Color.GREEN);
+                                message.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.GONE);
+
+                                ci.remote = true;
+                                ci.url = taskSnapshot.getDownloadUrl().getPath();
+
+                                switch (mImageType)
+                                {
+                                    case Constants.Cloud.ROBOT_PICTURE:
+                                        Team t = mDatabase.getTeam(ci.team_number);
+                                        t.robot_image_url = ci.url;
+                                        mDatabase.setTeam(t);
+                                        break;
+                                }
+
+                                Log.d(TAG, ci.url);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
+            }
+            else
+            {
+                upload.setEnabled(false);
+            }
+            displayPicture(image, ci.filepath);
+        }
+        else
+        {
+            upload.setEnabled(false);
+            image.setImageResource(android.R.color.transparent);
+        }
+
+        if(ci.remote && ci.internet)
+        {
+            download.setEnabled(true);
+        }
+        else
+        {
+            download.setEnabled(false);
+        }
+
+        //TODO: add click to upload and download
+
+        return convertView;
+    }
+
+    /**
+     * Sets the Image view to display the image
+     *
+     * @return
+     */
+    private void displayPicture(ImageView imageView, String filepath) {
+        // Get the dimensions of the View
+        int targetW = 100;
+        int targetH = 100;
+
+        File f = new File(filepath);
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filepath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(filepath, bmOptions);
+        imageView.setImageBitmap(bitmap);
+    }
+}

@@ -191,5 +191,15 @@
             android:text="Settings"
             android:textColor="@color/white" />
 
+        <Button
+            android:id="@+id/cloud_storage_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/navy_blue"
+            android:text="Cloud Storage"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
     </LinearLayout>
 </ScrollView>

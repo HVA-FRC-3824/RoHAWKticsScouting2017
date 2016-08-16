@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -79,10 +80,22 @@ public class Home extends Activity implements View.OnClickListener{
                 int pitGroup = sharedPreferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
                 userSubtypeTextView.setText(String.format("Group Number: %d", pitGroup));
                 userSubtypeTextView.setVisibility(View.VISIBLE);
+                break;
+            case Constants.User_Types.ADMIN:
+                setupButton(R.id.scout_match_button);
+                setupButton(R.id.scout_pit_button);
+                setupButton(R.id.cloud_storage_button);
+
+                eventTextview.setText("Event: " + eventKey);
+                eventTextview.setVisibility(View.VISIBLE);
+
+                usertypeTextview.setText("User: Admin");
+                usertypeTextview.setVisibility(View.VISIBLE);
 
                 break;
-            default:
         }
+
+        Database.getInstance(eventKey);
 
     }
 
@@ -103,6 +116,10 @@ public class Home extends Activity implements View.OnClickListener{
             case R.id.scout_pit_button:
                 intent = new Intent(this, TeamList.class);
                 intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.PIT_SCOUTING);
+                startActivity(intent);
+                break;
+            case R.id.cloud_storage_button:
+                intent = new Intent(this, CloudStorage.class);
                 startActivity(intent);
                 break;
             default:

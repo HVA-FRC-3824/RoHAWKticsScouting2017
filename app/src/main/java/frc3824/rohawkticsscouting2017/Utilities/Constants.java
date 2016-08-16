@@ -123,4 +123,10 @@ public interface Constants {
         String NICKNAME = "nickname";
     }
 
+    interface Cloud
+    {
+        int ROBOT_PICTURE = 0;
+        int STRATEGY = 1;
+    }
+
 }
