@@ -36,11 +36,9 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author Andrew Messing
- * Created: 8/15/16
- *
- *
+ *         Created: 8/15/16
  */
-public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
+public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
 
     private final static String TAG = "LVA_CloudImage";
 
@@ -68,19 +66,21 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
 
         final CloudImage ci = mCloudFiles.get(position);
         Button upload = (Button) convertView.findViewById(R.id.upload);
-        Button download = (Button)convertView.findViewById(R.id.download);
-        final ImageView image = (ImageView)convertView.findViewById(R.id.image);
-        TextView filepath = (TextView)convertView.findViewById(R.id.filename);
+        Button download = (Button) convertView.findViewById(R.id.download);
+        final ImageView image = (ImageView) convertView.findViewById(R.id.image);
+        TextView filepath = (TextView) convertView.findViewById(R.id.filename);
         String filename;
-        if(ci.filepath != null) {
+        if (ci.filepath != null) {
             filename = ci.filepath.substring(ci.filepath.lastIndexOf('/') + 1);
-        }
-        else
-        {
-            switch (mImageType)
-            {
+        } else {
+            switch (mImageType) {
                 case Constants.Cloud.ROBOT_PICTURE:
-                    filename = String.format("%d: No Image",ci.team_number);
+                    if(ci.remote)
+                    {
+                        filename = String.format("%d: Download required", ci.team_number);
+                    } else {
+                        filename = String.format("%d: No Image", ci.team_number);
+                    }
                     break;
                 default:
                     filename = "No Image";
@@ -92,9 +92,8 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
         final TextView message = (TextView) convertView.findViewById(R.id.message);
         final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progress_bar);
 
-        if(ci.local )
-        {
-            if(ci.internet) {
+        if (ci.local) {
+            if (ci.internet) {
                 upload.setEnabled(true);
                 upload.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -105,8 +104,8 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
                         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (double)taskSnapshot.getBytesTransferred() * 100 / (double)taskSnapshot.getTotalByteCount();
-                                int progress_int = (int)progress;
+                                double progress = (double) taskSnapshot.getBytesTransferred() * 100 / (double) taskSnapshot.getTotalByteCount();
+                                int progress_int = (int) progress;
                                 progressBar.setProgress(progress_int);
 
                             }
@@ -131,8 +130,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
                                 ci.remote = true;
                                 ci.url = taskSnapshot.getDownloadUrl().getPath();
 
-                                switch (mImageType)
-                                {
+                                switch (mImageType) {
                                     case Constants.Cloud.ROBOT_PICTURE:
                                         Team t = mDatabase.getTeam(ci.team_number);
                                         t.robot_image_url = ci.url;
@@ -146,21 +144,16 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 upload.setEnabled(false);
             }
             displayPicture(image, ci.filepath);
-        }
-        else
-        {
+        } else {
             upload.setEnabled(false);
             image.setImageResource(android.R.color.transparent);
         }
 
-        if(ci.remote && ci.internet)
-        {
+        if (ci.remote && ci.internet) {
             download.setEnabled(true);
             download.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -171,14 +164,15 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
                     fileDownloadTask.addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (double)taskSnapshot.getBytesTransferred() * 100 / (double)taskSnapshot.getTotalByteCount();
-                            int progress_int = (int)progress;
+                            double progress = (double) taskSnapshot.getBytesTransferred() * 100 / (double) taskSnapshot.getTotalByteCount();
+                            int progress_int = (int) progress;
                             progressBar.setProgress(progress_int);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.e(TAG, "Download failure");
+                            Log.e(TAG, e.getMessage());
                             message.setText("Download failure");
                             message.setTextColor(Color.RED);
                             message.setVisibility(View.VISIBLE);
@@ -201,9 +195,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
                     });
                 }
             });
-        }
-        else
-        {
+        } else {
             download.setEnabled(false);
         }
 
@@ -230,7 +222,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;

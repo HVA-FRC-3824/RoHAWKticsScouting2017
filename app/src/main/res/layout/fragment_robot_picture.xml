@@ -13,6 +13,16 @@
         android:id="@+id/robot_picture"
         android:layout_gravity="center_horizontal" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/need_to_download"
+        android:text="Image needs to be downloaded"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textColor="@color/bright_red"
+        android:visibility="gone"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

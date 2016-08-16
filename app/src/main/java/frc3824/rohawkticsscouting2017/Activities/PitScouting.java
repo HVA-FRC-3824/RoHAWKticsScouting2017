@@ -35,9 +35,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
  * @author Andrew Messing
- * Created: 8/15/16
- *
- *
+ *         Created: 8/15/16
  */
 public class PitScouting extends Activity {
 
@@ -52,8 +50,7 @@ public class PitScouting extends Activity {
     private int mTeamAfter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pit_scouting);
 
@@ -73,11 +70,10 @@ public class PitScouting extends Activity {
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager)findViewById(R.id.pit_scouting_view_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pit_scouting_view_pager);
         mFPA = new FPA_PitScouting(getFragmentManager());
         Team team = mDatabase.getTeam(mTeamNumber);
-        if(team != null && team.pit_scouted)
-        {
+        if (team != null && team.pit_scouted) {
             mFPA.setValueMap(team.pitToMap());
         }
 
@@ -402,21 +398,21 @@ public class PitScouting extends Activity {
             map.put(Constants.Pit_Scouting.PIT_SCOUTED, true);
 
             // Change picture filename to use event id and team number
-            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH)) {
+            if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH)) {
                 String picture_filename = null;
                 try {
                     picture_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
-                    if(!picture_filename.equals("")) {
+                    if (!picture_filename.equals("")) {
                         File picture = new File(picture_filename);
                         if (picture.exists() && picture.length() > 0) {
                             String newPathName = String.format("%s/robot_pictures/", mEventKey);
-                            File newPath = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newPathName);
-                            if(!newPath.exists()) {
+                            File newPath = new File(getFilesDir(), newPathName);
+                            if (!newPath.exists()) {
                                 newPath.mkdirs();
                             }
-                            File newPicture = new File(newPath, String.format("%d.jpg",mTeamNumber));
+                            File newPicture = new File(newPath, String.format("%d.jpg", mTeamNumber));
                             newPicture.delete();
-                            copy(picture,newPicture);
+                            copy(picture, newPicture);
                             picture.delete();
                             map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
                             map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH, newPicture.getAbsolutePath());
@@ -426,9 +422,7 @@ public class PitScouting extends Activity {
                     }
                 } catch (ScoutValue.TypeException e) {
                     Log.e(TAG, e.getMessage());
-                }
-                catch (IOException ex)
-                {
+                } catch (IOException ex) {
                     Log.e(TAG, ex.getMessage());
                 }
             }

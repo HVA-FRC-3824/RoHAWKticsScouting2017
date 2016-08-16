@@ -70,8 +70,15 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
                     mCurrentPhotoPath = mValueMap.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
                     //mValueMap.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
                     if (!mCurrentPhotoPath.equals("")) {
-                        displayPicture();
-                        mButton.setText("Remove Picture");
+                        if(new File(mCurrentPhotoPath).exists()) {
+                            displayPicture();
+                            mButton.setText("Remove Picture");
+                        }
+                        else
+                        {
+                            view.findViewById(R.id.need_to_download).setVisibility(View.VISIBLE);
+                            mButton.setText("Remove Picture");
+                        }
                     }
                 } catch (ScoutValue.TypeException e) {
                     Log.e(TAG, e.getMessage());
@@ -100,6 +107,7 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
             mButton.setText("Take Picture");
             mImageView.setImageDrawable(null);
             mValueMap.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
+            view.findViewById(R.id.need_to_download).setVisibility(View.GONE);
         }
     }
 

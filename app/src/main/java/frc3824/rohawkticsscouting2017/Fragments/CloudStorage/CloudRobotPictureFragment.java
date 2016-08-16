@@ -6,11 +6,20 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CloudImage;
@@ -29,12 +38,15 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  */
 public class CloudRobotPictureFragment extends Fragment implements View.OnClickListener{
 
-    private final static String TAG = "CloudRobotPictureFragment";
+    private final static String TAG = "CloudRobotPicture";
 
     private Context mContext;
     private ArrayList<CloudImage> mCIs;
     private Storage mStorage;
     private Database mDatabase;
+
+    private ProgressBar mUploadAllProgressBar;
+    private ProgressBar mDownloadAllProgressBar;
 
     public CloudRobotPictureFragment() {}
 
@@ -74,7 +86,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
             if(team.robot_image_filepath != null && !team.robot_image_filepath.equals(""))
             {
-                ci.local = true;
+                if(new File(team.robot_image_filepath).exists()) {
+                    ci.local = true;
+                }
                 ci.filepath = team.robot_image_filepath;
             }
 
@@ -91,9 +105,83 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
                 mStorage, mDatabase, Constants.Cloud.ROBOT_PICTURE);
         listView.setAdapter(lva);
 
-        //TODO: add click to upload and download
+        view.findViewById(R.id.upload_all).setOnClickListener(this);
+        view.findViewById(R.id.download_all).setOnClickListener(this);
+
+        mUploadAllProgressBar = (ProgressBar)view.findViewById(R.id.upload_all_progress_bar);
+        mDownloadAllProgressBar = (ProgressBar)view.findViewById(R.id.download_all_progress_bar);
 
         return view;
+    }
+
+    private void upload_next(final int i)
+    {
+        if(i == mCIs.size())
+        {
+            mUploadAllProgressBar.setVisibility(View.GONE);
+            mUploadAllProgressBar.setProgress(0);
+            return;
+        }
+
+        CloudImage cloudImage = mCIs.get(i);
+        if(cloudImage.local && cloudImage.internet)
+        {
+            UploadTask uploadTask = mStorage.uploadRobotPicture(cloudImage.filepath);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.d(TAG, "Upload Success");
+                    mUploadAllProgressBar.setProgress(i + 1);
+                    upload_next(i + 1);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "Upload Failure");
+                    // Don't want a infinite loop
+                }
+            });
+        }
+        else
+        {
+            mUploadAllProgressBar.setProgress(i + 1);
+            upload_next(i + 1);
+        }
+    }
+
+    private void download_next(final int i)
+    {
+        if(i == mCIs.size())
+        {
+            mDownloadAllProgressBar.setVisibility(View.GONE);
+            mDownloadAllProgressBar.setProgress(0);
+            return;
+        }
+
+        CloudImage cloudImage = mCIs.get(i);
+        if(cloudImage.remote && cloudImage.internet)
+        {
+            FileDownloadTask fileDownloadTask = mStorage.downloadRobotPicture(cloudImage.team_number, cloudImage.filepath);
+            fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Log.d(TAG, "Download Success");
+                    mDownloadAllProgressBar.setProgress(i + 1);
+                    download_next(i + 1);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "Download Failure");
+
+                }
+            });
+        }
+        else
+        {
+            mDownloadAllProgressBar.setProgress(i + 1);
+            download_next(i + 1);
+        }
     }
 
     @Override
@@ -101,8 +189,16 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
         switch (view.getId())
         {
             case R.id.upload_all:
+                mUploadAllProgressBar.setProgress(0);
+                mUploadAllProgressBar.setVisibility(View.VISIBLE);
+                mUploadAllProgressBar.setMax(mCIs.size());
+                upload_next(0);
                 break;
             case R.id.download_all:
+                mDownloadAllProgressBar.setProgress(0);
+                mDownloadAllProgressBar.setVisibility(View.VISIBLE);
+                mDownloadAllProgressBar.setMax(mCIs.size());
+                download_next(0);
                 break;
         }
     }
