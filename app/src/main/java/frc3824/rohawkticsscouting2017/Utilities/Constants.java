@@ -100,7 +100,7 @@ public interface Constants {
     {
         String PIT_SCOUTED = "pit_scouted";
 
-        String ROBOT_PICTURE_FILENAME = "robot_picture_filename";
+        String ROBOT_PICTURE_FILEPATH = "robot_picture_filepath";
 
         interface Dimensions
         {

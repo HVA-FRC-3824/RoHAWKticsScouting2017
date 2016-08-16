@@ -96,6 +96,7 @@ public class PitScouting extends Activity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //TODO: check if next or previous is in the group
         getMenuInflater().inflate(R.menu.team_overflow, menu);
         mTeamBefore = mDatabase.getTeamNumberBefore(mTeamNumber);
         if (mTeamBefore == 0) {
@@ -126,10 +127,10 @@ public class PitScouting extends Activity {
             case R.id.save:
                 save_press();
                 break;
-            case R.id.previous_match:
+            case R.id.previous_team:
                 previous_press();
                 break;
-            case R.id.next_match:
+            case R.id.next_team:
                 next_press();
                 break;
             default:
@@ -397,19 +398,24 @@ public class PitScouting extends Activity {
             map.put(Constants.Pit_Scouting.PIT_SCOUTED, true);
 
             // Change picture filename to use event id and team number
-            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME)) {
+            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH)) {
                 String picture_filename = null;
                 try {
-                    picture_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME);
-                    File picture = new File(getFilesDir(), picture_filename);
-                    if (picture.exists() && picture.length() > 0) {
-                        String newPathName = String.format("%s_%d.jpg", mEventKey, mTeamNumber);
-                        File newPath = new File(getFilesDir(), newPathName);
-                        picture.renameTo(newPath);
-                        map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME);
-                        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME, newPathName);
-                    } else {
-                        map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME);
+                    picture_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
+                    if(!picture_filename.equals("")) {
+                        File picture = new File(picture_filename);
+                        if (picture.exists() && picture.length() > 0) {
+                            String newPathName = String.format("%s/robot_pictures/%d.jpg", mEventKey, mTeamNumber);
+                            File newPath = new File(getFilesDir(), newPathName);
+                            if(!newPath.exists()) {
+                                newPath.mkdirs();
+                            }
+                            picture.renameTo(newPath);
+                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
+                            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH, picture.getAbsolutePath());
+                        } else {
+                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
+                        }
                     }
                 } catch (ScoutValue.TypeException e) {
                     Log.e(TAG, e.getMessage());
@@ -432,5 +438,4 @@ public class PitScouting extends Activity {
             Toast.makeText(PitScouting.this, text, Toast.LENGTH_SHORT).show();
         }
     }
-
 }

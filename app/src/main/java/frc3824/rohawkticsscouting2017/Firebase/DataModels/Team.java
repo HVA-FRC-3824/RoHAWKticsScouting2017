@@ -31,7 +31,7 @@ public class Team {
     public boolean pit_scouted;
 
     // Robot Image
-    public String robot_image_filename;
+    public String robot_image_filepath;
 
     // Dimensions
     public double weight;
@@ -80,7 +80,7 @@ public class Team {
 
             pit_scouted = map.getBoolean(Constants.Pit_Scouting.PIT_SCOUTED);
 
-            robot_image_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME);
+            robot_image_filepath = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
 
             width = map.getDouble(Constants.Pit_Scouting.Dimensions.WIDTH);
             length = map.getDouble(Constants.Pit_Scouting.Dimensions.LENGTH);
@@ -105,7 +105,7 @@ public class Team {
 
         map.put(Constants.Pit_Scouting.PIT_SCOUTED, pit_scouted);
 
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILENAME, robot_image_filename);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH, robot_image_filepath);
 
         map.put(Constants.Pit_Scouting.Dimensions.WIDTH, width);
         map.put(Constants.Pit_Scouting.Dimensions.LENGTH, length);
