@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 
@@ -68,7 +69,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
         final CloudImage ci = mCloudFiles.get(position);
         Button upload = (Button) convertView.findViewById(R.id.upload);
         Button download = (Button)convertView.findViewById(R.id.download);
-        ImageView image = (ImageView)convertView.findViewById(R.id.image);
+        final ImageView image = (ImageView)convertView.findViewById(R.id.image);
         TextView filepath = (TextView)convertView.findViewById(R.id.filename);
         String filename;
         if(ci.filepath != null) {
@@ -161,13 +162,50 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage>{
         if(ci.remote && ci.internet)
         {
             download.setEnabled(true);
+            download.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FileDownloadTask fileDownloadTask = mStorage.downloadRobotPicture(ci.team_number, ci.filepath);
+                    progressBar.setVisibility(View.VISIBLE);
+                    message.setVisibility(View.GONE);
+                    fileDownloadTask.addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (double)taskSnapshot.getBytesTransferred() * 100 / (double)taskSnapshot.getTotalByteCount();
+                            int progress_int = (int)progress;
+                            progressBar.setProgress(progress_int);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "Download failure");
+                            message.setText("Download failure");
+                            message.setTextColor(Color.RED);
+                            message.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Log.d(TAG, "Download success");
+                            message.setText("Download success");
+                            message.setTextColor(Color.GREEN);
+                            message.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+
+                            ci.local = true;
+                            // The local filepath should have been set by the database
+
+                            notifyDataSetChanged();
+                        }
+                    });
+                }
+            });
         }
         else
         {
             download.setEnabled(false);
         }
-
-        //TODO: add click to upload and download
 
         return convertView;
     }

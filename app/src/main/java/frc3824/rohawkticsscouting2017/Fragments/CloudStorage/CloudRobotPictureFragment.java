@@ -32,6 +32,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
     private final static String TAG = "CloudRobotPictureFragment";
 
     private Context mContext;
+    private ArrayList<CloudImage> mCIs;
+    private Storage mStorage;
+    private Database mDatabase;
 
     public CloudRobotPictureFragment() {}
 
@@ -45,9 +48,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
-        Database database = Database.getInstance(eventKey);
-        Storage storage = Storage.getInstance(eventKey);
-        ArrayList<Team> teams = database.getTeams();
+        mDatabase = Database.getInstance(eventKey);
+        mStorage = Storage.getInstance(eventKey);
+        ArrayList<Team> teams = mDatabase.getTeams();
 
         boolean internet = true;
         if(isNetworkAvailable()) {
@@ -61,7 +64,7 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
             internet = false;
         }
 
-        ArrayList<CloudImage> cis = new ArrayList<>();
+        mCIs = new ArrayList<>();
         for(Team team: teams)
         {
             CloudImage ci = new CloudImage();
@@ -81,11 +84,11 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
                 ci.url = team.robot_image_url;
             }
 
-            cis.add(ci);
+            mCIs.add(ci);
         }
 
-        LVA_CloudImage lva = new LVA_CloudImage(mContext, R.layout.list_item_cloud_image, cis,
-                storage, database, Constants.Cloud.ROBOT_PICTURE);
+        LVA_CloudImage lva = new LVA_CloudImage(mContext, R.layout.list_item_cloud_image, mCIs,
+                mStorage, mDatabase, Constants.Cloud.ROBOT_PICTURE);
         listView.setAdapter(lva);
 
         //TODO: add click to upload and download

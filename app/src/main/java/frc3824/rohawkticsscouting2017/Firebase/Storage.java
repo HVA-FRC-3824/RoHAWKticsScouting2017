@@ -2,6 +2,7 @@ package frc3824.rohawkticsscouting2017.Firebase;
 
 import android.net.Uri;
 
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -68,6 +69,18 @@ public class Storage {
         Uri uri = Uri.fromFile(file);
         StorageReference fileRef = mRobotImagesRef.child(uri.getLastPathSegment());
         return fileRef.putFile(uri);
+    }
+
+    public FileDownloadTask downloadRobotPicture(int team_number, String filepath)
+    {
+        return downloadRobotPicture(team_number, new File(filepath));
+    }
+
+    public FileDownloadTask downloadRobotPicture(int team_number, File file)
+    {
+        file.mkdirs(); // create all the directories needed
+        file.delete(); // makes sure that the file itself isn't a directory
+        return mRobotImagesRef.child(String.format("%d.jpg", team_number)).getFile(file);
     }
 
     public UploadTask uploadStrategyPicture(String filepath)
