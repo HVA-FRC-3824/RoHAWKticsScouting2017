@@ -3,6 +3,7 @@ package frc3824.rohawkticsscouting2017.Fragments.CloudStorage;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,6 +49,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
     private ProgressBar mUploadAllProgressBar;
     private ProgressBar mDownloadAllProgressBar;
+
+    private TextView mUploadAllMessage;
+    private TextView mDownloadAllMessage;
 
     public CloudRobotPictureFragment() {}
 
@@ -110,6 +115,8 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
         mUploadAllProgressBar = (ProgressBar)view.findViewById(R.id.upload_all_progress_bar);
         mDownloadAllProgressBar = (ProgressBar)view.findViewById(R.id.download_all_progress_bar);
+        mUploadAllMessage = (TextView)view.findViewById(R.id.upload_all_message);
+        mDownloadAllMessage = (TextView)view.findViewById(R.id.download_all_message);
 
         return view;
     }
@@ -120,6 +127,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
         {
             mUploadAllProgressBar.setVisibility(View.GONE);
             mUploadAllProgressBar.setProgress(0);
+            mUploadAllMessage.setText("Upload All Success");
+            mUploadAllMessage.setTextColor(Color.GREEN);
+            mUploadAllMessage.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -138,7 +148,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.e(TAG, "Upload Failure");
-                    // Don't want a infinite loop
+                    mUploadAllMessage.setText("Upload Failure");
+                    mUploadAllMessage.setTextColor(Color.RED);
+                    mUploadAllMessage.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -155,6 +167,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
         {
             mDownloadAllProgressBar.setVisibility(View.GONE);
             mDownloadAllProgressBar.setProgress(0);
+            mDownloadAllMessage.setText("Download All Success");
+            mDownloadAllMessage.setTextColor(Color.GREEN);
+            mDownloadAllMessage.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -173,7 +188,9 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.e(TAG, "Download Failure");
-
+                    mDownloadAllMessage.setText("Download Failure");
+                    mDownloadAllMessage.setTextColor(Color.RED);
+                    mDownloadAllMessage.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -189,12 +206,14 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
         switch (view.getId())
         {
             case R.id.upload_all:
+                mUploadAllMessage.setVisibility(View.GONE);
                 mUploadAllProgressBar.setProgress(0);
                 mUploadAllProgressBar.setVisibility(View.VISIBLE);
                 mUploadAllProgressBar.setMax(mCIs.size());
                 upload_next(0);
                 break;
             case R.id.download_all:
+                mDownloadAllMessage.setVisibility(View.GONE);
                 mDownloadAllProgressBar.setProgress(0);
                 mDownloadAllProgressBar.setVisibility(View.VISIBLE);
                 mDownloadAllProgressBar.setMax(mCIs.size());
