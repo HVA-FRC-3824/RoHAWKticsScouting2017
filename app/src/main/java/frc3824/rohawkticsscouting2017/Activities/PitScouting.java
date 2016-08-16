@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -18,6 +19,9 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
@@ -405,20 +409,27 @@ public class PitScouting extends Activity {
                     if(!picture_filename.equals("")) {
                         File picture = new File(picture_filename);
                         if (picture.exists() && picture.length() > 0) {
-                            String newPathName = String.format("%s/robot_pictures/%d.jpg", mEventKey, mTeamNumber);
-                            File newPath = new File(getFilesDir(), newPathName);
+                            String newPathName = String.format("%s/robot_pictures/", mEventKey);
+                            File newPath = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newPathName);
                             if(!newPath.exists()) {
                                 newPath.mkdirs();
                             }
-                            picture.renameTo(newPath);
+                            File newPicture = new File(newPath, String.format("%d.jpg",mTeamNumber));
+                            newPicture.delete();
+                            copy(picture,newPicture);
+                            picture.delete();
                             map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
-                            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH, picture.getAbsolutePath());
+                            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH, newPicture.getAbsolutePath());
                         } else {
                             map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
                         }
                     }
                 } catch (ScoutValue.TypeException e) {
                     Log.e(TAG, e.getMessage());
+                }
+                catch (IOException ex)
+                {
+                    Log.e(TAG, ex.getMessage());
                 }
             }
 
@@ -436,6 +447,18 @@ public class PitScouting extends Activity {
             String text = values[0];
             Log.d(TAG, text);
             Toast.makeText(PitScouting.this, text, Toast.LENGTH_SHORT).show();
+        }
+
+        private void copy(final File f1, final File f2) throws IOException {
+            f2.createNewFile();
+
+            final RandomAccessFile file1 = new RandomAccessFile(f1, "r");
+            final RandomAccessFile file2 = new RandomAccessFile(f2, "rw");
+
+            file2.getChannel().write(file1.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, f1.length()));
+
+            file1.close();
+            file2.close();
         }
     }
 }
