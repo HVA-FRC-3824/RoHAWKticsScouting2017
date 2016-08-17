@@ -100,11 +100,11 @@ public class PitScouting extends Activity {
         getMenuInflater().inflate(R.menu.team_overflow, menu);
         mTeamBefore = mDatabase.getTeamNumberBefore(mTeamNumber);
         if (mTeamBefore == 0) {
-            menu.removeItem(R.id.previous_match);
+            menu.removeItem(R.id.previous_team);
         }
         mTeamAfter = mDatabase.getTeamNumberAfter(mTeamNumber);
         if (mTeamAfter == 0) {
-            menu.removeItem(R.id.next_match);
+            menu.removeItem(R.id.next_team);
         }
         return true;
     }

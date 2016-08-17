@@ -3,6 +3,7 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -22,7 +23,7 @@ public class Team {
     public int team_number;
     public String nickname;
 
-    public ArrayList<Integer> match_numbers;
+    public List<Integer> match_numbers;
 
     /*
         Pit Scouting

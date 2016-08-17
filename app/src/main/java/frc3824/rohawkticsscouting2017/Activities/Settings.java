@@ -19,6 +19,11 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
@@ -251,28 +256,16 @@ public class Settings extends Activity {
 
                 ArrayList<TBA_Team> teams = theBlueAlliance.getEventTeams(eventKey);
                 int numberOfTeams = teams.size();
-                int currentIndex = 0;
-                publishProgress(currentIndex, numberOfTeams);
-                for(TBA_Team tbaTeam: teams)
-                {
-                    Team team = new Team();
-                    team.team_number = tbaTeam.team_number;
-                    team.nickname = tbaTeam.nickname;
-                    team.pit_scouted = false;
-                    database.setTeam(team);
-                    currentIndex++;
-                    publishProgress(currentIndex, numberOfTeams);
-                }
-
                 ArrayList<TBA_Match> matches = theBlueAlliance.getEventMatches(eventKey);
                 int numberOfMatches = matches.size();
-                currentIndex = 0;
-                publishProgress(currentIndex, numberOfMatches);
+                int currentIndex = 0;
+                Map<Integer, List<Integer>> teamMatchNumbers = new HashMap<>();
+                publishProgress(currentIndex, numberOfTeams + numberOfMatches);
                 for(TBA_Match tbaMatch: matches)
                 {
                     if(!tbaMatch.comp_level.equals("qm")) {
                         currentIndex++;
-                        publishProgress(currentIndex, numberOfMatches);
+                        publishProgress(currentIndex, numberOfTeams + numberOfMatches);
                         continue;
                     }
 
@@ -291,9 +284,59 @@ public class Settings extends Activity {
 
                     match.red_score = tbaMatch.alliances.red.score;
 
+                    if(!teamMatchNumbers.containsKey(match.blue1))
+                    {
+                        teamMatchNumbers.put(match.blue1,new ArrayList<Integer>());
+                    }
+                    teamMatchNumbers.get(match.blue1).add(match.match_number);
+
+                    if(!teamMatchNumbers.containsKey(match.blue2)) {
+                        teamMatchNumbers.put(match.blue2, new ArrayList<Integer>());
+                    }
+                    teamMatchNumbers.get(match.blue2).add(match.match_number);
+
+                    if(!teamMatchNumbers.containsKey(match.blue3))
+                    {
+                        teamMatchNumbers.put(match.blue3,new ArrayList<Integer>());
+                    }
+                    teamMatchNumbers.get(match.blue3).add(match.match_number);
+
+                    if(!teamMatchNumbers.containsKey(match.red1))
+                    {
+                        teamMatchNumbers.put(match.red1,new ArrayList<Integer>());
+
+                    }
+                    teamMatchNumbers.get(match.red1).add(match.match_number);
+
+                    if(!teamMatchNumbers.containsKey(match.red2))
+                    {
+                        teamMatchNumbers.put(match.red2,new ArrayList<Integer>());
+                    }
+                    teamMatchNumbers.get(match.red2).add(match.match_number);
+
+                    if(!teamMatchNumbers.containsKey(match.red3))
+                    {
+                        teamMatchNumbers.put(match.red3,new ArrayList<Integer>());
+                    }
+                    teamMatchNumbers.get(match.red3).add(match.match_number);
+
                     database.setMatch(match);
                     currentIndex++;
-                    publishProgress(currentIndex, numberOfMatches);
+                    publishProgress(currentIndex, numberOfTeams + numberOfMatches);
+                }
+
+                publishProgress(currentIndex, numberOfTeams + numberOfMatches);
+                for(TBA_Team tbaTeam: teams)
+                {
+                    Team team = new Team();
+                    team.team_number = tbaTeam.team_number;
+                    team.nickname = tbaTeam.nickname;
+                    team.pit_scouted = false;
+                    team.match_numbers = teamMatchNumbers.get(team.team_number);
+                    Collections.sort(team.match_numbers);
+                    database.setTeam(team);
+                    currentIndex++;
+                    publishProgress(currentIndex, numberOfTeams + numberOfMatches);
                 }
 
             } catch (IOException e) {

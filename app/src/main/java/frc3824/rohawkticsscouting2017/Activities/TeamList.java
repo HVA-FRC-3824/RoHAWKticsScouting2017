@@ -85,6 +85,10 @@ public class TeamList extends Activity implements View.OnClickListener{
                 intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, view.getId());
                 startActivity(intent);
                 break;
+            case Constants.Intent_Extras.TEAM_VIEWING:
+                intent = new Intent(this, TeamView.class);
+                intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, view.getId());
+                startActivity(intent);
             default:
                 assert false;
         }
