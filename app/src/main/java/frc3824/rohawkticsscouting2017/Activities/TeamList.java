@@ -89,4 +89,10 @@ public class TeamList extends Activity implements View.OnClickListener{
                 assert false;
         }
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(this, Home.class));
+    }
 }

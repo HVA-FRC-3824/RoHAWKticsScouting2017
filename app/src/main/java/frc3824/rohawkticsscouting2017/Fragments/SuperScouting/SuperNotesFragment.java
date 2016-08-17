@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Fragments.PitScouting;
+package frc3824.rohawkticsscouting2017.Fragments.SuperScouting;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,19 +11,17 @@ import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 
 /**
  * @author frc3824
- * Created: 8/15/16
- *
- * Fragment that handles collecting the notes for pit scouting
+ * Created: 8/16/16
  */
-public class NotesFragment extends ScoutFragment {
+public class SuperNotesFragment extends ScoutFragment {
 
-    private final static String TAG = "NotesFragment";
+    private final static String TAG = "SuperNotesFragment";
 
-    public NotesFragment(){}
+    public SuperNotesFragment(){}
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_notes, container, false);
+        View view = inflater.inflate(R.layout.fragment_super_notes, container, false);
         if(mValueMap != null)
         {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);
@@ -33,4 +31,5 @@ public class NotesFragment extends ScoutFragment {
 
         return view;
     }
+
 }

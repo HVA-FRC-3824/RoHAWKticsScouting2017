@@ -49,7 +49,7 @@ public class CloudStorage extends Activity {
         mFPA = new FPA_CloudStorage(getFragmentManager());
 
         viewPager.setAdapter(mFPA);
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(mFPA.getCount());
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.cloud_storage_tab_layout);
         tabLayout.setBackgroundColor(Color.BLUE);

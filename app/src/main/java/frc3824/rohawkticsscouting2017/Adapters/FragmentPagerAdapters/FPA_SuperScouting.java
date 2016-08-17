@@ -9,64 +9,55 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import frc3824.rohawkticsscouting2017.Fragments.PitScouting.PitNotesFragment;
-import frc3824.rohawkticsscouting2017.Fragments.PitScouting.DimensionsFragment;
-import frc3824.rohawkticsscouting2017.Fragments.PitScouting.MiscellaneousFragment;
-import frc3824.rohawkticsscouting2017.Fragments.PitScouting.RobotPictureFragment;
+import frc3824.rohawkticsscouting2017.Fragments.SuperScouting.QualitativeFragment;
+import frc3824.rohawkticsscouting2017.Fragments.SuperScouting.SuperNotesFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**
- * @author frc3824
- * Created: 8/11/16
+ * @author Andrew Messing
+ * Created: 8/16/16
  *
- * Adapter for the fragments to be used in the Match Scouting Activity
+ *
  */
-public class FPA_PitScouting extends FragmentPagerAdapter {
+public class FPA_SuperScouting extends FragmentPagerAdapter {
 
-    private final static String TAG = "FPA_PitScouting";
+    private final static String TAG = "FPA_SuperScouting";
 
-    private String mTabTitles[] = new String[]{"Robot Picture", "Dimensions", "Misc", "Notes"};
+    private String mTabTitles[] = new String[]{"Qualitative", "Notes"};
 
     private Map<Integer, ScoutFragment> mFragments = new HashMap<>();
 
     private ScoutMap mValueMap = null;
 
-    public FPA_PitScouting(FragmentManager fm) {
+    public FPA_SuperScouting(FragmentManager fm) {
         super(fm);
     }
 
-    /**
-     * Gets the fragment at the specified position for display
-     *
-     * @param position position of the fragment wanted
-     * @return fragment to be displayed
-     */
     @Override
     public Fragment getItem(int position) {
         ScoutFragment sf = null;
+
         if(mFragments.containsKey(position))
         {
             sf = mFragments.get(position);
         }
         else {
-            switch (position)
-            {
+            switch (position) {
                 case 0:
-                    sf = new RobotPictureFragment();
+                    sf = new QualitativeFragment();
                     break;
                 case 1:
-                    sf = new DimensionsFragment();
+                    sf = new SuperNotesFragment();
                     break;
-                case 2:
-                    sf = new MiscellaneousFragment();
-                    break;
-                case 3:
-                    sf = new PitNotesFragment();
-                    break;
+
+                default:
+                    assert false;
             }
 
-            if(mValueMap != null) {
+            // Set the value map that restores values
+            if(mValueMap != null)
+            {
                 sf.setValueMap(mValueMap);
             }
 
@@ -116,7 +107,6 @@ public class FPA_PitScouting extends FragmentPagerAdapter {
         {
             list.add(entry.getValue());
         }
-
         return list;
     }
 }

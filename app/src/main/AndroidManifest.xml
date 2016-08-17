@@ -44,6 +44,7 @@
         <activity android:name=".Activities.TeamList" />
         <activity android:name=".Activities.PitScouting" />
         <activity android:name=".Activities.CloudStorage" />
+        <activity android:name=".Activities.SuperScouting" />
     </application>
 
 </manifest>

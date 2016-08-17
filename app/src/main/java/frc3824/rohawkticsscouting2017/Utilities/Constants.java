@@ -118,6 +118,45 @@ public interface Constants {
         String NOTES = "pit_notes";
     }
 
+    interface Super_Scouting
+    {
+        interface Qualitative
+        {
+            interface Speed
+            {
+                String BLUE1 = "blue1_speed";
+                String BLUE2 = "blue2_speed";
+                String BLUE3 = "blue3_speed";
+                String RED1 = "red1_speed";
+                String RED2 = "red2_speed";
+                String RED3 = "red3_speed";
+            }
+
+            interface Pushing_Power
+            {
+                String BLUE1 = "blue1_pushing_power";
+                String BLUE2 = "blue2_pushing_power";
+                String BLUE3 = "blue3_pushing_power";
+                String RED1 = "red1_pushing_power";
+                String RED2 = "red2_pushing_power";
+                String RED3 = "red3_pushing_power";
+            }
+
+            interface Control
+            {
+                String BLUE1 = "blue1_control";
+                String BLUE2 = "blue2_control";
+                String BLUE3 = "blue3_control";
+                String RED1 = "red1_control";
+                String RED2 = "red2_control";
+                String RED3 = "red3_control";
+            }
+        }
+
+        String NOTES = "super_notes";
+
+    }
+
     interface Team
     {
         String NICKNAME = "nickname";

@@ -49,7 +49,7 @@ public class MatchList extends Activity implements View.OnClickListener{
         lp.setMargins(4, 4, 4, 4);
 
         // Set up practice match button for match and super scouting
-        if (mNextPage.equals(Constants.Intent_Extras.MATCH_SCOUTING)) {
+        if (mNextPage.equals(Constants.Intent_Extras.MATCH_SCOUTING) || mNextPage.equals(Constants.Intent_Extras.SUPER_SCOUTING)) {
             Button button = new Button(this);
             button.setLayoutParams(lp);
             button.setText("Practice Match");
@@ -107,6 +107,9 @@ public class MatchList extends Activity implements View.OnClickListener{
                         button.setBackgroundColor(Color.RED);
                     }
                     break;
+                case Constants.Intent_Extras.SUPER_SCOUTING:
+                    button.setText(String.format("Match: %d", match_number));
+                    break;
             }
             button.setOnClickListener(this);
             button.setId(match_number);
@@ -132,9 +135,26 @@ public class MatchList extends Activity implements View.OnClickListener{
                 }
                 startActivity(intent);
                 break;
+            case Constants.Intent_Extras.SUPER_SCOUTING:
+                intent = new Intent(this, SuperScouting.class);
+                if(match_number == 0)
+                {
+                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
+                }
+                else
+                {
+                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+                }
+                startActivity(intent);
+                break;
             default:
                 assert false;
         }
+    }
 
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(this, Home.class));
     }
 }

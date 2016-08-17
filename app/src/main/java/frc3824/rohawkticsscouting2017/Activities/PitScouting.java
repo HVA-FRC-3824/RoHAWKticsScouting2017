@@ -78,7 +78,7 @@ public class PitScouting extends Activity {
         }
 
         viewPager.setAdapter(mFPA);
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(mFPA.getCount());
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.pit_scouting_tab_layout);
         tabLayout.setBackgroundColor(Color.BLUE);
