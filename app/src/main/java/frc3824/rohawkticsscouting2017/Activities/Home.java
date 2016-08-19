@@ -94,6 +94,7 @@ public class Home extends Activity implements View.OnClickListener{
             case Constants.User_Types.STRATEGY:
                 setupButton(R.id.view_team_button);
                 setupButton(R.id.view_match_button);
+                setupButton(R.id.view_rankings_button);
 
                 eventTextview.setText("Event: " + eventKey);
                 eventTextview.setVisibility(View.VISIBLE);
@@ -109,8 +110,10 @@ public class Home extends Activity implements View.OnClickListener{
 
                 setupButton(R.id.view_team_button);
                 setupButton(R.id.view_match_button);
+                setupButton(R.id.view_rankings_button);
 
                 setupButton(R.id.cloud_storage_button);
+
 
                 eventTextview.setText("Event: " + eventKey);
                 eventTextview.setVisibility(View.VISIBLE);
@@ -157,6 +160,10 @@ public class Home extends Activity implements View.OnClickListener{
             case R.id.view_match_button:
                 intent = new Intent(this, MatchList.class);
                 intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.MATCH_VIEWING);
+                startActivity(intent);
+                break;
+            case R.id.view_rankings_button:
+                intent = new Intent(this, RankingsView.class);
                 startActivity(intent);
                 break;
             case R.id.cloud_storage_button:

@@ -47,6 +47,7 @@
         <activity android:name=".Activities.SuperScouting" />
         <activity android:name=".Activities.TeamView" />
         <activity android:name=".Activities.MatchView"/>
+        <activity android:name=".Activities.RankingsView"/>
     </application>
 
 </manifest>
