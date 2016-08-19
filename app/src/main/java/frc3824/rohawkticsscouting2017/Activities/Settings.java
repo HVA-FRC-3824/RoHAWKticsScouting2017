@@ -29,6 +29,7 @@ import java.util.Set;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
+import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Match;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Team;
@@ -185,6 +186,9 @@ public class Settings extends Activity {
         String eventKeyText = String.valueOf(eventKey.getText());
         if (!eventKeyText.equals("")) {
             prefEditor.putString(Constants.Settings.EVENT_KEY, eventKeyText);
+            Database.getInstance(eventKeyText);
+            Storage.getInstance(eventKeyText);
+
             String type = String.valueOf(typeSelector.getSelectedItem());
             prefEditor.putString(Constants.Settings.USER_TYPE, type);
 
@@ -252,7 +256,7 @@ public class Settings extends Activity {
 
             TheBlueAlliance theBlueAlliance = TheBlueAlliance.getInstance();
             try {
-                Database database = Database.getInstance(eventKey);
+                Database database = Database.getInstance();
 
                 ArrayList<TBA_Team> teams = theBlueAlliance.getEventTeams(eventKey);
                 int numberOfTeams = teams.size();

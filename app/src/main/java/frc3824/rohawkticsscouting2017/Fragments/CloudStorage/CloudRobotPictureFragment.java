@@ -63,10 +63,8 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
         ListView listView = (ListView)view.findViewById(R.id.file_list);
 
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
-        mDatabase = Database.getInstance(eventKey);
-        mStorage = Storage.getInstance(eventKey);
+        mDatabase = Database.getInstance();
+        mStorage = Storage.getInstance();
         ArrayList<Team> teams = mDatabase.getTeams();
 
         boolean internet = true;
@@ -107,7 +105,7 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
         }
 
         LVA_CloudImage lva = new LVA_CloudImage(mContext, R.layout.list_item_cloud_image, mCIs,
-                mStorage, mDatabase, Constants.Cloud.ROBOT_PICTURE);
+                Constants.Cloud.ROBOT_PICTURE);
         listView.setAdapter(lva);
 
         view.findViewById(R.id.upload_all).setOnClickListener(this);

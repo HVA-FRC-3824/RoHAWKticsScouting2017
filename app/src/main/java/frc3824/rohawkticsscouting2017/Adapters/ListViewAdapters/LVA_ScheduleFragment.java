@@ -32,11 +32,11 @@ public class LVA_ScheduleFragment extends ArrayAdapter<Integer> {
     private int mTeamNumber;
 
 
-    public LVA_ScheduleFragment(Context context, List<Integer> objects, Database database, int teamNumber) {
+    public LVA_ScheduleFragment(Context context, List<Integer> objects, int teamNumber) {
         super(context, R.layout.list_item_fragment_schedule, objects);
         mMatchNumbers = objects;
         mContext = context;
-        mDatabase = database;
+        mDatabase = Database.getInstance();
         mTeamNumber = teamNumber;
     }
 

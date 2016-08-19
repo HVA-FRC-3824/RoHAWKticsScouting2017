@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.Firebase.Database;
+import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -124,7 +125,10 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
         }
 
-        Database.getInstance(eventKey);
+        if(eventKey != "") {
+            Database.getInstance(eventKey);
+            Storage.getInstance(eventKey);
+        }
 
     }
 

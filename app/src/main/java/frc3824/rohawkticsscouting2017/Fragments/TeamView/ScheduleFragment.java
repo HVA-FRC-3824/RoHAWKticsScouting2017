@@ -20,15 +20,10 @@ public class ScheduleFragment extends Fragment {
 
     private final static String TAG = "ScheduleFragment";
 
-    private Database mDatabase;
     private int mTeamNumber;
 
     public ScheduleFragment(){}
 
-    public void setDatabase(Database database)
-    {
-        mDatabase = database;
-    }
 
     public void setTeamNumber(int teamNumber)
     {
@@ -41,10 +36,11 @@ public class ScheduleFragment extends Fragment {
 
         ListView schedule = (ListView)view.findViewById(R.id.schedule);
 
-        Team team = mDatabase.getTeam(mTeamNumber);
+        Database database = Database.getInstance();
+        Team team = database.getTeam(mTeamNumber);
 
 
-        LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), team.match_numbers, mDatabase, mTeamNumber);
+        LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), team.match_numbers, mTeamNumber);
 
         schedule.setAdapter(lva);
 

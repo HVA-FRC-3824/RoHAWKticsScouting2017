@@ -44,9 +44,8 @@ public class MatchView extends Activity {
         Bundle extras = getIntent().getExtras();
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
 
-        mDatabase = Database.getInstance(eventKey);
+        mDatabase = Database.getInstance();
 
         FragmentManager fm = getFragmentManager();
 

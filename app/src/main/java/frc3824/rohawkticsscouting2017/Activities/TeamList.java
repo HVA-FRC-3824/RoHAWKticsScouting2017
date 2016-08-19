@@ -44,7 +44,7 @@ public class TeamList extends Activity implements View.OnClickListener{
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
 
-        Database database = Database.getInstance(eventKey);
+        Database database = Database.getInstance();
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.team_list);
         TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -27,8 +27,6 @@ public class CloudStorage extends Activity {
 
     private FPA_CloudStorage mFPA;
 
-    private Storage mStorage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -39,10 +37,6 @@ public class CloudStorage extends Activity {
         setActionBar(toolbar);
 
         setTitle("Cloud Storage");
-
-        SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String eventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
-        mStorage = Storage.getInstance(eventKey);
 
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager)findViewById(R.id.cloud_storage_view_pager);

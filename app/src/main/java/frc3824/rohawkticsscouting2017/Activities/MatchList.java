@@ -38,9 +38,8 @@ public class MatchList extends Activity implements View.OnClickListener{
         mNextPage = extras.getString(Constants.Intent_Extras.NEXT_PAGE);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
 
-        Database database = Database.getInstance(eventKey);
+        Database database = Database.getInstance();
 
         int numberOfMatches = database.getNumberOfMatches();
 

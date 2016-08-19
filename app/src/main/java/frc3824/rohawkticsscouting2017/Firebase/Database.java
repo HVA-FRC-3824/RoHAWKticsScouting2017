@@ -9,7 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -63,6 +62,16 @@ public class Database {
         return  mSingleton;
     }
 
+    public static Database getInstance()
+    {
+        if(mSingleton == null)
+        {
+            mSingleton = new Database();
+        }
+
+        return  mSingleton;
+    }
+
     private Database()
     {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -75,29 +84,29 @@ public class Database {
         mRootRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildAdded: " + dataSnapshot.getKey());
+                Log.v(TAG, "onChildAdded: " + dataSnapshot.getKey());
                 mEvents.add(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildChanged: " + dataSnapshot.getKey());
+                Log.v(TAG, "onChildChanged: " + dataSnapshot.getKey());
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "onChildRemoved: " + dataSnapshot.getKey());
                 mEvents.remove(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildMoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "onChildMoved: " + dataSnapshot.getKey());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "onCancelled");
+                Log.v(TAG, "onCancelled");
             }
         });
     }
@@ -119,30 +128,30 @@ public class Database {
         mScheduleRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "schedule.onChildAdded: " + dataSnapshot.getKey());
+                Log.v(TAG, "schedule.onChildAdded: " + dataSnapshot.getKey());
                 mSchedule.put(dataSnapshot.getKey(), dataSnapshot.getValue(Match.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "schedule.onChildChanged: " + dataSnapshot.getKey());
+                Log.v(TAG, "schedule.onChildChanged: " + dataSnapshot.getKey());
                 mSchedule.put(dataSnapshot.getKey(), dataSnapshot.getValue(Match.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "schedule.onChildRemoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "schedule.onChildRemoved: " + dataSnapshot.getKey());
                 mSchedule.remove(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "schedule.onChildMoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "schedule.onChildMoved: " + dataSnapshot.getKey());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "schedule.onCancelled");
+                Log.v(TAG, "schedule.onCancelled");
             }
         });
 
@@ -151,30 +160,30 @@ public class Database {
         mPartialMatchRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "partial_match.onChildAdded: " + dataSnapshot.getKey());
+                Log.v(TAG, "partial_match.onChildAdded: " + dataSnapshot.getKey());
                 mPartialMatches.put(dataSnapshot.getKey(),dataSnapshot.getValue(TeamInMatch.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "partial_match.onChildChanged: " + dataSnapshot.getKey());
+                Log.v(TAG, "partial_match.onChildChanged: " + dataSnapshot.getKey());
                 mPartialMatches.put(dataSnapshot.getKey(),dataSnapshot.getValue(TeamInMatch.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "partial_match.onChildRemoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "partial_match.onChildRemoved: " + dataSnapshot.getKey());
                 mPartialMatches.remove(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "partial_match.onChildMoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "partial_match.onChildMoved: " + dataSnapshot.getKey());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "partial_match.onCancelled");
+                Log.v(TAG, "partial_match.onCancelled");
             }
         });
 
@@ -183,25 +192,25 @@ public class Database {
         mSuperMatchRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "super_match.onChildAdded: " + dataSnapshot.getKey());
+                Log.v(TAG, "super_match.onChildAdded: " + dataSnapshot.getKey());
                 mSuperMatches.put(dataSnapshot.getKey(), dataSnapshot.getValue(SuperMatch.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "super_match.onChildChanged: " + dataSnapshot.getKey());
+                Log.v(TAG, "super_match.onChildChanged: " + dataSnapshot.getKey());
                 mSuperMatches.put(dataSnapshot.getKey(), dataSnapshot.getValue(SuperMatch.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "super_match.onChildRemoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "super_match.onChildRemoved: " + dataSnapshot.getKey());
                 mSuperMatches.remove(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "super_match.onChildMoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "super_match.onChildMoved: " + dataSnapshot.getKey());
             }
 
             @Override
@@ -215,30 +224,30 @@ public class Database {
         mTeamRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "teams.onChildAdded: " + dataSnapshot.getKey());
+                Log.v(TAG, "teams.onChildAdded: " + dataSnapshot.getKey());
                 mTeams.put(dataSnapshot.getKey(), dataSnapshot.getValue(Team.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "teams.onChildAdded: " + dataSnapshot.getKey());
+                Log.v(TAG, "teams.onChildAdded: " + dataSnapshot.getKey());
                 mTeams.put(dataSnapshot.getKey(), dataSnapshot.getValue(Team.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "teams.onChildRemoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "teams.onChildRemoved: " + dataSnapshot.getKey());
                 mTeams.remove(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "teams.onChildMoved");
+                Log.v(TAG, "teams.onChildMoved");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "teams.onCancelled");
+                Log.v(TAG, "teams.onCancelled");
             }
         });
 
@@ -321,6 +330,22 @@ public class Database {
             }
         });
         return teams;
+    }
+
+    public List<TeamInMatch> getCompletedMatches(int team_number)
+    {
+        Team team = getTeam(team_number);
+        List<TeamInMatch> completedMatches = new ArrayList<>();
+        for(int match_number: team.match_numbers)
+        {
+            TeamInMatch tim = getTeamInMatch(match_number, team_number);
+            if(tim != null)
+            {
+                completedMatches.add(tim);
+            }
+        }
+
+        return completedMatches;
     }
 
     public int getTeamNumberBefore(int team_number)

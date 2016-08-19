@@ -66,7 +66,7 @@ public class PitScouting extends Activity {
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mEventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
-        mDatabase = Database.getInstance(mEventKey);
+        mDatabase = Database.getInstance();
 
         setTitle(String.format("Team: %d", mTeamNumber));
 

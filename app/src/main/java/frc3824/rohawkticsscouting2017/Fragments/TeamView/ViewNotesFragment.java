@@ -23,15 +23,9 @@ public class ViewNotesFragment extends Fragment{
 
     private final static String TAG = "ViewNotesFragment";
 
-    private Database mDatabase;
     private int mTeamNumber;
 
     public ViewNotesFragment(){}
-
-    public void setDatabase(Database database)
-    {
-        mDatabase = database;
-    }
 
     public void setTeamNumber(int teamNumber)
     {
@@ -46,16 +40,18 @@ public class ViewNotesFragment extends Fragment{
         TextView superNotes = (TextView)view.findViewById(R.id.super_notes);
         TextView driveTeamFeedback = (TextView)view.findViewById(R.id.drive_team_feedback);
 
-        Team team = mDatabase.getTeam(mTeamNumber);
+        Database database = Database.getInstance();
+
+        Team team = database.getTeam(mTeamNumber);
         String matchNotesText = "";
         String superNotesText = "";
         for(int matchNumber : team.match_numbers)
         {
-            TeamInMatch tim = mDatabase.getTeamInMatch(matchNumber, mTeamNumber);
+            TeamInMatch tim = database.getTeamInMatch(matchNumber, mTeamNumber);
             if(tim != null && tim.notes != null && tim.notes != "") {
                 matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tim.notes);
             }
-            SuperMatch sm = mDatabase.getSuperMatch(matchNumber);
+            SuperMatch sm = database.getSuperMatch(matchNumber);
             if(sm != null && sm.notes != null && sm.notes != "") {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }

@@ -42,6 +42,14 @@ public class Storage {
         return mSingleton;
     }
 
+    public static Storage getInstance() {
+        if (mSingleton == null) {
+            mSingleton = new Storage();
+        }
+
+        return mSingleton;
+    }
+
     private Storage() {
         mFirebaseStorage = FirebaseStorage.getInstance();
         mRootRef = mFirebaseStorage.getReferenceFromUrl("gs://rohawktics-scouting-2017.appspot.com");

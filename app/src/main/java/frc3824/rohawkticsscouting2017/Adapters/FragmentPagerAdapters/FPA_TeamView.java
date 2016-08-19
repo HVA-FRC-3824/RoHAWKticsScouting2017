@@ -53,18 +53,17 @@ public class FPA_TeamView extends FragmentPagerAdapter {
                     break;
                 case 1:
                     f = new PitDataFragment();
+                    ((PitDataFragment)f).setTeamNumber(mTeamNumber);
                     break;
                 case 2:
                     f = new MatchDataFragment();
                     break;
                 case 3:
                     f = new ViewNotesFragment();
-                    ((ViewNotesFragment)f).setDatabase(mDatabase);
                     ((ViewNotesFragment)f).setTeamNumber(mTeamNumber);
                     break;
                 case 4:
                     f = new ScheduleFragment();
-                    ((ScheduleFragment)f).setDatabase(mDatabase);
                     ((ScheduleFragment)f).setTeamNumber(mTeamNumber);
                     break;
             }

@@ -48,12 +48,12 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
     private Database mDatabase;
     private int mImageType;
 
-    public LVA_CloudImage(Context context, int resource, ArrayList<CloudImage> objects, Storage storage, Database database, int imageType) {
+    public LVA_CloudImage(Context context, int resource, ArrayList<CloudImage> objects, int imageType) {
         super(context, resource, objects);
         mCloudFiles = objects;
         mContext = context;
-        mStorage = storage;
-        mDatabase = database;
+        mStorage = Storage.getInstance();
+        mDatabase = Database.getInstance();
         mImageType = imageType;
     }
 

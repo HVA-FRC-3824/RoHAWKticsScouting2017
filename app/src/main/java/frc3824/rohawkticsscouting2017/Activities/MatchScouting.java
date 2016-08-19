@@ -61,9 +61,8 @@ public class MatchScouting extends Activity {
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String allianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
         int allianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
-        String eventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
 
-        mDatabase = Database.getInstance(eventKey);
+        mDatabase = Database.getInstance();
 
         if (mMatchNumber > 0) {
             if (allianceColor.equals(Constants.Alliance_Colors.BLUE)) {
