@@ -271,54 +271,29 @@ public class Settings extends Activity {
 
                     Match match = new Match();
                     match.match_number = tbaMatch.match_number;
+                    match.teams = new ArrayList<>();
+                    match.scores = new ArrayList<>();
 
-                    match.blue1 = Integer.parseInt(tbaMatch.alliances.blue.teams[0].substring(3));
-                    match.blue2 = Integer.parseInt(tbaMatch.alliances.blue.teams[1].substring(3));
-                    match.blue3 = Integer.parseInt(tbaMatch.alliances.blue.teams[2].substring(3));
+                    match.teams.add(Integer.parseInt(tbaMatch.alliances.blue.teams[0].substring(3)));
+                    match.teams.add(Integer.parseInt(tbaMatch.alliances.blue.teams[1].substring(3)));
+                    match.teams.add(Integer.parseInt(tbaMatch.alliances.blue.teams[2].substring(3)));
 
-                    match.blue_score = tbaMatch.alliances.blue.score;
+                    match.scores.add(tbaMatch.alliances.blue.score);
 
-                    match.red1 = Integer.parseInt(tbaMatch.alliances.red.teams[0].substring(3));
-                    match.red2 = Integer.parseInt(tbaMatch.alliances.red.teams[1].substring(3));
-                    match.red3 = Integer.parseInt(tbaMatch.alliances.red.teams[2].substring(3));
+                    match.teams.add(Integer.parseInt(tbaMatch.alliances.red.teams[0].substring(3)));
+                    match.teams.add(Integer.parseInt(tbaMatch.alliances.red.teams[1].substring(3)));
+                    match.teams.add(Integer.parseInt(tbaMatch.alliances.red.teams[2].substring(3)));
 
-                    match.red_score = tbaMatch.alliances.red.score;
+                    match.scores.add(tbaMatch.alliances.red.score);
 
-                    if(!teamMatchNumbers.containsKey(match.blue1))
+                    for(int i = 0; i < match.teams.size(); i++)
                     {
-                        teamMatchNumbers.put(match.blue1,new ArrayList<Integer>());
+                        if(!teamMatchNumbers.containsKey(match.teams.get(i)))
+                        {
+                            teamMatchNumbers.put(match.teams.get(i), new ArrayList<Integer>());
+                        }
+                        teamMatchNumbers.get(match.teams.get(i)).add(match.match_number);
                     }
-                    teamMatchNumbers.get(match.blue1).add(match.match_number);
-
-                    if(!teamMatchNumbers.containsKey(match.blue2)) {
-                        teamMatchNumbers.put(match.blue2, new ArrayList<Integer>());
-                    }
-                    teamMatchNumbers.get(match.blue2).add(match.match_number);
-
-                    if(!teamMatchNumbers.containsKey(match.blue3))
-                    {
-                        teamMatchNumbers.put(match.blue3,new ArrayList<Integer>());
-                    }
-                    teamMatchNumbers.get(match.blue3).add(match.match_number);
-
-                    if(!teamMatchNumbers.containsKey(match.red1))
-                    {
-                        teamMatchNumbers.put(match.red1,new ArrayList<Integer>());
-
-                    }
-                    teamMatchNumbers.get(match.red1).add(match.match_number);
-
-                    if(!teamMatchNumbers.containsKey(match.red2))
-                    {
-                        teamMatchNumbers.put(match.red2,new ArrayList<Integer>());
-                    }
-                    teamMatchNumbers.get(match.red2).add(match.match_number);
-
-                    if(!teamMatchNumbers.containsKey(match.red3))
-                    {
-                        teamMatchNumbers.put(match.red3,new ArrayList<Integer>());
-                    }
-                    teamMatchNumbers.get(match.red3).add(match.match_number);
 
                     database.setMatch(match);
                     currentIndex++;

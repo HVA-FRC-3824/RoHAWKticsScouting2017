@@ -14,6 +14,7 @@ import java.util.List;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author Andrew Messing
@@ -53,47 +54,25 @@ public class LVA_ScheduleFragment extends ArrayAdapter<Integer> {
 
         Match match = mDatabase.getMatch(matchNumber);
 
-        ((TextView)convertView.findViewById(R.id.blue_1)).setText(String.valueOf(match.blue1));
-        ((TextView)convertView.findViewById(R.id.blue_2)).setText(String.valueOf(match.blue2));
-        ((TextView)convertView.findViewById(R.id.blue_3)).setText(String.valueOf(match.blue3));
+        TextView[] teamTextViews = new TextView[6];
+        teamTextViews[Constants.Match_Indices.BLUE1] = (TextView)convertView.findViewById(R.id.blue_1);
+        teamTextViews[Constants.Match_Indices.BLUE2] = (TextView)convertView.findViewById(R.id.blue_2);
+        teamTextViews[Constants.Match_Indices.BLUE3] = (TextView)convertView.findViewById(R.id.blue_3);
+        teamTextViews[Constants.Match_Indices.RED1] = (TextView)convertView.findViewById(R.id.red_1);
+        teamTextViews[Constants.Match_Indices.RED2] = (TextView)convertView.findViewById(R.id.red_2);
+        teamTextViews[Constants.Match_Indices.RED3] = (TextView)convertView.findViewById(R.id.red_3);
 
-        ((TextView)convertView.findViewById(R.id.red_1)).setText(String.valueOf(match.red1));
-        ((TextView)convertView.findViewById(R.id.red_2)).setText(String.valueOf(match.red2));
-        ((TextView)convertView.findViewById(R.id.red_3)).setText(String.valueOf(match.red3));
-
-        convertView.findViewById(R.id.blue_1).setBackgroundColor(Color.TRANSPARENT);
-        convertView.findViewById(R.id.blue_2).setBackgroundColor(Color.TRANSPARENT);
-        convertView.findViewById(R.id.blue_3).setBackgroundColor(Color.TRANSPARENT);
-        convertView.findViewById(R.id.red_1).setBackgroundColor(Color.TRANSPARENT);
-        convertView.findViewById(R.id.red_2).setBackgroundColor(Color.TRANSPARENT);
-        convertView.findViewById(R.id.red_3).setBackgroundColor(Color.TRANSPARENT);
-        if(mTeamNumber == match.blue1)
+        for(int i = 0; i < match.teams.size(); i++)
         {
-            convertView.findViewById(R.id.blue_1).setBackgroundColor(Color.YELLOW);
-        }
-        else if(mTeamNumber == match.blue2)
-        {
-            convertView.findViewById(R.id.blue_2).setBackgroundColor(Color.YELLOW);
-        }
-        else if(mTeamNumber == match.blue3)
-        {
-            convertView.findViewById(R.id.blue_3).setBackgroundColor(Color.YELLOW);
-        }
-        else if(mTeamNumber == match.red1)
-        {
-            convertView.findViewById(R.id.red_1).setBackgroundColor(Color.YELLOW);
-        }
-        else if(mTeamNumber == match.red2)
-        {
-            convertView.findViewById(R.id.red_2).setBackgroundColor(Color.YELLOW);
-        }
-        else if(mTeamNumber == match.red3)
-        {
-            convertView.findViewById(R.id.red_3).setBackgroundColor(Color.YELLOW);
-        }
-        else
-        {
-            assert false;
+            teamTextViews[i].setText(String.valueOf(match.teams.get(i)));
+            if(mTeamNumber == match.teams.get(i))
+            {
+                teamTextViews[i].setBackgroundColor(Color.YELLOW);
+            }
+            else
+            {
+                teamTextViews[i].setBackgroundColor(Color.TRANSPARENT);
+            }
         }
 
         /*

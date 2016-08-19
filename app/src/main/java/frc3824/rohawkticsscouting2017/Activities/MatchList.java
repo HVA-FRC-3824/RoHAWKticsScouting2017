@@ -56,6 +56,14 @@ public class MatchList extends Activity implements View.OnClickListener{
             button.setOnClickListener(this);
             button.setId(0);
             linearLayout.addView(button);
+        } else if(mNextPage.equals(Constants.Intent_Extras.MATCH_VIEWING))
+        {
+            Button button = new Button(this);
+            button.setLayoutParams(lp);
+            button.setText("Custom Match");
+            button.setOnClickListener(this);
+            button.setId(0);
+            linearLayout.addView(button);
         }
 
         for (int match_number = 1; match_number <= numberOfMatches; match_number++) {
@@ -71,33 +79,9 @@ public class MatchList extends Activity implements View.OnClickListener{
                     String allianceColor = sharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
                     int allianceNumber = sharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
                     if (allianceColor == Constants.Alliance_Colors.BLUE) {
-                        switch (allianceNumber) {
-                            case 1:
-                                team_number = match.blue1;
-                                break;
-                            case 2:
-                                team_number = match.blue2;
-                                break;
-                            case 3:
-                                team_number = match.blue3;
-                                break;
-                            default:
-                                assert false;
-                        }
+                        team_number = match.teams.get(allianceNumber - 1);
                     } else {
-                        switch (allianceNumber) {
-                            case 1:
-                                team_number = match.red1;
-                                break;
-                            case 2:
-                                team_number = match.red2;
-                                break;
-                            case 3:
-                                team_number = match.red3;
-                                break;
-                            default:
-                                assert false;
-                        }
+                        team_number = match.teams.get(allianceNumber + 2);
                     }
 
                     button.setText(String.format("Match: %d - Team: %d", match_number, team_number));
@@ -108,6 +92,7 @@ public class MatchList extends Activity implements View.OnClickListener{
                     }
                     break;
                 case Constants.Intent_Extras.SUPER_SCOUTING:
+                case Constants.Intent_Extras.MATCH_VIEWING:
                     button.setText(String.format("Match: %d", match_number));
                     break;
             }
@@ -143,6 +128,17 @@ public class MatchList extends Activity implements View.OnClickListener{
                 }
                 else
                 {
+                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+                }
+                startActivity(intent);
+                break;
+            case Constants.Intent_Extras.MATCH_VIEWING:
+                intent = new Intent(this, MatchView.class);
+                if(match_number == 0)
+                {
+                    //TODO: setup dialogbox to collect 6 team numbers and pass those to match view
+                }
+                else {
                     intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
                 }
                 startActivity(intent);

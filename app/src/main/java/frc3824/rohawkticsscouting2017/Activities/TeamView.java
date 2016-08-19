@@ -125,6 +125,4 @@ public class TeamView extends Activity {
         }
         return true;
     }
-    
-
 }

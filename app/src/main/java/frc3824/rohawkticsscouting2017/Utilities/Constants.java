@@ -44,6 +44,19 @@ public interface Constants {
         String RED = "Red";
     }
 
+    //Match Indices
+    interface Match_Indices {
+        int BLUE1 = 0;
+        int BLUE2 = 1;
+        int BLUE3 = 2;
+        int RED1 = 3;
+        int RED2 = 4;
+        int RED3 = 5;
+
+        int BLUE_ALLIANCE = 0;
+        int RED_ALLIANCE = 1;
+    }
+
     // Intent Extras
     interface Intent_Extras {
         String TEAM_NUMBER = "team_number";
@@ -54,6 +67,13 @@ public interface Constants {
         String PIT_SCOUTING = "pit_scouting";
         String MATCH_VIEWING = "match_viewing";
         String TEAM_VIEWING = "team_viewing";
+
+        String BLUE1 = "blue1";
+        String BLUE2 = "blue2";
+        String BLUE3 = "blue3";
+        String RED1 = "red1";
+        String RED2 = "red2";
+        String RED3 = "red3";
     }
 
     interface The_Blue_Alliance {

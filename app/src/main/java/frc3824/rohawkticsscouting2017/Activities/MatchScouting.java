@@ -67,33 +67,9 @@ public class MatchScouting extends Activity {
 
         if (mMatchNumber > 0) {
             if (allianceColor.equals(Constants.Alliance_Colors.BLUE)) {
-                switch (allianceNumber) {
-                    case 1:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).blue1;
-                        break;
-                    case 2:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).blue2;
-                        break;
-                    case 3:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).blue3;
-                        break;
-                    default:
-                        assert false;
-                }
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(allianceNumber - 1);
             } else {
-                switch (allianceNumber) {
-                    case 1:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).red1;
-                        break;
-                    case 2:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).red2;
-                        break;
-                    case 3:
-                        mTeamNumber = mDatabase.getMatch(mMatchNumber).red3;
-                        break;
-                    default:
-                        assert false;
-                }
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(allianceNumber + 2);
             }
 
             setTitle(String.format("Match Number: %d Team Number: %d", mMatchNumber, mTeamNumber));
