@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,16 +52,30 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
     private Context mContext;
     private ImageView mImageView;
 
+    private final static int REQUEST_CAMERA_PERMISSION = 3;
     private final static int REQUEST_TAKE_PHOTO = 1;
+    private boolean mCameraPermission;
 
     public RobotPictureFragment() {}
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+
         View view = inflater.inflate(R.layout.fragment_robot_picture, container, false);
         Utilities.setupUi(getActivity(), view);
 
         mContext = getContext();
+
+        if(ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        {
+            mCameraPermission = false;
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        }
+        else
+        {
+            mCameraPermission = true;
+        }
+
         mImageView = (ImageView) view.findViewById(R.id.robot_picture);
         mButton = (Button) view.findViewById(R.id.take_picture);
 
@@ -97,7 +114,10 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
         String text = mButton.getText().toString();
         if(text.equals("Take Picture"))
         {
-            dispatchTakePictureIntent();
+            Log.d(TAG, String.valueOf(mCameraPermission));
+            if(mCameraPermission) {
+                dispatchTakePictureIntent();
+            }
         }
         // Removes the image from the file system
         else if (text.equals("Remove Picture")) {
@@ -219,6 +239,30 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
         return "";
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        switch (requestCode) {
+            case REQUEST_CAMERA_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Caught permission");
+                    mCameraPermission = true;
 
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+        }
+    }
+
+    public void cameraHasPermission()
+    {
+        mCameraPermission = true;
+    }
 
 }

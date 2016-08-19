@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 public class PitScouting extends Activity {
 
     private final static String TAG = "PitScouting";
+
+    private final static int REQUEST_CAMERA_PERMISSION = 3;
 
     private int mTeamNumber;
     private Database mDatabase;
@@ -453,6 +456,25 @@ public class PitScouting extends Activity {
 
             file1.close();
             file2.close();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        switch (requestCode) {
+            case REQUEST_CAMERA_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                   mFPA.cameraHasPermission();
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
         }
     }
 }

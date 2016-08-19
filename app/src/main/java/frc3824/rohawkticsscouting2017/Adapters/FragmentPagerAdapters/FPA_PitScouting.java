@@ -76,6 +76,11 @@ public class FPA_PitScouting extends FragmentPagerAdapter {
         return sf;
     }
 
+    public void cameraHasPermission()
+    {
+        ((RobotPictureFragment)mFragments.get(0)).cameraHasPermission();
+    }
+
     /**
      * Gets the number of fragments
      * @return the number of fragments
