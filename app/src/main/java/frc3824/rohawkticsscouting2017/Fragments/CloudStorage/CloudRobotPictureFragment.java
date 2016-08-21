@@ -104,7 +104,7 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
             mCIs.add(ci);
         }
 
-        LVA_CloudImage lva = new LVA_CloudImage(mContext, R.layout.list_item_cloud_image, mCIs,
+        LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs,
                 Constants.Cloud.ROBOT_PICTURE);
         listView.setAdapter(lva);
 

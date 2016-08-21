@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatch;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamInMatch;
@@ -40,6 +41,7 @@ public class Database {
     private DatabaseReference mPartialMatchRef;
     private DatabaseReference mSuperMatchRef;
     private DatabaseReference mTeamRef;
+    private DatabaseReference mStrategyRef;
 
     private String mEventKey;
 
@@ -48,6 +50,7 @@ public class Database {
     private Map<String, TeamInMatch> mPartialMatches;
     private Map<String, SuperMatch> mSuperMatches;
     private Map<String, Team> mTeams;
+    private Map<String, Strategy> mStrategies;
 
     private static Database mSingleton;
 
@@ -251,6 +254,38 @@ public class Database {
             }
         });
 
+        mStrategyRef = mEventRef.child("strategies");
+        mStrategies = new HashMap<>();
+        mStrategyRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.onChildAdded: " + dataSnapshot.getKey());
+                mStrategies.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.onChildChanged: " + dataSnapshot.getKey());
+                mStrategies.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "strategies.onChildRemoved: " + dataSnapshot.getKey());
+                mStrategies.remove(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "strategies.onCancelled");
+            }
+        });
+
         mEventKey = eventKey;
     }
 
@@ -347,6 +382,22 @@ public class Database {
 
         return completedMatches;
     }
+
+    public void setStrategy(Strategy strategy)
+    {
+        mStrategyRef.child(strategy.name).setValue(strategy);
+    }
+
+    public Strategy getStrategy(String strategy_name)
+    {
+        return mStrategies.get(strategy_name);
+    }
+
+    public ArrayList<Strategy> getStrategies()
+    {
+        return new ArrayList<>(mStrategies.values());
+    }
+
 
     public int getTeamNumberBefore(int team_number)
     {

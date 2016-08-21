@@ -43,6 +43,7 @@ public class Home extends Activity implements View.OnClickListener{
         switch (user_type)
         {
             case Constants.User_Types.MATCH_SCOUT:
+                setupButton(R.id.schedule_button);
                 setupButton(R.id.scout_match_button);
 
                 eventTextview.setText("Event: " + eventKey);
@@ -70,6 +71,7 @@ public class Home extends Activity implements View.OnClickListener{
                 userSubtypeTextView.setVisibility(View.VISIBLE);
                 break;
             case Constants.User_Types.PIT_SCOUT:
+                setupButton(R.id.schedule_button);
                 setupButton(R.id.scout_pit_button);
 
                 eventTextview.setText("Event: " + eventKey);
@@ -83,6 +85,7 @@ public class Home extends Activity implements View.OnClickListener{
                 userSubtypeTextView.setVisibility(View.VISIBLE);
                 break;
             case Constants.User_Types.SUPER_SCOUT:
+                setupButton(R.id.schedule_button);
                 setupButton(R.id.scout_super_button);
 
                 eventTextview.setText("Event: " + eventKey);
@@ -92,10 +95,23 @@ public class Home extends Activity implements View.OnClickListener{
                 usertypeTextview.setVisibility(View.VISIBLE);
 
                 break;
+            case Constants.User_Types.DRIVE_TEAM:
+                setupButton(R.id.schedule_button);
+                setupButton(R.id.match_planning_button);
+
+                eventTextview.setVisibility(View.VISIBLE);
+
+                usertypeTextview.setText("User: Drive Team");
+                usertypeTextview.setVisibility(View.VISIBLE);
+                break;
+
             case Constants.User_Types.STRATEGY:
+                setupButton(R.id.schedule_button);
                 setupButton(R.id.view_team_button);
                 setupButton(R.id.view_match_button);
                 setupButton(R.id.view_rankings_button);
+
+                setupButton(R.id.match_planning_button);
 
                 eventTextview.setText("Event: " + eventKey);
                 eventTextview.setVisibility(View.VISIBLE);
@@ -105,6 +121,7 @@ public class Home extends Activity implements View.OnClickListener{
 
                 break;
             case Constants.User_Types.ADMIN:
+                setupButton(R.id.schedule_button);
                 setupButton(R.id.scout_match_button);
                 setupButton(R.id.scout_pit_button);
                 setupButton(R.id.scout_super_button);
@@ -112,6 +129,8 @@ public class Home extends Activity implements View.OnClickListener{
                 setupButton(R.id.view_team_button);
                 setupButton(R.id.view_match_button);
                 setupButton(R.id.view_rankings_button);
+
+                setupButton(R.id.match_planning_button);
 
                 setupButton(R.id.cloud_storage_button);
 
@@ -141,6 +160,10 @@ public class Home extends Activity implements View.OnClickListener{
                 intent = new Intent(this, Settings.class);
                 startActivity(intent);
                 break;
+            case R.id.schedule_button:
+                intent = new Intent(this, Schedule.class);
+                startActivity(intent);
+                break;
             case R.id.scout_match_button:
                 intent = new Intent(this, MatchList.class);
                 intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.MATCH_SCOUTING);
@@ -168,6 +191,10 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
             case R.id.view_rankings_button:
                 intent = new Intent(this, RankingsView.class);
+                startActivity(intent);
+                break;
+            case R.id.match_planning_button:
+                intent = new Intent(this, MatchPlanning.class);
                 startActivity(intent);
                 break;
             case R.id.cloud_storage_button:

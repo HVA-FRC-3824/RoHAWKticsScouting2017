@@ -48,8 +48,8 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
     private Database mDatabase;
     private int mImageType;
 
-    public LVA_CloudImage(Context context, int resource, ArrayList<CloudImage> objects, int imageType) {
-        super(context, resource, objects);
+    public LVA_CloudImage(Context context, ArrayList<CloudImage> objects, int imageType) {
+        super(context, R.layout.list_item_cloud_image, objects);
         mCloudFiles = objects;
         mContext = context;
         mStorage = Storage.getInstance();
@@ -60,7 +60,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item_cloud_image, null);
         }
 

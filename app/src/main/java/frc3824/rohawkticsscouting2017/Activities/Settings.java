@@ -35,6 +35,7 @@ import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Match;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Team;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TheBlueAlliance;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
+import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 
 /**
  * @author frc3824
@@ -47,7 +48,6 @@ public class Settings extends Activity {
 
     private final static String TAG = "Settings";
 
-    private boolean pullAllowed = false;
     private boolean backAllowed = false;
     private SharedPreferences mSharedPreferences;
     private ProgressBar mProgressBar;
@@ -56,6 +56,9 @@ public class Settings extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        Utilities.setupUi(this, findViewById(android.R.id.content));
+
 
         mSharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
 

@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import frc3824.rohawkticsscouting2017.Views.CustomEditText;
 import frc3824.rohawkticsscouting2017.Views.CustomNumeric;
@@ -22,7 +23,7 @@ public class Utilities {
     public static void setupUi(final Activity activity, View view)
     {
         // Setup touch listener for non-textbox views to hide the keyboard.
-        if(!(view instanceof CustomEditText) && !(view instanceof CustomNumeric)){
+        if(!(view instanceof CustomEditText) && !(view instanceof CustomNumeric) && !(view instanceof EditText)){
             view.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
