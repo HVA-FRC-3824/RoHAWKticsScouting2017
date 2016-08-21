@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.io.File;
 
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -39,7 +40,7 @@ public class PitDataFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_pit_data, container, false);
 
-        Team team = Database.getInstance().getTeam(mTeamNumber);
+        TPD team = Database.getInstance().getTPD(mTeamNumber);
 
         if(team.robot_image_filepath != null && team.robot_image_filepath != "")
         {

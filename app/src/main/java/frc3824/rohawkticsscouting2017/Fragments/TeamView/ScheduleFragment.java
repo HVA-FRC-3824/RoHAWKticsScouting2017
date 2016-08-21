@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_ScheduleFragment;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -37,10 +38,9 @@ public class ScheduleFragment extends Fragment {
         ListView schedule = (ListView)view.findViewById(R.id.schedule);
 
         Database database = Database.getInstance();
-        Team team = database.getTeam(mTeamNumber);
+        TID info = database.getTID(mTeamNumber);
 
-
-        LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), team.match_numbers, mTeamNumber);
+        LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), info.match_numbers, mTeamNumber);
 
         schedule.setAdapter(lva);
 

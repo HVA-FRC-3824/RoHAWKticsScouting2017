@@ -8,11 +8,13 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
  * @author Andrew Messing
- *         Created: 8/13/16
+ * Created: 8/13/16
+ *
+ * Team Match Data
  */
-public class TeamInMatch {
+public class TMD {
 
-    private final static String TAG = "TeamInMatch";
+    private final static String TAG = "TMD";
 
     public int match_number;
     public int team_number;
@@ -35,9 +37,9 @@ public class TeamInMatch {
     public boolean yellow_card;
     public boolean red_card;
 
-    public TeamInMatch() {}
+    public TMD() {}
 
-    public TeamInMatch(ScoutMap map)
+    public TMD(ScoutMap map)
     {
         try {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);

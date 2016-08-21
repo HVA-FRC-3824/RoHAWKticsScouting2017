@@ -10,11 +10,11 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  * @author Andrew Messing
  * Created: 8/13/16
  *
- *
+ * Super Match Data
  */
-public class SuperMatch {
+public class SMD {
 
-    private final static String TAG = "SuperMatch";
+    private final static String TAG = "SMD";
 
     public int match_number;
 
@@ -48,9 +48,9 @@ public class SuperMatch {
     //Notes
     public String notes;
 
-    public SuperMatch() {}
+    public SMD() {}
 
-    public SuperMatch(ScoutMap map)
+    public SMD(ScoutMap map)
     {
         try {
             match_number = map.getInt(Constants.Intent_Extras.MATCH_NUMBER);

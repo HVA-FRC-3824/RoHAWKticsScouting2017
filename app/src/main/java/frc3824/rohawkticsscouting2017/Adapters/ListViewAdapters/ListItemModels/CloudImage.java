@@ -10,7 +10,7 @@ public class CloudImage {
 
     private final static String TAG = "CloudImage";
 
-    public int team_number;
+    public String extra;
 
     public String filepath;
     public String url;

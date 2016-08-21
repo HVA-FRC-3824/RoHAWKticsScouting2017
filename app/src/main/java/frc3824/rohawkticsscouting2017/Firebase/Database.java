@@ -9,8 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,10 +16,13 @@ import java.util.Map;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatch;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamInMatch;
 
 /**
  * @author Andrew Messing
@@ -38,18 +39,22 @@ public class Database {
 
     private DatabaseReference mEventRef;
     private DatabaseReference mScheduleRef;
+    private DatabaseReference mPitRef;
+    private DatabaseReference mSuperRef;
     private DatabaseReference mPartialMatchRef;
-    private DatabaseReference mSuperMatchRef;
-    private DatabaseReference mTeamRef;
+    private DatabaseReference mCalulatedRef;
+    private DatabaseReference mInfoRef;
     private DatabaseReference mStrategyRef;
 
     private String mEventKey;
 
     private static Set<String> mEvents;
-    private Map<String, Match> mSchedule;
-    private Map<String, TeamInMatch> mPartialMatches;
-    private Map<String, SuperMatch> mSuperMatches;
-    private Map<String, Team> mTeams;
+    private Map<Integer, Match> mSchedule;
+    private Map<Integer, SMD> mSMDs;
+    private Map<Integer, TPD> mTPDs;
+    private Map<String, TMD> mTMDs;
+    private Map<Integer, TID> mTIDs;
+    private Map<Integer, TCD> mTCDs;
     private Map<String, Strategy> mStrategies;
 
     private static Database mSingleton;
@@ -132,19 +137,19 @@ public class Database {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "schedule.onChildAdded: " + dataSnapshot.getKey());
-                mSchedule.put(dataSnapshot.getKey(), dataSnapshot.getValue(Match.class));
+                mSchedule.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(Match.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "schedule.onChildChanged: " + dataSnapshot.getKey());
-                mSchedule.put(dataSnapshot.getKey(), dataSnapshot.getValue(Match.class));
+                mSchedule.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(Match.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "schedule.onChildRemoved: " + dataSnapshot.getKey());
-                mSchedule.remove(dataSnapshot.getKey());
+                mSchedule.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -159,24 +164,24 @@ public class Database {
         });
 
         mPartialMatchRef = mEventRef.child("partial_match");
-        mPartialMatches = new HashMap<>();
+        mTMDs = new HashMap<>();
         mPartialMatchRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "partial_match.onChildAdded: " + dataSnapshot.getKey());
-                mPartialMatches.put(dataSnapshot.getKey(),dataSnapshot.getValue(TeamInMatch.class));
+                mTMDs.put(dataSnapshot.getKey(),dataSnapshot.getValue(TMD.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "partial_match.onChildChanged: " + dataSnapshot.getKey());
-                mPartialMatches.put(dataSnapshot.getKey(),dataSnapshot.getValue(TeamInMatch.class));
+                mTMDs.put(dataSnapshot.getKey(),dataSnapshot.getValue(TMD.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "partial_match.onChildRemoved: " + dataSnapshot.getKey());
-                mPartialMatches.remove(dataSnapshot.getKey());
+                mTMDs.remove(dataSnapshot.getKey());
             }
 
             @Override
@@ -190,25 +195,57 @@ public class Database {
             }
         });
 
-        mSuperMatchRef = mEventRef.child("super_match");
-        mSuperMatches = new HashMap<>();
-        mSuperMatchRef.addChildEventListener(new ChildEventListener() {
+        mPitRef = mEventRef.child("pit");
+        mTPDs = new HashMap<>();
+        mPitRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "pit.onChildAdded: " + dataSnapshot.getKey());
+                mTPDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPD.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "pit.onChildChanged: " + dataSnapshot.getKey());
+                mTPDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPD.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "pit.onChildRemoved: " + dataSnapshot.getKey());
+                mTPDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "pit.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "pit.onCancelled");
+            }
+        });
+
+        mSuperRef = mEventRef.child("super_match");
+        mSMDs = new HashMap<>();
+        mSuperRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "super_match.onChildAdded: " + dataSnapshot.getKey());
-                mSuperMatches.put(dataSnapshot.getKey(), dataSnapshot.getValue(SuperMatch.class));
+                mSMDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(SMD.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "super_match.onChildChanged: " + dataSnapshot.getKey());
-                mSuperMatches.put(dataSnapshot.getKey(), dataSnapshot.getValue(SuperMatch.class));
+                mSMDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(SMD.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "super_match.onChildRemoved: " + dataSnapshot.getKey());
-                mSuperMatches.remove(dataSnapshot.getKey());
+                mSMDs.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -222,35 +259,67 @@ public class Database {
             }
         });
 
-        mTeamRef = mEventRef.child("teams");
-        mTeams = new HashMap<>();
-        mTeamRef.addChildEventListener(new ChildEventListener() {
+        mInfoRef = mEventRef.child("info");
+        mTIDs = new HashMap<>();
+        mInfoRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "teams.onChildAdded: " + dataSnapshot.getKey());
-                mTeams.put(dataSnapshot.getKey(), dataSnapshot.getValue(Team.class));
+                Log.v(TAG, "info.onChildAdded: " + dataSnapshot.getKey());
+                mTIDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TID.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "teams.onChildAdded: " + dataSnapshot.getKey());
-                mTeams.put(dataSnapshot.getKey(), dataSnapshot.getValue(Team.class));
+                Log.v(TAG, "info.onChildChanged: " + dataSnapshot.getKey());
+                mTIDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TID.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.v(TAG, "teams.onChildRemoved: " + dataSnapshot.getKey());
-                mTeams.remove(dataSnapshot.getKey());
+                Log.v(TAG, "info.onChildRemoved: " + dataSnapshot.getKey());
+                mTIDs.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "teams.onChildMoved");
+                Log.v(TAG, "info.onChildMoved");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.v(TAG, "teams.onCancelled");
+                Log.v(TAG, "info.onCancelled");
+            }
+        });
+
+        mCalulatedRef = mEventRef.child("calculated");
+        mTCDs = new HashMap<>();
+        mCalulatedRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "calc.onChildAdded: " + dataSnapshot.getKey());
+                mTCDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TCD.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "calc.onChildChanged: " + dataSnapshot.getKey());
+                mTCDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TCD.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "calc.onChildRemoved: " + dataSnapshot.getKey());
+                mTCDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "calc.onChildMoved");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "calc.onCancelled");
             }
         });
 
@@ -295,15 +364,15 @@ public class Database {
 
     public void setMatch(Match match)
     {
-        mScheduleRef.child(String.format("M%d", match.match_number)).setValue(match);
+        mScheduleRef.child(String.format("%d", match.match_number)).setValue(match);
     }
 
     public Match getMatch(int match_number)
     {
-        return mSchedule.get(String.format("M%d", match_number));
+        return mSchedule.get(match_number);
     }
 
-    public Map<String, Match> getSchedule()
+    public Map<Integer, Match> getSchedule()
     {
         return mSchedule;
     }
@@ -317,63 +386,103 @@ public class Database {
         Match Scouting Data
     */
 
-    public void setTeamInMatch(TeamInMatch tim)
+    public void setTMD(TMD tmd)
     {
-        mPartialMatchRef.child(String.format("M%d_T%d", tim.match_number, tim.team_number)).setValue(tim);
+        mPartialMatchRef.child(String.format("%d_%d", tmd.match_number,tmd.team_number)).setValue(tmd);
     }
 
-    public TeamInMatch getTeamInMatch(int match_number, int team_number)
+    public TMD getTMD(int match_number, int team_number)
     {
-        return mPartialMatches.get(String.format("M%d_T%d", match_number, team_number));
+        return mTMDs.get(String.format("%d_%d", match_number, team_number));
+    }
+
+    /*
+        Pit Scouting Data
+    */
+    public void setTPD(TPD tpd)
+    {
+        mPitRef.child(String.format("%d", tpd.team_number)).setValue(tpd);
+    }
+
+    public TPD getTPD(int team_number)
+    {
+        return mTPDs.get(team_number);
     }
 
     /*
         Super Scouting Data
     */
 
-    public void setSuperMatch(SuperMatch sm)
+    public void setSMD(SMD smd)
     {
-        mSuperMatchRef.child(String.format("M%d", sm.match_number)).setValue(sm);
+        mSuperRef.child(String.format("%d", smd.match_number)).setValue(smd);
     }
 
-    public SuperMatch getSuperMatch(int match_number)
+    public SMD getSMD(int match_number)
     {
-        return mSuperMatches.get(String.format("M%d",match_number));
+        return mSMDs.get(String.format("M%d",match_number));
     }
 
     /*
-        Team, Pit, and Calculated Data
+        Team Info
     */
+
+    public void setTID(TID tid)
+    {
+        mInfoRef.child(String.format("%d", tid.team_number)).setValue(tid);
+    }
+
+    public TID getTID(int team_number)
+    {
+        return mTIDs.get(team_number);
+    }
+
+    /*
+        Calculated data
+    */
+    public void setTCD(TCD tcd)
+    {
+        mCalulatedRef.child(String.format("%d",tcd.team_number)).setValue(tcd);
+    }
+
+    public TCD getTCD(int team_number){ return mTCDs.get(team_number); }
 
     public void setTeam(Team team)
     {
-        mTeamRef.child(String.format("T%d", team.team_number)).setValue(team);
+        setTCD(team.calc);
+        setTID(team.info);
+        setTPD(team.pit);
+        for(Map.Entry entry: team.completed_matches.entrySet())
+        {
+            setTMD((TMD)entry.getValue());
+        }
     }
 
     public Team getTeam(int team_number)
     {
-        return mTeams.get(String.format("T%d", team_number));
-    }
-
-    public ArrayList<Team> getTeams()
-    {
-        ArrayList<Team> teams = new ArrayList<>(mTeams.values());
-        Collections.sort(teams, new Comparator<Team>() {
-            @Override
-            public int compare(Team t1, Team t2) {
-                return Integer.compare(t1.team_number, t2.team_number);
+        Team team = new Team();
+        team.team_number = team_number;
+        team.info = getTID(team_number);
+        team.pit = getTPD(team_number);
+        team.calc = getTCD(team_number);
+        for(int match_number : team.info.match_numbers)
+        {
+            TMD tmd = getTMD(match_number, team_number);
+            if(tmd != null) {
+                team.completed_matches.put(match_number, tmd);
             }
-        });
-        return teams;
+        }
+
+        return team;
     }
 
-    public List<TeamInMatch> getCompletedMatches(int team_number)
+    public List<TMD> getCompletedMatches(int team_number)
     {
         Team team = getTeam(team_number);
-        List<TeamInMatch> completedMatches = new ArrayList<>();
-        for(int match_number: team.match_numbers)
+        List<TMD> completedMatches = new ArrayList<>();
+        for(int match_number: team.info.match_numbers)
         {
-            TeamInMatch tim = getTeamInMatch(match_number, team_number);
+            TMD tim = getTMD(match_number, team_number);
             if(tim != null)
             {
                 completedMatches.add(tim);
@@ -398,14 +507,18 @@ public class Database {
         return new ArrayList<>(mStrategies.values());
     }
 
+    public ArrayList<Integer> getTeamNumbers()
+    {
+        return new ArrayList<>(mTPDs.keySet());
+    }
 
     public int getTeamNumberBefore(int team_number)
     {
-        ArrayList<Team> teams = getTeams();
+        ArrayList<Integer> teams = getTeamNumbers();
 
         for(int i = 0; i < teams.size(); i++)
         {
-            if(teams.get(i).team_number == team_number)
+            if(teams.get(i) == team_number)
             {
                 if(i == 0)
                 {
@@ -413,7 +526,7 @@ public class Database {
                 }
                 else
                 {
-                    return teams.get(i - 1).team_number;
+                    return teams.get(i - 1);
                 }
             }
         }
@@ -423,11 +536,11 @@ public class Database {
 
     public int getTeamNumberAfter(int team_number)
     {
-        ArrayList<Team> teams = getTeams();
+        ArrayList<Integer> teams = getTeamNumbers();
 
         for(int i = 0; i < teams.size(); i++)
         {
-            if(teams.get(i).team_number == team_number)
+            if(teams.get(i) == team_number)
             {
                 if(i == teams.size() - 1)
                 {
@@ -435,7 +548,7 @@ public class Database {
                 }
                 else
                 {
-                    return teams.get(i + 1).team_number;
+                    return teams.get(i + 1);
                 }
             }
         }

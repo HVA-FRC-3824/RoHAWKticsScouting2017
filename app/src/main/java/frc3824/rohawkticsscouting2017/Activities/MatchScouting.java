@@ -20,7 +20,7 @@ import android.widget.Toolbar;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamInMatch;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -84,7 +84,7 @@ public class MatchScouting extends Activity {
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager) findViewById(R.id.match_scouting_view_pager);
         mFPA = new FPA_MatchScouting(getFragmentManager());
-        TeamInMatch tim = mDatabase.getTeamInMatch(mMatchNumber, mTeamNumber);
+        TMD tim = mDatabase.getTMD(mMatchNumber, mTeamNumber);
         if (tim != null) {
             mFPA.setValueMap(tim.toMap());
         }
@@ -435,8 +435,8 @@ public class MatchScouting extends Activity {
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
-            TeamInMatch tim = new TeamInMatch(map);
-            mDatabase.setTeamInMatch(tim);
+            TMD tmd = new TMD(map);
+            mDatabase.setTMD(tmd);
 
             //TODO: add Bluetooth and Syncing
 

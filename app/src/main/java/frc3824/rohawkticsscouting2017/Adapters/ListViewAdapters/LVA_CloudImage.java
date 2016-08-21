@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
@@ -73,19 +75,12 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
         if (ci.filepath != null) {
             filename = ci.filepath.substring(ci.filepath.lastIndexOf('/') + 1);
         } else {
-            switch (mImageType) {
-                case Constants.Cloud.ROBOT_PICTURE:
-                    if(ci.remote)
-                    {
-                        filename = String.format("%d: Download required", ci.team_number);
-                    } else {
-                        filename = String.format("%d: No Image", ci.team_number);
-                    }
-                    break;
-                default:
-                    filename = "No Image";
-            }
 
+            if (ci.remote) {
+                filename = String.format("%s: Download required", ci.extra);
+            } else {
+                filename = String.format("%s: No Image", ci.extra);
+            }
         }
         filepath.setText(filename);
 
@@ -98,7 +93,17 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                 upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        UploadTask uploadTask = mStorage.uploadRobotPicture(ci.filepath);
+                        UploadTask uploadTask = null;
+                        switch(mImageType)
+                        {
+                            case Constants.Cloud.ROBOT_PICTURE:
+                                uploadTask = mStorage.uploadRobotPicture(ci.filepath);
+                                break;
+                            case Constants.Cloud.STRATEGY:
+                                uploadTask = mStorage.uploadStrategyPicture(ci.filepath);
+                                break;
+                        }
+
                         progressBar.setVisibility(View.VISIBLE);
                         message.setVisibility(View.GONE);
                         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -132,9 +137,14 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
 
                                 switch (mImageType) {
                                     case Constants.Cloud.ROBOT_PICTURE:
-                                        Team t = mDatabase.getTeam(ci.team_number);
+                                        TPD t = mDatabase.getTPD(Integer.parseInt(ci.extra));
                                         t.robot_image_url = ci.url;
-                                        mDatabase.setTeam(t);
+                                        mDatabase.setTPD(t);
+                                        break;
+                                    case Constants.Cloud.STRATEGY:
+                                        Strategy s = mDatabase.getStrategy(ci.extra);
+                                        s.url = ci.url;
+                                        mDatabase.setStrategy(s);
                                         break;
                                 }
 
@@ -158,7 +168,16 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
             download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FileDownloadTask fileDownloadTask = mStorage.downloadRobotPicture(ci.team_number, ci.filepath);
+                    FileDownloadTask fileDownloadTask = null;
+                    switch (mImageType)
+                    {
+                        case Constants.Cloud.ROBOT_PICTURE:
+                            fileDownloadTask = mStorage.downloadRobotPicture(Integer.parseInt(ci.extra), ci.filepath);
+                            break;
+                        case Constants.Cloud.STRATEGY:
+                            fileDownloadTask = mStorage.downloadStrategyPicture(ci.extra, ci.filepath);
+                            break;
+                    }
                     progressBar.setVisibility(View.VISIBLE);
                     message.setVisibility(View.GONE);
                     fileDownloadTask.addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {

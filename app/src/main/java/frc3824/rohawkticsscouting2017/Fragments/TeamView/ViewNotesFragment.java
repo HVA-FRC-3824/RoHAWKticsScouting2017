@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatch;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamInMatch;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -45,13 +45,13 @@ public class ViewNotesFragment extends Fragment{
         Team team = database.getTeam(mTeamNumber);
         String matchNotesText = "";
         String superNotesText = "";
-        for(int matchNumber : team.match_numbers)
+        for(int matchNumber : team.info.match_numbers)
         {
-            TeamInMatch tim = database.getTeamInMatch(matchNumber, mTeamNumber);
+            TMD tim = database.getTMD(matchNumber, mTeamNumber);
             if(tim != null && tim.notes != null && tim.notes != "") {
                 matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tim.notes);
             }
-            SuperMatch sm = database.getSuperMatch(matchNumber);
+            SMD sm = database.getSMD(matchNumber);
             if(sm != null && sm.notes != null && sm.notes != "") {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }

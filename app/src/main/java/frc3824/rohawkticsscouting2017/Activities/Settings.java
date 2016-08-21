@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
@@ -310,13 +312,18 @@ public class Settings extends Activity {
                 publishProgress(currentIndex, numberOfTeams + numberOfMatches);
                 for(TBA_Team tbaTeam: teams)
                 {
-                    Team team = new Team();
-                    team.team_number = tbaTeam.team_number;
-                    team.nickname = tbaTeam.nickname;
-                    team.pit_scouted = false;
-                    team.match_numbers = teamMatchNumbers.get(team.team_number);
-                    Collections.sort(team.match_numbers);
-                    database.setTeam(team);
+                    TID info = new TID();
+                    info.team_number = tbaTeam.team_number;
+                    info.nickname = tbaTeam.nickname;
+                    info.match_numbers = teamMatchNumbers.get(info.team_number);
+                    Collections.sort(info.match_numbers);
+                    database.setTID(info);
+
+                    TPD pit = new TPD();
+                    pit.team_number = tbaTeam.team_number;
+                    pit.pit_scouted = false;
+                    database.setTPD(pit);
+
                     currentIndex++;
                     publishProgress(currentIndex, numberOfTeams + numberOfMatches);
                 }

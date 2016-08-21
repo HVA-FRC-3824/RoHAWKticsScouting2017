@@ -101,6 +101,20 @@ public class Storage {
         return fileRef.putFile(uri);
     }
 
+    public FileDownloadTask downloadStrategyPicture(String strategy_name, String filepath) {
+        return downloadStrategyPicture(strategy_name, new File(filepath));
+    }
+
+    public FileDownloadTask downloadStrategyPicture(String strategy_name, File file) {
+        File parent = file.getParentFile();
+        if (!parent.exists()) {
+            boolean madeParent = parent.mkdirs();
+            Log.d(TAG, String.valueOf(madeParent));
+        }
+
+        return mStrategyImagesRef.child(String.format("%s.png", strategy_name)).getFile(file);
+    }
+
     public UploadTask uploadPickList(String filepath) {
         return uploadPickList(new File(filepath));
     }

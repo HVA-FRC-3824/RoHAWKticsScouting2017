@@ -26,6 +26,7 @@ import java.nio.channels.FileChannel;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -75,9 +76,9 @@ public class PitScouting extends Activity {
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager) findViewById(R.id.pit_scouting_view_pager);
         mFPA = new FPA_PitScouting(getFragmentManager());
-        Team team = mDatabase.getTeam(mTeamNumber);
+        TPD team = mDatabase.getTPD(mTeamNumber);
         if (team != null && team.pit_scouted) {
-            mFPA.setValueMap(team.pitToMap());
+            mFPA.setValueMap(team.toMap());
         }
 
         viewPager.setAdapter(mFPA);
@@ -430,9 +431,8 @@ public class PitScouting extends Activity {
                 }
             }
 
-            Team t = mDatabase.getTeam(mTeamNumber);
-            t.pitFromMap(map);
-            mDatabase.setTeam(t);
+            TPD team = new TPD(map);
+            mDatabase.setTPD(team);
 
             //TODO: add Bluetooth and Syncing
 

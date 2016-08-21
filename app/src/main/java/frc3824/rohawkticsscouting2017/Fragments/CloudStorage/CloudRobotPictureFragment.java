@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CloudImage;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
@@ -65,7 +66,7 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
         mDatabase = Database.getInstance();
         mStorage = Storage.getInstance();
-        ArrayList<Team> teams = mDatabase.getTeams();
+        ArrayList<Integer> teams = mDatabase.getTeamNumbers();
 
         boolean internet = true;
         if(isNetworkAvailable()) {
@@ -80,25 +81,26 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
         }
 
         mCIs = new ArrayList<>();
-        for(Team team: teams)
+        for(int team_number: teams)
         {
             CloudImage ci = new CloudImage();
+            TPD tpd = mDatabase.getTPD(team_number);
 
-            ci.team_number = team.team_number;
+            ci.extra = String.valueOf(team_number);
             ci.internet = internet;
 
-            if(team.robot_image_filepath != null && !team.robot_image_filepath.equals(""))
+            if(tpd.robot_image_filepath != null && !tpd.robot_image_filepath.equals(""))
             {
-                if(new File(team.robot_image_filepath).exists()) {
+                if(new File(tpd.robot_image_filepath).exists()) {
                     ci.local = true;
                 }
-                ci.filepath = team.robot_image_filepath;
+                ci.filepath = tpd.robot_image_filepath;
             }
 
-            if(team.robot_image_url != null && !team.robot_image_url.equals(""))
+            if(tpd.robot_image_url != null && !tpd.robot_image_url.equals(""))
             {
                 ci.remote = true;
-                ci.url = team.robot_image_url;
+                ci.url = tpd.robot_image_url;
             }
 
             mCIs.add(ci);
@@ -174,7 +176,7 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
         CloudImage cloudImage = mCIs.get(i);
         if(cloudImage.remote && cloudImage.internet)
         {
-            FileDownloadTask fileDownloadTask = mStorage.downloadRobotPicture(cloudImage.team_number, cloudImage.filepath);
+            FileDownloadTask fileDownloadTask = mStorage.downloadRobotPicture(Integer.parseInt(cloudImage.extra), cloudImage.filepath);
             fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {

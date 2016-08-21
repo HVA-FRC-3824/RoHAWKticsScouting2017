@@ -7,11 +7,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.widget.Toolbar;
 
-import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_RankingsView;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamInMatch;
 import frc3824.rohawkticsscouting2017.R;
-import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author Andrew Messing

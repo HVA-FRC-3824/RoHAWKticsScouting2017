@@ -41,25 +41,22 @@ public class TeamList extends Activity implements View.OnClickListener{
         Bundle extras = getIntent().getExtras();
         mNextPage = extras.getString(Constants.Intent_Extras.NEXT_PAGE);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
-
         Database database = Database.getInstance();
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.team_list);
         TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.setMargins(4, 4, 4, 4);
 
-        ArrayList<Team> teams = database.getTeams();
+        ArrayList<Integer> teams = database.getTeamNumbers();
         for(int i = 0; i < teams.size(); i++)
         {
-            Team team = teams.get(i);
+            int team_number = teams.get(i);
             Button button = new Button(this);
             button.setLayoutParams(lp);
-            button.setText(String.format("Team: %d", team.team_number));
+            button.setText(String.format("Team: %d", team_number));
             if(mNextPage.equals(Constants.Intent_Extras.PIT_SCOUTING))
             {
-                if(team.pit_scouted)
+                if(database.getTPD(team_number).pit_scouted)
                 {
                     button.setBackgroundColor(Color.GREEN);
                 }
@@ -69,7 +66,7 @@ public class TeamList extends Activity implements View.OnClickListener{
                 }
             }
             button.setOnClickListener(this);
-            button.setId(team.team_number);
+            button.setId(team_number);
             linearLayout.addView(button);
         }
 

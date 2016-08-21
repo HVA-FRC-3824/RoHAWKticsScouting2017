@@ -20,7 +20,7 @@ import android.widget.Toolbar;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_SuperScouting;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatch;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -77,7 +77,7 @@ public class SuperScouting extends Activity{
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager) findViewById(R.id.super_scouting_view_pager);
         mFPA = new FPA_SuperScouting(getFragmentManager());
-        SuperMatch sm = mDatabase.getSuperMatch(mMatchNumber);
+        SMD sm = mDatabase.getSMD(mMatchNumber);
         if (sm != null) {
             mFPA.setValueMap(sm.toMap());
         }
@@ -422,8 +422,8 @@ public class SuperScouting extends Activity{
         protected Void doInBackground(ScoutMap... scoutMaps) {
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
-            SuperMatch sm = new SuperMatch(map);
-            mDatabase.setSuperMatch(sm);
+            SMD smd = new SMD(map);
+            mDatabase.setSMD(smd);
 
             //TODO: add Bluetooth and Syncing
 
