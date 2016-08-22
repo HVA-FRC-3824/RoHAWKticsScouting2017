@@ -120,6 +120,16 @@ public class Home extends Activity implements View.OnClickListener{
                 usertypeTextview.setVisibility(View.VISIBLE);
 
                 break;
+            case Constants.User_Types.SERVER:
+                setupButton(R.id.schedule_button);
+                setupButton(R.id.server_button);
+
+                eventTextview.setText("Event: " + eventKey);
+                eventTextview.setVisibility(View.VISIBLE);
+
+                usertypeTextview.setText("User: Server");
+                usertypeTextview.setVisibility(View.VISIBLE);
+                break;
             case Constants.User_Types.ADMIN:
                 setupButton(R.id.schedule_button);
                 setupButton(R.id.scout_match_button);
@@ -131,6 +141,8 @@ public class Home extends Activity implements View.OnClickListener{
                 setupButton(R.id.view_rankings_button);
 
                 setupButton(R.id.match_planning_button);
+
+                setupButton(R.id.server_button);
 
                 setupButton(R.id.cloud_storage_button);
 
@@ -147,6 +159,11 @@ public class Home extends Activity implements View.OnClickListener{
         if(eventKey != "") {
             Database.getInstance(eventKey);
             Storage.getInstance(eventKey);
+        }
+        else
+        {
+            Database.getInstance();
+            Storage.getInstance();
         }
 
     }
@@ -195,6 +212,10 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
             case R.id.match_planning_button:
                 intent = new Intent(this, MatchPlanning.class);
+                startActivity(intent);
+                break;
+            case R.id.server_button:
+                intent = new Intent(this, Server.class);
                 startActivity(intent);
                 break;
             case R.id.cloud_storage_button:

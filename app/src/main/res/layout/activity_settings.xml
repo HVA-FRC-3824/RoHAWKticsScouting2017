@@ -27,7 +27,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/type_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -41,7 +41,7 @@
             />
 
         <Spinner
-            android:id="@+id/typeSelector"
+            android:id="@+id/type_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:spinnerMode="dropdown"
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Alliance Color: "
-            android:id="@+id/textView2"
+            android:id="@+id/alliance_color_label"
             android:textColor="#000000"
             android:layout_gravity="center_vertical" />
 
@@ -72,7 +72,7 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/allianceColorSelector"
+            android:id="@+id/alliance_color_selector"
             android:spinnerMode="dropdown"
             />
 
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Alliance Number: "
-            android:id="@+id/textView3"
+            android:id="@+id/alliance_number_label"
             android:textColor="#000000"
             android:layout_gravity="center_vertical" />
 
@@ -101,7 +101,7 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/allianceNumberSelector"
+            android:id="@+id/alliance_number_selector"
             android:spinnerMode="dropdown"
             />
 
@@ -117,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pit Group: "
-            android:id="@+id/textView4"
+            android:id="@+id/pit_group_label"
             android:textColor="#000000"
             android:layout_gravity="center_vertical" />
 
@@ -130,7 +130,7 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/pitGroupSelector"
+            android:id="@+id/pit_group_selector"
             android:spinnerMode="dropdown"
             />
 
@@ -143,7 +143,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Server: "
-            android:id="@+id/textView5"
+            android:id="@+id/server_label"
             android:textColor="#000000"
             android:layout_gravity="center_vertical" />
 
@@ -156,7 +156,7 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/serverSelector"
+            android:id="@+id/server_selector"
             android:spinnerMode="dropdown"
             />
     </LinearLayout>
@@ -185,7 +185,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:id="@+id/saveButton"
+        android:id="@+id/save_button"
         android:onClick="saveSettings"
         android:background="@color/navy_blue"
         android:textColor="@color/white" />

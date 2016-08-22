@@ -2,6 +2,8 @@ package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,9 +19,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.List;
+import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
+import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -47,6 +54,8 @@ public class MatchScouting extends Activity {
 
     private Database mDatabase;
 
+    private String serverName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +70,7 @@ public class MatchScouting extends Activity {
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String allianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
         int allianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
+        serverName = shared_preferences.getString(Constants.Settings.SERVER, "");
 
         mDatabase = Database.getInstance();
 
@@ -438,7 +448,49 @@ public class MatchScouting extends Activity {
             TMD tmd = new TMD(map);
             mDatabase.setTMD(tmd);
 
-            //TODO: add Bluetooth and Syncing
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if(bluetoothAdapter == null)
+            {
+                publishProgress("This device does not have bluetooth");
+                return null;
+            }
+
+            if (!bluetoothAdapter.isEnabled())
+            {
+                bluetoothAdapter.enable();
+                while (!bluetoothAdapter.isEnabled());
+            }
+
+            Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+
+            BluetoothDevice server = null;
+            for(BluetoothDevice device: devices)
+            {
+                String deviceName = device.getName();
+                if(deviceName.equals(serverName))
+                {
+                    server = device;
+                    break;
+                }
+            }
+
+            //TODO: add queueing upon failure
+            if(server == null)
+            {
+                publishProgress("Server not found in list of possible connections...");
+                return null;
+            }
+
+            ConnectThread connectThread = new ConnectThread(server,true);
+            connectThread.start();
+            while (!connectThread.isConnected());
+            Gson gson = new GsonBuilder().create();
+            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(tmd))))
+            {
+                publishProgress("Match data sent to server");
+            }
+            connectThread.cancel();
+            connectThread = null;
 
             return null;
         }

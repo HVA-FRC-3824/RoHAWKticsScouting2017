@@ -9,6 +9,9 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -42,11 +45,12 @@
         <activity android:name=".Activities.MatchList" />
         <activity android:name=".Activities.MatchPlanning" />
         <activity android:name=".Activities.MatchScouting" />
-        <activity android:name=".Activities.MatchView"/>
+        <activity android:name=".Activities.MatchView" />
         <activity android:name=".Activities.PitScouting" />
         <activity android:name=".Activities.RankingsView"/>
         <activity android:name=".Activities.Schedule" />
         <activity android:name=".Activities.ScheduleBuilder" />
+        <activity android:name=".Activities.Server" />
         <activity android:name=".Activities.Settings" />
         <activity android:name=".Activities.SuperScouting" />
         <activity android:name=".Activities.TeamList" />

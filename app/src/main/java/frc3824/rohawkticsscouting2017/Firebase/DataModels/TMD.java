@@ -45,7 +45,6 @@ public class TMD {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);
             match_number = map.getInt(Constants.Intent_Extras.MATCH_NUMBER);
 
-
             fouls = map.getInt(Constants.Match_Scouting.Fouls.FOUL);
             tech_fouls = map.getInt(Constants.Match_Scouting.Fouls.TECH_FOUL);
             yellow_card = map.getBoolean(Constants.Match_Scouting.Fouls.YELLOW_CARD);
