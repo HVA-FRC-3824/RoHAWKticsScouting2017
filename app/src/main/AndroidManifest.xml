@@ -42,6 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.CloudStorage" />
+        <activity android:name=".Activities.EventView" />
         <activity android:name=".Activities.MatchList" />
         <activity android:name=".Activities.MatchPlanning" />
         <activity android:name=".Activities.MatchScouting" />

@@ -263,4 +263,24 @@ public interface Constants {
         String WHITE = "white";
     }
 
+    interface Event_View
+    {
+        interface Main_Dropdown_Options
+        {
+            String FOULS = "Fouls";
+
+            String[] OPTIONS = {FOULS};
+        }
+
+        interface Foul_Secondary_Options
+        {
+            String STANDARD_FOULS = "Standard Fouls";
+            String TECH_FOULS = "Tech Fouls";
+            String YELLOW_CARDS = "Yellow Cards";
+            String RED_CARDS = "Red Cards";
+
+            String[] OPTIONS = {STANDARD_FOULS, TECH_FOULS, YELLOW_CARDS, RED_CARDS};
+        }
+    }
+
 }

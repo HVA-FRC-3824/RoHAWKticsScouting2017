@@ -163,7 +163,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/viewEvent_button"
+            android:id="@+id/view_event_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

@@ -1,8 +1,6 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,9 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.widget.Toolbar;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_CloudStorage;
-import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
-import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author frc3824
