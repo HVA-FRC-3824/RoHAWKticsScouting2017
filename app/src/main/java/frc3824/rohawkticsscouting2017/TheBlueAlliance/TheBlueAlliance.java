@@ -1,8 +1,13 @@
 package frc3824.rohawkticsscouting2017.TheBlueAlliance;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +19,7 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Event;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Match;
+import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Ranking;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Team;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -129,5 +135,28 @@ public class TheBlueAlliance {
         Type type = new TypeToken<ArrayList<TBA_Match>>(){}.getType();
 
         return mGson.fromJson(getData(con), type);
+    }
+
+    public ArrayList<TBA_Ranking> getEventRankings(String eventKey) throws IOException {
+        URL url = new URL(String.format("https://www.thebluealliance.com/api/v2/event/%s/rankings", eventKey));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.addRequestProperty(Constants.The_Blue_Alliance.TBA_Header_NAME, Constants.The_Blue_Alliance.TBA_Header_VALUE);
+
+        ArrayList<TBA_Ranking> rankings = new ArrayList<>();
+
+        try {
+            JSONArray jsonArray = new JSONArray(getData(con));
+
+            for(int i = 1; i < jsonArray.length(); i++)
+            {
+                JSONArray innerArray = jsonArray.getJSONArray(i);
+                TBA_Ranking ranking = new TBA_Ranking(innerArray);
+                rankings.add(ranking);
+            }
+            return rankings;
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return new ArrayList<>();
     }
 }

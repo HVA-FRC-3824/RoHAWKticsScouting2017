@@ -47,7 +47,7 @@
         <activity android:name=".Activities.MatchScouting" />
         <activity android:name=".Activities.MatchView" />
         <activity android:name=".Activities.PitScouting" />
-        <activity android:name=".Activities.RankingsView"/>
+        <activity android:name=".Activities.RankingsView" />
         <activity android:name=".Activities.Schedule" />
         <activity android:name=".Activities.ScheduleBuilder" />
         <activity android:name=".Activities.Server" />

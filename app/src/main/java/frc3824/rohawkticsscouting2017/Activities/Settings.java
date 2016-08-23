@@ -28,10 +28,12 @@ import java.util.Set;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Match;
+import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Ranking;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Team;
 import frc3824.rohawkticsscouting2017.TheBlueAlliance.TheBlueAlliance;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -276,14 +278,17 @@ public class Settings extends Activity {
                 int numberOfTeams = teams.size();
                 ArrayList<TBA_Match> matches = theBlueAlliance.getEventMatches(eventKey);
                 int numberOfMatches = matches.size();
+                ArrayList<TBA_Ranking> rankings = theBlueAlliance.getEventRankings(eventKey);
+
+                int total = 2 * numberOfTeams + numberOfMatches;
                 int currentIndex = 0;
                 Map<Integer, List<Integer>> teamMatchNumbers = new HashMap<>();
-                publishProgress(currentIndex, numberOfTeams + numberOfMatches);
+                publishProgress(currentIndex, total);
                 for(TBA_Match tbaMatch: matches)
                 {
                     if(!tbaMatch.comp_level.equals("qm")) {
                         currentIndex++;
-                        publishProgress(currentIndex, numberOfTeams + numberOfMatches);
+                        publishProgress(currentIndex, total);
                         continue;
                     }
 
@@ -315,10 +320,10 @@ public class Settings extends Activity {
 
                     database.setMatch(match);
                     currentIndex++;
-                    publishProgress(currentIndex, numberOfTeams + numberOfMatches);
+                    publishProgress(currentIndex, total);
                 }
 
-                publishProgress(currentIndex, numberOfTeams + numberOfMatches);
+                publishProgress(currentIndex, total);
                 for(TBA_Team tbaTeam: teams)
                 {
                     TID info = new TID();
@@ -334,7 +339,26 @@ public class Settings extends Activity {
                     database.setTPD(pit);
 
                     currentIndex++;
-                    publishProgress(currentIndex, numberOfTeams + numberOfMatches);
+                    publishProgress(currentIndex, total);
+                }
+                publishProgress(currentIndex, total);
+                for(TBA_Ranking tbaRanking: rankings)
+                {
+                    TRD ranking = new TRD();
+                    ranking.team_number = tbaRanking.team_number;
+                    ranking.rank = tbaRanking.rank;
+                    ranking.RPs = tbaRanking.RPs;
+                    ranking.wins = tbaRanking.wins;
+                    ranking.ties = tbaRanking.ties;
+                    ranking.loses = tbaRanking.loses;
+                    ranking.played = tbaRanking.played;
+                    ranking.auto = tbaRanking.auto;
+                    ranking.scale_challenge = tbaRanking.scale_challenge;
+                    ranking.goals = tbaRanking.goals;
+                    ranking.defenses = tbaRanking.defenses;
+                    database.setCurrentTRD(ranking);
+                    currentIndex++;
+                    publishProgress(currentIndex, total);
                 }
 
             } catch (IOException e) {

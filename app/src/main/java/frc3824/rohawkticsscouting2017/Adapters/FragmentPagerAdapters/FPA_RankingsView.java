@@ -7,7 +7,7 @@ import android.support.v13.app.FragmentPagerAdapter;
 import java.util.HashMap;
 import java.util.Map;
 
-import frc3824.rohawkticsscouting2017.Fragments.RankingsView.ActualRankingsFragment;
+import frc3824.rohawkticsscouting2017.Fragments.RankingsView.CurrentRankingsFragment;
 import frc3824.rohawkticsscouting2017.Fragments.RankingsView.PredictedRankingsFragment;
 
 /**
@@ -37,7 +37,7 @@ public class FPA_RankingsView extends FragmentPagerAdapter {
             switch (position)
             {
                 case 0:
-                    f = new ActualRankingsFragment();
+                    f = new CurrentRankingsFragment();
                     break;
                 case 1:
                     f = new PredictedRankingsFragment();

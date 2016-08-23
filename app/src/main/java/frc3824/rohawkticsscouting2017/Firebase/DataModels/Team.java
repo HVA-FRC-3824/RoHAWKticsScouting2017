@@ -18,6 +18,8 @@ public class Team {
     public TPD pit;
     public TCD calc;
     public TID info;
+    public TRD current_ranking;
+    public TRD predicted_ranking;
 
     public Team() {}
 }

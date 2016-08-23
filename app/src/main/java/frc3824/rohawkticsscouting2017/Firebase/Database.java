@@ -22,6 +22,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 
 /**
@@ -45,6 +46,8 @@ public class Database {
     private DatabaseReference mCalulatedRef;
     private DatabaseReference mInfoRef;
     private DatabaseReference mStrategyRef;
+    private DatabaseReference mCurrentRankingRef;
+    private DatabaseReference mPredictedRankingRef;
 
     private String mEventKey;
 
@@ -55,6 +58,8 @@ public class Database {
     private Map<String, TMD> mTMDs;
     private Map<Integer, TID> mTIDs;
     private Map<Integer, TCD> mTCDs;
+    private Map<Integer, TRD> mCTRDs;
+    private Map<Integer, TRD> mPTRDs;
     private Map<String, Strategy> mStrategies;
 
     private static Database mSingleton;
@@ -355,6 +360,70 @@ public class Database {
             }
         });
 
+        mCurrentRankingRef = mEventRef.child("rankings").child("current");
+        mCTRDs = new HashMap<>();
+        mCurrentRankingRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "current_ranking.onChildAdded: " + dataSnapshot.getKey());
+                mCTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "current_ranking.onChildChanged: " + dataSnapshot.getKey());
+                mCTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "current_ranking.onChildRemoved: " + dataSnapshot.getKey());
+                mCTRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "current_ranking.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "current_ranking.onCancelled");
+            }
+        });
+
+        mPredictedRankingRef = mEventRef.child("rankings").child("predicted");
+        mPTRDs = new HashMap<>();
+        mPredictedRankingRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "predicted_ranking.onChildAdded: " + dataSnapshot.getKey());
+                mPTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "predicted_ranking.onChildChanged: " + dataSnapshot.getKey());
+                mPTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "predicted_ranking.onChildRemoved: " + dataSnapshot.getKey());
+                mPTRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "predicted_ranking.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "predicted_ranking.onCancelled");
+            }
+        });
+
         mEventKey = eventKey;
     }
 
@@ -458,6 +527,36 @@ public class Database {
         }
     }
 
+    public void setCurrentTRD(TRD trd)
+    {
+        mCurrentRankingRef.child(String.format("%d", trd.team_number)).setValue(trd);
+    }
+
+    public TRD getCurrentTRD(int team_number)
+    {
+        return mCTRDs.get(team_number);
+    }
+
+    public Map<Integer, TRD> getCurrentRankings()
+    {
+        return mCTRDs;
+    }
+
+    public void setPredictedTRD(TRD trd)
+    {
+        mPredictedRankingRef.child(String.format("%d", trd.team_number)).setValue(trd);
+    }
+
+    public TRD getPredictedTRD(int team_number)
+    {
+        return mPTRDs.get(team_number);
+    }
+
+    public Map<Integer, TRD> getPredictedRankings()
+    {
+        return mPTRDs;
+    }
+
     public Team getTeam(int team_number)
     {
         Team team = new Team();
@@ -472,6 +571,8 @@ public class Database {
                 team.completed_matches.put(match_number, tmd);
             }
         }
+        team.current_ranking = getCurrentTRD(team_number);
+        team.predicted_ranking = getPredictedTRD(team_number);
 
         return team;
     }

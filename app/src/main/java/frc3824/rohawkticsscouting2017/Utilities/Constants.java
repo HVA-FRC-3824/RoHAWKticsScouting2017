@@ -80,6 +80,19 @@ public interface Constants {
         String TBA_Header_NAME = "X-TBA-App-Id";
         String TBA_Header_VALUE = "frc3824:scouting-system:" + VERSION;
 
+        interface Ranking_Indices
+        {
+            int RANK = 0;
+            int TEAM_NUMBER = 1;
+            int RPs = 2;
+            int AUTO = 3;
+            int SCALE_CHALLENGE = 4;
+            int GOALS = 5;
+            int DEFENSE = 6;
+            int RECORD = 7;
+            int PLAYED = 8;
+        }
+
     }
 
     interface Match_Scouting
