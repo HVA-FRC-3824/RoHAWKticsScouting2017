@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
+import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
 import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -449,8 +451,11 @@ public class MatchScouting extends Activity {
             mDatabase.setTMD(tmd);
 
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothQueue queue = BluetoothQueue.getInstance();
+
             if(bluetoothAdapter == null)
             {
+                queue.add(tmd);
                 publishProgress("This device does not have bluetooth");
                 return null;
             }
@@ -474,10 +479,10 @@ public class MatchScouting extends Activity {
                 }
             }
 
-            //TODO: add queueing upon failure
             if(server == null)
             {
                 publishProgress("Server not found in list of possible connections...");
+                queue.add(tmd);
                 return null;
             }
 
@@ -488,6 +493,34 @@ public class MatchScouting extends Activity {
             if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(tmd))))
             {
                 publishProgress("Match data sent to server");
+                List<String> queuedString = queue.getQueueList();
+                queue.clear();
+                boolean queueEmpty = true;
+                for (String s: queuedString)
+                {
+
+                    if(!connectThread.write(s))
+                    {
+                        queueEmpty = false;
+                        switch (s.charAt(0))
+                        {
+                            case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                queue.add(gson.fromJson(s.substring(1), TMD.class));
+                                break;
+                            case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                queue.add(gson.fromJson(s.substring(1), SMD.class));
+                                break;
+                        }
+                    }
+                }
+                if(queueEmpty && queuedString.size() > 0)
+                {
+                    publishProgress("Bluetooth Queue Emptied");
+                }
+            }
+            else
+            {
+                queue.add(tmd);
             }
             connectThread.cancel();
             connectThread = null;

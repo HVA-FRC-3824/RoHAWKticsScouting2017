@@ -2,6 +2,8 @@ package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,10 +19,17 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.List;
+import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_SuperScouting;
+import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
+import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -44,6 +53,7 @@ public class SuperScouting extends Activity{
     private Database mDatabase;
 
     private FPA_SuperScouting mFPA;
+    private String serverName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,9 +68,10 @@ public class SuperScouting extends Activity{
         mMatchNumber = extras.getInt(Constants.Intent_Extras.MATCH_NUMBER);
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String eventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
+        serverName = shared_preferences.getString(Constants.Settings.SERVER, "");
 
-        mDatabase = Database.getInstance(eventKey);
+
+        mDatabase = Database.getInstance();
 
         if(mMatchNumber > 0)
         {
@@ -425,7 +436,80 @@ public class SuperScouting extends Activity{
             SMD smd = new SMD(map);
             mDatabase.setSMD(smd);
 
-            //TODO: add Bluetooth and Syncing
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothQueue queue = BluetoothQueue.getInstance();
+
+            if(bluetoothAdapter == null)
+            {
+                queue.add(smd);
+                publishProgress("This device does not have bluetooth");
+                return null;
+            }
+
+            if (!bluetoothAdapter.isEnabled())
+            {
+                bluetoothAdapter.enable();
+                while (!bluetoothAdapter.isEnabled());
+            }
+
+            Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+
+            BluetoothDevice server = null;
+            for(BluetoothDevice device: devices)
+            {
+                String deviceName = device.getName();
+                if(deviceName.equals(serverName))
+                {
+                    server = device;
+                    break;
+                }
+            }
+
+            if(server == null)
+            {
+                publishProgress("Server not found in list of possible connections...");
+                queue.add(smd);
+                return null;
+            }
+
+            ConnectThread connectThread = new ConnectThread(server,true);
+            connectThread.start();
+            while (!connectThread.isConnected());
+            Gson gson = new GsonBuilder().create();
+            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(smd))))
+            {
+                publishProgress("Super data sent to server");
+                List<String> queuedString = queue.getQueueList();
+                queue.clear();
+                boolean queueEmpty = true;
+                for (String s: queuedString)
+                {
+
+                    if(!connectThread.write(s))
+                    {
+                        queueEmpty = false;
+                        switch (s.charAt(0))
+                        {
+                            case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                queue.add(gson.fromJson(s.substring(1), TMD.class));
+                                break;
+                            case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                queue.add(gson.fromJson(s.substring(1), SMD.class));
+                                break;
+                        }
+                    }
+                }
+                if(queueEmpty && queuedString.size() > 0)
+                {
+                    publishProgress("Bluetooth Queue Emptied");
+                }
+            }
+            else
+            {
+                queue.add(smd);
+            }
+            connectThread.cancel();
+            connectThread = null;
 
             return null;
         }
