@@ -29,9 +29,11 @@ public class FPA_SuperScouting extends FragmentPagerAdapter {
     private Map<Integer, ScoutFragment> mFragments = new HashMap<>();
 
     private ScoutMap mValueMap = null;
+    private int mMatchNumber;
 
-    public FPA_SuperScouting(FragmentManager fm) {
+    public FPA_SuperScouting(FragmentManager fm, int match_number) {
         super(fm);
+        mMatchNumber = match_number;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class FPA_SuperScouting extends FragmentPagerAdapter {
             switch (position) {
                 case 0:
                     sf = new QualitativeFragment();
+                    ((QualitativeFragment)sf).setMatchNumber(mMatchNumber);
                     break;
                 case 1:
                     sf = new SuperNotesFragment();
