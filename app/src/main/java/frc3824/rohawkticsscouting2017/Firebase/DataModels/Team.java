@@ -20,6 +20,9 @@ public class Team {
     public TID info;
     public TRD current_ranking;
     public TRD predicted_ranking;
+    public TPA first_pick;
+    public TPA second_pick;
+    public TPA third_pick;
 
     public Team() {}
 }

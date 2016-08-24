@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/robot_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/team_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/robot_picture"
+        android:text="Team Number"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/team_number"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/team_number"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/team_number"
+        android:gravity="center"
+        android:text="Nickname"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/top_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/team_number"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/team_number"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/nickname"
+        android:gravity="center"
+        android:text="Top Line"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/second_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/team_number"
+        android:layout_below="@id/team_number"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:text="Second Line"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/third_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/team_number"
+        android:layout_below="@+id/second_line"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:text="Bottom Line"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View"
+        android:id="@+id/view_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
+
+
+    <View
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_toLeftOf="@id/view_button"
+        android:layout_alignParentTop="true"
+        android:background="@color/bright_red"
+        android:id="@+id/red_card"
+        android:visibility="gone"/>
+
+    <View
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_toLeftOf="@id/red_card"
+        android:layout_alignParentTop="true"
+        android:background="#ffea00"
+        android:id="@+id/yellow_card"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/thriller"
+        android:layout_toLeftOf="@id/yellow_card"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:id="@+id/stopped_moving"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/view_button"
+        android:id="@+id/picked_button"
+        android:text="Picked"/>
+
+
+</RelativeLayout>

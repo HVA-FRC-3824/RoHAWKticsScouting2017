@@ -19,8 +19,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:icon="@drawable/logo"
+        android:label="RScout"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -47,6 +47,7 @@
         <activity android:name=".Activities.MatchPlanning" />
         <activity android:name=".Activities.MatchScouting" />
         <activity android:name=".Activities.MatchView" />
+        <activity android:name=".Activities.PickList" />
         <activity android:name=".Activities.PitScouting" />
         <activity android:name=".Activities.RankingsView" />
         <activity android:name=".Activities.Schedule" />

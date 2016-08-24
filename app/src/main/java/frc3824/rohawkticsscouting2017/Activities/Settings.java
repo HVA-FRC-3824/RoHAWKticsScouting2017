@@ -27,6 +27,7 @@ import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -337,6 +338,14 @@ public class Settings extends Activity {
                     pit.team_number = tbaTeam.team_number;
                     pit.pit_scouted = false;
                     database.setTPD(pit);
+
+                    TPA pick = new TPA();
+                    pick.team_number = tbaTeam.team_number;
+                    pick.nickname = tbaTeam.nickname;
+                    pick.manual_ranking = -1;
+                    database.setFirstTPA(pick);
+                    database.setSecondTPA(pick);
+                    database.setThirdTPA(pick);
 
                     currentIndex++;
                     publishProgress(currentIndex, total);

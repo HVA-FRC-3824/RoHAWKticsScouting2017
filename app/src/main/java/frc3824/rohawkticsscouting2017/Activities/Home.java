@@ -111,6 +111,7 @@ public class Home extends Activity implements View.OnClickListener{
                 setupButton(R.id.view_match_button);
                 setupButton(R.id.view_rankings_button);
                 setupButton(R.id.view_event_button);
+                setupButton(R.id.view_pick_list_button);
 
                 setupButton(R.id.match_planning_button);
 
@@ -141,6 +142,7 @@ public class Home extends Activity implements View.OnClickListener{
                 setupButton(R.id.view_match_button);
                 setupButton(R.id.view_rankings_button);
                 setupButton(R.id.view_event_button);
+                setupButton(R.id.view_pick_list_button);
 
                 setupButton(R.id.match_planning_button);
 
@@ -214,6 +216,10 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
             case R.id.view_event_button:
                 intent = new Intent(this, EventView.class);
+                startActivity(intent);
+                break;
+            case R.id.view_pick_list_button:
+                intent = new Intent(this, PickList.class);
                 startActivity(intent);
                 break;
             case R.id.match_planning_button:
