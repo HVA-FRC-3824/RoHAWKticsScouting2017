@@ -75,7 +75,9 @@ public class BluetoothHandler extends Handler {
 
                 switch (message.charAt(0)) {
                     case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
-                        mDatabase.setTMD(mGson.fromJson(message.substring(1), TMD.class));
+                        TMD tmd = mGson.fromJson(message.substring(1), TMD.class);
+                        mDatabase.setTMD(tmd);
+                        dataRecieved(tmd);
                         displayText("Match Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.PIT_HEADER:
@@ -83,7 +85,9 @@ public class BluetoothHandler extends Handler {
                         displayText("Pit Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
-                        mDatabase.setSMD(mGson.fromJson(message.substring(1), SMD.class));
+                        SMD smd = mGson.fromJson(message.substring(1), SMD.class);
+                        mDatabase.setSMD(smd);
+                        dataRecieved(smd);
                         displayText("Super Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.CALC_HEADER:
@@ -99,4 +103,6 @@ public class BluetoothHandler extends Handler {
     public void displayText(String message, String color){}
     public void connectionAdded(String message){}
     public void connectionLost(String message){}
+    public void dataRecieved(TMD tmd){}
+    public void dataRecieved(SMD smd){}
 }
