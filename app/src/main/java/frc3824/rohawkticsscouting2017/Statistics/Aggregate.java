@@ -75,7 +75,39 @@ public class Aggregate {
         team.calc.no_show = LowLevelStats.fromBoolean(no_show);
         team.calc.dq = LowLevelStats.fromBoolean(dq);
 
-        database.setTCD(team.calc);
+
+        TeamCalculations tc = new TeamCalculations(team);
+
+        team.first_pick.pick_ability = tc.firstPickAbility();
+        team.second_pick.pick_ability = tc.secondPickAbility();
+        team.third_pick.pick_ability = tc.thirdPickAbility();
+
+        if(team.pit.robot_image_filepath != null && team.pit.robot_image_filepath != "")
+        {
+            team.first_pick.robot_picture_filepath = team.pit.robot_image_filepath;
+            team.second_pick.robot_picture_filepath = team.pit.robot_image_filepath;
+            team.third_pick.robot_picture_filepath = team.pit.robot_image_filepath;
+        }
+
+        /////// GAME SPECIFIC ///////
+
+
+        /////////////////////////////
+
+
+        team.first_pick.stopped_moving = team.calc.stopped_moving.total > 0;
+        team.second_pick.stopped_moving = team.calc.stopped_moving.total > 0;
+        team.third_pick.stopped_moving = team.calc.stopped_moving.total > 0;
+
+        team.first_pick.yellow_card = team.calc.yellow_cards.total > 0;
+        team.second_pick.yellow_card = team.calc.yellow_cards.total > 0;
+        team.third_pick.yellow_card = team.calc.yellow_cards.total > 0;
+
+        team.first_pick.red_card = team.calc.red_cards.total > 0;
+        team.second_pick.red_card = team.calc.red_cards.total > 0;
+        team.third_pick.red_card = team.calc.red_cards.total > 0;
+
+        database.setTeam(team);
     }
 
     public static void aggregateForSuper(int match_number)

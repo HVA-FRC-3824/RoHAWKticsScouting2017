@@ -152,4 +152,35 @@ public class TeamCalculations {
     {
         return 0;
     }
+
+    /**
+     * Calculate the first pick ability which is the predicted offensive score that the team can
+     * contribute combined with our team.
+     *
+     * @return
+     */
+    public double firstPickAbility()
+    {
+        return 0.0;
+    }
+
+    /**
+     * Calculate the second pick ability
+     *
+     * @return
+     */
+    public double secondPickAbility()
+    {
+        return 0.0;
+    }
+
+    /**
+     * Calculate the third pick ability
+     *
+     * @return
+     */
+    public double thirdPickAbility()
+    {
+        return 0.0;
+    }
 }

@@ -619,17 +619,6 @@ public class Database {
 
     public TCD getTCD(int team_number){ return mTCDs.get(team_number); }
 
-    public void setTeam(Team team)
-    {
-        setTCD(team.calc);
-        setTID(team.info);
-        setTPD(team.pit);
-        for(Map.Entry entry: team.completed_matches.entrySet())
-        {
-            setTMD((TMD)entry.getValue());
-        }
-    }
-
     /*
         Pick List Data
     */
@@ -743,6 +732,22 @@ public class Database {
         team.third_pick = getThirdTPA(team_number);
 
         return team;
+    }
+
+    public void setTeam(Team team)
+    {
+        setTCD(team.calc);
+        setTID(team.info);
+        setTPD(team.pit);
+        for(Map.Entry entry: team.completed_matches.entrySet())
+        {
+            setTMD((TMD)entry.getValue());
+        }
+        setCurrentTRD(team.current_ranking);
+        setPredictedTRD(team.predicted_ranking);
+        setFirstTPA(team.first_pick);
+        setSecondTPA(team.second_pick);
+        setThirdTPA(team.third_pick);
     }
 
     public List<TMD> getCompletedMatches(int team_number)
