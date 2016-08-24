@@ -19,26 +19,26 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  *
  * Savable Checkbox that has a label attached. Clicking anywhere in the field modifies the checkbox.
  */
-public class CustomCheckbox extends CustomScoutView implements View.OnClickListener{
+public class SavableCheckbox extends SavableView implements View.OnClickListener{
 
     private final static String TAG = "CustomCheckbox";
 
     private CheckBox mCheckbox;
     private String mKey;
 
-    public CustomCheckbox(Context context, AttributeSet attrs) {
+    public SavableCheckbox(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.custom_checkbox, this);
+        inflater.inflate(R.layout.savable_checkbox, this);
 
         mCheckbox = (CheckBox)findViewById(R.id.checkbox);
 
         // Set label and get key
         TextView label = (TextView)findViewById(R.id.label);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomScoutView);
-        label.setText(typedArray.getString(R.styleable.CustomScoutView_label));
-        mKey = typedArray.getString(R.styleable.CustomScoutView_key);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
+        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
 
         // Clicking anywhere on the widget will affect the checkbox

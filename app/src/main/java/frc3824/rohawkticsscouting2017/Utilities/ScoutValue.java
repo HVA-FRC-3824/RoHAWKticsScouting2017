@@ -8,7 +8,7 @@ public class ScoutValue {
 
     private final static String TAG = "ScoutValue";
 
-    public enum Type {INTEGER, DOUBLE, STRING, BOOLEAN};
+    public enum Type {INTEGER, DOUBLE, STRING, BOOLEAN, OBJECT}
 
     public class TypeException extends Exception
     {
@@ -23,6 +23,7 @@ public class ScoutValue {
     private double mValue_double;
     private String mValue_string;
     private boolean mValue_boolean;
+    private Object mValue_object;
 
     public ScoutValue(int value)
     {
@@ -52,6 +53,12 @@ public class ScoutValue {
     {
         mType = Type.BOOLEAN;
         mValue_boolean = value;
+    }
+
+    public ScoutValue(Object value)
+    {
+        mType = Type.OBJECT;
+        mValue_object = value;
     }
 
     public Type getType()
@@ -95,6 +102,14 @@ public class ScoutValue {
         throw new TypeException(String.format("This ScoutValue is a %s not a boolean",enumToString(mType)));
     }
 
+    public Object getObject() throws TypeException {
+        if(mType == Type.OBJECT)
+        {
+            return mValue_object;
+        }
+        throw new TypeException(String.format("This ScoutValue is a %s not a object",enumToString(mType)));
+    }
+
     private String enumToString(Type type)
     {
         switch (type)
@@ -107,6 +122,8 @@ public class ScoutValue {
                 return "string";
             case BOOLEAN:
                 return "boolean";
+            case OBJECT:
+                return "object";
             default:
                 assert false;
                 return "";

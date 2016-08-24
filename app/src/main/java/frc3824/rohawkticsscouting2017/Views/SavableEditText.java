@@ -16,26 +16,26 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  * @author Andrew Messing
  *         Created: 8/11/16
  */
-public class CustomEditText extends CustomScoutView {
+public class SavableEditText extends SavableView {
 
     private final static String TAG = "CustomEditText";
 
     private EditText mEditText;
     private String mKey;
 
-    public CustomEditText(Context context, AttributeSet attrs) {
+    public SavableEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.custom_edittext, this);
+        inflater.inflate(R.layout.savable_edittext, this);
 
         mEditText = (EditText) findViewById(R.id.edittext);
 
         // Setup label and get key
         TextView label = (TextView) findViewById(R.id.label);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomScoutView);
-        label.setText(typedArray.getString(R.styleable.CustomScoutView_label));
-        mKey = typedArray.getString(R.styleable.CustomScoutView_key);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
+        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
     }
 
