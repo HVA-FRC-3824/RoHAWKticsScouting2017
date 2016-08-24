@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <frc3824.rohawkticsscouting2017.Views.CustomEditText
+    <frc3824.rohawkticsscouting2017.Views.SavableEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/pit_notes"

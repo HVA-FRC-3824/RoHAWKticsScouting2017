@@ -7,28 +7,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <frc3824.rohawkticsscouting2017.Views.CustomCheckbox
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/post_dq"
         app:label="DQed"
         app:key="post_dq" />
 
-    <frc3824.rohawkticsscouting2017.Views.CustomCheckbox
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/post_stopped"
         app:label="Stopped Moving"
         app:key="post_stopped" />
 
-    <frc3824.rohawkticsscouting2017.Views.CustomCheckbox
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/post_no_show"
         app:label="No Show"
         app:key="post_no_show" />
 
-    <frc3824.rohawkticsscouting2017.Views.CustomEditText
+    <frc3824.rohawkticsscouting2017.Views.SavableEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/post_notes"

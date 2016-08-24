@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import frc3824.rohawkticsscouting2017.Views.CustomScoutView;
+import frc3824.rohawkticsscouting2017.Views.SavableView;
 
 /**
  * @author Andrew Messing
@@ -54,9 +54,9 @@ public abstract class ScoutFragment extends Fragment {
         for(int i = 0; i < childCount; i++)
         {
             View view = vg.getChildAt(i);
-            if(view instanceof CustomScoutView)
+            if(view instanceof SavableView)
             {
-                error += ((CustomScoutView)view).writeToMap(map);
+                error += ((SavableView)view).writeToMap(map);
             }
             else if(view instanceof ViewGroup)
             {
@@ -81,9 +81,9 @@ public abstract class ScoutFragment extends Fragment {
         for(int i = 0; i < childCount; i++)
         {
             View view = vg.getChildAt(i);
-            if(view instanceof CustomScoutView)
+            if(view instanceof SavableView)
             {
-                error += ((CustomScoutView)view).writeToMap(map);
+                error += ((SavableView)view).writeToMap(map);
             }
             else if(view instanceof ViewGroup)
             {
@@ -116,9 +116,9 @@ public abstract class ScoutFragment extends Fragment {
         for(int i = 0; i < childCount; i++)
         {
             View view = vg.getChildAt(i);
-            if(view instanceof CustomScoutView)
+            if(view instanceof SavableView)
             {
-                error += ((CustomScoutView)view).restoreFromMap(map);
+                error += ((SavableView)view).restoreFromMap(map);
             }
             else if(view instanceof ViewGroup)
             {
@@ -142,9 +142,9 @@ public abstract class ScoutFragment extends Fragment {
         for(int i = 0; i < childCount; i++)
         {
             View view = vg.getChildAt(i);
-            if(view instanceof CustomScoutView)
+            if(view instanceof SavableView)
             {
-                error += ((CustomScoutView)view).restoreFromMap(map);
+                error += ((SavableView)view).restoreFromMap(map);
             }
             else if(view instanceof ViewGroup)
             {

@@ -21,7 +21,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  *
  * Savable set of radiobuttons that has a label attached.
  */
-public class CustomRadioButtons extends CustomScoutView{
+public class SavableRadioButtons extends SavableView {
 
     private final static String TAG = "CustomRadioButtons";
 
@@ -29,22 +29,22 @@ public class CustomRadioButtons extends CustomScoutView{
     private RadioGroup mRadioButtons;
     private String mKey;
 
-    public CustomRadioButtons(Context context, AttributeSet attrs) {
+    public SavableRadioButtons(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.custom_radio_buttons, this);
+        inflater.inflate(R.layout.savable_radio_buttons, this);
 
         // Setup label and get key
         TextView label = (TextView) findViewById(R.id.label);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomScoutView);
-        label.setText(typedArray.getString(R.styleable.CustomScoutView_label));
-        mKey = typedArray.getString(R.styleable.CustomScoutView_key);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
+        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
 
         // Get RadioButtons
-        typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomRadioButtons);
-        int radioValuesId = typedArray.getResourceId(R.styleable.CustomRadioButtons_radio_values, 0);
+        typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableRadioButtons);
+        int radioValuesId = typedArray.getResourceId(R.styleable.SavableRadioButtons_radio_values, 0);
         mResourceStrings = context.getResources().getStringArray(radioValuesId);
 
         mRadioButtons = (RadioGroup) findViewById(R.id.radiobuttons);

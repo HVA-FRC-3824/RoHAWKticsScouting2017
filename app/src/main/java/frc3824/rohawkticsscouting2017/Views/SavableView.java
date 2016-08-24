@@ -13,11 +13,11 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
  *
  * Abstract base class for all custom widgets that save and retrieve data
  */
-public abstract class CustomScoutView extends RelativeLayout{
+public abstract class SavableView extends RelativeLayout{
 
     private final static String TAG = "CustomScoutView";
 
-    public CustomScoutView(Context context, AttributeSet attrs) {
+    public SavableView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

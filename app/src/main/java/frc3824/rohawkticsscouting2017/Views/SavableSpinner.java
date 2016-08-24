@@ -21,7 +21,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  *
  * Savable spinner with a label attached
  */
-public class CustomSpinner extends CustomScoutView{
+public class SavableSpinner extends SavableView {
 
     private final static String TAG = "CustomSpinner";
 
@@ -30,21 +30,21 @@ public class CustomSpinner extends CustomScoutView{
     private Spinner mSpinner;
 
 
-    public CustomSpinner(Context context, AttributeSet attrs) {
+    public SavableSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.custom_spinner, this);
+        inflater.inflate(R.layout.savable_spinner, this);
 
         // Setup label and get key
         TextView label = (TextView) this.findViewById(R.id.label);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomScoutView);
-        label.setText(typedArray.getString(R.styleable.CustomScoutView_label));
-        mKey = typedArray.getString(R.styleable.CustomScoutView_key);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
+        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
 
-        typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomSpinner);
-        int spinnerValueId = typedArray.getResourceId(R.styleable.CustomSpinner_spinner_values, 0);
+        typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableSpinner);
+        int spinnerValueId = typedArray.getResourceId(R.styleable.SavableSpinner_spinner_values, 0);
         mResourceStrings = context.getResources().getStringArray(spinnerValueId);
         typedArray.recycle();
 

@@ -45,6 +45,8 @@ public class ScoutMap {
         mMap.put(key, new ScoutValue(value));
     }
 
+    public void put(String key, Object value) { mMap.put(key, new ScoutValue(value)); }
+
     public boolean contains(String key)
     {
         return mMap.containsKey(key);
@@ -69,6 +71,10 @@ public class ScoutMap {
 
     public boolean getBoolean(String key) throws ScoutValue.TypeException {
         return mMap.get(key).getBoolean();
+    }
+
+    public Object getObject(String key) throws ScoutValue.TypeException {
+        return mMap.get(key).getObject();
     }
 
     public void remove(String key) { mMap.remove(key); }

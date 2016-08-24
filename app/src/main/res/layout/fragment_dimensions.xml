@@ -7,28 +7,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <frc3824.rohawkticsscouting2017.Views.CustomNumeric
+    <frc3824.rohawkticsscouting2017.Views.SavableNumeric
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/width"
         app:key="width"
         app:label="Width (in)"/>
 
-    <frc3824.rohawkticsscouting2017.Views.CustomNumeric
+    <frc3824.rohawkticsscouting2017.Views.SavableNumeric
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/length"
         app:key="length"
         app:label="Length (in)"/>
 
-    <frc3824.rohawkticsscouting2017.Views.CustomNumeric
+    <frc3824.rohawkticsscouting2017.Views.SavableNumeric
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/height"
         app:key="height"
         app:label="Height (in)"/>
 
-    <frc3824.rohawkticsscouting2017.Views.CustomNumeric
+    <frc3824.rohawkticsscouting2017.Views.SavableNumeric
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/weight"

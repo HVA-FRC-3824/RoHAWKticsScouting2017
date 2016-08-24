@@ -16,26 +16,26 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  * @author Andrew Messing
  *         Created: 8/11/16
  */
-public class CustomNumeric extends CustomScoutView {
+public class SavableNumeric extends SavableView {
 
     private final static String TAG = "CustomNumeric";
 
     private EditText mNumeric;
     private String mKey;
 
-    public CustomNumeric(Context context, AttributeSet attrs) {
+    public SavableNumeric(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.custom_numeric, this);
+        inflater.inflate(R.layout.savable_numeric, this);
 
         mNumeric = (EditText) findViewById(R.id.numeric);
 
         // Setup label and get key
         TextView label = (TextView) this.findViewById(R.id.label);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomScoutView);
-        label.setText(typedArray.getString(R.styleable.CustomScoutView_label));
-        mKey = typedArray.getString(R.styleable.CustomScoutView_key);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
+        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
     }
 

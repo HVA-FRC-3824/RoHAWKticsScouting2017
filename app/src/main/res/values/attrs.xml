@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="CustomScoutView">
+    <declare-styleable name="SavableView">
         <attr name="label" format="string" />
         <attr name="key" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="CustomRadioButtons">
+    <declare-styleable name="SavableRadioButtons">
         <attr name="radio_values" format="reference"/>
     </declare-styleable>
 
-    <declare-styleable name="CustomSpinner">
+    <declare-styleable name="SavableSpinner">
         <attr name="spinner_values" format="reference"/>
     </declare-styleable>
 
-    <declare-styleable name="CustomAutoCompleteTextView">
+    <declare-styleable name="SavableAutoCompleteTextView">
         <attr name="autocomplete_values" format="reference"/>
     </declare-styleable>
 

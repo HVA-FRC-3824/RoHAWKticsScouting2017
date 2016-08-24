@@ -20,7 +20,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  * Savable Counter that has a label attached. Clicking anywhere in the field increments the counter.
  * Long clicks decrement the counter.
  */
-public class CustomCounter extends CustomScoutView implements View.OnClickListener, View.OnLongClickListener{
+public class SavableCounter extends SavableView implements View.OnClickListener, View.OnLongClickListener{
 
     private final static String TAG = "CustomCounter";
 
@@ -28,17 +28,17 @@ public class CustomCounter extends CustomScoutView implements View.OnClickListen
     private int mCount;
     private String mKey;
 
-    public CustomCounter(Context context, AttributeSet attrs) {
+    public SavableCounter(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.custom_counter, this);
+        inflater.inflate(R.layout.savable_counter, this);
 
         // Setup label and get key
         TextView label = (TextView)findViewById(R.id.label);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomScoutView);
-        label.setText(typedArray.getString(R.styleable.CustomScoutView_label));
-        mKey = typedArray.getString(R.styleable.CustomScoutView_key);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
+        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
 
         // Setup counter
