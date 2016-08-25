@@ -5,17 +5,16 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_Qualitative;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 import frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView;
+import frc3824.rohawkticsscouting2017.Views.DragSortListView.SimpleFloatViewManager;
 
 /**
  * @author Andrew Messing
@@ -46,6 +45,8 @@ public class SavableQualitative extends SavableView implements DragSortListView.
         typedArray.recycle();
 
         mListView = (DragSortListView)findViewById(R.id.listview);
+        mListView.setDropListener(this);
+        //mListView.setFloatViewManager(new SimpleFloatViewManager(mListView));
     }
 
     public void setTeams(ArrayList<Integer> teams)
@@ -53,7 +54,6 @@ public class SavableQualitative extends SavableView implements DragSortListView.
         mTeams = teams;
         mLva = new LVA_Qualitative(mContext, teams);
         mListView.setAdapter(mLva);
-        mListView.setDropListener(this);
     }
 
     @Override

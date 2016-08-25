@@ -20,6 +20,6 @@
         android:id="@+id/listview"
         android:dividerHeight="4px"
         dslv:drag_enabled="true"
-        dslv:drag_start_mode="onDown"/>
+        dslv:drag_start_mode="onLongPress"/>
 
 </LinearLayout>

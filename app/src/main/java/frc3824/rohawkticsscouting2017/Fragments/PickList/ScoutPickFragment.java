@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import frc3824.rohawkticsscouting2017.Adapters.DSLVA_PickList;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PickList;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -26,7 +26,7 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
 
     protected ArrayList<TPA> mTeams;
     protected Database mDatabase;
-    private DSLVA_PickList mAdapter;
+    private LVA_PickList mAdapter;
     private Comparator<TPA> mComparator;
     private DragSortListView mList;
 
@@ -81,7 +81,7 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
         };
         Collections.sort(mTeams, mComparator);
 
-        mAdapter = new DSLVA_PickList(getContext(), mTeams);
+        mAdapter = new LVA_PickList(getContext(), mTeams);
         mList.setAdapter(mAdapter);
         mList.setDropListener(this);
 
@@ -159,7 +159,7 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
             }
         }
         Collections.sort(mTeams, mComparator);
-        mAdapter = new DSLVA_PickList(getContext(), mTeams);
+        mAdapter = new LVA_PickList(getContext(), mTeams);
         mList.setAdapter(mAdapter);
     }
 }

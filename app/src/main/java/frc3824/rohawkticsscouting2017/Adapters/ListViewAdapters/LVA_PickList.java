@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Adapters;
+package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,14 +29,14 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * @author Andrew Messing
  *         Created: 8/23/16
  */
-public class DSLVA_PickList extends ArrayAdapter<TPA>{
+public class LVA_PickList extends ArrayAdapter<TPA>{
 
-    private final static String TAG = "DSLVA_PickList";
+    private final static String TAG = "LVA_PickList";
 
     private ArrayList<TPA> mTeams;
     private Context mContext;
 
-    public DSLVA_PickList(Context context, ArrayList<TPA> objects) {
+    public LVA_PickList(Context context, ArrayList<TPA> objects) {
         super(context, R.layout.list_item_pick, objects);
         mTeams = objects;
         mContext = context;

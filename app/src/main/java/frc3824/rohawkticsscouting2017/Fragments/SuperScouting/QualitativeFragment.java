@@ -35,7 +35,7 @@ public class QualitativeFragment extends ScoutFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_qualitative, container, false);
+        View view = inflater.inflate(R.layout.fragment_super_qualitative, container, false);
 
         Database database = Database.getInstance();
         Match match = database.getMatch(mMatchNumber);
@@ -75,7 +75,7 @@ public class QualitativeFragment extends ScoutFragment {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);
         }
 
-        Utilities.setupUi(getActivity(), view);
+        //Utilities.setupUi(getActivity(), view);
 
         return view;
     }
