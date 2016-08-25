@@ -156,35 +156,17 @@ public interface Constants {
     {
         interface Qualitative
         {
-            interface Speed
-            {
-                String BLUE1 = "blue1_speed";
-                String BLUE2 = "blue2_speed";
-                String BLUE3 = "blue3_speed";
-                String RED1 = "red1_speed";
-                String RED2 = "red2_speed";
-                String RED3 = "red3_speed";
-            }
+            String BLUE_SPEED = "blue_speed";
+            String RED_SPEED = "red_speed";
 
-            interface Pushing_Power
-            {
-                String BLUE1 = "blue1_pushing_power";
-                String BLUE2 = "blue2_pushing_power";
-                String BLUE3 = "blue3_pushing_power";
-                String RED1 = "red1_pushing_power";
-                String RED2 = "red2_pushing_power";
-                String RED3 = "red3_pushing_power";
-            }
+            String BLUE_TORQUE = "blue_torque";
+            String RED_TORQUE = "red_torque";
 
-            interface Control
-            {
-                String BLUE1 = "blue1_control";
-                String BLUE2 = "blue2_control";
-                String BLUE3 = "blue3_control";
-                String RED1 = "red1_control";
-                String RED2 = "red2_control";
-                String RED3 = "red3_control";
-            }
+            String BLUE_CONTROL = "blue_control";
+            String RED_CONTROL = "red_control";
+
+            String BLUE_DEFENSE = "blue_defense";
+            String RED_DEFENSE = "red_defense";
         }
 
         String NOTES = "super_notes";
