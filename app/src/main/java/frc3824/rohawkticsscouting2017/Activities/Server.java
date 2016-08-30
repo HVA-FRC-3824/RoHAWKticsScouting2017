@@ -15,7 +15,10 @@ import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Bluetooth.AcceptThread;
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothHandler;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Statistics.Aggregate;
 import frc3824.rohawkticsscouting2017.Utilities.CircularBuffer;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -142,6 +145,18 @@ public class Server extends Activity {
         public void connectionLost(String name)
         {
             mLabels.get(name).setBackgroundColor(Color.RED);
+        }
+
+        @Override
+        public void dataRecieved(TMD tmd)
+        {
+            Aggregate.aggregateForTeam(tmd.team_number);
+        }
+
+        @Override
+        public void dataRecieved(SMD smd)
+        {
+            Aggregate.aggregateForSuper();
         }
     }
 }

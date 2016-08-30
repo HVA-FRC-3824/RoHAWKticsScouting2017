@@ -21,6 +21,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
@@ -48,6 +49,9 @@ public class Database {
     private DatabaseReference mStrategyRef;
     private DatabaseReference mCurrentRankingRef;
     private DatabaseReference mPredictedRankingRef;
+    private DatabaseReference mFirstPickRef;
+    private DatabaseReference mSecondPickRef;
+    private DatabaseReference mThirdPickRef;
 
     private String mEventKey;
 
@@ -58,8 +62,11 @@ public class Database {
     private Map<String, TMD> mTMDs;
     private Map<Integer, TID> mTIDs;
     private Map<Integer, TCD> mTCDs;
-    private Map<Integer, TRD> mCTRDs;
-    private Map<Integer, TRD> mPTRDs;
+    private Map<Integer, TRD> mCurrent_TRDs;
+    private Map<Integer, TRD> mPredicted_TRDs;
+    private Map<Integer, TPA> mFirst_TPA;
+    private Map<Integer, TPA> mSecond_TPA;
+    private Map<Integer, TPA> mThird_TPA;
     private Map<String, Strategy> mStrategies;
 
     private static Database mSingleton;
@@ -361,24 +368,24 @@ public class Database {
         });
 
         mCurrentRankingRef = mEventRef.child("rankings").child("current");
-        mCTRDs = new HashMap<>();
+        mCurrent_TRDs = new HashMap<>();
         mCurrentRankingRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "current_ranking.onChildAdded: " + dataSnapshot.getKey());
-                mCTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mCurrent_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "current_ranking.onChildChanged: " + dataSnapshot.getKey());
-                mCTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mCurrent_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "current_ranking.onChildRemoved: " + dataSnapshot.getKey());
-                mCTRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mCurrent_TRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -393,24 +400,24 @@ public class Database {
         });
 
         mPredictedRankingRef = mEventRef.child("rankings").child("predicted");
-        mPTRDs = new HashMap<>();
+        mPredicted_TRDs = new HashMap<>();
         mPredictedRankingRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "predicted_ranking.onChildAdded: " + dataSnapshot.getKey());
-                mPTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mPredicted_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "predicted_ranking.onChildChanged: " + dataSnapshot.getKey());
-                mPTRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mPredicted_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "predicted_ranking.onChildRemoved: " + dataSnapshot.getKey());
-                mPTRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mPredicted_TRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -421,6 +428,102 @@ public class Database {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "predicted_ranking.onCancelled");
+            }
+        });
+
+        mFirstPickRef = mEventRef.child("first_pick");
+        mFirst_TPA = new HashMap<>();
+        mFirstPickRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "first_pick.onChildAdded: " + dataSnapshot.getKey());
+                mFirst_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "first_pick.onChildChanged: " + dataSnapshot.getKey());
+                mFirst_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "first_pick.onChildRemoved: " + dataSnapshot.getKey());
+                mFirst_TPA.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "first_pick.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "first_pick.onCancelled");
+            }
+        });
+
+        mSecondPickRef = mEventRef.child("second_pick");
+        mSecond_TPA = new HashMap<>();
+        mSecondPickRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "second_pick.onChildAdded: " + dataSnapshot.getKey());
+                mSecond_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "second_pick.onChildChanged: " + dataSnapshot.getKey());
+                mSecond_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "second_pick.onChildRemoved: " + dataSnapshot.getKey());
+                mSecond_TPA.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "second_pick.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "second_pick.onCancelled");
+            }
+        });
+
+        mThirdPickRef = mEventRef.child("third_pick");
+        mThird_TPA = new HashMap<>();
+        mThirdPickRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "third_pick.onChildAdded: " + dataSnapshot.getKey());
+                mThird_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "third_pick.onChildChanged: " + dataSnapshot.getKey());
+                mThird_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "third_pick.onChildRemoved: " + dataSnapshot.getKey());
+                mThird_TPA.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "third_pick.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "third_pick.onCancelled");
             }
         });
 
@@ -492,6 +595,8 @@ public class Database {
         return mSMDs.get(String.format("M%d",match_number));
     }
 
+    public Map<Integer, SMD> getSMDs() { return  mSMDs; }
+
     /*
         Team Info
     */
@@ -516,15 +621,66 @@ public class Database {
 
     public TCD getTCD(int team_number){ return mTCDs.get(team_number); }
 
-    public void setTeam(Team team)
+    /*
+        Pick List Data
+    */
+    public void setFirstTPA(TPA first)
     {
-        setTCD(team.calc);
-        setTID(team.info);
-        setTPD(team.pit);
-        for(Map.Entry entry: team.completed_matches.entrySet())
+        mFirstPickRef.child(String.valueOf(first.team_number)).setValue(first);
+    }
+
+    public TPA getFirstTPA(int team_number)
+    {
+        return mFirst_TPA.get(team_number);
+    }
+
+    public void setSecondTPA(TPA second)
+    {
+        mSecondPickRef.child(String.valueOf(second.team_number)).setValue(second);
+    }
+
+    public TPA getSecondTPA(int team_number)
+    {
+        return mSecond_TPA.get(team_number);
+    }
+
+    public void setThirdTPA(TPA third)
+    {
+        mThirdPickRef.child(String.valueOf(third.team_number)).setValue(third);
+    }
+
+    public TPA getThirdTPA(int team_number)
+    {
+        return mThird_TPA.get(team_number);
+    }
+
+    public void setDNP(int team_number, boolean dnp)
+    {
+        mFirstPickRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mSecondPickRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mThirdPickRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+    }
+
+    public ArrayList<Integer> getDnpList()
+    {
+        ArrayList<Integer> teams = getTeamNumbers();
+        // Remove all teams that are not set to do not pick
+        for(int i = 0; i < teams.size(); i++)
         {
-            setTMD((TMD)entry.getValue());
+            if(!mFirst_TPA.get(teams.get(i)).dnp)
+            {
+                teams.remove(i);
+                i--;
+            }
         }
+        return teams;
+    }
+
+    public void setPicked(int team_number, boolean picked)
+    {
+        mFirstPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mSecondPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mThirdPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
     }
 
     public void setCurrentTRD(TRD trd)
@@ -534,12 +690,12 @@ public class Database {
 
     public TRD getCurrentTRD(int team_number)
     {
-        return mCTRDs.get(team_number);
+        return mCurrent_TRDs.get(team_number);
     }
 
     public Map<Integer, TRD> getCurrentRankings()
     {
-        return mCTRDs;
+        return mCurrent_TRDs;
     }
 
     public void setPredictedTRD(TRD trd)
@@ -549,12 +705,12 @@ public class Database {
 
     public TRD getPredictedTRD(int team_number)
     {
-        return mPTRDs.get(team_number);
+        return mPredicted_TRDs.get(team_number);
     }
 
     public Map<Integer, TRD> getPredictedRankings()
     {
-        return mPTRDs;
+        return mPredicted_TRDs;
     }
 
     public Team getTeam(int team_number)
@@ -573,8 +729,27 @@ public class Database {
         }
         team.current_ranking = getCurrentTRD(team_number);
         team.predicted_ranking = getPredictedTRD(team_number);
+        team.first_pick = getFirstTPA(team_number);
+        team.second_pick = getSecondTPA(team_number);
+        team.third_pick = getThirdTPA(team_number);
 
         return team;
+    }
+
+    public void setTeam(Team team)
+    {
+        setTCD(team.calc);
+        setTID(team.info);
+        setTPD(team.pit);
+        for(Map.Entry entry: team.completed_matches.entrySet())
+        {
+            setTMD((TMD)entry.getValue());
+        }
+        setCurrentTRD(team.current_ranking);
+        setPredictedTRD(team.predicted_ranking);
+        setFirstTPA(team.first_pick);
+        setSecondTPA(team.second_pick);
+        setThirdTPA(team.third_pick);
     }
 
     public List<TMD> getCompletedMatches(int team_number)

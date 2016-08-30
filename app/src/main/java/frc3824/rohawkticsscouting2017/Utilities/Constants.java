@@ -156,35 +156,17 @@ public interface Constants {
     {
         interface Qualitative
         {
-            interface Speed
-            {
-                String BLUE1 = "blue1_speed";
-                String BLUE2 = "blue2_speed";
-                String BLUE3 = "blue3_speed";
-                String RED1 = "red1_speed";
-                String RED2 = "red2_speed";
-                String RED3 = "red3_speed";
-            }
+            String BLUE_SPEED = "blue_speed";
+            String RED_SPEED = "red_speed";
 
-            interface Pushing_Power
-            {
-                String BLUE1 = "blue1_pushing_power";
-                String BLUE2 = "blue2_pushing_power";
-                String BLUE3 = "blue3_pushing_power";
-                String RED1 = "red1_pushing_power";
-                String RED2 = "red2_pushing_power";
-                String RED3 = "red3_pushing_power";
-            }
+            String BLUE_TORQUE = "blue_torque";
+            String RED_TORQUE = "red_torque";
 
-            interface Control
-            {
-                String BLUE1 = "blue1_control";
-                String BLUE2 = "blue2_control";
-                String BLUE3 = "blue3_control";
-                String RED1 = "red1_control";
-                String RED2 = "red2_control";
-                String RED3 = "red3_control";
-            }
+            String BLUE_CONTROL = "blue_control";
+            String RED_CONTROL = "red_control";
+
+            String BLUE_DEFENSE = "blue_defense";
+            String RED_DEFENSE = "red_defense";
         }
 
         String NOTES = "super_notes";
@@ -261,6 +243,26 @@ public interface Constants {
         String GREEN = "green";
         String YELLOW = "yellow";
         String WHITE = "white";
+    }
+
+    interface Event_View
+    {
+        interface Main_Dropdown_Options
+        {
+            String FOULS = "Fouls";
+
+            String[] OPTIONS = {FOULS};
+        }
+
+        interface Foul_Secondary_Options
+        {
+            String STANDARD_FOULS = "Standard Fouls";
+            String TECH_FOULS = "Tech Fouls";
+            String YELLOW_CARDS = "Yellow Cards";
+            String RED_CARDS = "Red Cards";
+
+            String[] OPTIONS = {STANDARD_FOULS, TECH_FOULS, YELLOW_CARDS, RED_CARDS};
+        }
     }
 
 }

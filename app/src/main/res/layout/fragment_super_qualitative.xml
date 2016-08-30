@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="@color/bright_blue">
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/blue_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="blue_speed"
+            app:label="Blue Speed" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/blue_torque"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="blue_torque"
+            app:label="Blue Torque" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/blue_control"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="blue_control"
+            app:label="Blue Control" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/blue_defense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="blue_defense"
+            app:label="Blue Defense" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="@color/bright_red">
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/red_speed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="red_speed"
+            app:label="Red Speed" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/red_torque"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="red_torque"
+            app:label="Red Torque" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/red_control"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="red_control"
+            app:label="Red Control" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <frc3824.rohawkticsscouting2017.Views.SavableQualitative
+            android:id="@+id/red_defense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:key="red_defense"
+            app:label="Red Defense" />
+    </LinearLayout>
+
+
+</LinearLayout>

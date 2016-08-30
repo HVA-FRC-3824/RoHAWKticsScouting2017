@@ -231,8 +231,6 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
         int targetW = 100;
         int targetH = 100;
 
-        File f = new File(filepath);
-
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;

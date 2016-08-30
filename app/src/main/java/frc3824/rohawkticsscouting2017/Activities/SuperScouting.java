@@ -87,7 +87,7 @@ public class SuperScouting extends Activity{
 
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager) findViewById(R.id.super_scouting_view_pager);
-        mFPA = new FPA_SuperScouting(getFragmentManager());
+        mFPA = new FPA_SuperScouting(getFragmentManager(), mMatchNumber);
         SMD sm = mDatabase.getSMD(mMatchNumber);
         if (sm != null) {
             mFPA.setValueMap(sm.toMap());

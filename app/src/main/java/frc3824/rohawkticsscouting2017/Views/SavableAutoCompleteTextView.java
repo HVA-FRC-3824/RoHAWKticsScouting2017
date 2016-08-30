@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.R;
@@ -20,7 +19,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
  *
  * Savable textbox that can autocomplete with an array of options
  */
-public class CustomAutoCompleteTextView extends CustomScoutView{
+public class SavableAutoCompleteTextView extends SavableView {
 
     // TAG is shortened so that it can be used with log
     private final static String TAG = "CustomAutoCompleteText";
@@ -30,21 +29,21 @@ public class CustomAutoCompleteTextView extends CustomScoutView{
     private AutoCompleteTextView mAutocompleteTextView;
 
 
-    public CustomAutoCompleteTextView(Context context, AttributeSet attrs) {
+    public SavableAutoCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.custom_autocomplete_textview, this);
+        inflater.inflate(R.layout.savable_autocomplete_textview, this);
 
         // Setup label and get key
         TextView label = (TextView) findViewById(R.id.label);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomScoutView);
-        label.setText(typedArray.getString(R.styleable.CustomScoutView_label));
-        mKey = typedArray.getString(R.styleable.CustomScoutView_key);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
+        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
 
-        typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomAutoCompleteTextView);
-        int autocompleteValueId = typedArray.getResourceId(R.styleable.CustomAutoCompleteTextView_autocomplete_values, 0);
+        typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableAutoCompleteTextView);
+        int autocompleteValueId = typedArray.getResourceId(R.styleable.SavableAutoCompleteTextView_autocomplete_values, 0);
         mResourceStrings = context.getResources().getStringArray(autocompleteValueId);
         typedArray.recycle();
 
