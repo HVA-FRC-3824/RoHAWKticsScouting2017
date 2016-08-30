@@ -33,4 +33,17 @@ public class TCD {
     public LowLevelStats tech_fouls;
     public LowLevelStats yellow_cards;
     public LowLevelStats red_cards;
+
+    // Qualitative
+    public double zscore_speed;
+    public int rank_speed;
+
+    public double zscore_torque;
+    public int rank_torque;
+
+    public double zscore_control;
+    public int rank_control;
+
+    public double zscore_defense;
+    public int rank_defense;
 }

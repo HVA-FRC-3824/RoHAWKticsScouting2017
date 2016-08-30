@@ -595,6 +595,8 @@ public class Database {
         return mSMDs.get(String.format("M%d",match_number));
     }
 
+    public Map<Integer, SMD> getSMDs() { return  mSMDs; }
+
     /*
         Team Info
     */

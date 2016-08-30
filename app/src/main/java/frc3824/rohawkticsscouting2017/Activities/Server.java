@@ -156,7 +156,7 @@ public class Server extends Activity {
         @Override
         public void dataRecieved(SMD smd)
         {
-            Aggregate.aggregateForSuper(smd.match_number);
+            Aggregate.aggregateForSuper();
         }
     }
 }
