@@ -1,5 +1,7 @@
 package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,7 @@ import java.util.List;
  *
  * Team Info Data
  */
+@IgnoreExtraProperties
 public class TID {
 
     private final static String TAG = "TID";

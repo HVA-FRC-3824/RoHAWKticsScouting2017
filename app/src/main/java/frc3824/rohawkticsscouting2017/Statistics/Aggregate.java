@@ -16,7 +16,9 @@ import frc3824.rohawkticsscouting2017.Firebase.Database;
 
 /**
  * @author Andrew Messing
- *         Created: 8/23/16
+ * Created: 8/23/16
+ *
+ *
  */
 public class Aggregate {
 
@@ -30,10 +32,10 @@ public class Aggregate {
 
         // Low level calculations (avg, std, max, min, total)
 
-        /////// GAME SPECIFIC ///////
+        /////////////////////////////////// GAME SPECIFIC ///////////////////////////////////
 
 
-        /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
         List<Integer> fouls = new ArrayList<>();
         List<Integer> tech_fouls = new ArrayList<>();
@@ -46,10 +48,10 @@ public class Aggregate {
 
         for(TMD tmd: team.completed_matches.values())
         {
-            /////// GAME SPECIFIC ///////
+            /////////////////////////////////// GAME SPECIFIC ///////////////////////////////////
 
 
-            /////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////
 
 
             // fouls
@@ -64,10 +66,10 @@ public class Aggregate {
             dq.add(tmd.dq);
         }
 
-        /////// GAME SPECIFIC ///////
+        /////////////////////////////////// GAME SPECIFIC ///////////////////////////////////
 
 
-        /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
         team.calc.fouls = LowLevelStats.fromInt(fouls);
         team.calc.tech_fouls = LowLevelStats.fromInt(tech_fouls);
@@ -92,11 +94,10 @@ public class Aggregate {
             team.third_pick.robot_picture_filepath = team.pit.robot_image_filepath;
         }
 
-        /////// GAME SPECIFIC ///////
+        /////////////////////////////////// GAME SPECIFIC ///////////////////////////////////
 
 
-        /////////////////////////////
-
+        /////////////////////////////////////////////////////////////////////////////////////
 
         team.first_pick.stopped_moving = team.calc.stopped_moving.total > 0;
         team.second_pick.stopped_moving = team.calc.stopped_moving.total > 0;
@@ -115,11 +116,8 @@ public class Aggregate {
 
     public static void aggregateForSuper()
     {
-        //TODO: zscore calculation for speed, torque, control, and defense
         Database database = Database.getInstance();
-        List<Integer> team_numbers = database.getTeamNumbers();
         Map<Integer, ZscoreTeam> teams = new HashMap<>();
-
 
         for(SMD smd : database.getSMDs().values())
         {

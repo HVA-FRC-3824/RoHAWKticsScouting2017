@@ -13,6 +13,7 @@ public class LLD_Entry extends Entry {
 
     private final static String TAG = "LLD_Entry";
 
+    private int mTeamNumber;
     private float mMax;
     private float mMin;
     private float mStd;
@@ -27,9 +28,10 @@ public class LLD_Entry extends Entry {
      * @param average The average.
      * @param std The standard deviation.
      */
-    public LLD_Entry(float x, float max, float min, float average, float std) {
+    public LLD_Entry(float x, int team_number, float max, float min, float average, float std) {
         super(x, (max + min) / 2f);
 
+        this.mTeamNumber = team_number;
         this.mMax = max;
         this.mMin = min;
         this.mAvg = average;
@@ -90,6 +92,8 @@ public class LLD_Entry extends Entry {
 
         return c;
     }
+
+    public int getTeamNumber() { return mTeamNumber; }
 
     /**
      * Returns the max value.

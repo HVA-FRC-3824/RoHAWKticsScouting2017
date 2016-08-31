@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -717,9 +718,29 @@ public class Database {
     {
         Team team = new Team();
         team.team_number = team_number;
+
         team.info = getTID(team_number);
+        if(team.info == null)
+        {
+            team.info = new TID();
+            team.info.team_number = team_number;
+        }
+
         team.pit = getTPD(team_number);
+        if(team.pit == null)
+        {
+            team.pit = new TPD();
+            team.pit.team_number = team_number;
+        }
+
         team.calc = getTCD(team_number);
+        if(team.calc == null)
+        {
+            team.calc = new TCD();
+            team.calc.team_number = team_number;
+        }
+
+        team.completed_matches = new HashMap<>();
         for(int match_number : team.info.match_numbers)
         {
             TMD tmd = getTMD(match_number, team_number);
@@ -727,11 +748,41 @@ public class Database {
                 team.completed_matches.put(match_number, tmd);
             }
         }
+
         team.current_ranking = getCurrentTRD(team_number);
+        if(team.current_ranking == null)
+        {
+            team.current_ranking = new TRD();
+            team.current_ranking.team_number = team_number;
+        }
+
         team.predicted_ranking = getPredictedTRD(team_number);
+        if(team.predicted_ranking == null)
+        {
+            team.predicted_ranking = new TRD();
+            team.predicted_ranking.team_number = team_number;
+        }
+
         team.first_pick = getFirstTPA(team_number);
+        if(team.first_pick == null)
+        {
+            team.first_pick = new TPA();
+            team.first_pick.team_number = team_number;
+        }
+
         team.second_pick = getSecondTPA(team_number);
+        if(team.second_pick == null)
+        {
+            team.second_pick = new TPA();
+            team.second_pick.team_number = team_number;
+        }
+
         team.third_pick = getThirdTPA(team_number);
+        if(team.third_pick == null)
+        {
+            team.third_pick = new TPA();
+            team.third_pick.team_number = team_number;
+        }
 
         return team;
     }
@@ -741,9 +792,9 @@ public class Database {
         setTCD(team.calc);
         setTID(team.info);
         setTPD(team.pit);
-        for(Map.Entry entry: team.completed_matches.entrySet())
+        for(TMD entry: team.completed_matches.values())
         {
-            setTMD((TMD)entry.getValue());
+            setTMD(entry);
         }
         setCurrentTRD(team.current_ranking);
         setPredictedTRD(team.predicted_ranking);
@@ -785,7 +836,9 @@ public class Database {
 
     public ArrayList<Integer> getTeamNumbers()
     {
-        return new ArrayList<>(mTPDs.keySet());
+        ArrayList<Integer> team_numbers = new ArrayList<>(mTPDs.keySet());
+        Collections.sort(team_numbers);
+        return team_numbers;
     }
 
     public int getTeamNumberBefore(int team_number)

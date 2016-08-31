@@ -2,14 +2,20 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
 import android.util.Log;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
  * @author Andrew Messing
- *         Created: 8/20/16
+ * Created: 8/20/16
+ *
+ * Team Pit Data
  */
+@IgnoreExtraProperties
 public class TPD {
 
     private final static String TAG = "TPD";
@@ -64,6 +70,7 @@ public class TPD {
 
     }
 
+    @Exclude
     public ScoutMap toMap()
     {
         ScoutMap map = new ScoutMap();

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="4dp"
+    android:padding="8dp"
     android:background="@color/columbia_blue">
 
     <Spinner
@@ -18,12 +18,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/secondary_dropdown"
         android:background="@color/white"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
 
-    <com.github.mikephil.charting.charts.CandleStickChart
+    <frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_Chart
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/candle_stick_chart"/>
+        android:id="@+id/lld_chart"
+        android:background="@color/white"/>
 
 </LinearLayout>

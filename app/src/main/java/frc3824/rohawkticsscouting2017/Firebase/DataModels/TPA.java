@@ -1,11 +1,14 @@
 package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /**
  * @author Andrew Messing
  * Created: 8/23/16
  *
  * Team Pick Ability
  */
+@IgnoreExtraProperties
 public class TPA {
 
     private final static String TAG = "TPA";

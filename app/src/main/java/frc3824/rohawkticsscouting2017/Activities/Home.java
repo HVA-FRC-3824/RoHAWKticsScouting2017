@@ -13,6 +13,7 @@ import android.widget.TextView;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Statistics.Aggregate;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
@@ -23,6 +24,8 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * button based on the usertype.
  */
 public class Home extends Activity implements View.OnClickListener{
+
+    private Database mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +110,7 @@ public class Home extends Activity implements View.OnClickListener{
 
             case Constants.User_Types.STRATEGY:
                 setupButton(R.id.schedule_button);
+
                 setupButton(R.id.view_team_button);
                 setupButton(R.id.view_match_button);
                 setupButton(R.id.view_rankings_button);
@@ -114,6 +118,8 @@ public class Home extends Activity implements View.OnClickListener{
                 setupButton(R.id.view_pick_list_button);
 
                 setupButton(R.id.match_planning_button);
+
+                setupButton(R.id.aggregate_button);
 
                 eventTextview.setText("Event: " + eventKey);
                 eventTextview.setVisibility(View.VISIBLE);
@@ -150,6 +156,8 @@ public class Home extends Activity implements View.OnClickListener{
 
                 setupButton(R.id.cloud_storage_button);
 
+                setupButton(R.id.aggregate_button);
+
 
                 eventTextview.setText("Event: " + eventKey);
                 eventTextview.setVisibility(View.VISIBLE);
@@ -162,7 +170,7 @@ public class Home extends Activity implements View.OnClickListener{
 
         //Authentication.getInstance();
         if(eventKey != "") {
-            Database.getInstance(eventKey);
+            mDatabase = Database.getInstance(eventKey);
             Storage.getInstance(eventKey);
         }
         else
@@ -233,6 +241,13 @@ public class Home extends Activity implements View.OnClickListener{
             case R.id.cloud_storage_button:
                 intent = new Intent(this, CloudStorage.class);
                 startActivity(intent);
+                break;
+            case R.id.aggregate_button:
+                for(int team_number: mDatabase.getTeamNumbers())
+                {
+                    Aggregate.aggregateForTeam(team_number);
+                }
+                Aggregate.aggregateForSuper();
                 break;
             default:
                 assert false;

@@ -7,12 +7,14 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
  * @author Andrew Messing
  *         Created: 8/23/16
  */
-public class LLD_Transformer extends Transformer {
+public class LLD_Transformer {
 
     private final static String TAG = "LLD_Transformer";
 
-    public LLD_Transformer(ViewPortHandler viewPortHandler) {
-        super(viewPortHandler);
+    private Transformer mTransformer;
+
+    public LLD_Transformer(Transformer transformer) {
+        mTransformer = transformer;
     }
 
     protected float[] valuePointsForGenerateTransformedValuesLLD = new float[1];
@@ -28,10 +30,10 @@ public class LLD_Transformer extends Transformer {
 
         final int count = (int) ((to - from) * phaseX + 1) * 2;
 
-        if(valuePointsForGenerateTransformedValuesCandle.length != count){
-            valuePointsForGenerateTransformedValuesCandle = new float[count];
+        if(valuePointsForGenerateTransformedValuesLLD.length != count){
+            valuePointsForGenerateTransformedValuesLLD = new float[count];
         }
-        float[] valuePoints = valuePointsForGenerateTransformedValuesCandle;
+        float[] valuePoints = valuePointsForGenerateTransformedValuesLLD;
 
         for (int j = 0; j < count; j += 2) {
 
@@ -46,7 +48,7 @@ public class LLD_Transformer extends Transformer {
             }
         }
 
-        getValueToPixelMatrix().mapPoints(valuePoints);
+        mTransformer.getValueToPixelMatrix().mapPoints(valuePoints);
 
         return valuePoints;
     }

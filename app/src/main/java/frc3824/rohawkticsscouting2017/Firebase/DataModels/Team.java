@@ -1,5 +1,7 @@
 package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.Map;
 
 /**
@@ -8,6 +10,7 @@ import java.util.Map;
  *
  *
  */
+@IgnoreExtraProperties
 public class Team {
 
     private final static String TAG = "Team";

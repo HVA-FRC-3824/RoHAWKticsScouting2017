@@ -1,6 +1,9 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,5 +55,11 @@ public class Utilities {
             InputMethodManager imm = (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    public static int dpToPixels(Context context, float dp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int px = Math.round(dp * (metrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 }

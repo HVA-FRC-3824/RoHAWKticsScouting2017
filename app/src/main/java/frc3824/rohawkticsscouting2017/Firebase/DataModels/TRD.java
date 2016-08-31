@@ -1,11 +1,14 @@
 package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /**
  * @author Andrew Messing
  * Created: 8/19/16
  *
- *
+ * Team Ranking Data
  */
+@IgnoreExtraProperties
 public class TRD {
 
     private final static String TAG = "TRD";
@@ -27,8 +30,6 @@ public class TRD {
     public int scale_challenge;
     public int goals;
     public int defenses;
-
-
 
     public TRD(){}
 

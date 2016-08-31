@@ -2,6 +2,8 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
 import android.util.Log;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -64,7 +66,8 @@ public class SMD {
             Log.e(TAG, e.getMessage());
         }
     }
-    
+
+    @Exclude
     public ScoutMap toMap()
     {
         ScoutMap map = new ScoutMap();

@@ -1,11 +1,14 @@
 package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /**
  * @author Andrew Messing
  * Created: 8/20/16
  *
  * Team Calculated Data
  */
+@IgnoreExtraProperties
 public class TCD {
 
     private final static String TAG = "TCD";
@@ -46,4 +49,6 @@ public class TCD {
 
     public double zscore_defense;
     public int rank_defense;
+
+    public TCD() {}
 }

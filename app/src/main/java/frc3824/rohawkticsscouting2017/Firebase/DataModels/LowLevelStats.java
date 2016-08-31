@@ -1,5 +1,8 @@
 package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.List;
 
 /**
@@ -8,6 +11,7 @@ import java.util.List;
  *
  *
  */
+@IgnoreExtraProperties
 public class LowLevelStats {
 
     private final static String TAG = "LowLevelStats";
@@ -18,11 +22,28 @@ public class LowLevelStats {
     public double std;
     public double total;
 
-    public LowLevelStats() {}
+    public LowLevelStats() {
+        max = 0.0;
+        min = 0.0;
+        average = 0.0;
+        std = 0.0;
+        total = 0.0;
+    }
 
+    @Exclude
     public static LowLevelStats fromInt(List<Integer> list)
     {
         LowLevelStats lls = new LowLevelStats();
+        if(list.size() == 0)
+        {
+            lls.total = 0;
+            lls.average = 0.0;
+            lls.max = 0.0;
+            lls.min = 0.0;
+            lls.std = 0.0;
+            return lls;
+        }
+
         lls.total = 0.0;
         lls.max = Double.MIN_VALUE;
         lls.min = Double.MAX_VALUE;
@@ -38,8 +59,8 @@ public class LowLevelStats {
             }
             lls.total += i;
         }
+        lls.average = lls.total / (double) list.size();
 
-        lls.average /= list.size();
         lls.std = 0.0;
         for(int i: list)
         {
@@ -52,9 +73,20 @@ public class LowLevelStats {
         return lls;
     }
 
+    @Exclude
     public static LowLevelStats fromDouble(List<Double> list)
     {
         LowLevelStats lls = new LowLevelStats();
+        if(list.size() == 0)
+        {
+            lls.total = 0;
+            lls.average = 0.0;
+            lls.max = 0.0;
+            lls.min = 0.0;
+            lls.std = 0.0;
+            return lls;
+        }
+
         lls.total = 0.0;
         lls.max = Double.MIN_VALUE;
         lls.min = Double.MAX_VALUE;
@@ -71,7 +103,8 @@ public class LowLevelStats {
             lls.total += i;
         }
 
-        lls.average /= list.size();
+        lls.average = lls.total / (double) list.size();
+
         lls.std = 0.0;
         for(double i: list)
         {
@@ -84,9 +117,20 @@ public class LowLevelStats {
         return lls;
     }
 
+    @Exclude
     public static LowLevelStats fromBoolean(List<Boolean> list)
     {
         LowLevelStats lls = new LowLevelStats();
+        if(list.size() == 0)
+        {
+            lls.total = 0;
+            lls.average = 0.0;
+            lls.max = 0.0;
+            lls.min = 0.0;
+            lls.std = 0.0;
+            return lls;
+        }
+
         lls.total = 0;
         lls.max = Double.MIN_VALUE;
         lls.min = Double.MAX_VALUE;
@@ -102,8 +146,8 @@ public class LowLevelStats {
             }
             lls.total += i ? 1.0 : 0.0;
         }
+        lls.average = lls.total / (double) list.size();
 
-        lls.average /= list.size();
         lls.std = 0.0;
         for(boolean i: list)
         {
