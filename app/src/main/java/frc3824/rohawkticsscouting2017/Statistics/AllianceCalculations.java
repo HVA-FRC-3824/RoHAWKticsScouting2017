@@ -1,8 +1,6 @@
 package frc3824.rohawkticsscouting2017.Statistics;
 
 import org.apache.commons.math3.distribution.TDistribution;
-import org.apache.commons.math3.stat.inference.TTest;
-import org.apache.commons.math3.stat.inference.TestUtils;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Alliance;
 import frc3824.rohawkticsscouting2017.Firebase.Database;

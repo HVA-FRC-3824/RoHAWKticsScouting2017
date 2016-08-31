@@ -81,7 +81,7 @@ public class LLD_DataSet extends LineScatterCandleRadarDataSet<LLD_Entry> implem
 
     @Override
     public DataSet<LLD_Entry> copy() {
-        List<LLD_Entry> yVals = new ArrayList<LLD_Entry>();
+        List<LLD_Entry> yVals = new ArrayList<>();
         yVals.clear();
 
         for (int i = 0; i < mValues.size(); i++) {

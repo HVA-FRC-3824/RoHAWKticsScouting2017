@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listview"
-        android:dividerHeight="4px"
+        android:dividerHeight="4dp"
         dslv:drag_enabled="true"
         dslv:drag_start_mode="onLongPress"/>
 

@@ -4,10 +4,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Fragments.PickList.DoNotPickFragment;
 import frc3824.rohawkticsscouting2017.Fragments.PickList.FirstPickFragment;

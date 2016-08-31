@@ -7,7 +7,6 @@ import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Alliance;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;

@@ -14,7 +14,6 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 import frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView;
-import frc3824.rohawkticsscouting2017.Views.DragSortListView.SimpleFloatViewManager;
 
 /**
  * @author Andrew Messing

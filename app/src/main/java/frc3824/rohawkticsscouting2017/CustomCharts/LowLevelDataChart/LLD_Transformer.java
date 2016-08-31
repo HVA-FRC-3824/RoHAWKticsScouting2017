@@ -1,7 +1,6 @@
 package frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart;
 
 import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 
 /**
  * @author Andrew Messing

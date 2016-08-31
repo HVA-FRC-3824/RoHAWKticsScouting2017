@@ -49,7 +49,7 @@ public class SavableSpinner extends SavableView {
         typedArray.recycle();
 
         mSpinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, mResourceStrings);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, mResourceStrings);
         mSpinner.setAdapter(adapter);
     }
 

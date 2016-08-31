@@ -11,7 +11,6 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
-import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 import frc3824.rohawkticsscouting2017.Views.SavableQualitative;
 
 /**

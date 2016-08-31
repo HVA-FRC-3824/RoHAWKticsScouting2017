@@ -235,7 +235,7 @@ public class Settings extends Activity {
             backAllowed = false;
             Button homeButton = (Button) findViewById(R.id.homeButton);
             homeButton.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, "Event ID must be entered", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Event ID must be entered", Toast.LENGTH_LONG).show();
         }
     }
 

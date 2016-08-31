@@ -13,11 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Activities.TeamView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;

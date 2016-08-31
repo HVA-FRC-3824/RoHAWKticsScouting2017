@@ -34,28 +34,28 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Activities.Home">
+        <activity android:name=".Activities$Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.CloudStorage" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.EventView" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.MatchList" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.MatchPlanning" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.MatchScouting" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.MatchView" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.PickList" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.PitScouting" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.RankingsView" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Schedule" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ScheduleBuilder" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Server" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.Settings" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.SuperScouting" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.TeamList" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.TeamView" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$CloudStorage" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$EventView" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$MatchList" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$MatchPlanning" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$MatchScouting" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$MatchView" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$PickList" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$PitScouting" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$RankingsView" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$Schedule" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$ScheduleBuilder" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$Server" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$Settings" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$SuperScouting" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities$TeamList" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities$TeamView" android:screenOrientation="landscape"/>
     </application>
 </manifest>

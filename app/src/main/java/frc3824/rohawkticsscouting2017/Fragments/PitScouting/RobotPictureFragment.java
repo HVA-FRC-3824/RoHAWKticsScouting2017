@@ -254,7 +254,6 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
 
         }

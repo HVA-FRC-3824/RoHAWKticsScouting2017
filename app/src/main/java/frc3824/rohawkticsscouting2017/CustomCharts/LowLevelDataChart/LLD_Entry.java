@@ -88,9 +88,7 @@ public class LLD_Entry extends Entry {
 
     public LLD_Entry copy() {
 
-        LLD_Entry c = new LLD_Entry(getX(), mMax, mMin, mAvg, mStd, getData());
-
-        return c;
+        return new LLD_Entry(getX(), mMax, mMin, mAvg, mStd, getData());
     }
 
     public int getTeamNumber() { return mTeamNumber; }

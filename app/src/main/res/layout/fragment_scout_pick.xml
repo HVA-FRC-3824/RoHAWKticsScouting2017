@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/pick_list"
-        android:dividerHeight="4px"
+        android:dividerHeight="4dp"
         dslv:drag_enabled="true"
         dslv:drag_start_mode="onLongPress"/>
 

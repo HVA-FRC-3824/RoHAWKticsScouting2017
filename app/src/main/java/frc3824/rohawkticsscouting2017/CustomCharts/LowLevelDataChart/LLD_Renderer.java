@@ -7,13 +7,9 @@ import android.graphics.Paint;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.renderer.LineScatterCandleRadarRenderer;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-
-import java.util.List;
 
 /**
  * @author Andrew Messing

@@ -849,7 +849,7 @@ public class DragSortListView extends ListView {
 
         public HeightCache(int size) {
             mMap = new SparseIntArray(size);
-            mOrder = new ArrayList<Integer>(size);
+            mOrder = new ArrayList<>(size);
             mMaxSize = size;
         }
 
@@ -2151,11 +2151,7 @@ public class DragSortListView extends ListView {
 
         View v = mFloatViewManager.onCreateFloatView(position);
 
-        if (v == null) {
-            return false;
-        } else {
-            return startDrag(position, v, dragFlags, deltaX, deltaY);
-        }
+        return v != null && startDrag(position, v, dragFlags, deltaX, deltaY);
 
     }
 
@@ -2370,7 +2366,7 @@ public class DragSortListView extends ListView {
          *
          * @return The View you wish to display as the floating View.
          */
-        public View onCreateFloatView(int position);
+        View onCreateFloatView(int position);
 
         /**
          * Called whenever the floating View is dragged. Float View
@@ -2386,7 +2382,7 @@ public class DragSortListView extends ListView {
          * @param touch The current touch location (relative to DSLV
          * top-left).
          */
-        public void onDragFloatView(View floatView, Point location, Point touch);
+        void onDragFloatView(View floatView, Point location, Point touch);
 
         /**
          * Called when the float View is dropped; lets you perform
@@ -2396,7 +2392,7 @@ public class DragSortListView extends ListView {
          * @param floatView The floating View passed to
          * {@link #onCreateFloatView(int)}.
          */
-        public void onDestroyFloatView(View floatView);
+        void onDestroyFloatView(View floatView);
     }
 
     public void setFloatViewManager(FloatViewManager manager) {
@@ -2456,7 +2452,7 @@ public class DragSortListView extends ListView {
     }
 
     public interface DragListener {
-        public void drag(int from, int to);
+        void drag(int from, int to);
     }
 
     /**
@@ -2469,7 +2465,7 @@ public class DragSortListView extends ListView {
      *
      */
     public interface DropListener {
-        public void drop(int from, int to);
+        void drop(int from, int to);
     }
 
     /**
@@ -2481,7 +2477,7 @@ public class DragSortListView extends ListView {
      *
      */
     public interface RemoveListener {
-        public void remove(int which);
+        void remove(int which);
     }
 
     public interface DragSortListener extends DropListener, DragListener, RemoveListener {
@@ -2835,7 +2831,7 @@ public class DragSortListView extends ListView {
             // means user is scrolling up (list item moves down the screen,
             // remember
             // y=0 is at top of View).
-            dy = (int) Math.round(mScrollSpeed * dt);
+            dy = Math.round(mScrollSpeed * dt);
 
             int movePos;
             if (dy >= 0) {

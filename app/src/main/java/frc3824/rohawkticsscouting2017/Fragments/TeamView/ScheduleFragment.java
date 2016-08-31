@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_ScheduleFragment;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 

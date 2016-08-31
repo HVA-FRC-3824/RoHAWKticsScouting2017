@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -27,7 +26,6 @@ import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -424,10 +422,8 @@ public class PitScouting extends Activity {
                             map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
                         }
                     }
-                } catch (ScoutValue.TypeException e) {
+                } catch (ScoutValue.TypeException | IOException e) {
                     Log.e(TAG, e.getMessage());
-                } catch (IOException ex) {
-                    Log.e(TAG, ex.getMessage());
                 }
             }
 
@@ -472,7 +468,6 @@ public class PitScouting extends Activity {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
 
         }
