@@ -84,8 +84,8 @@ public class LLD_DataSet extends LineScatterCandleRadarDataSet<LLD_Entry> implem
         List<LLD_Entry> yVals = new ArrayList<>();
         yVals.clear();
 
-        for (int i = 0; i < mValues.size(); i++) {
-            yVals.add(mValues.get(i).copy());
+        for (int i = 0; i < mYVals.size(); i++) {
+            yVals.add(mYVals.get(i).copy());
         }
 
         LLD_DataSet copied = new LLD_DataSet(yVals, getLabel());
@@ -102,29 +102,34 @@ public class LLD_DataSet extends LineScatterCandleRadarDataSet<LLD_Entry> implem
     }
 
     @Override
-    public void calcMinMax() {
+    public void calcMinMax(int start, int end) {
+        // super.calculate();
 
-        if (mValues == null || mValues.isEmpty())
+        if (mYVals == null)
             return;
 
-        mYMax = -Float.MAX_VALUE;
-        mYMin = Float.MAX_VALUE;
-        mXMax = -Float.MAX_VALUE;
-        mXMin = Float.MAX_VALUE;
+        if (mYVals.size() == 0)
+            return;
 
-        for (LLD_Entry e : mValues) {
+        int endValue;
+
+        if (end == 0 || end >= mYVals.size())
+            endValue = mYVals.size() - 1;
+        else
+            endValue = end;
+
+        mYMin = Float.MAX_VALUE;
+        mYMax = -Float.MAX_VALUE;
+
+        for (int i = start; i <= endValue; i++) {
+
+            LLD_Entry e = mYVals.get(i);
 
             if (e.getMin() < mYMin)
                 mYMin = e.getMin();
 
             if (e.getMax() > mYMax)
                 mYMax = e.getMax();
-
-            if (e.getX() < mXMin)
-                mXMin = e.getX();
-
-            if (e.getX() > mXMax)
-                mXMax = e.getX();
         }
     }
 

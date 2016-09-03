@@ -39,7 +39,7 @@ public class LLD_Transformer {
             LLD_Entry e = data.getEntryForIndex(j / 2 + from);
 
             if (e != null) {
-                valuePoints[j] = e.getX();
+                valuePoints[j] = e.getXIndex();
                 valuePoints[j + 1] = e.getMax() * phaseY;
             }else{
                 valuePoints[j] = 0;

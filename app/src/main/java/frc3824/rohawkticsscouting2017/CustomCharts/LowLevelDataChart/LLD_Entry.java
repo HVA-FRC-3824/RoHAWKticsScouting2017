@@ -28,8 +28,8 @@ public class LLD_Entry extends Entry {
      * @param average The average.
      * @param std The standard deviation.
      */
-    public LLD_Entry(float x, int team_number, float max, float min, float average, float std) {
-        super(x, (max + min) / 2f);
+    public LLD_Entry(int x, int team_number, float max, float min, float average, float std) {
+        super((max + min) / 2f, x);
 
         this.mTeamNumber = team_number;
         this.mMax = max;
@@ -48,9 +48,9 @@ public class LLD_Entry extends Entry {
      * @param std The standard deviation.
      * @param data Spot for additional data this Entry represents.
      */
-    public LLD_Entry(float x, float max, float min, float average, float std,
+    public LLD_Entry(int x, float max, float min, float average, float std,
                      Object data) {
-        super(x, (max + min) / 2f, data);
+        super((max + min) / 2f, x, data);
 
         this.mMax = max;
         this.mMin = min;
@@ -82,13 +82,13 @@ public class LLD_Entry extends Entry {
      * low)
      */
     @Override
-    public float getY() {
-        return super.getY();
+    public float getVal() {
+        return super.getVal();
     }
 
     public LLD_Entry copy() {
 
-        return new LLD_Entry(getX(), mMax, mMin, mAvg, mStd, getData());
+        return new LLD_Entry(getXIndex(), mMax, mMin, mAvg, mStd, getData());
     }
 
     public int getTeamNumber() { return mTeamNumber; }

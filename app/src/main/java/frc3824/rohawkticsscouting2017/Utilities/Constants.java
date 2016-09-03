@@ -250,8 +250,9 @@ public interface Constants {
         interface Main_Dropdown_Options
         {
             String FOULS = "Fouls";
+            String POST_MATCH = "Post Match";
 
-            String[] OPTIONS = {FOULS};
+            String[] OPTIONS = {FOULS, POST_MATCH};
         }
 
         interface Foul_Secondary_Options
@@ -262,6 +263,15 @@ public interface Constants {
             String RED_CARDS = "Red Cards";
 
             String[] OPTIONS = {STANDARD_FOULS, TECH_FOULS, YELLOW_CARDS, RED_CARDS};
+        }
+
+        interface Post_Match_Secondary_Options
+        {
+            String DQ = "DQ";
+            String NO_SHOW = "No Show";
+            String STOPPED_MOVING = "Stopped Moving";
+
+            String[] OPTIONS = {DQ, NO_SHOW, STOPPED_MOVING};
         }
     }
 

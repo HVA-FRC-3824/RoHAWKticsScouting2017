@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.renderer.LineScatterCandleRadarRenderer;
-import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -53,15 +52,20 @@ public class LLD_Renderer extends LineScatterCandleRadarRenderer {
 
         Transformer trans = mChart.getTransformer(dataSet.getAxisDependency());
 
+        float phaseX = Math.max(0.f, Math.min(1.f, mAnimator.getPhaseX()));
         float phaseY = mAnimator.getPhaseY();
         float barSpace = dataSet.getBarSpace();
 
-        mXBounds.set(mChart, dataSet);
+        int minx = Math.max(mMinX, 0);
+        int maxx = Math.min(mMaxX + 1, dataSet.getEntryCount());
 
         mRenderPaint.setStrokeWidth(dataSet.getShadowWidth());
 
         // draw the body
-        for (int j = mXBounds.min; j <= mXBounds.range + mXBounds.min; j++) {
+        for (int j = minx,
+             count = (int) Math.ceil((maxx - minx) * phaseX + (float)minx);
+             j < count;
+             j++) {
 
             // get the entry
             LLD_Entry e = dataSet.getEntryForIndex(j);
@@ -69,7 +73,7 @@ public class LLD_Renderer extends LineScatterCandleRadarRenderer {
             if (e == null)
                 continue;
 
-            final float xPos = e.getX();
+            final float xPos = e.getXIndex();
 
             final float avg = e.getAvg();
             final float std = e.getStd();
@@ -199,26 +203,44 @@ public class LLD_Renderer extends LineScatterCandleRadarRenderer {
 
         for (Highlight high : indices) {
 
-            ILLD_DataSet set = lld_data.getDataSetByIndex(high.getDataSetIndex());
+            final int minDataSetIndex = high.getDataSetIndex() == -1
+                    ? 0
+                    : high.getDataSetIndex();
+            final int maxDataSetIndex = high.getDataSetIndex() == -1
+                    ? lld_data.getDataSetCount()
+                    : (high.getDataSetIndex() + 1);
+            if (maxDataSetIndex - minDataSetIndex < 1) continue;
 
-            if (set == null || !set.isHighlightEnabled())
-                continue;
+            for (int dataSetIndex = minDataSetIndex;
+                 dataSetIndex < maxDataSetIndex;
+                 dataSetIndex++) {
 
-            LLD_Entry e = set.getEntryForXPos(high.getX());
+                int xIndex = high.getXIndex(); // get the
+                // x-position
 
-            if (!isInBoundsX(e, set))
-                continue;
+                ILLD_DataSet set = mChart.getLLD_Data().getDataSetByIndex(dataSetIndex);
 
-            float lowValue = e.getMin() * mAnimator.getPhaseY();
-            float highValue = e.getMax() * mAnimator.getPhaseY();
-            float y = (lowValue + highValue) / 2f;
+                if (set == null || !set.isHighlightEnabled())
+                    continue;
 
-            MPPointD pix = mChart.getTransformer(set.getAxisDependency()).getPixelsForValues(e.getX(), y);
+                LLD_Entry e = set.getEntryForXIndex(xIndex);
 
-            high.setDraw((float) pix.x, (float) pix.y);
+                if (e == null || e.getXIndex() != xIndex)
+                    continue;
 
-            // draw the lines
-            drawHighlightLines(c, (float) pix.x, (float) pix.y, set);
+                float lowValue = e.getMin() * mAnimator.getPhaseY();
+                float highValue = e.getMax() * mAnimator.getPhaseY();
+                float y = (lowValue + highValue) / 2f;
+
+                float[] pts = new float[]{
+                        xIndex, y
+                };
+
+                mChart.getTransformer(set.getAxisDependency()).pointValuesToPixel(pts);
+
+                // draw the lines
+                drawHighlightLines(c, pts, set);
+            }
         }
     }
 
