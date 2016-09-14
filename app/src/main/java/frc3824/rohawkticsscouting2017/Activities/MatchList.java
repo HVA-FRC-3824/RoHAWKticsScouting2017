@@ -119,121 +119,135 @@ public class MatchList extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         int match_number = view.getId();
-        Intent intent;
         switch (mNextPage)
         {
             case Constants.Intent_Extras.MATCH_SCOUTING:
-                intent = new Intent(this, MatchScouting.class);
-                if(match_number == 0)
-                {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
-                }
-                else
-                {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
-                }
-                startActivity(intent);
+                goToMatchScouting(match_number);
                 break;
             case Constants.Intent_Extras.SUPER_SCOUTING:
-                intent = new Intent(this, SuperScouting.class);
-                if(match_number == 0)
-                {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
-                }
-                else
-                {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
-                }
-                startActivity(intent);
+                goToSuperScouting(match_number);
                 break;
             case Constants.Intent_Extras.MATCH_VIEWING:
-                intent = new Intent(this, MatchView.class);
-                if(match_number == 0)
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Custom Match");
-
-                    ArrayList<Integer> teamNumbers = mDatabase.getTeamNumbers();
-
-                    View matchTeamsView = this.getLayoutInflater().inflate(R.layout.dialog_custom_match, null);
-
-                    //TODO: figure out scrolling so keyboard doesn't block
-
-                    final AutoCompleteTextView blue1 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.blue1);
-                    blue1.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
-
-                    final AutoCompleteTextView blue2 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.blue2);
-                    blue2.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
-
-                    final AutoCompleteTextView blue3 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.blue3);
-                    blue3.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
-
-                    final AutoCompleteTextView red1 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.red1);
-                    red1.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
-
-                    final AutoCompleteTextView red2 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.red2);
-                    red2.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
-
-                    final AutoCompleteTextView red3 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.red3);
-                    red3.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
-
-                    final TextView error = (TextView)matchTeamsView.findViewById(R.id.error);
-
-                    builder.setView(matchTeamsView);
-
-                    builder.setPositiveButton("Go", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent1 = new Intent(MatchList.this, MatchView.class);
-
-                            String blue1_text = blue1.getText().toString();
-                            String blue2_text = blue2.getText().toString();
-                            String blue3_text = blue3.getText().toString();
-                            String red1_text = red1.getText().toString();
-                            String red2_text = red2.getText().toString();
-                            String red3_text = red3.getText().toString();
-                            try {
-
-                                int blue1_number = Integer.parseInt(blue1_text);
-                                int blue2_number = Integer.parseInt(blue2_text);
-                                int blue3_number = Integer.parseInt(blue3_text);
-                                int red1_number = Integer.parseInt(red1_text);
-                                int red2_number = Integer.parseInt(red2_text);
-                                int red3_number = Integer.parseInt(red3_text);
-
-                                intent1.putExtra(Constants.Intent_Extras.BLUE1, blue1_number);
-                                intent1.putExtra(Constants.Intent_Extras.BLUE2, blue2_number);
-                                intent1.putExtra(Constants.Intent_Extras.BLUE3, blue3_number);
-                                intent1.putExtra(Constants.Intent_Extras.RED1, red1_number);
-                                intent1.putExtra(Constants.Intent_Extras.RED2, red2_number);
-                                intent1.putExtra(Constants.Intent_Extras.RED3, red3_number);
-                                error.setVisibility(View.GONE);
-                                startActivity(intent1);
-                            }
-                            catch (NumberFormatException e)
-                            {
-                                Log.e(TAG, "One of the lines in not parsable");
-                                error.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
-
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    });
-
-                    builder.show();
-
-                } else {
-                    intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
-                    startActivity(intent);
-                }
+                goToMatchViewing(match_number);
                 break;
             default:
                 assert false;
+        }
+    }
+
+    private void goToMatchScouting(int match_number)
+    {
+        Intent intent = new Intent(this, MatchScouting.class);
+        if(match_number == 0)
+        {
+            intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
+        }
+        else
+        {
+            intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+        }
+        startActivity(intent);
+    }
+
+    private void goToSuperScouting(int match_number)
+    {
+        Intent intent = new Intent(this, SuperScouting.class);
+        if(match_number == 0)
+        {
+            intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
+        }
+        else
+        {
+            intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+        }
+        startActivity(intent);
+    }
+
+    private void goToMatchViewing(int match_number)
+    {
+        Intent intent = new Intent(this, MatchView.class);
+        if(match_number == 0)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Custom Match");
+
+            ArrayList<Integer> teamNumbers = mDatabase.getTeamNumbers();
+
+            View matchTeamsView = this.getLayoutInflater().inflate(R.layout.dialog_custom_match, null);
+
+            //TODO: figure out scrolling so keyboard doesn't block
+
+            final AutoCompleteTextView blue1 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.blue1);
+            blue1.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
+
+            final AutoCompleteTextView blue2 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.blue2);
+            blue2.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
+
+            final AutoCompleteTextView blue3 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.blue3);
+            blue3.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
+
+            final AutoCompleteTextView red1 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.red1);
+            red1.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
+
+            final AutoCompleteTextView red2 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.red2);
+            red2.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
+
+            final AutoCompleteTextView red3 = (AutoCompleteTextView)matchTeamsView.findViewById(R.id.red3);
+            red3.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, teamNumbers));
+
+            final TextView error = (TextView)matchTeamsView.findViewById(R.id.error);
+
+            builder.setView(matchTeamsView);
+
+            builder.setPositiveButton("Go", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent1 = new Intent(MatchList.this, MatchView.class);
+
+                    String blue1_text = blue1.getText().toString();
+                    String blue2_text = blue2.getText().toString();
+                    String blue3_text = blue3.getText().toString();
+                    String red1_text = red1.getText().toString();
+                    String red2_text = red2.getText().toString();
+                    String red3_text = red3.getText().toString();
+                    try {
+
+                        int blue1_number = Integer.parseInt(blue1_text);
+                        int blue2_number = Integer.parseInt(blue2_text);
+                        int blue3_number = Integer.parseInt(blue3_text);
+                        int red1_number = Integer.parseInt(red1_text);
+                        int red2_number = Integer.parseInt(red2_text);
+                        int red3_number = Integer.parseInt(red3_text);
+
+                        intent1.putExtra(Constants.Intent_Extras.BLUE1, blue1_number);
+                        intent1.putExtra(Constants.Intent_Extras.BLUE2, blue2_number);
+                        intent1.putExtra(Constants.Intent_Extras.BLUE3, blue3_number);
+                        intent1.putExtra(Constants.Intent_Extras.RED1, red1_number);
+                        intent1.putExtra(Constants.Intent_Extras.RED2, red2_number);
+                        intent1.putExtra(Constants.Intent_Extras.RED3, red3_number);
+                        error.setVisibility(View.GONE);
+                        startActivity(intent1);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        Log.e(TAG, "One of the lines in not parsable");
+                        error.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+
+            builder.show();
+
+        } else {
+            intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+            startActivity(intent);
         }
     }
 

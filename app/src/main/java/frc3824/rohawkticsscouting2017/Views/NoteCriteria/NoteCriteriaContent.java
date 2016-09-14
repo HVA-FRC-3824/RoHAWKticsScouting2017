@@ -3,11 +3,9 @@ package frc3824.rohawkticsscouting2017.Views.NoteCriteria;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 
 import frc3824.rohawkticsscouting2017.R;
 

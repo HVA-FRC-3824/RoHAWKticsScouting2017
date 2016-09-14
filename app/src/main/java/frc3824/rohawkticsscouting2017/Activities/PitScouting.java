@@ -430,8 +430,6 @@ public class PitScouting extends Activity {
             TPD team = new TPD(map);
             mDatabase.setTPD(team);
 
-            //TODO: add Bluetooth and Syncing
-
             return null;
         }
 

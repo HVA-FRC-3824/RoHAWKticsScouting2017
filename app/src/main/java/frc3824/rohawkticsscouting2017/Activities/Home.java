@@ -26,6 +26,13 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
 public class Home extends Activity implements View.OnClickListener{
 
     private Database mDatabase;
+    private SharedPreferences mSharedPreferences;
+
+    private TextView mEventTextView;
+    private TextView mUserTypeTextView;
+    private TextView mUserSubTypeTextView;
+
+    private String mEventKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,144 +43,42 @@ public class Home extends Activity implements View.OnClickListener{
 
         setupButton(R.id.settings_button);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String user_type = sharedPreferences.getString(Constants.Settings.USER_TYPE, "");
-        String eventKey = sharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
+        mSharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
+        String user_type = mSharedPreferences.getString(Constants.Settings.USER_TYPE, "");
+        mEventKey = mSharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
 
-        TextView eventTextview = (TextView)findViewById(R.id.event);
-        TextView usertypeTextview = (TextView)findViewById(R.id.user_type);
-        TextView userSubtypeTextView = (TextView)findViewById(R.id.user_subtype);
+        mEventTextView = (TextView)findViewById(R.id.event);
+        mUserTypeTextView = (TextView)findViewById(R.id.user_type);
+        mUserSubTypeTextView = (TextView)findViewById(R.id.user_subtype);
+
         switch (user_type)
         {
             case Constants.User_Types.MATCH_SCOUT:
-                setupButton(R.id.schedule_button);
-                setupButton(R.id.scout_match_button);
-
-                eventTextview.setText("Event: " + eventKey);
-                eventTextview.setVisibility(View.VISIBLE);
-
-                usertypeTextview.setText("User: Match Scout");
-                usertypeTextview.setVisibility(View.VISIBLE);
-
-                String allianceColor = sharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
-                String userSubtype;
-                if(allianceColor == Constants.Alliance_Colors.BLUE)
-                {
-                    userSubtypeTextView.setTextColor(Color.BLUE);
-                    userSubtype = "Blue ";
-                }
-                else
-                {
-                    userSubtypeTextView.setTextColor(Color.RED);
-                    userSubtype = "Red ";
-                }
-                int allianceNumber = sharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
-                userSubtype += String.valueOf(allianceNumber);
-
-                userSubtypeTextView.setText(userSubtype);
-                userSubtypeTextView.setVisibility(View.VISIBLE);
+                userTypeMatchScoutSetup();
                 break;
             case Constants.User_Types.PIT_SCOUT:
-                setupButton(R.id.schedule_button);
-                setupButton(R.id.scout_pit_button);
-
-                eventTextview.setText("Event: " + eventKey);
-                eventTextview.setVisibility(View.VISIBLE);
-
-                usertypeTextview.setText("User: Pit Scout");
-                usertypeTextview.setVisibility(View.VISIBLE);
-
-                int pitGroup = sharedPreferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
-                userSubtypeTextView.setText(String.format("Group Number: %d", pitGroup));
-                userSubtypeTextView.setVisibility(View.VISIBLE);
+                userTypePitScoutSetup();
                 break;
             case Constants.User_Types.SUPER_SCOUT:
-                setupButton(R.id.schedule_button);
-                setupButton(R.id.scout_super_button);
-
-                eventTextview.setText("Event: " + eventKey);
-                eventTextview.setVisibility(View.VISIBLE);
-
-                usertypeTextview.setText("User: Super Scout");
-                usertypeTextview.setVisibility(View.VISIBLE);
-
+                userTypeSuperScoutSetup();
                 break;
             case Constants.User_Types.DRIVE_TEAM:
-                setupButton(R.id.schedule_button);
-                setupButton(R.id.match_planning_button);
-
-                eventTextview.setVisibility(View.VISIBLE);
-
-                usertypeTextview.setText("User: Drive Team");
-                usertypeTextview.setVisibility(View.VISIBLE);
+                userTypeDriveTeamSetup();
                 break;
-
             case Constants.User_Types.STRATEGY:
-                setupButton(R.id.schedule_button);
-
-                setupButton(R.id.view_team_button);
-                setupButton(R.id.view_match_button);
-                setupButton(R.id.view_rankings_button);
-                setupButton(R.id.view_event_button);
-                setupButton(R.id.view_pick_list_button);
-                setupButton(R.id.view_notes_button);
-
-                setupButton(R.id.match_planning_button);
-
-                setupButton(R.id.aggregate_button);
-
-                eventTextview.setText("Event: " + eventKey);
-                eventTextview.setVisibility(View.VISIBLE);
-
-                usertypeTextview.setText("User: Strategy");
-                usertypeTextview.setVisibility(View.VISIBLE);
-
+                userTypeStrategySetup();
                 break;
             case Constants.User_Types.SERVER:
-                setupButton(R.id.schedule_button);
-                setupButton(R.id.server_button);
-
-                eventTextview.setText("Event: " + eventKey);
-                eventTextview.setVisibility(View.VISIBLE);
-
-                usertypeTextview.setText("User: Server");
-                usertypeTextview.setVisibility(View.VISIBLE);
+                userTypeServerSetup();
                 break;
             case Constants.User_Types.ADMIN:
-                setupButton(R.id.schedule_button);
-                setupButton(R.id.scout_match_button);
-                setupButton(R.id.scout_pit_button);
-                setupButton(R.id.scout_super_button);
-
-                setupButton(R.id.view_team_button);
-                setupButton(R.id.view_match_button);
-                setupButton(R.id.view_rankings_button);
-                setupButton(R.id.view_event_button);
-                setupButton(R.id.view_pick_list_button);
-                setupButton(R.id.view_notes_button);
-
-                setupButton(R.id.match_planning_button);
-
-                setupButton(R.id.server_button);
-
-                setupButton(R.id.cloud_storage_button);
-
-                setupButton(R.id.aggregate_button);
-
-
-                eventTextview.setText("Event: " + eventKey);
-                eventTextview.setVisibility(View.VISIBLE);
-
-                usertypeTextview.setText("User: Admin");
-                usertypeTextview.setVisibility(View.VISIBLE);
-
+                userTypeAdminSetup();
                 break;
         }
 
-        //Authentication.getInstance();
-        if(eventKey != "") {
-            mDatabase = Database.getInstance(eventKey);
-            Storage.getInstance(eventKey);
+        if(mEventKey != "") {
+            mDatabase = Database.getInstance(mEventKey);
+            Storage.getInstance(mEventKey);
         }
         else
         {
@@ -181,6 +86,142 @@ public class Home extends Activity implements View.OnClickListener{
             Storage.getInstance();
         }
     }
+
+    //region User Type Setups
+    private void userTypeMatchScoutSetup()
+    {
+        setupButton(R.id.schedule_button);
+        setupButton(R.id.scout_match_button);
+
+        mEventTextView.setText("Event: " + mEventKey);
+        mEventTextView.setVisibility(View.VISIBLE);
+
+        mUserTypeTextView.setText("User: Match Scout");
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+
+        String allianceColor = mSharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
+        String userSubtype;
+        if(allianceColor == Constants.Alliance_Colors.BLUE)
+        {
+            mUserSubTypeTextView.setTextColor(Color.BLUE);
+            userSubtype = "Blue ";
+        }
+        else
+        {
+            mUserSubTypeTextView.setTextColor(Color.RED);
+            userSubtype = "Red ";
+        }
+        int allianceNumber = mSharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
+        userSubtype += String.valueOf(allianceNumber);
+
+        mUserSubTypeTextView.setText(userSubtype);
+        mUserSubTypeTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void userTypePitScoutSetup()
+    {
+        setupButton(R.id.schedule_button);
+        setupButton(R.id.scout_pit_button);
+
+        mEventTextView.setText("Event: " + mEventKey);
+        mEventTextView.setVisibility(View.VISIBLE);
+
+        mUserTypeTextView.setText("User: Pit Scout");
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+
+        int pitGroup = mSharedPreferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
+        mUserTypeTextView.setText(String.format("Group Number: %d", pitGroup));
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void userTypeSuperScoutSetup()
+    {
+        setupButton(R.id.schedule_button);
+        setupButton(R.id.scout_super_button);
+
+        mEventTextView.setText("Event: " + mEventKey);
+        mEventTextView.setVisibility(View.VISIBLE);
+
+        mUserTypeTextView.setText("User: Super Scout");
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void userTypeDriveTeamSetup()
+    {
+        setupButton(R.id.schedule_button);
+        setupButton(R.id.match_planning_button);
+
+        mEventTextView.setText("Event: " + mEventKey);
+        mEventTextView.setVisibility(View.VISIBLE);
+
+        mUserTypeTextView.setText("User: Drive Team");
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void userTypeStrategySetup()
+    {
+        setupButton(R.id.schedule_button);
+
+        setupButton(R.id.view_team_button);
+        setupButton(R.id.view_match_button);
+        setupButton(R.id.view_rankings_button);
+        setupButton(R.id.view_event_button);
+        setupButton(R.id.view_pick_list_button);
+        setupButton(R.id.view_notes_button);
+
+        setupButton(R.id.match_planning_button);
+
+        setupButton(R.id.aggregate_button);
+
+        mEventTextView.setText("Event: " + mEventKey);
+        mEventTextView.setVisibility(View.VISIBLE);
+
+        mUserTypeTextView.setText("User: Strategy");
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void userTypeServerSetup()
+    {
+        setupButton(R.id.schedule_button);
+        setupButton(R.id.server_button);
+
+        mEventTextView.setText("Event: " + mEventKey);
+        mEventTextView.setVisibility(View.VISIBLE);
+
+        mUserTypeTextView.setText("User: Server");
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void userTypeAdminSetup()
+    {
+        setupButton(R.id.schedule_button);
+        setupButton(R.id.scout_match_button);
+        setupButton(R.id.scout_pit_button);
+        setupButton(R.id.scout_super_button);
+
+        setupButton(R.id.view_team_button);
+        setupButton(R.id.view_match_button);
+        setupButton(R.id.view_rankings_button);
+        setupButton(R.id.view_event_button);
+        setupButton(R.id.view_pick_list_button);
+        setupButton(R.id.view_notes_button);
+
+        setupButton(R.id.match_planning_button);
+
+        setupButton(R.id.server_button);
+
+        setupButton(R.id.cloud_storage_button);
+
+        setupButton(R.id.aggregate_button);
+
+
+        mEventTextView.setText("Event: " + mEventKey);
+        mEventTextView.setVisibility(View.VISIBLE);
+
+        mUserTypeTextView.setText("User: Admin");
+        mUserTypeTextView.setVisibility(View.VISIBLE);
+    }
+    //endregion
 
     @Override
     public void onClick(View view) {
