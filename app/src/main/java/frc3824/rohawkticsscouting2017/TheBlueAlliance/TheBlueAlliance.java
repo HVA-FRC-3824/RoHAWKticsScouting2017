@@ -137,6 +137,12 @@ public class TheBlueAlliance {
         return mGson.fromJson(getData(con), type);
     }
 
+    /**
+     * Retrieves a list of all the rankings at a specific event with TheBlueAlliance Ranking Data Model
+     * @param eventKey - key for the event
+     * @return List of TheBlueAlliance Ranking Data Model
+     * @throws IOException
+     */
     public ArrayList<TBA_Ranking> getEventRankings(String eventKey) throws IOException {
         URL url = new URL(String.format("https://www.thebluealliance.com/api/v2/event/%s/rankings", eventKey));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();

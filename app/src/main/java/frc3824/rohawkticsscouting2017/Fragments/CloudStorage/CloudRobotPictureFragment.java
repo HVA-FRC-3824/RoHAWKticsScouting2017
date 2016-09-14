@@ -41,6 +41,7 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
     private final static String TAG = "CloudRobotPicture";
 
+    //region variables
     private Context mContext;
     private ArrayList<CloudImage> mCIs;
     private Storage mStorage;
@@ -51,6 +52,7 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
     private TextView mUploadAllMessage;
     private TextView mDownloadAllMessage;
+    //endregion
 
     public CloudRobotPictureFragment() {}
 
@@ -78,6 +80,25 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
             internet = false;
         }
 
+        getCloudImages(teams, internet);
+
+        LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs,
+                Constants.Cloud.ROBOT_PICTURE);
+        listView.setAdapter(lva);
+
+        view.findViewById(R.id.upload_all).setOnClickListener(this);
+        view.findViewById(R.id.download_all).setOnClickListener(this);
+
+        mUploadAllProgressBar = (ProgressBar)view.findViewById(R.id.upload_all_progress_bar);
+        mDownloadAllProgressBar = (ProgressBar)view.findViewById(R.id.download_all_progress_bar);
+        mUploadAllMessage = (TextView)view.findViewById(R.id.upload_all_message);
+        mDownloadAllMessage = (TextView)view.findViewById(R.id.download_all_message);
+
+        return view;
+    }
+
+    private void getCloudImages(ArrayList<Integer> teams, boolean internet)
+    {
         mCIs = new ArrayList<>();
         for(int team_number: teams)
         {
@@ -103,20 +124,6 @@ public class CloudRobotPictureFragment extends Fragment implements View.OnClickL
 
             mCIs.add(ci);
         }
-
-        LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs,
-                Constants.Cloud.ROBOT_PICTURE);
-        listView.setAdapter(lva);
-
-        view.findViewById(R.id.upload_all).setOnClickListener(this);
-        view.findViewById(R.id.download_all).setOnClickListener(this);
-
-        mUploadAllProgressBar = (ProgressBar)view.findViewById(R.id.upload_all_progress_bar);
-        mDownloadAllProgressBar = (ProgressBar)view.findViewById(R.id.download_all_progress_bar);
-        mUploadAllMessage = (TextView)view.findViewById(R.id.upload_all_message);
-        mDownloadAllMessage = (TextView)view.findViewById(R.id.download_all_message);
-
-        return view;
     }
 
     private void upload_next(final int i)

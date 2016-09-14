@@ -39,6 +39,7 @@ public class CloudStrategyFragment extends Fragment implements View.OnClickListe
 
     private final static String TAG = "CloudStrategyFragment";
 
+    //region variables
     private Context mContext;
     private ArrayList<CloudImage> mCIs;
     private Storage mStorage;
@@ -49,6 +50,7 @@ public class CloudStrategyFragment extends Fragment implements View.OnClickListe
 
     private TextView mUploadAllMessage;
     private TextView mDownloadAllMessage;
+    //endregion
 
     public  CloudStrategyFragment() {}
 
@@ -76,6 +78,25 @@ public class CloudStrategyFragment extends Fragment implements View.OnClickListe
             internet = false;
         }
 
+        getCloudImages(strategies, internet);
+
+        LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs,
+                Constants.Cloud.STRATEGY);
+        listView.setAdapter(lva);
+
+        view.findViewById(R.id.upload_all).setOnClickListener(this);
+        view.findViewById(R.id.download_all).setOnClickListener(this);
+
+        mUploadAllProgressBar = (ProgressBar)view.findViewById(R.id.upload_all_progress_bar);
+        mDownloadAllProgressBar = (ProgressBar)view.findViewById(R.id.download_all_progress_bar);
+        mUploadAllMessage = (TextView)view.findViewById(R.id.upload_all_message);
+        mDownloadAllMessage = (TextView)view.findViewById(R.id.download_all_message);
+
+        return view;
+    }
+
+    private void getCloudImages(ArrayList<Strategy> strategies, boolean internet)
+    {
         mCIs = new ArrayList<>();
         for(Strategy strategy: strategies)
         {
@@ -100,20 +121,6 @@ public class CloudStrategyFragment extends Fragment implements View.OnClickListe
 
             mCIs.add(ci);
         }
-
-        LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs,
-                Constants.Cloud.STRATEGY);
-        listView.setAdapter(lva);
-
-        view.findViewById(R.id.upload_all).setOnClickListener(this);
-        view.findViewById(R.id.download_all).setOnClickListener(this);
-
-        mUploadAllProgressBar = (ProgressBar)view.findViewById(R.id.upload_all_progress_bar);
-        mDownloadAllProgressBar = (ProgressBar)view.findViewById(R.id.download_all_progress_bar);
-        mUploadAllMessage = (TextView)view.findViewById(R.id.upload_all_message);
-        mDownloadAllMessage = (TextView)view.findViewById(R.id.download_all_message);
-
-        return view;
     }
 
     private void upload_next(final int i)
