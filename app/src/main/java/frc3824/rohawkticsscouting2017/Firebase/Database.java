@@ -31,7 +31,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
  * @author Andrew Messing
  * Created: 8/13/16
  *
- *
+ *  The Database class handles all data and connecting with the Firebase system
  */
 public class Database {
 
@@ -40,6 +40,7 @@ public class Database {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mRootRef;
 
+    //region Database References
     private DatabaseReference mEventRef;
     private DatabaseReference mScheduleRef;
     private DatabaseReference mPitRef;
@@ -53,9 +54,11 @@ public class Database {
     private DatabaseReference mFirstPickRef;
     private DatabaseReference mSecondPickRef;
     private DatabaseReference mThirdPickRef;
+    //endregion
 
     private String mEventKey;
 
+    //region Maps
     private static Set<String> mEvents;
     private Map<Integer, Match> mSchedule;
     private Map<Integer, SMD> mSMDs;
@@ -69,6 +72,7 @@ public class Database {
     private Map<Integer, TPA> mSecond_TPA;
     private Map<Integer, TPA> mThird_TPA;
     private Map<String, Strategy> mStrategies;
+    //endregion
 
     private static Database mSingleton;
 
@@ -144,6 +148,8 @@ public class Database {
 
         mEventRef = mRootRef.child(eventKey);
 
+        //region Setup references and maps
+        //region Schedule
         mScheduleRef = mEventRef.child("schedule");
         mSchedule = new HashMap<>();
         mScheduleRef.addChildEventListener(new ChildEventListener() {
@@ -175,7 +181,9 @@ public class Database {
                 Log.v(TAG, "schedule.onCancelled");
             }
         });
+        //endregion
 
+        //region Partial Matches
         mPartialMatchRef = mEventRef.child("partial_match");
         mTMDs = new HashMap<>();
         mPartialMatchRef.addChildEventListener(new ChildEventListener() {
@@ -207,7 +215,9 @@ public class Database {
                 Log.v(TAG, "partial_match.onCancelled");
             }
         });
+        //endregion
 
+        //region Pit
         mPitRef = mEventRef.child("pit");
         mTPDs = new HashMap<>();
         mPitRef.addChildEventListener(new ChildEventListener() {
@@ -239,7 +249,9 @@ public class Database {
                 Log.v(TAG, "pit.onCancelled");
             }
         });
+        //endregion
 
+        //region Super
         mSuperRef = mEventRef.child("super_match");
         mSMDs = new HashMap<>();
         mSuperRef.addChildEventListener(new ChildEventListener() {
@@ -271,7 +283,9 @@ public class Database {
                 Log.d(TAG, "super_match.onCancelled: ");
             }
         });
+        //endregion
 
+        //region Team Info
         mInfoRef = mEventRef.child("info");
         mTIDs = new HashMap<>();
         mInfoRef.addChildEventListener(new ChildEventListener() {
@@ -303,7 +317,9 @@ public class Database {
                 Log.v(TAG, "info.onCancelled");
             }
         });
+        //endregion
 
+        //region Calculated
         mCalulatedRef = mEventRef.child("calculated");
         mTCDs = new HashMap<>();
         mCalulatedRef.addChildEventListener(new ChildEventListener() {
@@ -335,7 +351,9 @@ public class Database {
                 Log.v(TAG, "calc.onCancelled");
             }
         });
+        //endregion
 
+        //region Strategy
         mStrategyRef = mEventRef.child("strategies");
         mStrategies = new HashMap<>();
         mStrategyRef.addChildEventListener(new ChildEventListener() {
@@ -367,7 +385,9 @@ public class Database {
                 Log.v(TAG, "strategies.onCancelled");
             }
         });
+        //endregion
 
+        //region Current Ranking
         mCurrentRankingRef = mEventRef.child("rankings").child("current");
         mCurrent_TRDs = new HashMap<>();
         mCurrentRankingRef.addChildEventListener(new ChildEventListener() {
@@ -399,7 +419,9 @@ public class Database {
                 Log.v(TAG, "current_ranking.onCancelled");
             }
         });
+        //endregion
 
+        //region Predicted Ranking
         mPredictedRankingRef = mEventRef.child("rankings").child("predicted");
         mPredicted_TRDs = new HashMap<>();
         mPredictedRankingRef.addChildEventListener(new ChildEventListener() {
@@ -431,7 +453,9 @@ public class Database {
                 Log.v(TAG, "predicted_ranking.onCancelled");
             }
         });
+        //endregion
 
+        //region First Pick
         mFirstPickRef = mEventRef.child("first_pick");
         mFirst_TPA = new HashMap<>();
         mFirstPickRef.addChildEventListener(new ChildEventListener() {
@@ -463,7 +487,9 @@ public class Database {
                 Log.v(TAG, "first_pick.onCancelled");
             }
         });
+        //endregion
 
+        //region Second Pick
         mSecondPickRef = mEventRef.child("second_pick");
         mSecond_TPA = new HashMap<>();
         mSecondPickRef.addChildEventListener(new ChildEventListener() {
@@ -495,7 +521,9 @@ public class Database {
                 Log.v(TAG, "second_pick.onCancelled");
             }
         });
+        //endregion
 
+        //region Third Pick
         mThirdPickRef = mEventRef.child("third_pick");
         mThird_TPA = new HashMap<>();
         mThirdPickRef.addChildEventListener(new ChildEventListener() {
@@ -527,14 +555,13 @@ public class Database {
                 Log.v(TAG, "third_pick.onCancelled");
             }
         });
+        //endregion
+        //endregion
 
         mEventKey = eventKey;
     }
 
-    /*
-        Schedule Data
-    */
-
+    //region Schedule Data
     public void setMatch(Match match)
     {
         mScheduleRef.child(String.format("%d", match.match_number)).setValue(match);
@@ -554,11 +581,9 @@ public class Database {
     {
         return mSchedule.size();
     }
+    //endregion
 
-    /*
-        Match Scouting Data
-    */
-
+    //region Match Scouting Data
     public void setTMD(TMD tmd)
     {
         mPartialMatchRef.child(String.format("%d_%d", tmd.match_number,tmd.team_number)).setValue(tmd);
@@ -568,10 +593,9 @@ public class Database {
     {
         return mTMDs.get(String.format("%d_%d", match_number, team_number));
     }
+    //endregion
 
-    /*
-        Pit Scouting Data
-    */
+    //region Pit Scouting Data
     public void setTPD(TPD tpd)
     {
         mPitRef.child(String.format("%d", tpd.team_number)).setValue(tpd);
@@ -581,11 +605,9 @@ public class Database {
     {
         return mTPDs.get(team_number);
     }
+    //endregion
 
-    /*
-        Super Scouting Data
-    */
-
+    //region Super Scouting Data
     public void setSMD(SMD smd)
     {
         mSuperRef.child(String.format("%d", smd.match_number)).setValue(smd);
@@ -597,11 +619,9 @@ public class Database {
     }
 
     public Map<Integer, SMD> getSMDs() { return  mSMDs; }
+    //endregion
 
-    /*
-        Team Info
-    */
-
+    //region Team Info
     public void setTID(TID tid)
     {
         mInfoRef.child(String.format("%d", tid.team_number)).setValue(tid);
@@ -611,20 +631,19 @@ public class Database {
     {
         return mTIDs.get(team_number);
     }
+    //endregion
 
-    /*
-        Calculated data
-    */
+    //region Calculated data
     public void setTCD(TCD tcd)
     {
         mCalulatedRef.child(String.format("%d",tcd.team_number)).setValue(tcd);
     }
 
     public TCD getTCD(int team_number){ return mTCDs.get(team_number); }
+    //endregion
 
-    /*
-        Pick List Data
-    */
+    //region Pick List Data
+    //region First Pick
     public void setFirstTPA(TPA first)
     {
         mFirstPickRef.child(String.valueOf(first.team_number)).setValue(first);
@@ -634,7 +653,9 @@ public class Database {
     {
         return mFirst_TPA.get(team_number);
     }
+    //endregion
 
+    //region Second Pick
     public void setSecondTPA(TPA second)
     {
         mSecondPickRef.child(String.valueOf(second.team_number)).setValue(second);
@@ -644,7 +665,9 @@ public class Database {
     {
         return mSecond_TPA.get(team_number);
     }
+    //endregion
 
+    //region Third Pick
     public void setThirdTPA(TPA third)
     {
         mThirdPickRef.child(String.valueOf(third.team_number)).setValue(third);
@@ -654,7 +677,9 @@ public class Database {
     {
         return mThird_TPA.get(team_number);
     }
+    //endregion
 
+    //region DNP
     public void setDNP(int team_number, boolean dnp)
     {
         mFirstPickRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
@@ -676,6 +701,7 @@ public class Database {
         }
         return teams;
     }
+    //endregion
 
     public void setPicked(int team_number, boolean picked)
     {
@@ -683,7 +709,10 @@ public class Database {
         mSecondPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
         mThirdPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
     }
+    //endregion
 
+    //region Rankings
+    //region Current Rankings
     public void setCurrentTRD(TRD trd)
     {
         mCurrentRankingRef.child(String.format("%d", trd.team_number)).setValue(trd);
@@ -698,7 +727,9 @@ public class Database {
     {
         return mCurrent_TRDs;
     }
+    //endregion
 
+    //region Predicted Rankings
     public void setPredictedTRD(TRD trd)
     {
         mPredictedRankingRef.child(String.format("%d", trd.team_number)).setValue(trd);
@@ -713,7 +744,10 @@ public class Database {
     {
         return mPredicted_TRDs;
     }
+    //endregion
+    //endregion
 
+    //region All Team Data
     public Team getTeam(int team_number)
     {
         Team team = new Team();
@@ -818,7 +852,9 @@ public class Database {
 
         return completedMatches;
     }
+    //endregion
 
+    //region Strategy
     public void setStrategy(Strategy strategy)
     {
         mStrategyRef.child(strategy.name).setValue(strategy);
@@ -833,7 +869,10 @@ public class Database {
     {
         return new ArrayList<>(mStrategies.values());
     }
+    //endregion
 
+
+    //region Team Numbers
     public ArrayList<Integer> getTeamNumbers()
     {
         ArrayList<Integer> team_numbers = new ArrayList<>(mTPDs.keySet());
@@ -884,4 +923,5 @@ public class Database {
 
         return 0;
     }
+    //endregion
 }
