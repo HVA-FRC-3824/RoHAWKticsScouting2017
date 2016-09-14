@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
@@ -871,6 +872,31 @@ public class Database {
     }
     //endregion
 
+    //region Notes
+    public ArrayList<NoteView> getAllNotes()
+    {
+        ArrayList<NoteView> notes = new ArrayList<>();
+        for(TMD tmd: mTMDs.values())
+        {
+            NoteView note = new NoteView();
+            note.note_type = NoteView.NoteType.MATCH;
+            note.match_number = tmd.match_number;
+            note.team_number = tmd.team_number;
+            note.note = tmd.notes;
+            notes.add(note);
+        }
+        for(SMD smd: mSMDs.values())
+        {
+            NoteView note = new NoteView();
+            note.note_type = NoteView.NoteType.SUPER;
+            note.match_number = smd.match_number;
+            note.team_number = -1;
+            note.note = smd.notes;
+            notes.add(note);
+        }
+        return notes;
+    }
+    //endregion
 
     //region Team Numbers
     public ArrayList<Integer> getTeamNumbers()

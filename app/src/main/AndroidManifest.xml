@@ -47,6 +47,7 @@
         <activity android:name=".Activities.MatchPlanning" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchScouting" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchView" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities.NotesViewActivity" android:screenOrientation="portrait" />
         <activity android:name=".Activities.PickList" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.PitScouting" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.RankingsView" android:screenOrientation="portrait"/>
