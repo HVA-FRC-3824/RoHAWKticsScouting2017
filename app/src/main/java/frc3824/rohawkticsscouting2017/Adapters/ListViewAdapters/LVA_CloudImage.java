@@ -33,7 +33,9 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author Andrew Messing
- *         Created: 8/15/16
+ * Created: 8/15/16
+ *
+ *
  */
 public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
 
