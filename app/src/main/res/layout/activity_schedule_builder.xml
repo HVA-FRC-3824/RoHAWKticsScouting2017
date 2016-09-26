@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <frc3824.rohawkticsscouting2017.Views.DragSortListView
+    <frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -13,11 +13,11 @@
         android:dividerHeight="4dp"
         dslv:drag_enabled="true"
         dslv:drag_start_mode="onLongPress"/>
-    
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
         android:id="@+id/add"
+        android:drawableRight="@drawable/plus_math_black"
         android:text="Add"/>
 
 </LinearLayout>

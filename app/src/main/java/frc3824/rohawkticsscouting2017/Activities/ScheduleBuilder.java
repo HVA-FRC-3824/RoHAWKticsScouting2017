@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -49,7 +48,6 @@ public class ScheduleBuilder extends Activity implements View.OnClickListener, D
         dslv.setAdapter(mLVA);
         dslv.setDropListener(this);
 
-
         View add = findViewById(R.id.add);
         add.setOnClickListener(this);
 
@@ -59,6 +57,7 @@ public class ScheduleBuilder extends Activity implements View.OnClickListener, D
     @Override
     public void onClick(View view) {
         final Match match = new Match();
+        match.match_number = mMatches.size() + 1;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(String.format("Edit Match Number %d", match.match_number));
         View dialogView = mLayoutInflator.inflate(R.layout.dialog_schedule_builder, null);
@@ -69,12 +68,6 @@ public class ScheduleBuilder extends Activity implements View.OnClickListener, D
         edits.add((EditText) dialogView.findViewById(R.id.red1));
         edits.add((EditText) dialogView.findViewById(R.id.red2));
         edits.add((EditText) dialogView.findViewById(R.id.red3));
-
-        for(int i = 0; i < 6; i++)
-        {
-            edits.get(i).setText(String.valueOf(match.teams.get(i)));
-        }
-
 
         builder.setView(dialogView);
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -97,6 +90,7 @@ public class ScheduleBuilder extends Activity implements View.OnClickListener, D
                 // Dialogbox goes away
             }
         });
+        builder.show();
     }
 
     @Override

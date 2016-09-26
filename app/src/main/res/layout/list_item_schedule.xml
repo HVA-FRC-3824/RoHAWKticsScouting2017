@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Match: "
+        android:text="Match Number "
         android:id="@+id/match_number"
         android:textColor="@color/black"
         android:background="@color/white"
@@ -19,60 +19,80 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Blue1"
+        android:text="Blue 1"
         android:id="@+id/blue1"
-        android:textColor="@color/black"
-        android:background="@color/white"
+        android:textColor="@color/white"
+        android:background="@color/bright_blue"
         android:textAlignment="center"/>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Blue2"
+        android:text="Blue 2"
         android:id="@+id/blue2"
-        android:textColor="@color/black"
-        android:background="@color/white"
+        android:textColor="@color/white"
+        android:background="@color/bright_blue"
         android:textAlignment="center"/>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Blue3"
+        android:text="Blue 3"
         android:id="@+id/blue3"
-        android:textColor="@color/black"
-        android:background="@color/white"
+        android:textColor="@color/white"
+        android:background="@color/bright_blue"
         android:textAlignment="center"/>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Red1"
+        android:text="Red 1"
         android:id="@+id/red1"
-        android:textColor="@color/black"
-        android:background="@color/white"
+        android:textColor="@color/white"
+        android:background="@color/bright_red"
         android:textAlignment="center"/>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Red2"
+        android:text="Red 2"
         android:id="@+id/red2"
-        android:textColor="@color/black"
-        android:background="@color/white"
+        android:textColor="@color/white"
+        android:background="@color/bright_red"
         android:textAlignment="center"/>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Red3"
+        android:text="Red 3"
         android:id="@+id/red3"
-        android:textColor="@color/black"
-        android:background="@color/white"
+        android:textColor="@color/white"
+        android:background="@color/bright_red"
         android:textAlignment="center"/>
 
 </LinearLayout>

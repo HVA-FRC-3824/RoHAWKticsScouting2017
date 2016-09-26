@@ -32,7 +32,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/download"
         android:layout_marginRight="8dp"
-        android:text="Upload" />
+        android:text="upload"
+        android:drawableRight="@drawable/upload_to_cloud_color"/>
 
     <Button
         android:id="@+id/download"
@@ -42,7 +43,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/upload"
         android:layout_marginRight="8dp"
-        android:text="Download" />
+        android:text="download"
+        android:drawableRight="@drawable/download_from_cloud_color" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

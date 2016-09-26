@@ -45,7 +45,7 @@ public class Schedule extends Activity implements View.OnClickListener{
 
         int numMatches = Database.getInstance().getNumberOfMatches();
         ArrayList<Integer> matches = new ArrayList<>();
-        for(int i = 1; i <= numMatches; i++)
+        for(int i = 0; i <= numMatches; i++)
         {
             matches.add(i);
         }

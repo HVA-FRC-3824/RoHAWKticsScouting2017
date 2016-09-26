@@ -1,67 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/match_number"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:id="@+id/match_number"/>
+        android:gravity="center"
+        android:text="MN"
+        android:textAlignment="center"
+        android:textColor="@color/black" />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
+        android:id="@+id/blue1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:id="@+id/blue1"/>
+        android:background="@color/bright_blue"
+        android:gravity="center"
+        android:text="Blue 1"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
+        android:id="@+id/blue2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:id="@+id/blue2"/>
+        android:background="@color/bright_blue"
+        android:gravity="center"
+        android:text="Blue 2"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
+        android:id="@+id/blue3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:id="@+id/blue3"/>
+        android:background="@color/bright_blue"
+        android:gravity="center"
+        android:text="Blue 3"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
 
     <TextView
+        android:id="@+id/red1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:id="@+id/red1"/>
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/red2"/>
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/red3"/>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/edit"
-        android:src="@drawable/ic_create_black_24dp"/>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/delete"
-        android:src="@drawable/ic_delete_black_24dp"
         android:background="@color/bright_red"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"/>
+        android:gravity="center"
+        android:text="Red 1"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/red2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="@color/bright_red"
+        android:gravity="center"
+        android:text="Red 2"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/red3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="@color/bright_red"
+        android:gravity="center"
+        android:text="Red 3"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <ImageButton
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/pencil_color" />
+
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/delete_cross_color" />
 
 </LinearLayout>

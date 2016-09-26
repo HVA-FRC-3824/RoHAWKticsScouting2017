@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
+        android:id="@+id/upload_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Upload All"
-        android:id="@+id/upload_all"/>
+        android:drawableRight="@drawable/upload_to_cloud_color"
+        android:text="Upload All" />
 
     <ProgressBar
         android:id="@+id/upload_all_progress_bar"
@@ -19,17 +19,18 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/upload_all_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/upload_all_message"
         android:textAlignment="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <Button
+        android:id="@+id/download_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Download All"
-        android:id="@+id/download_all"/>
+        android:drawableRight="@drawable/download_from_cloud_color"
+        android:text="Download All" />
 
     <ProgressBar
         android:id="@+id/download_all_progress_bar"
@@ -39,16 +40,16 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/download_all_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/download_all_message"
         android:textAlignment="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ListView
+        android:id="@+id/file_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/file_list" />
+        android:layout_weight="1" />
 
 </LinearLayout>

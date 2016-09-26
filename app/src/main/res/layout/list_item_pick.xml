@@ -78,48 +78,48 @@
         android:textSize="15sp" />
 
     <Button
+        android:id="@+id/view_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View"
-        android:id="@+id/view_button"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:text="View" />
 
 
     <View
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_toLeftOf="@id/view_button"
-        android:layout_alignParentTop="true"
-        android:background="@color/bright_red"
         android:id="@+id/red_card"
-        android:visibility="gone"/>
-
-    <View
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_toLeftOf="@id/red_card"
         android:layout_alignParentTop="true"
-        android:background="#ffea00"
+        android:layout_toLeftOf="@id/view_button"
+        android:background="@color/bright_red"
+        android:visibility="gone" />
+
+    <View
         android:id="@+id/yellow_card"
-        android:visibility="gone"/>
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/red_card"
+        android:background="#ffea00"
+        android:visibility="gone" />
 
     <ImageView
+        android:id="@+id/stopped_moving"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@drawable/thriller"
-        android:layout_toLeftOf="@id/yellow_card"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
-        android:id="@+id/stopped_moving"/>
+        android:layout_toLeftOf="@id/yellow_card"
+        android:src="@drawable/skull_color"
+        android:visibility="gone" />
 
     <Button
+        android:id="@+id/picked_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/view_button"
-        android:id="@+id/picked_button"
-        android:text="Picked"/>
+        android:text="Picked" />
 
 
 </RelativeLayout>

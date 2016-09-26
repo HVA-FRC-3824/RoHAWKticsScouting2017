@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,15 +8,19 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Activities.Home" >
+    tools:context=".Activities.Home">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView android:id="@+id/textView"
+
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -33,15 +36,17 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center_vertical"
                 android:layout_toLeftOf="@+id/textView"
-                android:src="@drawable/logo"/>
+                android:src="@drawable/logo" />
 
         </RelativeLayout>
+
         <TextView
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/event"
             android:layout_width="wrap_content"
@@ -49,7 +54,8 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/user_type"
             android:layout_width="wrap_content"
@@ -57,7 +63,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/user_subtype"
@@ -66,7 +72,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/schedule_button"
@@ -178,9 +184,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
+            android:drawableRight="@drawable/note_color"
             android:text="View Notes"
             android:textColor="@color/white"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/view_pick_list_button"
@@ -190,7 +197,7 @@
             android:background="@color/navy_blue"
             android:text="View Pick List"
             android:textColor="@color/white"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/server_button"
@@ -200,7 +207,7 @@
             android:background="@color/navy_blue"
             android:text="Server"
             android:textColor="@color/white"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/settings_button"
@@ -208,6 +215,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
+            android:drawableRight="@drawable/settings_color"
             android:text="Settings"
             android:textColor="@color/white" />
 
@@ -217,9 +225,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
+            android:drawableRight="@drawable/cloud_color"
             android:text="Cloud Storage"
             android:textColor="@color/white"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/aggregate_button"
@@ -227,9 +236,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
+            android:drawableRight="@drawable/calculator_color"
             android:text="Aggregate"
             android:textColor="@color/white"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

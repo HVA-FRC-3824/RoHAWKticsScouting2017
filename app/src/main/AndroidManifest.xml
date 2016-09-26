@@ -51,8 +51,8 @@
         <activity android:name=".Activities.PickList" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.PitScouting" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.RankingsView" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Schedule" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ScheduleBuilder" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.Schedule"/>
+        <activity android:name=".Activities.ScheduleBuilder"/>
         <activity android:name=".Activities.Server" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.Settings" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.SuperScouting" android:screenOrientation="landscape"/>

@@ -3,9 +3,11 @@ package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -47,27 +49,27 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
 
         final Match match = mMatches.get(position);
 
-        TextView match_number = (TextView)convertView.findViewById(R.id.match_number);
+        final TextView match_number = (TextView)convertView.findViewById(R.id.match_number);
         match_number.setText(String.valueOf(position + 1));
         match.match_number = position + 1;
 
-        TextView blue1 = (TextView)convertView.findViewById(R.id.blue1);
+        final TextView blue1 = (TextView)convertView.findViewById(R.id.blue1);
         blue1.setText(String.valueOf(match.teams.get(Constants.Match_Indices.BLUE1)));
 
-        TextView blue2 = (TextView)convertView.findViewById(R.id.blue2);
+        final TextView blue2 = (TextView)convertView.findViewById(R.id.blue2);
         blue2.setText(String.valueOf(match.teams.get(Constants.Match_Indices.BLUE2)));
 
-        TextView blue3 = (TextView)convertView.findViewById(R.id.blue3);
+        final TextView blue3 = (TextView)convertView.findViewById(R.id.blue3);
         blue3.setText(String.valueOf(match.teams.get(Constants.Match_Indices.BLUE3)));
 
 
-        TextView red1 = (TextView)convertView.findViewById(R.id.red1);
+        final TextView red1 = (TextView)convertView.findViewById(R.id.red1);
         red1.setText(String.valueOf(match.teams.get(Constants.Match_Indices.RED1)));
 
-        TextView red2 = (TextView)convertView.findViewById(R.id.red2);
+        final TextView red2 = (TextView)convertView.findViewById(R.id.red2);
         red2.setText(String.valueOf(match.teams.get(Constants.Match_Indices.RED2)));
 
-        TextView red3 = (TextView)convertView.findViewById(R.id.red3);
+        final TextView red3 = (TextView)convertView.findViewById(R.id.red3);
         red3.setText(String.valueOf(match.teams.get(Constants.Match_Indices.RED3)));
 
         final ImageButton edit = (ImageButton)convertView.findViewById(R.id.edit);
@@ -111,15 +113,38 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
                         // Dialogbox goes away
                     }
                 });
+
+                builder.show();
             }
         });
 
-        ImageButton delete = (ImageButton)convertView.findViewById(R.id.delete);
+        final ImageButton delete = (ImageButton)convertView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mMatches.remove(position);
                 notifyDataSetChanged();
+            }
+        });
+
+        // Set textboxes to correct width
+        final View cv = convertView;
+        convertView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                cv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                int button_widths = edit.getMeasuredWidth() + delete.getMeasuredWidth();
+                int parent_width = ((View)cv.getParent()).getWidth();
+                int textview_width = (parent_width - button_widths) / 7;
+
+                match_number.setWidth(textview_width);
+                blue1.setWidth(textview_width);
+                blue2.setWidth(textview_width);
+                blue3.setWidth(textview_width);
+                red1.setWidth(textview_width);
+                red2.setWidth(textview_width);
+                red3.setWidth(textview_width);
             }
         });
 

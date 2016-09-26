@@ -41,43 +41,40 @@ public class LVA_Schedule extends ArrayAdapter<Integer> {
 
         final int matchNumber = mMatchNumbers.get(position);
 
-        TextView matchNumberTextView = (TextView)convertView.findViewById(R.id.match_number);
-        matchNumberTextView.setText(String.format("Match: %d", matchNumber));
+        if(position == 0) {
+            ((TextView) convertView.findViewById(R.id.match_number)).setText(String.format("Match Number", matchNumber));
+            ((TextView) convertView.findViewById(R.id.blue1)).setText("Blue 1");
+            ((TextView) convertView.findViewById(R.id.blue2)).setText("Blue 2");
+            ((TextView) convertView.findViewById(R.id.blue3)).setText("Blue 3");
+            ((TextView) convertView.findViewById(R.id.red1)).setText("Red 1");
+            ((TextView) convertView.findViewById(R.id.red2)).setText("Red 2");
+            ((TextView) convertView.findViewById(R.id.red3)).setText("Red 3");
+        } else {
 
-        Match match = mDatabase.getMatch(matchNumber);
+            ((TextView) convertView.findViewById(R.id.match_number)).setText(String.format("%d", matchNumber));
 
-        TextView[] teamTextViews = new TextView[6];
-        teamTextViews[Constants.Match_Indices.BLUE1] = (TextView)convertView.findViewById(R.id.blue1);
-        teamTextViews[Constants.Match_Indices.BLUE2] = (TextView)convertView.findViewById(R.id.blue2);
-        teamTextViews[Constants.Match_Indices.BLUE3] = (TextView)convertView.findViewById(R.id.blue3);
-        teamTextViews[Constants.Match_Indices.RED1] = (TextView)convertView.findViewById(R.id.red1);
-        teamTextViews[Constants.Match_Indices.RED2] = (TextView)convertView.findViewById(R.id.red2);
-        teamTextViews[Constants.Match_Indices.RED3] = (TextView)convertView.findViewById(R.id.red3);
+            Match match = mDatabase.getMatch(matchNumber);
 
-        for(int i = 0; i < match.teams.size(); i++)
-        {
-            int team_number = match.teams.get(i);
-            teamTextViews[i].setText(String.valueOf(team_number));
-            if(team_number == Constants.OUR_TEAM_NUMBER)
-            {
-                teamTextViews[i].setBackgroundColor(Color.YELLOW);
-            }
-            else
-            {
-                teamTextViews[i].setBackgroundColor(Color.TRANSPARENT);
+            TextView[] teamTextViews = new TextView[6];
+            teamTextViews[Constants.Match_Indices.BLUE1] = (TextView) convertView.findViewById(R.id.blue1);
+            teamTextViews[Constants.Match_Indices.BLUE2] = (TextView) convertView.findViewById(R.id.blue2);
+            teamTextViews[Constants.Match_Indices.BLUE3] = (TextView) convertView.findViewById(R.id.blue3);
+            teamTextViews[Constants.Match_Indices.RED1] = (TextView) convertView.findViewById(R.id.red1);
+            teamTextViews[Constants.Match_Indices.RED2] = (TextView) convertView.findViewById(R.id.red2);
+            teamTextViews[Constants.Match_Indices.RED3] = (TextView) convertView.findViewById(R.id.red3);
+
+            for (int i = 0; i < match.teams.size(); i++) {
+                int team_number = match.teams.get(i);
+                teamTextViews[i].setText(String.valueOf(team_number));
+                if (team_number == Constants.OUR_TEAM_NUMBER) {
+                    teamTextViews[i].setBackgroundColor(Color.YELLOW);
+                } else if(i < 3) {
+                    teamTextViews[i].setBackgroundColor(Color.BLUE);
+                } else {
+                    teamTextViews[i].setBackgroundColor(Color.RED);
+                }
             }
         }
-
-        /*
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, MatchView.class);
-                intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, matchNumber);
-                mContext.startActivity(intent);
-            }
-        });
-        */
         return convertView;
     }
 }
