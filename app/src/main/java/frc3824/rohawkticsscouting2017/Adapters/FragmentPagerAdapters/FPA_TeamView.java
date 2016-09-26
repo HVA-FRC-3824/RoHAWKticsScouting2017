@@ -17,7 +17,9 @@ import frc3824.rohawkticsscouting2017.Fragments.TeamView.VisualsFragment;
 
 /**
  * @author Andrew Messing
- *         Created: 8/16/16
+ * Created: 8/16/16
+ *
+ * The fragment pager adapter that handles the Team View Activity.
  */
 public class FPA_TeamView extends FragmentPagerAdapter {
 

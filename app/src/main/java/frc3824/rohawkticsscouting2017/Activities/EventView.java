@@ -36,7 +36,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  *
  * An activity for comparing all the teams at an event
  */
-public class EventView extends Activity implements AdapterView.OnItemSelectedListener/*, XAxisValueFormatter*/{
+public class EventView extends Activity implements AdapterView.OnItemSelectedListener{
 
     private final static String TAG = "EventView";
 
@@ -62,48 +62,55 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         setContentView(R.layout.activity_event_view);
 
         mMainDropdown = (Spinner)findViewById(R.id.main_dropdown);
-        mMainAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, Constants.Event_View.Main_Dropdown_Options.OPTIONS);
+        mMainAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
+                Constants.Event_View.Main_Dropdown_Options.OPTIONS);
         mMainDropdown.setAdapter(mMainAdapter);
         mMainDropdown.setOnItemSelectedListener(this);
 
         mSecondaryDropdown = (Spinner)findViewById(R.id.secondary_dropdown);
         mSecondaryDropdown.setOnItemSelectedListener(this);
 
+        //region Low Level Data Chart Setup
         mLLDChart = (LLD_Chart) findViewById(R.id.lld_chart);
         mLLDChart.setMarkerView(new LLD_MarkerView(this, R.layout.marker_lld));
         mLLDChart.setDoubleTapToZoomEnabled(false);
         mLLDChart.setPinchZoom(false);
         mLLDChart.setDescription("");
+        //endregion
 
+        //region Bar Chart Setup
         mBarChart = (BarChart) findViewById(R.id.bar_chart);
         mBarChart.setMarkerView(new Bar_MarkerView(this, R.layout.marker_bar));
         mBarChart.setDoubleTapToZoomEnabled(false);
         mBarChart.setPinchZoom(false);
         mBarChart.setDescription("");
-        //mBarChart.setDrawValueAboveBar(false);
+        //endregion
 
+        //region Y-Axis Setup
         YAxis yAxis = mLLDChart.getAxisRight();
         yAxis.setEnabled(false);
         yAxis = mBarChart.getAxisRight();
         yAxis.setEnabled(false);
+        //endregion
 
+        //region X-Axis Setup
         mXAxis = mLLDChart.getXAxis();
         mXAxis.setLabelRotationAngle(90);
         mXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         mXAxis.setDrawGridLines(false);
-        //mXAxis.setValueFormatter(this);
 
         mXAxis = mBarChart.getXAxis();
         mXAxis.setLabelRotationAngle(90);
         mXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         mXAxis.setDrawGridLines(false);
-        //mXAxis.setValueFormatter(this);
+        //endregion
 
-
+        //region Legend
         Legend legend = mLLDChart.getLegend();
         legend.setEnabled(false);
         legend = mBarChart.getLegend();
         legend.setEnabled(false);
+        //endregion
 
         mDatabase = Database.getInstance();
         mTeamNumbers = mDatabase.getTeamNumbers();
@@ -117,12 +124,18 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[position])
                 {
                     case Constants.Event_View.Main_Dropdown_Options.FOULS:
-                        mSecondaryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, Constants.Event_View.Foul_Secondary_Options.OPTIONS);
+                        mSecondaryAdapter = new ArrayAdapter<>(this,
+                                android.R.layout.simple_dropdown_item_1line,
+                                Constants.Event_View.Foul_Secondary_Options.OPTIONS);
                         mSecondaryDropdown.setAdapter(mSecondaryAdapter);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.POST_MATCH:
-                        mSecondaryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, Constants.Event_View.Post_Match_Secondary_Options.OPTIONS);
+                        mSecondaryAdapter = new ArrayAdapter<>(this,
+                                android.R.layout.simple_dropdown_item_1line,
+                                Constants.Event_View.Post_Match_Secondary_Options.OPTIONS);
                         mSecondaryDropdown.setAdapter(mSecondaryAdapter);
+
+                    // Add GAME SPECIFIC Main Dropdown Options
                 }
                 break;
             case R.id.secondary_dropdown:
@@ -134,6 +147,8 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                     case Constants.Event_View.Main_Dropdown_Options.POST_MATCH:
                         postMatchSecondary(position);
                         break;
+
+                    // Add GAME SPECIFIC Secondary Dropdown Options
                 }
                 break;
         }
@@ -150,6 +165,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         LLD_Data data;
         switch (Constants.Event_View.Foul_Secondary_Options.OPTIONS[position]) {
             case Constants.Event_View.Foul_Secondary_Options.STANDARD_FOULS:
+                //region Fouls
                 entries = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
                 for (int i = 0; i < mTeamNumbers.size(); i++) {
@@ -171,7 +187,9 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mLLDChart.notifyDataSetChanged();
                 mLLDChart.invalidate();
                 break;
+                //endregion
             case Constants.Event_View.Foul_Secondary_Options.TECH_FOULS:
+                //region Tech Fouls
                 entries = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
                 for (int i = 0; i < mTeamNumbers.size(); i++) {
@@ -193,7 +211,9 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mLLDChart.notifyDataSetChanged();
                 mLLDChart.invalidate();
                 break;
+                //endregion
             case Constants.Event_View.Foul_Secondary_Options.YELLOW_CARDS:
+                //region Yellow Cards
                 entries = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
                 for (int i = 0; i < mTeamNumbers.size(); i++) {
@@ -215,7 +235,9 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mLLDChart.notifyDataSetChanged();
                 mLLDChart.invalidate();
                 break;
+                //endregion
             case Constants.Event_View.Foul_Secondary_Options.RED_CARDS:
+                //region Red Cards
                 entries = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
                 for (int i = 0; i < mTeamNumbers.size(); i++) {
@@ -238,6 +260,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mLLDChart.notifyDataSetChanged();
                 mLLDChart.invalidate();
                 break;
+                //endregion
         }
     }
 
@@ -253,6 +276,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         switch (Constants.Event_View.Post_Match_Secondary_Options.OPTIONS[position])
         {
             case Constants.Event_View.Post_Match_Secondary_Options.DQ:
+                //region DQ
                 entries = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
@@ -275,8 +299,10 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
 
                 mBarChart.notifyDataSetChanged();
                 mBarChart.invalidate();
+                //endregion
                 break;
             case Constants.Event_View.Post_Match_Secondary_Options.NO_SHOW:
+                //region No Show
                 entries = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
@@ -299,8 +325,10 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
 
                 mBarChart.notifyDataSetChanged();
                 mBarChart.invalidate();
+                //endregion
                 break;
             case Constants.Event_View.Post_Match_Secondary_Options.STOPPED_MOVING:
+                //region Stopped Moving
                 entries = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
                 mCurrentTeamNumbers = new ArrayList<>();
@@ -324,6 +352,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mBarChart.notifyDataSetChanged();
                 mBarChart.invalidate();
                 break;
+                //endregion
         }
     }
 
@@ -331,10 +360,4 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-/*
-    @Override
-    public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-        return String.valueOf(mCurrentTeamNumbers.get((int)index));
-    }
-    */
 }

@@ -23,7 +23,9 @@ import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
 
 /**
  * @author Andrew Messing
- *         Created: 9/3/16
+ * Created: 9/3/16
+ *
+ * Activity for filtering through notes
  */
 
 //TODO: create add/or and contains/does not contain for content criteria
@@ -43,7 +45,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
     private LinearLayout mAdvancedSearchMatchNumberCriteria;
     private Button mAdvancedSearchMatchNumberCriteriaAdd;
     private LinearLayout mAdvancedSearchTeamNumberCriteria;
-    private  Button mAdvancedSearchTeamNumberCriteriaAdd;
+    private Button mAdvancedSearchTeamNumberCriteriaAdd;
     private LinearLayout mAdvancedSearchContentCriteria;
     private Button mAdvancedSearchContentCriteriaAdd;
     private CheckBox mMatchNotesCheckbox;
@@ -64,6 +66,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes_view);
 
+        //region Basic Search Find Views
         mBasicSearch = (RelativeLayout)findViewById(R.id.basic_search);
         mBasicSearchOpen = (Button)findViewById(R.id.basic_search_open);
         mBasicSearchOpen.setOnClickListener(this);
@@ -71,7 +74,9 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         mBasicSearchType.check(R.id.basic_match_number_option);
         mBasicSearchEditText = (EditText)findViewById(R.id.basic_search_edittext);
         mBasicSearchButton = (Button)findViewById(R.id.basic_search_button);
+        //endregion
 
+        //region Advanced Search Find Views
         mAdvancedSearch = (LinearLayout)findViewById(R.id.advanced_search);
         mAdvancedSearchOpen = (Button)findViewById(R.id.advanced_search_open);
         mAdvancedSearchOpen.setOnClickListener(this);
@@ -87,6 +92,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         mMatchNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.match_notes_checkbox);
         mSuperNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.super_notes_checkbox);
         mDriveTeamNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.drive_team_notes_checkbox);
+        //endregion
 
         mLayoutInflator = getLayoutInflater();
 

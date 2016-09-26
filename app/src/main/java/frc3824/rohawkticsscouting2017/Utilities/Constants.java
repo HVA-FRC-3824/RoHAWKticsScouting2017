@@ -99,17 +99,17 @@ public interface Constants {
     {
         interface Autonomous
         {
-
+            // GAME SPECIFIC
         }
 
         interface Teleop
         {
-
+            // GAME SPECIFIC
         }
 
         interface Endgame
         {
-
+            // GAME SPECIFIC
         }
 
         interface Fouls
@@ -147,6 +147,8 @@ public interface Constants {
         interface Miscellaneous
         {
             String PROGRAMMING_LANGUAGE = "programming_language";
+
+            // GAME SPECIFIC
         }
 
         String NOTES = "pit_notes";
@@ -154,6 +156,9 @@ public interface Constants {
 
     interface Super_Scouting
     {
+        // GAME SPECIFIC
+
+
         interface Qualitative
         {
             String BLUE_SPEED = "blue_speed";
@@ -252,6 +257,8 @@ public interface Constants {
             String FOULS = "Fouls";
             String POST_MATCH = "Post Match";
 
+            // GAME SPECIFIC
+
             String[] OPTIONS = {FOULS, POST_MATCH};
         }
 
@@ -273,6 +280,8 @@ public interface Constants {
 
             String[] OPTIONS = {DQ, NO_SHOW, STOPPED_MOVING};
         }
+
+        // GAME SPECIFIC
     }
 
 }
