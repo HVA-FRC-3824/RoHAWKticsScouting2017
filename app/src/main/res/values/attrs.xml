@@ -18,6 +18,13 @@
         <attr name="autocomplete_values" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="ImageTextButton">
+        <attr name="text" format="string"/>
+        <attr name="textColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="src" format="reference"/>
+    </declare-styleable>
+
     <declare-styleable name="DragSortListView">
         <attr name="collapsed_height" format="dimension" />
 

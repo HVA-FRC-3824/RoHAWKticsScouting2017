@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -15,6 +15,7 @@ import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Statistics.Aggregate;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
+import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 
 /**
  * @author frc3824
@@ -24,6 +25,8 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * button based on the usertype.
  */
 public class Home extends Activity implements View.OnClickListener{
+
+    private static final String TAG = "Home";
 
     private Database mDatabase;
     private SharedPreferences mSharedPreferences;
@@ -225,6 +228,7 @@ public class Home extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
+        Log.d(TAG, "click");
         Intent intent;
         switch (view.getId())
         {
@@ -307,7 +311,7 @@ public class Home extends Activity implements View.OnClickListener{
      * @param btn id for the button to be set up
      */
     private void setupButton(int btn) {
-        Button button = (Button) findViewById(btn);
+        ImageTextButton button = (ImageTextButton) findViewById(btn);
         button.setVisibility(View.VISIBLE);
         button.setOnClickListener(this);
     }

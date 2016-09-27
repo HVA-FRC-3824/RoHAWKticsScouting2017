@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/columbia_blue"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="@dimen/activity_vertical_margin"
     tools:context=".Activities.Home">
 
     <LinearLayout
@@ -74,172 +72,188 @@
             android:textSize="20sp"
             android:visibility="gone" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/schedule_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="Match Schedule"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="Match Schedule"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
         <!-- Match Scouting -->
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/scout_match_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="Scout Match"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="Scout Match"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
         <!-- Pit Scouting -->
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/scout_pit_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="Scout Pit"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="Scout Pit"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
         <!-- Super Scouting -->
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/scout_super_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="Super Scout"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="Super Scout"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
         <!-- Drive Team -->
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/feedback_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="Drive Team Feedback"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="Drive Team Feedback"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/match_planning_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="Match Planning"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="Match Planning"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/view_match_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="View Match"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="View Match"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/view_team_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="View Team"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="View Team"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/view_rankings_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="View Rankings"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="View Rankings"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/view_event_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="View Event"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="View Event"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/view_notes_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:drawableRight="@drawable/note_color"
-            android:text="View Notes"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:src="@drawable/note_color"
+            app:text="View Notes"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/view_pick_list_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="View Pick List"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="View Pick List"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/server_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:text="Server"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:text="Server"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/settings_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:drawableRight="@drawable/settings_color"
-            android:text="Settings"
-            android:textColor="@color/white" />
+            app:src="@drawable/settings_color"
+            app:text="Settings"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/cloud_storage_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:drawableRight="@drawable/cloud_color"
-            android:text="Cloud Storage"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:src="@drawable/cloud_color"
+            app:text="Cloud Storage"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
-        <Button
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/aggregate_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
-            android:drawableRight="@drawable/calculator_color"
-            android:text="Aggregate"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:src="@drawable/calculator_color"
+            app:text="Aggregate"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
 
     </LinearLayout>
 </ScrollView>
