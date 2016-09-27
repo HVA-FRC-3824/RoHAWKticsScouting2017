@@ -122,6 +122,7 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mDatabase.removeMatch(match.match_number);
                 mMatches.remove(position);
                 notifyDataSetChanged();
             }

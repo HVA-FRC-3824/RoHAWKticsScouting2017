@@ -610,6 +610,10 @@ public class Database {
         return mSchedule.get(match_number);
     }
 
+    public void removeMatch(int match_number){
+        mScheduleRef.child(String.format("%d", match_number)).removeValue();
+    }
+
     public Map<Integer, Match> getSchedule()
     {
         return mSchedule;
@@ -684,6 +688,10 @@ public class Database {
     public TID getTID(int team_number)
     {
         return mTIDs.get(team_number);
+    }
+
+    public void removeTID(int team_number){
+        mInfoRef.child(String.format("%d", team_number)).removeValue();
     }
     //endregion
 
