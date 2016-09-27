@@ -5,11 +5,14 @@ import org.apache.commons.math3.distribution.TDistribution;
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Alliance;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 
 /**
  * @author frc3824
  * Created: 8/19/16
+ *
+ *
  */
 public class AllianceCalculations {
 
@@ -110,7 +113,10 @@ public class AllianceCalculations {
     public double winProbabilityOver(Alliance O)
     {
         AllianceCalculations oCalc = new AllianceCalculations(O);
+        return winProbabilityOver(oCalc);
+    }
 
+    public double winProbabilityOver(AllianceCalculations oCalc){
         double s_1 = std_predictedScore();
         double s_2 = oCalc.std_predictedScore();
         double N_1 = sampleSize();

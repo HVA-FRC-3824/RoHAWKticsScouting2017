@@ -14,4 +14,13 @@
         android:textAlignment="center"
         android:id="@+id/team_number"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="# of Matches"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:id="@+id/num_matches"/>
+
 </LinearLayout>

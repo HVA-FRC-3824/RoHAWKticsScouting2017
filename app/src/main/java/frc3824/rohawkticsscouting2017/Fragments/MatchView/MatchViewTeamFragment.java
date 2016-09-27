@@ -11,8 +11,10 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/18/16
+ *
+ *
  */
 public class MatchViewTeamFragment extends Fragment {
 
@@ -22,14 +24,15 @@ public class MatchViewTeamFragment extends Fragment {
 
     public MatchViewTeamFragment() {}
 
-    public void setTeam(Team team)
-    {
+    public void setTeam(Team team) {
         TextView teamNumber = (TextView)mView.findViewById(R.id.team_number);
         teamNumber.setText(String.valueOf(team.team_number));
+
+        TextView numberOfMatches = (TextView)mView.findViewById(R.id.num_matches);
+        numberOfMatches.setText(String.valueOf(team.info.match_numbers.size()));
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_match_view_team, container, false);
         return mView;
     }

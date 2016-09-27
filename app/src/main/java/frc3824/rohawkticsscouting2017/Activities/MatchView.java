@@ -32,8 +32,7 @@ public class MatchView extends Activity {
     private Database mDatabase;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_view);
 
@@ -41,8 +40,6 @@ public class MatchView extends Activity {
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
-
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
 
         mDatabase = Database.getInstance();
 
@@ -89,6 +86,9 @@ public class MatchView extends Activity {
             teamFragments[Constants.Match_Indices.RED3].setTeam(redTeam3);
 
             redPrediction.setTeams(redTeam1, redTeam2, redTeam3);
+
+            bluePrediction.setOpponents(redTeam1, redTeam2, redTeam3);
+            redPrediction.setOpponents(blueTeam1, blueTeam2, blueTeam3);
         }
         else
         {
