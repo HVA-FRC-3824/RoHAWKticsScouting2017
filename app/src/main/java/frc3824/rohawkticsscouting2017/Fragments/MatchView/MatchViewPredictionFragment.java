@@ -45,7 +45,7 @@ public class MatchViewPredictionFragment extends Fragment {
         alliancePredictedScore.setText(String.format("%d", Math.round(mAC.predictedScore())));
     }
 
-    public void setOpponents(Team opp1, Team opp2, Team opp3){
+    public void setOpponents(Team opp1, Team opp2, Team opp3) {
         TextView winProbability = (TextView)mView.findViewById(R.id.win_probability);
         Alliance alliance = new Alliance();
         alliance.teams.add(opp1);

@@ -6,9 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toolbar;
+
+import java.lang.reflect.Method;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
@@ -134,6 +138,38 @@ public class MatchView extends Activity {
         menu.removeItem(R.id.save);
         return true;
     }
+
+    /**
+     * Override to show icons on the overflow menu
+     * http://stackoverflow.com/questions/18374183/how-to-show-icons-in-overflow-menu-in-actionbar
+     *
+     * @param featureId
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu)
+    {
+        if(featureId == Window.FEATURE_ACTION_BAR && menu != null){
+            if(menu.getClass().getSimpleName().equals("MenuBuilder")){
+                try{
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                }
+                catch(NoSuchMethodException e){
+                    Log.e(TAG, "onMenuOpened", e);
+                }
+                catch(Exception e){
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return super.onMenuOpened(featureId, menu);
+    }
+
+
 
     /**
      *  Implements the overflow menu actions

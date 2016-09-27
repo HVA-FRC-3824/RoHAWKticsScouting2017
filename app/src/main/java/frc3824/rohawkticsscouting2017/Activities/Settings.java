@@ -239,8 +239,7 @@ public class Settings extends Activity {
         }
     }
 
-    public void pullEvent(View view)
-    {
+    public void pullEvent(View view) {
         mProgressBar.setVisibility(View.VISIBLE);
         new PullEvent().execute(mSharedPreferences.getString(Constants.Settings.EVENT_KEY, ""));
     }
@@ -256,8 +255,7 @@ public class Settings extends Activity {
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         if(backAllowed)
         {
             super.onBackPressed();
@@ -378,8 +376,7 @@ public class Settings extends Activity {
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values)
-        {
+        protected void onProgressUpdate(Integer... values) {
             int numCompleted = values[0];
             int numTotal = values[0];
             mProgressBar.setMax(numTotal);

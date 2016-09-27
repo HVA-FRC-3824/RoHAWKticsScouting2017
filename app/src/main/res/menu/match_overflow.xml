@@ -4,26 +4,31 @@
     <item
         android:id="@+id/home"
         android:title="Home"
+        android:icon="@drawable/home_color"
         />
 
     <item
         android:id="@+id/match_list"
         android:title="Match List"
+        android:icon="@drawable/list_color"
         />
 
     <item
         android:id="@+id/save"
         android:title="Save"
+        android:icon="@drawable/save_color"
         />
 
     <item
         android:id="@+id/previous_match"
         android:title="Previous Match"
+        android:icon="@drawable/previous_color"
         />
 
     <item
         android:id="@+id/next_match"
         android:title="Next Match"
+        android:icon="@drawable/next_color"
         />
 
 </menu>

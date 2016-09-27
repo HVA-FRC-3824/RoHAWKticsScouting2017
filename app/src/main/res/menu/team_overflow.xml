@@ -3,21 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:title="Home" />
+        android:title="Home"
+        android:icon="@drawable/home_color"/>
 
     <item
         android:id="@+id/team_list"
-        android:title="Team List" />
+        android:title="Team List"
+        android:icon="@drawable/list_color"/>
 
     <item
         android:id="@+id/save"
-        android:title="Save"/>
+        android:title="Save"
+        android:icon="@drawable/save_color"/>
 
     <item
         android:id="@+id/previous_team"
-        android:title="Previous Team"/>
+        android:title="Previous Team"
+        android:icon="@drawable/previous_color"/>
 
     <item
         android:id="@+id/next_team"
-        android:title="Next Team"/>
+        android:title="Next Team"
+        android:icon="@drawable/next_color"/>
 </menu>
