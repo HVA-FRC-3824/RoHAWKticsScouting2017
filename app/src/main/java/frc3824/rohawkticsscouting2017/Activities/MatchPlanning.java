@@ -31,7 +31,7 @@ import frc3824.rohawkticsscouting2017.Views.DrawingView;
  * @author frc3824
  * Created: 8/20/16
  *
- *
+ * Activity for drawing a match plan
  */
 public class MatchPlanning extends Activity implements View.OnClickListener{
 

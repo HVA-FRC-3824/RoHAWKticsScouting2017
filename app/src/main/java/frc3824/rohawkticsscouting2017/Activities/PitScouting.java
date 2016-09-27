@@ -34,8 +34,10 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
- *         Created: 8/15/16
+ * @author frc3824
+ * Created: 8/15/16
+ *
+ * Activity for recording pit scouting data
  */
 public class PitScouting extends Activity {
 

@@ -26,10 +26,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/13/16
  *
- * List of matches which forward to match scouting, super scouting, or match view
+ * List of matches which forward to match scouting, super scouting, match view, or drive team feedback
  */
 public class MatchList extends Activity implements View.OnClickListener{
 

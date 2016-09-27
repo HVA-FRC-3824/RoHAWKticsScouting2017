@@ -23,10 +23,10 @@ import frc3824.rohawkticsscouting2017.Utilities.CircularBuffer;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/21/16
  *
- *
+ * Activity to receive data from the other tablets
  */
 public class Server extends Activity {
 

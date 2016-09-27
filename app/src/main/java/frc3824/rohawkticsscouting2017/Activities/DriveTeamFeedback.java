@@ -22,10 +22,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 9/26/16
  *
- *
+ * Activity for the drive team to record feedback on our alliance partners.
  */
 public class DriveTeamFeedback extends Activity {
 

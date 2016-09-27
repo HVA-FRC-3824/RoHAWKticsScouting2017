@@ -1,8 +1,10 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels;
 
 /**
- * @author Andrew Messing
- *         Created: 9/6/16
+ * @author frc3824
+ * Created: 9/6/16
+ *
+ * Data Structure for holding notes to be filtered
  */
 
 

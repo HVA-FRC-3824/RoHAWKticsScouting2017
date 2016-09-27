@@ -17,10 +17,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/19/16
  *
- *
+ * Activity for displaying the schedule
  */
 public class Schedule extends Activity implements View.OnClickListener{
 

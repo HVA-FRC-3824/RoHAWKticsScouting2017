@@ -14,10 +14,10 @@ import frc3824.rohawkticsscouting2017.Fragments.PickList.SecondPickFragment;
 import frc3824.rohawkticsscouting2017.Fragments.PickList.ThirdPickFragment;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/23/16
  *
- *
+ * Fragment Pager Adapter for the Pick List Activity
  */
 public class FPA_PickList extends FragmentPagerAdapter {
 

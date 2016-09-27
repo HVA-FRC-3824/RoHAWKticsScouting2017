@@ -15,8 +15,10 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
- *         Created: 8/22/16
+ * @author frc3824
+ * Created: 8/22/16
+ *
+ * List View Adapter for displaying the current rankings
  */
 public class LVA_CurrentRanking extends ArrayAdapter<TRD> {
 

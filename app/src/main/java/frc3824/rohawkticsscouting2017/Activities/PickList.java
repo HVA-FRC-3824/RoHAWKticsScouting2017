@@ -11,8 +11,10 @@ import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PickLis
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/23/16
+ *
+ * Activity to display pick lists
  */
 public class PickList extends Activity implements ViewPager.OnPageChangeListener {
 

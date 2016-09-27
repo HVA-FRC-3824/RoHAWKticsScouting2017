@@ -20,8 +20,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/16/16
+ *
+ * Activity that displays data about a specific team
  */
 public class TeamView extends Activity {
 

@@ -11,8 +11,10 @@ import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_Ranking
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/19/16
+ *
+ * Activity for displaying current and predicted rankings
  */
 public class RankingsView extends Activity {
 

@@ -16,7 +16,7 @@ import frc3824.rohawkticsscouting2017.Fragments.CloudStorage.CloudStrategyFragme
  * @author frc3824
  * Created: 8/15/16
  *
- *
+ * Fragment Pager Adapter for the cloud storage activity
  */
 public class FPA_CloudStorage extends FragmentPagerAdapter {
 

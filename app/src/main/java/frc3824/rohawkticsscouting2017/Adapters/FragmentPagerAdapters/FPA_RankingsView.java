@@ -11,8 +11,10 @@ import frc3824.rohawkticsscouting2017.Fragments.RankingsView.CurrentRankingsFrag
 import frc3824.rohawkticsscouting2017.Fragments.RankingsView.PredictedRankingsFragment;
 
 /**
- * @author Andrew Messing
- *         Created: 8/19/16
+ * @author frc3824
+ * Created: 8/19/16
+ *
+ * Fragment Pager Adapter for the Rankings View Activity
  */
 public class FPA_RankingsView extends FragmentPagerAdapter {
 

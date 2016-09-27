@@ -30,7 +30,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/13/16
  *
  *  The Database class handles all data and connecting with the Firebase system

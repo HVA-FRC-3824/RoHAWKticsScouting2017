@@ -32,10 +32,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/15/16
  *
- *
+ * List View Adapter for uploading/downloading images
  */
 public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
 

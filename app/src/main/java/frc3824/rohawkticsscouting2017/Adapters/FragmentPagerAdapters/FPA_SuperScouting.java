@@ -15,10 +15,10 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/16/16
  *
- *
+ * Fragment Pager Adapter for the Super Scouting Activity
  */
 public class FPA_SuperScouting extends FragmentPagerAdapter {
 

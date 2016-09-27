@@ -19,10 +19,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/18/16
  *
- *
+ * Activity for showing all the teams in a match
  */
 public class MatchView extends Activity {
 

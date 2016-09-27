@@ -22,7 +22,7 @@ import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaContent;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 9/3/16
  *
  * Activity for filtering through notes

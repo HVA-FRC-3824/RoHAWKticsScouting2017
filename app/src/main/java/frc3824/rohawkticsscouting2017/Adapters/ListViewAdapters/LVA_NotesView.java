@@ -13,8 +13,10 @@ import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.N
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
- *         Created: 9/6/16
+ * @author frc3824
+ * Created: 9/6/16
+ *
+ * List View Adapter
  */
 public class LVA_NotesView extends ArrayAdapter<NoteView> {
 

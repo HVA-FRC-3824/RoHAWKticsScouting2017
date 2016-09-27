@@ -20,9 +20,10 @@ import frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView;
 
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/19/16
  *
+ * Activity for modifying the schedule
  */
 public class ScheduleBuilder extends Activity implements View.OnClickListener, DragSortListView.DropListener {
 
