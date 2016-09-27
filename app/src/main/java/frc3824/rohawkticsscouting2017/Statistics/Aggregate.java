@@ -15,7 +15,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/23/16
  *
  *
@@ -24,8 +24,7 @@ public class Aggregate {
 
     private final static String TAG = "Aggregate";
 
-    public static void aggregateForTeam(int team_number)
-    {
+    public static void aggregateForTeam(int team_number) {
         Database database = Database.getInstance();
 
         Team team = database.getTeam(team_number);
@@ -112,10 +111,10 @@ public class Aggregate {
         team.third_pick.red_card = team.calc.red_cards.total > 0;
 
         database.setTeam(team);
+
     }
 
-    public static void aggregateForSuper()
-    {
+    public static void aggregateForSuper() {
         Database database = Database.getInstance();
         Map<Integer, ZscoreTeam> teams = new HashMap<>();
 

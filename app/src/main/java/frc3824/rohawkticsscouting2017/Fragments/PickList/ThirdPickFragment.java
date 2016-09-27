@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
 
 /**
- * @author Andrew Messing
- *         Created: 8/23/16
+ * @author frc3824
+ * Created: 8/23/16
+ *
+ *
  */
 public class ThirdPickFragment extends ScoutPickFragment {
 
@@ -15,16 +17,15 @@ public class ThirdPickFragment extends ScoutPickFragment {
     public ThirdPickFragment(){}
 
     @Override
-    public ArrayList<TPA> setupTeamList()
-    {
+    public ArrayList<TPA> setupTeamList() {
 
-        ArrayList<TPA> team = new ArrayList<>();
+        ArrayList<TPA> teams = new ArrayList<>();
         for(int team_number: mDatabase.getTeamNumbers())
         {
-            team.add(mDatabase.getThirdTPA(team_number));
+            teams.add(mDatabase.getThirdTPA(team_number));
         }
 
-        return team;
+        return teams;
     }
 
     @Override

@@ -1,14 +1,20 @@
 package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
+import java.util.ArrayList;
+
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/19/16
+ *
+ *
  */
 public class Alliance {
 
     private final static String TAG = "Alliance";
 
-    public Team[] teams;
+    public ArrayList<Team> teams;
 
-    public Alliance() {}
+    public Alliance() {
+        teams = new ArrayList<>();
+    }
 }

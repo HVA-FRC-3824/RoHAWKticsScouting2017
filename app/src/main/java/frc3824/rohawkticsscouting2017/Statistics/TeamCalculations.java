@@ -12,8 +12,10 @@ import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
- *         Created: 8/19/16
+ * @author frc3824
+ * Created: 8/19/16
+ *
+ *
  */
 public class TeamCalculations {
 
@@ -22,8 +24,12 @@ public class TeamCalculations {
     private Team mTeam;
     private Database mDatabase;
 
-    public TeamCalculations(Team team)
-    {
+    public TeamCalculations(int team_number) {
+        mDatabase = Database.getInstance();
+        mTeam = mDatabase.getTeam(team_number);
+    }
+
+    public TeamCalculations(Team team) {
         mTeam = team;
         mDatabase = Database.getInstance();
     }
@@ -54,8 +60,7 @@ public class TeamCalculations {
      *
      * @return predicted number of ranking points at the end of qualifications
      */
-    public int predictedRankingPoints()
-    {
+    public int predictedRankingPoints() {
         int actualRPs = 0;
 
         // Make sure the matches are in order
@@ -91,17 +96,15 @@ public class TeamCalculations {
         {
             Match match = mDatabase.getMatch(mTeam.info.match_numbers.get(i));
             Alliance blueAlliance = new Alliance();
-            blueAlliance.teams = new Team[3];
             for(int j = 0; j < 3; j++)
             {
-                blueAlliance.teams[j] = mDatabase.getTeam(match.teams.get(j));
+                blueAlliance.teams.add(mDatabase.getTeam(match.teams.get(j)));
             }
 
             Alliance redAlliance = new Alliance();
-            redAlliance.teams = new Team[3];
             for(int j = 3; j < 6; j++)
             {
-                redAlliance.teams[j] = mDatabase.getTeam(match.teams.get(j));
+                redAlliance.teams.add(mDatabase.getTeam(match.teams.get(j)));
             }
 
             try {
@@ -156,21 +159,36 @@ public class TeamCalculations {
      * Calculate the first pick ability which is the predicted offensive score that the team can
      * contribute combined with our team.
      *
+     * fpa(X) = S_p(A)
+     *
+     * - S_p(A) predicted score of alliance A (this team and our team)
+     *
      * @return
      */
     public double firstPickAbility()
     {
-        return 0.0;
+        double fpa = 0.0;
+        Alliance alliance = new Alliance();
+        alliance.teams.add(mTeam);
+        alliance.teams.add(mDatabase.getTeam(Constants.OUR_TEAM_NUMBER));
+        AllianceCalculations ac = new AllianceCalculations(alliance);
+        fpa += ac.predictedScore();
+        return fpa;
     }
 
     /**
      * Calculate the second pick ability
      *
+     * spa(T) = [1 - dfp(T)] * [aA(T)]
+     *
      * @return
      */
     public double secondPickAbility()
     {
-        return 0.0;
+        double spa = 0.0;
+        spa += autoAbility();
+        spa *= (1 - dysfunctionalPercentage());
+        return spa;
     }
 
     /**
@@ -180,6 +198,18 @@ public class TeamCalculations {
      */
     public double thirdPickAbility()
     {
-        return 0.0;
+        double tpa = 0.0;
+        return tpa;
+    }
+
+    /**
+     * Calculate the dysfunctional percentage
+     *
+     * @return
+     */
+    public double dysfunctionalPercentage() {
+        double dysfunctionalMatches = mTeam.calc.dq.total + mTeam.calc.no_show.total + mTeam.calc.stopped_moving.total;
+        double totalMatches = mTeam.info.match_numbers.size();
+        return dysfunctionalMatches / totalMatches;
     }
 }

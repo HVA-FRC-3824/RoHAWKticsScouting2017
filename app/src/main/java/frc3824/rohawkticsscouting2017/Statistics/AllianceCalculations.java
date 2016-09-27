@@ -2,11 +2,13 @@ package frc3824.rohawkticsscouting2017.Statistics;
 
 import org.apache.commons.math3.distribution.TDistribution;
 
+import java.util.ArrayList;
+
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Alliance;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/19/16
  */
 public class AllianceCalculations {
@@ -14,16 +16,16 @@ public class AllianceCalculations {
     private final static String TAG = "AllianceCalculations";
     private Database mDatabase;
     private Alliance mAlliance;
-    private TeamCalculations[] mTeams;
+    private ArrayList<TeamCalculations> mTeams;
 
     public AllianceCalculations(Alliance a)
     {
         mAlliance = a;
         mDatabase = Database.getInstance();
-        mTeams = new TeamCalculations[3];
-        for(int i = 0; i < mTeams.length; i++)
+        mTeams = new ArrayList<>();
+        for(int i = 0; i < mAlliance.teams.size(); i++)
         {
-            mTeams[i] = new TeamCalculations(mAlliance.teams[i]);
+            mTeams.add(new TeamCalculations(mAlliance.teams.get(i)));
         }
     }
 
@@ -34,11 +36,16 @@ public class AllianceCalculations {
     */
     public double predictedScore()
     {
+        return predictedScore(false);
+    }
+
+    public double predictedScore(boolean elimination)
+    {
         double pScore = 0.0;
 
-        for(int i = 0; i < mAlliance.teams.length; i++)
+        for(int i = 0; i < mAlliance.teams.size(); i++)
         {
-            pScore += mTeams[i].autoAbility();
+            pScore += mTeams.get(i).autoAbility();
         }
 
         return pScore;
@@ -51,11 +58,16 @@ public class AllianceCalculations {
      */
     public double std_predictedScore()
     {
+        return std_predictedScore();
+    }
+
+    public double std_predictedScore(boolean elimination)
+    {
         double std_pScore = 0.0;
 
-        for(int i = 0; i < mAlliance.teams.length; i++)
+        for(int i = 0; i < mAlliance.teams.size(); i++)
         {
-            std_pScore += Math.pow(mTeams[i].std_autoAbility(), 2);
+            std_pScore += Math.pow(mTeams.get(i).std_autoAbility(), 2);
         }
 
         std_pScore = Math.sqrt(std_pScore);
@@ -76,8 +88,8 @@ public class AllianceCalculations {
             - N_1 is the size of the first sample
 
             - X_bar_2 is the mean of the second sample
-            -s_2 is the standard deviation of the second sample
-            -N_2 is the size of the second sample
+            - s_2 is the standard deviation of the second sample
+            - N_2 is the size of the second sample
 
        This t is then converted to a win probability using the cumulative distribution function
        (https://en.wikipedia.org/wiki/Cumulative_distribution_function) for a t-distribution T(t|v)
@@ -115,12 +127,12 @@ public class AllianceCalculations {
     public double sampleSize()
     {
         double average = 0.0;
-        for(int i = 0; i < mAlliance.teams.length; i++)
+        for(int i = 0; i < mAlliance.teams.size(); i++)
         {
-            average += mTeams[i].numberOfCompletedMatches();
+            average += mTeams.get(i).numberOfCompletedMatches();
         }
 
-        average /= mAlliance.teams.length;
+        average /= mAlliance.teams.size();
 
         return average;
     }
