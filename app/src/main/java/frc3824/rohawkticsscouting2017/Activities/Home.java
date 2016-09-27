@@ -1,20 +1,37 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
+import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Statistics.Aggregate;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
+import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 
 /**
@@ -37,6 +54,8 @@ public class Home extends Activity implements View.OnClickListener{
 
     private String mEventKey;
 
+    private String mServerName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +68,7 @@ public class Home extends Activity implements View.OnClickListener{
         mSharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String user_type = mSharedPreferences.getString(Constants.Settings.USER_TYPE, "");
         mEventKey = mSharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
+        mServerName = mSharedPreferences.getString(Constants.Settings.SERVER, "");
 
         mEventTextView = (TextView)findViewById(R.id.event);
         mUserTypeTextView = (TextView)findViewById(R.id.user_type);
@@ -153,6 +173,11 @@ public class Home extends Activity implements View.OnClickListener{
     {
         setupButton(R.id.schedule_button);
         setupButton(R.id.match_planning_button);
+        setupButton(R.id.drive_team_feedback_button);
+        setupButton(R.id.sync_feedback_button);
+
+        setupButton(R.id.view_team_button);
+        setupButton(R.id.view_match_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -164,6 +189,8 @@ public class Home extends Activity implements View.OnClickListener{
     private void userTypeStrategySetup()
     {
         setupButton(R.id.schedule_button);
+
+        setupButton(R.id.sync_feedback_button);
 
         setupButton(R.id.view_team_button);
         setupButton(R.id.view_match_button);
@@ -201,6 +228,8 @@ public class Home extends Activity implements View.OnClickListener{
         setupButton(R.id.scout_match_button);
         setupButton(R.id.scout_pit_button);
         setupButton(R.id.scout_super_button);
+        setupButton(R.id.drive_team_feedback_button);
+        setupButton(R.id.sync_feedback_button);
 
         setupButton(R.id.view_team_button);
         setupButton(R.id.view_match_button);
@@ -254,6 +283,14 @@ public class Home extends Activity implements View.OnClickListener{
                 intent = new Intent(this, MatchList.class);
                 intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.SUPER_SCOUTING);
                 startActivity(intent);
+                break;
+            case R.id.drive_team_feedback_button:
+                intent = new Intent(this, MatchList.class);
+                intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.DRIVE_TEAM_FEEDBACK);
+                startActivity(intent);
+                break;
+            case R.id.sync_feedback_button:
+                new SaveTask().execute(mDatabase.getTDTFs());
                 break;
             case R.id.view_team_button:
                 intent = new Intent(this, TeamList.class);
@@ -314,5 +351,118 @@ public class Home extends Activity implements View.OnClickListener{
         ImageTextButton button = (ImageTextButton) findViewById(btn);
         button.setVisibility(View.VISIBLE);
         button.setOnClickListener(this);
+    }
+
+    private class SaveTask extends AsyncTask<ArrayList, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(ArrayList... arrayLists) {
+            ArrayList<TDTF> tdtfs = arrayLists[0];
+
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothQueue queue = BluetoothQueue.getInstance();
+
+            if(bluetoothAdapter == null)
+            {
+                for(TDTF tdtf: tdtfs) {
+                    queue.add(tdtf);
+                }
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
+                return null;
+            }
+
+            if (!bluetoothAdapter.isEnabled())
+            {
+                bluetoothAdapter.enable();
+                while (!bluetoothAdapter.isEnabled());
+            }
+
+            Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+
+            BluetoothDevice server = null;
+            for(BluetoothDevice device: devices)
+            {
+                String deviceName = device.getName();
+                if(deviceName.equals(mServerName))
+                {
+                    server = device;
+                    break;
+                }
+            }
+
+            if(server == null)
+            {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
+                for(TDTF tdtf: tdtfs) {
+                    queue.add(tdtf);
+                }
+                return null;
+            }
+
+            ConnectThread connectThread = new ConnectThread(server,true);
+            connectThread.start();
+            while (!connectThread.isConnected());
+            Gson gson = new GsonBuilder().create();
+            for(TDTF tdtf: tdtfs) {
+                if (connectThread.write(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(tdtf)))) {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                    List<String> queuedString = queue.getQueueList();
+                    queue.clear();
+                    boolean queueEmpty = true;
+                    for (String s : queuedString) {
+                        if (!connectThread.write(s)) {
+                            queueEmpty = false;
+                            switch (s.charAt(0)) {
+                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TMD.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), SMD.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TDTF.class));
+                                    break;
+                            }
+                        }
+                    }
+                    if (queueEmpty && queuedString.size() > 0) {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                    }
+                } else {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    queue.add(tdtf);
+                }
+            }
+            connectThread.cancel();
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+            switch (values[0])
+            {
+                case Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH:
+                    builder.setTitle("No bluetooth on this device!!!");
+                    builder.setIcon(getDrawable(R.drawable.bluetooth_2_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED:
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND:
+                    builder.setTitle("Server not found");
+                    builder.setIcon(getDrawable(R.drawable.error_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.SUCCESS:
+                    builder.setTitle("Data transfer successful");
+                    builder.setIcon(getDrawable(R.drawable.ok_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.FAILURE:
+                    builder.setTitle("Data transfer failure (Added to Queue)");
+                    builder.setIcon(getDrawable(R.drawable.error_color));
+                    break;
+            }
+            builder.show();
+        }
     }
 }

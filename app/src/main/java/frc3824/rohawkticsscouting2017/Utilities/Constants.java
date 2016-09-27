@@ -64,6 +64,7 @@ public interface Constants {
         String NEXT_PAGE = "next_page";
         String MATCH_SCOUTING = "match_scouting";
         String SUPER_SCOUTING = "super_scouting";
+        String DRIVE_TEAM_FEEDBACK = "drive_team_feedback";
         String PIT_SCOUTING = "pit_scouting";
         String MATCH_VIEWING = "match_viewing";
         String TEAM_VIEWING = "team_viewing";
@@ -223,6 +224,7 @@ public interface Constants {
             char PIT_HEADER = 'P';
             char SUPER_HEADER = 'S';
             char CALC_HEADER = 'C';
+            char FEEDBACK_HEADER = 'F';
         }
 
         interface Device_Names
@@ -237,6 +239,15 @@ public interface Constants {
             String SERVER = "3824_Server";
             String STRATEGY = "3824_Strategy";
             String DRIVETEAM = "3824_Drive_Team";
+        }
+
+        interface Data_Transfer_Status
+        {
+            int NO_BLUETOOTH = 0;
+            int SERVER_NOT_FOUND = 1;
+            int SUCCESS = 2;
+            int QUEUE_EMPTIED = 3;
+            int FAILURE = 4;
         }
     }
 

@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author Andrew Messing
- *         Created: 8/22/16
+ * Created: 8/22/16
+ *
+ * Queue to hold data that fails to send.
  */
 public class BluetoothQueue {
 
@@ -20,6 +23,7 @@ public class BluetoothQueue {
 
     private ArrayList<TMD> mTMDs;
     private ArrayList<SMD> mSMDs;
+    private ArrayList<TDTF> mTDTFs;
 
     private static BluetoothQueue mQueue;
 
@@ -48,6 +52,8 @@ public class BluetoothQueue {
         mSMDs.add(smd);
     }
 
+    public void add(TDTF tdtf) {mTDTFs.add(tdtf);}
+
     public List<String> getQueueList()
     {
         List<String> rv = new ArrayList<>();
@@ -58,6 +64,10 @@ public class BluetoothQueue {
 
         for(SMD smd: mSMDs) {
             rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.SUPER_HEADER, mGson.toJson(smd)));
+        }
+
+        for(TDTF tdtf: mTDTFs) {
+            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, mGson.toJson(tdtf)));
         }
 
         return rv;

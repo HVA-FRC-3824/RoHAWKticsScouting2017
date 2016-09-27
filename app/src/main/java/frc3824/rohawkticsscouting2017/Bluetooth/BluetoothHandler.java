@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -89,6 +90,11 @@ public class BluetoothHandler extends Handler {
                         mDatabase.setSMD(smd);
                         dataRecieved(smd);
                         displayText("Super Data Received", Constants.Server_Log_Colors.YELLOW);
+                        break;
+                    case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                        TDTF tdtf = mGson.fromJson(message.substring(1), TDTF.class);
+                        mDatabase.setTDTF(tdtf);
+                        displayText("Feedback Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.CALC_HEADER:
                         mDatabase.setTCD(mGson.fromJson(message.substring(1), TCD.class));

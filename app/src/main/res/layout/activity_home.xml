@@ -121,13 +121,24 @@
 
         <!-- Drive Team -->
         <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/feedback_button"
+            android:id="@+id/drive_team_feedback_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
             app:text="Drive Team Feedback"
+            app:textColor="@color/white"
+            app:textSize="10sp" />
+
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+            android:id="@+id/sync_feedback_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/navy_blue"
+            android:visibility="gone"
+            app:text="Sync Feedback"
             app:textColor="@color/white"
             app:textSize="10sp" />
 

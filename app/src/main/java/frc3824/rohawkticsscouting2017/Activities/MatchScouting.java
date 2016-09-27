@@ -29,6 +29,7 @@ import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchSc
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
 import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -56,7 +57,7 @@ public class MatchScouting extends Activity {
 
     private Database mDatabase;
 
-    private String serverName;
+    private String mServerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class MatchScouting extends Activity {
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String allianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
         int allianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
-        serverName = shared_preferences.getString(Constants.Settings.SERVER, "");
+        mServerName = shared_preferences.getString(Constants.Settings.SERVER, "");
 
         mDatabase = Database.getInstance();
 
@@ -440,7 +441,7 @@ public class MatchScouting extends Activity {
         back_press();
     }
 
-    private class SaveTask extends AsyncTask<ScoutMap, String, Void> {
+    private class SaveTask extends AsyncTask<ScoutMap, Integer, Void> {
 
         @Override
         protected Void doInBackground(ScoutMap... scoutMaps) {
@@ -456,7 +457,7 @@ public class MatchScouting extends Activity {
             if(bluetoothAdapter == null)
             {
                 queue.add(tmd);
-                publishProgress("This device does not have bluetooth");
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
                 return null;
             }
 
@@ -472,7 +473,7 @@ public class MatchScouting extends Activity {
             for(BluetoothDevice device: devices)
             {
                 String deviceName = device.getName();
-                if(deviceName.equals(serverName))
+                if(deviceName.equals(mServerName))
                 {
                     server = device;
                     break;
@@ -481,7 +482,7 @@ public class MatchScouting extends Activity {
 
             if(server == null)
             {
-                publishProgress("Server not found in list of possible connections...");
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
                 queue.add(tmd);
                 return null;
             }
@@ -492,13 +493,12 @@ public class MatchScouting extends Activity {
             Gson gson = new GsonBuilder().create();
             if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(tmd))))
             {
-                publishProgress("Match data sent to server");
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
                 List<String> queuedString = queue.getQueueList();
                 queue.clear();
                 boolean queueEmpty = true;
                 for (String s: queuedString)
                 {
-
                     if(!connectThread.write(s))
                     {
                         queueEmpty = false;
@@ -510,29 +510,52 @@ public class MatchScouting extends Activity {
                             case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
                                 queue.add(gson.fromJson(s.substring(1), SMD.class));
                                 break;
+                            case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                                queue.add(gson.fromJson(s.substring(1), TDTF.class));
+                                break;
                         }
                     }
                 }
                 if(queueEmpty && queuedString.size() > 0)
                 {
-                    publishProgress("Bluetooth Queue Emptied");
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
                 }
             }
             else
             {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
                 queue.add(tmd);
             }
             connectThread.cancel();
-            connectThread = null;
 
             return null;
         }
 
         @Override
-        protected void onProgressUpdate(String... values) {
-            String text = values[0];
-            Log.d(TAG, text);
-            Toast.makeText(MatchScouting.this, text, Toast.LENGTH_SHORT).show();
+        protected void onProgressUpdate(Integer... values) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MatchScouting.this);
+            switch (values[0])
+            {
+                case Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH:
+                    builder.setTitle("No bluetooth on this device!!!");
+                    builder.setIcon(getDrawable(R.drawable.bluetooth_2_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED:
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND:
+                    builder.setTitle("Server not found");
+                    builder.setIcon(getDrawable(R.drawable.error_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.SUCCESS:
+                    builder.setTitle("Data transfer successful");
+                    builder.setIcon(getDrawable(R.drawable.ok_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.FAILURE:
+                    builder.setTitle("Data transfer failure (Added to Queue)");
+                    builder.setIcon(getDrawable(R.drawable.error_color));
+                    break;
+            }
+            builder.show();
         }
     }
 }

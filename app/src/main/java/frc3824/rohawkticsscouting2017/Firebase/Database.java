@@ -21,6 +21,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
@@ -46,6 +47,7 @@ public class Database {
     private DatabaseReference mScheduleRef;
     private DatabaseReference mPitRef;
     private DatabaseReference mSuperRef;
+    private DatabaseReference mFeedbackRef;
     private DatabaseReference mPartialMatchRef;
     private DatabaseReference mCalulatedRef;
     private DatabaseReference mInfoRef;
@@ -65,6 +67,7 @@ public class Database {
     private Map<Integer, SMD> mSMDs;
     private Map<Integer, TPD> mTPDs;
     private Map<String, TMD> mTMDs;
+    private Map<Integer, TDTF> mTDTFs;
     private Map<Integer, TID> mTIDs;
     private Map<Integer, TCD> mTCDs;
     private Map<Integer, TRD> mCurrent_TRDs;
@@ -282,6 +285,40 @@ public class Database {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, "super_match.onCancelled: ");
+            }
+        });
+        //endregion
+
+        //region Drive Team Feedback
+        mFeedbackRef = mEventRef.child("feedback");
+        mTDTFs = new HashMap<>();
+        mFeedbackRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "feedback.onChildAdded: " + dataSnapshot.getKey());
+                mTDTFs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TDTF.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "feedback.onChildChanged: " + dataSnapshot.getKey());
+                mTDTFs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TDTF.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "feedback.onChildRemoved: " + dataSnapshot.getKey());
+                mTDTFs.remove(Integer.parseInt(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "feedback.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "feedback.onChildRemoved");
             }
         });
         //endregion
@@ -616,10 +653,26 @@ public class Database {
 
     public SMD getSMD(int match_number)
     {
-        return mSMDs.get(String.format("M%d",match_number));
+        return mSMDs.get(String.format("%d",match_number));
     }
 
     public Map<Integer, SMD> getSMDs() { return  mSMDs; }
+    //endregion
+
+    //region Drive Team Feedback Data
+    public void setTDTF(TDTF tdtf)
+    {
+        mFeedbackRef.child(String.format("%d", tdtf.team_number)).setValue(tdtf);
+    }
+
+    public TDTF getTDTF(int team_number)
+    {
+        return mTDTFs.get(String.format("%d", team_number));
+    }
+
+    public ArrayList<TDTF> getTDTFs() {
+        return new ArrayList<>(mTDTFs.values());
+    }
     //endregion
 
     //region Team Info
@@ -768,6 +821,13 @@ public class Database {
             team.pit.team_number = team_number;
         }
 
+        team.drive_team_feedback = getTDTF(team_number);
+        if(team.drive_team_feedback == null)
+        {
+            team.drive_team_feedback = new TDTF();
+            team.drive_team_feedback.team_number = team_number;
+        }
+
         team.calc = getTCD(team_number);
         if(team.calc == null)
         {
@@ -827,6 +887,7 @@ public class Database {
         setTCD(team.calc);
         setTID(team.info);
         setTPD(team.pit);
+        setTDTF(team.drive_team_feedback);
         for(TMD entry: team.completed_matches.values())
         {
             setTMD(entry);

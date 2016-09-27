@@ -109,6 +109,21 @@ public class MatchList extends Activity implements View.OnClickListener{
                 case Constants.Intent_Extras.MATCH_VIEWING:
                     button.setText(String.format("Match: %d", match_number));
                     break;
+                case Constants.Intent_Extras.DRIVE_TEAM_FEEDBACK:
+                    boolean our_match = false;
+                    for(int i = 0; i < 6; i++)
+                    {
+                        if(match.teams.get(i) == Constants.OUR_TEAM_NUMBER)
+                        {
+                            our_match = true;
+                            break;
+                        }
+                    }
+                    if(!our_match)
+                    {
+                        continue;
+                    }
+                    break;
             }
             button.setOnClickListener(this);
             button.setId(match_number);
@@ -129,6 +144,9 @@ public class MatchList extends Activity implements View.OnClickListener{
                 break;
             case Constants.Intent_Extras.MATCH_VIEWING:
                 goToMatchViewing(match_number);
+                break;
+            case Constants.Intent_Extras.DRIVE_TEAM_FEEDBACK:
+                goToDriveTeamFeedback(match_number);
                 break;
             default:
                 assert false;
@@ -249,6 +267,13 @@ public class MatchList extends Activity implements View.OnClickListener{
             intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
             startActivity(intent);
         }
+    }
+
+    public void goToDriveTeamFeedback(int match_number)
+    {
+        Intent intent = new Intent(this, DriveTeamFeedback.class);
+        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+        startActivity(intent);
     }
 
     @Override

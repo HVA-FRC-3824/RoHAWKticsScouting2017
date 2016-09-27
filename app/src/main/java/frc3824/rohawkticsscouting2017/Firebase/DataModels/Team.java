@@ -18,11 +18,16 @@ public class Team {
     public int team_number;
 
     public Map<Integer, TMD> completed_matches;
-    public TPD pit;
-    public TCD calc;
     public TID info;
+    public TPD pit;
+    public TDTF drive_team_feedback;
+    public TCD calc;
+
+    // Rankings
     public TRD current_ranking;
     public TRD predicted_ranking;
+
+    // Picks
     public TPA first_pick;
     public TPA second_pick;
     public TPA third_pick;
