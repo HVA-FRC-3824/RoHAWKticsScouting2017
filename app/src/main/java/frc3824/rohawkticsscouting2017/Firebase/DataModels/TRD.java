@@ -3,10 +3,10 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/19/16
  *
- * Team Ranking Data
+ * Data for FRC rankings for a specific team
  */
 @IgnoreExtraProperties
 public class TRD {
@@ -15,9 +15,7 @@ public class TRD {
 
     public int team_number;
 
-    /*
-        Current Ranking Data
-    */
+    // Ranking Data
     public int rank;
     public int RPs;
     public int wins;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author frc3824
  * Created: 8/19/16
  *
- *
+ * Collection of Team objects that represent the teams on an alliance
  */
 public class Alliance {
 

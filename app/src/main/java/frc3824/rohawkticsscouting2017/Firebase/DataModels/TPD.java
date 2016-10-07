@@ -10,10 +10,10 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/20/16
  *
- * Team Pit Data
+ * Data collected by pit scouts
  */
 @IgnoreExtraProperties
 public class TPD {

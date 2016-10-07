@@ -6,10 +6,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.List;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/13/16
  *
- *
+ * Class to store the logistical information about a match (teams, scores)
  */
 @IgnoreExtraProperties
 public class Match {

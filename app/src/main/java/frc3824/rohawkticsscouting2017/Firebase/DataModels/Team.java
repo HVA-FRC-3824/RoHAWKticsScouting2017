@@ -5,10 +5,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.Map;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/13/16
  *
- *
+ * Class to hold all information about a specific team
  */
 @IgnoreExtraProperties
 public class Team {
@@ -17,10 +17,12 @@ public class Team {
 
     public int team_number;
 
+    // Collected data
     public Map<Integer, TMD> completed_matches;
     public TID info;
     public TPD pit;
     public TDTF drive_team_feedback;
+
     public TCD calc;
 
     // Rankings

@@ -14,7 +14,9 @@ import java.io.IOException;
 
 /**
  * @author frc3824
- *         Created: 8/15/16
+ * Created: 8/15/16
+ *
+ * Class to handle uploading/downloading to google cloud storage via firebase
  */
 public class Storage {
 
@@ -26,7 +28,6 @@ public class Storage {
     private StorageReference mImagesRef;
     private StorageReference mRobotImagesRef;
     private StorageReference mStrategyImagesRef;
-    private StorageReference mPickListRef;
 
     private String mEventKey;
 
@@ -59,13 +60,14 @@ public class Storage {
         if (eventKey == "" || mEventKey == eventKey)
             return;
 
+        mEventKey = eventKey;
         mEventRef = mRootRef.child(eventKey);
         mImagesRef = mEventRef.child("images");
         mRobotImagesRef = mImagesRef.child("robots");
         mStrategyImagesRef = mImagesRef.child("strategies");
-        mPickListRef = mEventRef.child("pick_lists");
     }
 
+    //region Robot Picture
     public UploadTask uploadRobotPicture(String filepath) {
         return uploadRobotPicture(new File(filepath));
     }
@@ -89,8 +91,9 @@ public class Storage {
 
         return mRobotImagesRef.child(String.format("%d.jpg", team_number)).getFile(file);
     }
+    //endregion
 
-
+    //region Strategy Picture
     public UploadTask uploadStrategyPicture(String filepath) {
         return uploadStrategyPicture(new File(filepath));
     }
@@ -114,15 +117,5 @@ public class Storage {
 
         return mStrategyImagesRef.child(String.format("%s.png", strategy_name)).getFile(file);
     }
-
-    public UploadTask uploadPickList(String filepath) {
-        return uploadPickList(new File(filepath));
-    }
-
-    public UploadTask uploadPickList(File file) {
-        Uri uri = Uri.fromFile(file);
-        StorageReference fileRef = mPickListRef.child(uri.getLastPathSegment());
-        return fileRef.putFile(uri);
-    }
-
+    //endregion Strategy Picture
 }

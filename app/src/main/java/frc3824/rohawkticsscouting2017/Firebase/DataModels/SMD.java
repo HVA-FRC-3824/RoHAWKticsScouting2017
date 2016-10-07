@@ -11,10 +11,10 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/13/16
  *
- * Super Match Data
+ * Class to store the data collected by the super scout during a match
  */
 public class SMD {
 
@@ -45,8 +45,7 @@ public class SMD {
 
     public SMD() {}
 
-    public SMD(ScoutMap map)
-    {
+    public SMD(ScoutMap map) {
         try {
             match_number = map.getInt(Constants.Intent_Extras.MATCH_NUMBER);
 
@@ -68,8 +67,7 @@ public class SMD {
     }
 
     @Exclude
-    public ScoutMap toMap()
-    {
+    public ScoutMap toMap() {
         ScoutMap map = new ScoutMap();
         
         map.put(Constants.Intent_Extras.MATCH_NUMBER, match_number);

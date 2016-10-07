@@ -6,10 +6,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.List;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/13/16
  *
- *
+ * Class that stores low level statistics (avg, std, min, max, total) for a data input
  */
 @IgnoreExtraProperties
 public class LowLevelStats {
@@ -31,8 +31,7 @@ public class LowLevelStats {
     }
 
     @Exclude
-    public static LowLevelStats fromInt(List<Integer> list)
-    {
+    public static LowLevelStats fromInt(List<Integer> list) {
         LowLevelStats lls = new LowLevelStats();
         if(list.size() == 0)
         {
@@ -74,8 +73,7 @@ public class LowLevelStats {
     }
 
     @Exclude
-    public static LowLevelStats fromDouble(List<Double> list)
-    {
+    public static LowLevelStats fromDouble(List<Double> list) {
         LowLevelStats lls = new LowLevelStats();
         if(list.size() == 0)
         {
@@ -118,8 +116,7 @@ public class LowLevelStats {
     }
 
     @Exclude
-    public static LowLevelStats fromBoolean(List<Boolean> list)
-    {
+    public static LowLevelStats fromBoolean(List<Boolean> list) {
         LowLevelStats lls = new LowLevelStats();
         if(list.size() == 0)
         {

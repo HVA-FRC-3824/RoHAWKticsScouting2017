@@ -33,7 +33,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
  * @author frc3824
  * Created: 8/13/16
  *
- *  The Database class handles all data and connecting with the Firebase system
+ * The Database class handles all data and connecting with the Firebase system
  */
 public class Database {
 
@@ -80,8 +80,7 @@ public class Database {
 
     private static Database mSingleton;
 
-    public static Database getInstance(String eventKey)
-    {
+    public static Database getInstance(String eventKey) {
         if(mSingleton == null)
         {
             mSingleton = new Database();
@@ -91,8 +90,7 @@ public class Database {
         return  mSingleton;
     }
 
-    public static Database getInstance()
-    {
+    public static Database getInstance() {
         if(mSingleton == null)
         {
             mSingleton = new Database();
@@ -101,8 +99,7 @@ public class Database {
         return  mSingleton;
     }
 
-    private Database()
-    {
+    private Database() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseDatabase.setPersistenceEnabled(true);
         mRootRef = mFirebaseDatabase.getReference();
@@ -145,8 +142,7 @@ public class Database {
         return mEvents;
     }
 
-    private void setEventKey(String eventKey)
-    {
+    private void setEventKey(String eventKey) {
         if(eventKey == "" || mEventKey == eventKey)
             return;
 
@@ -600,8 +596,7 @@ public class Database {
     }
 
     //region Schedule Data
-    public void setMatch(Match match)
-    {
+    public void setMatch(Match match) {
         mScheduleRef.child(String.format("%d", match.match_number)).setValue(match);
     }
 
@@ -650,13 +645,11 @@ public class Database {
     //endregion
 
     //region Super Scouting Data
-    public void setSMD(SMD smd)
-    {
+    public void setSMD(SMD smd) {
         mSuperRef.child(String.format("%d", smd.match_number)).setValue(smd);
     }
 
-    public SMD getSMD(int match_number)
-    {
+    public SMD getSMD(int match_number) {
         return mSMDs.get(String.format("%d",match_number));
     }
 
@@ -664,8 +657,7 @@ public class Database {
     //endregion
 
     //region Drive Team Feedback Data
-    public void setTDTF(TDTF tdtf)
-    {
+    public void setTDTF(TDTF tdtf) {
         mFeedbackRef.child(String.format("%d", tdtf.team_number)).setValue(tdtf);
     }
 

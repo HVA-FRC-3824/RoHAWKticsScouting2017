@@ -3,8 +3,10 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
- * @author Andrew Messing
- *         Created: 8/20/16
+ * @author frc3824
+ * Created: 8/20/16
+ *
+ * Class to hold the info for a strategy image
  */
 @IgnoreExtraProperties
 public class Strategy {

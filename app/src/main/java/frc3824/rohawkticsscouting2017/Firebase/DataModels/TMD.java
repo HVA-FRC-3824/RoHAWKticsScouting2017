@@ -10,10 +10,10 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/13/16
  *
- * Team Match Data
+ * Data collected by match scouts
  */
 @IgnoreExtraProperties
 public class TMD {

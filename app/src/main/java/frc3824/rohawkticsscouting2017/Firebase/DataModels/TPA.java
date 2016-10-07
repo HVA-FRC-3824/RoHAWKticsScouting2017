@@ -3,10 +3,10 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/23/16
  *
- * Team Pick Ability
+ * Class to hold information for picks for a specific team
  */
 @IgnoreExtraProperties
 public class TPA {
