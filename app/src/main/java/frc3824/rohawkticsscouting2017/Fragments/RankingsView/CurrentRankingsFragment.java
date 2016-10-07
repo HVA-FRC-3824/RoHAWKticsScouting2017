@@ -16,10 +16,10 @@ import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/19/16
  *
- *
+ * Fragment that displays the current rankings
  */
 public class CurrentRankingsFragment extends Fragment {
 
@@ -27,8 +27,7 @@ public class CurrentRankingsFragment extends Fragment {
 
     public CurrentRankingsFragment() {}
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_current_rankings, container, false);
 
         Database database = Database.getInstance();

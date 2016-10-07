@@ -134,7 +134,7 @@ public class TeamCalculations {
     }
 
     /**
-     * Predict the first tie breaker for rankings. Use the actual value for matches that are complete
+     * Predict the first tie breaker for rankings. Use the actual value for matches that are completed
      * and predict the value for ones that are not.
      *
      * @return
@@ -145,7 +145,7 @@ public class TeamCalculations {
     }
 
     /**
-     * Predict the second tie breaker for rankings. Use the actual value for matches that are complete
+     * Predict the second tie breaker for rankings. Use the actual value for matches that are completed
      * and predict the values for ones that are not.
      *
      * @return

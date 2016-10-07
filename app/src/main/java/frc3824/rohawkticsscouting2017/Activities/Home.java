@@ -38,8 +38,8 @@ import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
  * @author frc3824
  * Created:
  *
- * Home page for the app that allows the user to reach all other areas of the map. Display specific
- * button based on the usertype.
+ * Home page for the app that allows the user to reach all other areas of the app. Display specific
+ * buttons based on the user's type (Match Scout, Pit Scout, etc).
  */
 public class Home extends Activity implements View.OnClickListener{
 
@@ -111,8 +111,7 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     //region User Type Setups
-    private void userTypeMatchScoutSetup()
-    {
+    private void userTypeMatchScoutSetup() {
         setupButton(R.id.schedule_button);
         setupButton(R.id.scout_match_button);
 
@@ -141,8 +140,7 @@ public class Home extends Activity implements View.OnClickListener{
         mUserSubTypeTextView.setVisibility(View.VISIBLE);
     }
 
-    private void userTypePitScoutSetup()
-    {
+    private void userTypePitScoutSetup() {
         setupButton(R.id.schedule_button);
         setupButton(R.id.scout_pit_button);
 
@@ -157,8 +155,7 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setVisibility(View.VISIBLE);
     }
 
-    private void userTypeSuperScoutSetup()
-    {
+    private void userTypeSuperScoutSetup() {
         setupButton(R.id.schedule_button);
         setupButton(R.id.scout_super_button);
 
@@ -169,8 +166,7 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setVisibility(View.VISIBLE);
     }
 
-    private void userTypeDriveTeamSetup()
-    {
+    private void userTypeDriveTeamSetup() {
         setupButton(R.id.schedule_button);
         setupButton(R.id.match_planning_button);
         setupButton(R.id.drive_team_feedback_button);
@@ -186,8 +182,7 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setVisibility(View.VISIBLE);
     }
 
-    private void userTypeStrategySetup()
-    {
+    private void userTypeStrategySetup() {
         setupButton(R.id.schedule_button);
 
         setupButton(R.id.sync_feedback_button);
@@ -210,8 +205,7 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setVisibility(View.VISIBLE);
     }
 
-    private void userTypeServerSetup()
-    {
+    private void userTypeServerSetup() {
         setupButton(R.id.schedule_button);
         setupButton(R.id.server_button);
 
@@ -222,8 +216,7 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setVisibility(View.VISIBLE);
     }
 
-    private void userTypeAdminSetup()
-    {
+    private void userTypeAdminSetup() {
         setupButton(R.id.schedule_button);
         setupButton(R.id.scout_match_button);
         setupButton(R.id.scout_pit_button);
@@ -245,7 +238,7 @@ public class Home extends Activity implements View.OnClickListener{
         setupButton(R.id.cloud_storage_button);
 
         setupButton(R.id.aggregate_button);
-
+        setupButton(R.id.team_list_builder_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -336,6 +329,10 @@ public class Home extends Activity implements View.OnClickListener{
                     Aggregate.aggregateForTeam(team_number);
                 }
                 Aggregate.aggregateForSuper();
+                break;
+            case R.id.team_list_builder_button:
+                intent = new Intent(this, TeamListBuilder.class);
+                startActivity(intent);
                 break;
             default:
                 assert false;
