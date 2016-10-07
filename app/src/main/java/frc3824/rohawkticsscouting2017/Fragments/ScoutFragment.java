@@ -1,14 +1,15 @@
-package frc3824.rohawkticsscouting2017.Utilities;
+package frc3824.rohawkticsscouting2017.Fragments;
 
 import android.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Views.SavableView;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/11/16
  *
  * Abstract base class for each of the fragments that need to save
@@ -17,16 +18,17 @@ public abstract class ScoutFragment extends Fragment {
 
     private final static String TAG = "ScoutFragment";
 
-    // protected means that it can be accessed by its children class
-    // a private variable cannot
+    /*
+        Protected means that it can be accessed by its children class
+        a private variable cannot
+     */
     protected ScoutMap mValueMap;
 
     public ScoutFragment() {
         mValueMap = new ScoutMap();
     }
 
-    public void setValueMap(ScoutMap map)
-    {
+    public void setValueMap(ScoutMap map) {
         mValueMap = map;
     }
 
@@ -37,13 +39,11 @@ public abstract class ScoutFragment extends Fragment {
      * @param map the ScoutMap to write all the values to
      * @return any error messages
      */
-    public String writeContentsToMap(ScoutMap map)
-    {
+    public String writeContentsToMap(ScoutMap map) {
         // Get the ViewGroup holding all of the widgets
         ViewGroup vg = (ViewGroup) getView();
 
-        if(vg == null)
-        {
+        if(vg == null) {
             Log.d(TAG, "Null View");
             // If the view has been destroyed, state should already be saved to the parent activity
             return "";
@@ -51,15 +51,11 @@ public abstract class ScoutFragment extends Fragment {
 
         String error = "";
         int childCount = vg.getChildCount();
-        for(int i = 0; i < childCount; i++)
-        {
+        for(int i = 0; i < childCount; i++) {
             View view = vg.getChildAt(i);
-            if(view instanceof SavableView)
-            {
+            if(view instanceof SavableView) {
                 error += ((SavableView)view).writeToMap(map);
-            }
-            else if(view instanceof ViewGroup)
-            {
+            } else if(view instanceof ViewGroup) {
                 error += writeContentsToMap(map, (ViewGroup)view);
             }
         }
@@ -74,19 +70,14 @@ public abstract class ScoutFragment extends Fragment {
      * @param vg the viewGroup to search through
      * @return any error messages
      */
-    protected String writeContentsToMap(ScoutMap map, ViewGroup vg)
-    {
+    protected String writeContentsToMap(ScoutMap map, ViewGroup vg) {
         String error = "";
         int childCount = vg.getChildCount();
-        for(int i = 0; i < childCount; i++)
-        {
+        for(int i = 0; i < childCount; i++) {
             View view = vg.getChildAt(i);
-            if(view instanceof SavableView)
-            {
+            if(view instanceof SavableView) {
                 error += ((SavableView)view).writeToMap(map);
-            }
-            else if(view instanceof ViewGroup)
-            {
+            } else if(view instanceof ViewGroup) {
                 error += writeContentsToMap(map, (ViewGroup)view);
             }
         }
@@ -99,12 +90,10 @@ public abstract class ScoutFragment extends Fragment {
      *
      * @param map the map in which the values are retrieved from
      */
-    public String restoreContentsFromMap(ScoutMap map)
-    {
+    public String restoreContentsFromMap(ScoutMap map) {
         //Get the ViewGroup holding all of the widgets
         ViewGroup vg = (ViewGroup) getView();
-        if(vg == null)
-        {
+        if(vg == null) {
             Log.d(TAG, "Null view");
             // If the view has been destroyed, state should already be saved to parent activity
             map.putAll(mValueMap);
@@ -113,15 +102,11 @@ public abstract class ScoutFragment extends Fragment {
 
         String error = "";
         int childCount = vg.getChildCount();
-        for(int i = 0; i < childCount; i++)
-        {
+        for(int i = 0; i < childCount; i++) {
             View view = vg.getChildAt(i);
-            if(view instanceof SavableView)
-            {
+            if(view instanceof SavableView) {
                 error += ((SavableView)view).restoreFromMap(map);
-            }
-            else if(view instanceof ViewGroup)
-            {
+            } else if(view instanceof ViewGroup) {
                 error += restoreContentsFromMap(map, (ViewGroup)view);
             }
         }
@@ -135,19 +120,14 @@ public abstract class ScoutFragment extends Fragment {
      * @param map the map in which the values are retrieved from
      * @param vg the ViewGroup to search through
      */
-    protected String restoreContentsFromMap(ScoutMap map, ViewGroup vg)
-    {
+    protected String restoreContentsFromMap(ScoutMap map, ViewGroup vg) {
         String error = "";
         int childCount = vg.getChildCount();
-        for(int i = 0; i < childCount; i++)
-        {
+        for(int i = 0; i < childCount; i++) {
             View view = vg.getChildAt(i);
-            if(view instanceof SavableView)
-            {
+            if(view instanceof SavableView) {
                 error += ((SavableView)view).restoreFromMap(map);
-            }
-            else if(view instanceof ViewGroup)
-            {
+            } else if(view instanceof ViewGroup) {
                 error += restoreContentsFromMap(map, (ViewGroup)view);
             }
         }
@@ -156,8 +136,7 @@ public abstract class ScoutFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView()
-    {
+    public void onDestroyView() {
         mValueMap.clear();
         writeContentsToMap(mValueMap);
         super.onDestroyView();

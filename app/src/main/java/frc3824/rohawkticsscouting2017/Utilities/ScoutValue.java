@@ -1,8 +1,10 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
 /**
- * @author Andrew Messing
- *         Created: 8/11/16
+ * @author frc3824
+ * Created: 8/11/16
+ *
+ * Variable wrapper that knows what type it is
  */
 public class ScoutValue {
 
@@ -10,8 +12,7 @@ public class ScoutValue {
 
     public enum Type {INTEGER, DOUBLE, STRING, BOOLEAN, OBJECT}
 
-    public class TypeException extends Exception
-    {
+    public class TypeException extends Exception {
         public TypeException(String message)
         {
             super(message);
@@ -25,38 +26,32 @@ public class ScoutValue {
     private boolean mValue_boolean;
     private Object mValue_object;
 
-    public ScoutValue(int value)
-    {
+    public ScoutValue(int value) {
         mType = Type.INTEGER;
         mValue_int = value;
     }
 
-    public ScoutValue(float value)
-    {
+    public ScoutValue(float value) {
         mType = Type.DOUBLE;
         mValue_double = value;
     }
 
-    public ScoutValue(double value)
-    {
+    public ScoutValue(double value) {
         mType = Type.DOUBLE;
         mValue_double = value;
     }
 
-    public ScoutValue(String value)
-    {
+    public ScoutValue(String value) {
         mType = Type.STRING;
         mValue_string = value;
     }
 
-    public ScoutValue(boolean value)
-    {
+    public ScoutValue(boolean value) {
         mType = Type.BOOLEAN;
         mValue_boolean = value;
     }
 
-    public ScoutValue(Object value)
-    {
+    public ScoutValue(Object value) {
         mType = Type.OBJECT;
         mValue_object = value;
     }
@@ -110,8 +105,7 @@ public class ScoutValue {
         throw new TypeException(String.format("This ScoutValue is a %s not a object",enumToString(mType)));
     }
 
-    private String enumToString(Type type)
-    {
+    private String enumToString(Type type) {
         switch (type)
         {
             case INTEGER:

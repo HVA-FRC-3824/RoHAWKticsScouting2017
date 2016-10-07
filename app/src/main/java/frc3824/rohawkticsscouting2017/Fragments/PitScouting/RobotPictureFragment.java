@@ -28,7 +28,7 @@ import java.util.Date;
 
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
-import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
+import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;

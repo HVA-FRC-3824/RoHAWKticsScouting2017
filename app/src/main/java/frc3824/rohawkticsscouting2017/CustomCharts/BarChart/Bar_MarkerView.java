@@ -14,8 +14,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 
 /**
- * @author Andrew Messing
- *         Created: 9/3/16
+ * @author frc3824
+ * Created: 9/3/16
+ *
+ *
  */
 public class Bar_MarkerView extends MarkerView{
 

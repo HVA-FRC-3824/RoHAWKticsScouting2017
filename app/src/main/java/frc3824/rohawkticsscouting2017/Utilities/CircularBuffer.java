@@ -119,8 +119,7 @@ public class CircularBuffer {
         }
     }
 
-    public String toString()
-    {
+    public String toString() {
         String output = "";
         for(int i = 0; i < size; i++)
         {

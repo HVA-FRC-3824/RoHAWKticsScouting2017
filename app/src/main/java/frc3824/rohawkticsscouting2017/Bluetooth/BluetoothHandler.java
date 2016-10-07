@@ -15,7 +15,7 @@ import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/21/16
  *
  *
@@ -27,8 +27,7 @@ public class BluetoothHandler extends Handler {
     private Gson mGson;
     private Database mDatabase;
 
-    public BluetoothHandler()
-    {
+    public BluetoothHandler() {
         mGson = new GsonBuilder().create();
         mDatabase = Database.getInstance();
     }

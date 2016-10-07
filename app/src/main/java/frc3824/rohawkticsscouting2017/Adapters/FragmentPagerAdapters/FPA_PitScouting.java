@@ -13,7 +13,7 @@ import frc3824.rohawkticsscouting2017.Fragments.PitScouting.PitNotesFragment;
 import frc3824.rohawkticsscouting2017.Fragments.PitScouting.DimensionsFragment;
 import frc3824.rohawkticsscouting2017.Fragments.PitScouting.MiscellaneousFragment;
 import frc3824.rohawkticsscouting2017.Fragments.PitScouting.RobotPictureFragment;
-import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
+import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**

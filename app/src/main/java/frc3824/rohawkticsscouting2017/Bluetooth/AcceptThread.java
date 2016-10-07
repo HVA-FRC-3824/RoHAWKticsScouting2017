@@ -12,7 +12,7 @@ import java.util.UUID;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/21/16
  *
  * This thread runs while listening for incoming connections. It behaves
@@ -30,8 +30,7 @@ public class AcceptThread extends Thread {
     private boolean mRunning;
     private ConnectionStatusThread mConnectionStatusThread;
 
-    public AcceptThread(BluetoothAdapter adapter, BluetoothHandler handler, boolean secure)
-    {
+    public AcceptThread(BluetoothAdapter adapter, BluetoothHandler handler, boolean secure) {
         BluetoothServerSocket tmp = null;
         mSocketType = secure ? "Secure" : "Insecure";
         mHandler = handler;
@@ -41,18 +40,13 @@ public class AcceptThread extends Thread {
 
         // Create a new listener server socket
         try {
-            if(secure)
-            {
-                if(MY_UUID == null)
-                {
+            if(secure) {
+                if(MY_UUID == null) {
                     MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_SECURE);
                 }
                 tmp = adapter.listenUsingRfcommWithServiceRecord(Constants.Bluetooth.NAME_SECURE, MY_UUID);
-            }
-            else
-            {
-                if(MY_UUID == null)
-                {
+            } else {
+                if(MY_UUID == null) {
                     MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_INSECURE);
                 }
                 tmp = adapter.listenUsingRfcommWithServiceRecord(Constants.Bluetooth.NAME_INSECURE, MY_UUID);
@@ -64,8 +58,7 @@ public class AcceptThread extends Thread {
         mServer = tmp;
     }
 
-    public void run()
-    {
+    public void run() {
         Log.d(TAG, "BEGIN mAcceptThread" + this);
         setName("AcceptThread" + mSocketType);
 
@@ -73,8 +66,7 @@ public class AcceptThread extends Thread {
 
         mRunning = true;
         // Listen to the server socket and accept new connections
-        while(mRunning)
-        {
+        while(mRunning) {
             try {
                 socket = mServer.accept();
             } catch (IOException e) {
@@ -82,8 +74,7 @@ public class AcceptThread extends Thread {
             }
 
             // If connection was accepted
-            if(socket != null)
-            {
+            if(socket != null) {
                 Message message = new Message();
                 message.obj = socket.getRemoteDevice().getName();
                 message.what = Constants.Bluetooth.Message_Type.NEW_CONNECTION;
@@ -96,8 +87,7 @@ public class AcceptThread extends Thread {
         }
     }
 
-    public void cancel()
-    {
+    public void cancel() {
         mRunning = false;
         mConnectionStatusThread.cancel();
 

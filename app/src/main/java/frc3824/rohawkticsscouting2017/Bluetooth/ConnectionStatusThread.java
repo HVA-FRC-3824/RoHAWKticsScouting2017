@@ -8,7 +8,7 @@ import java.util.Stack;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/22/16
  *
  * This thread gets all the ConnectedThreads from the server and checks to make sure they
@@ -23,24 +23,19 @@ public class ConnectionStatusThread extends Thread {
     private boolean mRunning;
     private BluetoothHandler mHandler;
 
-    public ConnectionStatusThread(BluetoothHandler handler)
-    {
+    public ConnectionStatusThread(BluetoothHandler handler) {
         mConnections = new ArrayList<>();
         mToAdd = new Stack<>();
         mHandler = handler;
     }
 
-    public void run()
-    {
+    public void run() {
         mRunning = true;
-        while (mRunning)
-        {
+        while (mRunning) {
             // Remove any disconnected connection threads
-            for (int i = 0; i < mConnections.size(); i++)
-            {
+            for (int i = 0; i < mConnections.size(); i++) {
                 ConnectedThread ct = mConnections.get(i);
-                if(!ct.isConnected())
-                {
+                if(!ct.isConnected()) {
                     Message message = new Message();
                     message.obj = ct.getRemoveDeviceName();
                     message.what = Constants.Bluetooth.Message_Type.CONNECTION_LOST;
@@ -51,27 +46,22 @@ public class ConnectionStatusThread extends Thread {
                 }
             }
 
-            while (mToAdd.size() > 0)
-            {
+            while (mToAdd.size() > 0) {
                 mConnections.add(mToAdd.pop());
             }
         }
     }
 
-    public void addCT(ConnectedThread ct)
-    {
+    public void addCT(ConnectedThread ct) {
         mToAdd.add(ct);
     }
 
-    public void cancel()
-    {
+    public void cancel() {
         mRunning = false;
-        for(ConnectedThread ct: mConnections)
-        {
+        for(ConnectedThread ct: mConnections) {
             ct.cancel();
         }
-        for (ConnectedThread ct: mToAdd)
-        {
+        for (ConnectedThread ct: mToAdd) {
             ct.cancel();
         }
     }

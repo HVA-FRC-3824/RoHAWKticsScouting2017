@@ -11,7 +11,7 @@ import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Fragments.SuperScouting.QualitativeFragment;
 import frc3824.rohawkticsscouting2017.Fragments.SuperScouting.SuperNotesFragment;
-import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
+import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**

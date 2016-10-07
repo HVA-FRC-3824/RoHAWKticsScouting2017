@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import frc3824.rohawkticsscouting2017.R;
-import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
+import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 
 /**

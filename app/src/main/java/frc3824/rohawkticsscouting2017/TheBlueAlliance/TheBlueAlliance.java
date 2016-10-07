@@ -17,17 +17,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Event;
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Match;
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Ranking;
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models.TBA_Team;
+import frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel.TBA_Event;
+import frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel.TBA_Match;
+import frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel.TBA_Ranking;
+import frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel.TBA_Team;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/14/16
  *
- * Singleton based class used to collect data from TheBlueAlliance
+ * Singleton based class used to collect data from The Blue Alliance
  */
 public class TheBlueAlliance {
 
@@ -37,8 +37,7 @@ public class TheBlueAlliance {
 
     private static TheBlueAlliance mSingleton;
 
-    public static TheBlueAlliance getInstance()
-    {
+    public static TheBlueAlliance getInstance() {
         if(mSingleton == null)
         {
             mSingleton = new TheBlueAlliance();

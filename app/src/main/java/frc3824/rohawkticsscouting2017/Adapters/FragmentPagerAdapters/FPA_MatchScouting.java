@@ -14,7 +14,7 @@ import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.EndgameFragment;
 import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.FoulsFragment;
 import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.PostMatchFragment;
 import frc3824.rohawkticsscouting2017.Fragments.MatchScouting.TeleopFragment;
-import frc3824.rohawkticsscouting2017.Utilities.ScoutFragment;
+import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**

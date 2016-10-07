@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Andrew Messing
- *         Created: 8/11/16
+ * @author frc3824
+ * Created: 8/11/16
+ *
+ * Map wrapper that holds ScoutValues
  */
 public class ScoutMap {
 

@@ -12,7 +12,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/22/16
  *
  * Queue to hold data that fails to send.
@@ -27,19 +27,17 @@ public class BluetoothQueue {
 
     private static BluetoothQueue mQueue;
 
-    public static BluetoothQueue getInstance()
-    {
-        if(mQueue == null)
-        {
+    public static BluetoothQueue getInstance() {
+        if(mQueue == null) {
             mQueue = new BluetoothQueue();
         }
         return mQueue;
     }
 
-    private BluetoothQueue()
-    {
+    private BluetoothQueue() {
         mTMDs = new ArrayList<>();
         mSMDs = new ArrayList<>();
+        mTDTFs = new ArrayList<>();
     }
 
     public void add(TMD tmd)
@@ -52,10 +50,11 @@ public class BluetoothQueue {
         mSMDs.add(smd);
     }
 
-    public void add(TDTF tdtf) {mTDTFs.add(tdtf);}
+    public void add(TDTF tdtf) {
+        mTDTFs.add(tdtf);
+    }
 
-    public List<String> getQueueList()
-    {
+    public List<String> getQueueList() {
         List<String> rv = new ArrayList<>();
         Gson mGson = new GsonBuilder().create();
         for(TMD tmd: mTMDs) {
@@ -73,9 +72,9 @@ public class BluetoothQueue {
         return rv;
     }
 
-    public void clear()
-    {
+    public void clear() {
         mTMDs.clear();
         mSMDs.clear();
+        mTDTFs.clear();
     }
 }

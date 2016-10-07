@@ -1,8 +1,10 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
 /**
- * @author Andrew Messing
- *         Created: 8/10/16
+ * @author frc3824
+ * Created: 8/10/16
+ *
+ * Interface holding constants
  */
 public interface Constants {
 
@@ -17,7 +19,6 @@ public interface Constants {
     String VERSION = "2.0.1";
     int OUR_TEAM_NUMBER = 3824;
 
-    // Settings
     interface Settings {
         String EVENT_KEY = "event_key";
         String USER_TYPE = "user_type";
@@ -27,7 +28,6 @@ public interface Constants {
         String SERVER = "server";
     }
 
-    //User Types
     interface User_Types {
         String MATCH_SCOUT = "Match Scout";
         String PIT_SCOUT = "Pit Scout";
@@ -38,13 +38,11 @@ public interface Constants {
         String ADMIN = "Admin";
     }
 
-    //Alliance Colors
     interface Alliance_Colors {
         String BLUE = "Blue";
         String RED = "Red";
     }
 
-    //Match Indices
     interface Match_Indices {
         int BLUE1 = 0;
         int BLUE2 = 1;
@@ -57,7 +55,6 @@ public interface Constants {
         int RED_ALLIANCE = 1;
     }
 
-    // Intent Extras
     interface Intent_Extras {
         String TEAM_NUMBER = "team_number";
         String MATCH_NUMBER = "match_number";
@@ -81,8 +78,7 @@ public interface Constants {
         String TBA_Header_NAME = "X-TBA-App-Id";
         String TBA_Header_VALUE = "frc3824:scouting-system:" + VERSION;
 
-        interface Ranking_Indices
-        {
+        interface Ranking_Indices {
             int RANK = 0;
             int TEAM_NUMBER = 1;
             int RPs = 2;
@@ -93,36 +89,29 @@ public interface Constants {
             int RECORD = 7;
             int PLAYED = 8;
         }
-
     }
 
-    interface Match_Scouting
-    {
-        interface Autonomous
-        {
+    interface Match_Scouting {
+        interface Autonomous {
             // GAME SPECIFIC
         }
 
-        interface Teleop
-        {
+        interface Teleop {
             // GAME SPECIFIC
         }
 
-        interface Endgame
-        {
+        interface Endgame {
             // GAME SPECIFIC
         }
 
-        interface Fouls
-        {
+        interface Fouls {
             String FOUL = "foul_standard";
             String TECH_FOUL = "foul_tech";
             String YELLOW_CARD = "foul_yellow_card";
             String RED_CARD = "foul_red_card";
         }
 
-        interface PostMatch
-        {
+        interface PostMatch {
             String DQ = "post_dq";
             String STOPPED_MOVING = "post_stopped";
             String NO_SHOW = "post_no_show";
@@ -130,23 +119,20 @@ public interface Constants {
         }
     }
 
-    interface Pit_Scouting
-    {
+    interface Pit_Scouting {
         String PIT_SCOUTED = "pit_scouted";
 
         String ROBOT_PICTURE_FILEPATH = "robot_picture_filepath";
         String ROBOT_PICTURE_URL = "robot_picture_url";
 
-        interface Dimensions
-        {
+        interface Dimensions {
             String WIDTH = "width";
             String LENGTH = "length";
             String HEIGHT = "height";
             String WEIGHT = "weight";
         }
 
-        interface Miscellaneous
-        {
+        interface Miscellaneous {
             String PROGRAMMING_LANGUAGE = "programming_language";
 
             // GAME SPECIFIC
@@ -155,13 +141,11 @@ public interface Constants {
         String NOTES = "pit_notes";
     }
 
-    interface Super_Scouting
-    {
+    interface Super_Scouting {
         // GAME SPECIFIC
 
 
-        interface Qualitative
-        {
+        interface Qualitative {
             String BLUE_SPEED = "blue_speed";
             String RED_SPEED = "red_speed";
 
@@ -176,22 +160,18 @@ public interface Constants {
         }
 
         String NOTES = "super_notes";
-
     }
 
-    interface Team
-    {
+    interface Team {
         String NICKNAME = "nickname";
     }
 
-    interface Cloud
-    {
+    interface Cloud {
         int ROBOT_PICTURE = 0;
         int STRATEGY = 1;
     }
 
-    interface Bluetooth
-    {
+    interface Bluetooth {
         String NAME_SECURE = "SyncSecure";
         String UUID_SECURE = "fa87c0d0-afac-11de-8a39-0800200c9a66";
 
@@ -251,8 +231,7 @@ public interface Constants {
         }
     }
 
-    interface Server_Log_Colors
-    {
+    interface Server_Log_Colors {
         String RED = "red";
         String BLUE = "blue";
         String BLACK = "black";
@@ -261,10 +240,8 @@ public interface Constants {
         String WHITE = "white";
     }
 
-    interface Event_View
-    {
-        interface Main_Dropdown_Options
-        {
+    interface Event_View {
+        interface Main_Dropdown_Options {
             String FOULS = "Fouls";
             String POST_MATCH = "Post Match";
 
@@ -273,8 +250,7 @@ public interface Constants {
             String[] OPTIONS = {FOULS, POST_MATCH};
         }
 
-        interface Foul_Secondary_Options
-        {
+        interface Foul_Secondary_Options {
             String STANDARD_FOULS = "Standard Fouls";
             String TECH_FOULS = "Tech Fouls";
             String YELLOW_CARDS = "Yellow Cards";
@@ -283,8 +259,7 @@ public interface Constants {
             String[] OPTIONS = {STANDARD_FOULS, TECH_FOULS, YELLOW_CARDS, RED_CARDS};
         }
 
-        interface Post_Match_Secondary_Options
-        {
+        interface Post_Match_Secondary_Options {
             String DQ = "DQ";
             String NO_SHOW = "No Show";
             String STOPPED_MOVING = "Stopped Moving";
@@ -294,5 +269,4 @@ public interface Constants {
 
         // GAME SPECIFIC
     }
-
 }

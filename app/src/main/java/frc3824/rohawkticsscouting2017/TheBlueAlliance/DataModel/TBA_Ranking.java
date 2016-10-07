@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models;
+package frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel;
 
 import android.util.Log;
 
@@ -8,8 +8,10 @@ import org.json.JSONException;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
- *         Created: 8/22/16
+ * @author frc3824
+ * Created: 8/22/16
+ *
+ * Data Model to hold ranking data from The Blue Alliance
  */
 public class TBA_Ranking {
 

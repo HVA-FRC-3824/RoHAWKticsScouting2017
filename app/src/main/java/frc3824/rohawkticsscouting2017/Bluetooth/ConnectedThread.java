@@ -14,7 +14,7 @@ import java.util.Arrays;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/21/16
  *
  * This thread runs during a connection with a remote device.
@@ -66,15 +66,12 @@ public class ConnectedThread extends Thread {
                     byte header;
                     int totalSize, remainingSize = -1;
 
-                    while (running)
-                    {
-                        if (waitingForHeader)
-                        {
+                    while (running) {
+                        if (waitingForHeader) {
                             header = (byte) mInputStream.read();
                             headerBytes[headerIndex++] = header;
 
-                            if(headerIndex == 22)
-                            {
+                            if(headerIndex == 22) {
                                 if ((headerBytes[0] == Constants.Bluetooth.HEADER_MSB) && (headerBytes[1] == Constants.Bluetooth.HEADER_LSB)) {
                                     Log.v(TAG, "Header Received.  Now obtaining length");
                                     byte[] dataSizeBuffer = Arrays.copyOfRange(headerBytes, 2, 6);
@@ -142,11 +139,9 @@ public class ConnectedThread extends Thread {
      */
     public boolean write(byte[] buffer) {
         String tempBuffer = new String(buffer);
-        if(buffer.length > 30)
-        {
+        if(buffer.length > 30) {
             Log.d(TAG, String.format("Sending: %s ... %s",tempBuffer.substring(0,15),tempBuffer.substring(tempBuffer.length()-15)));
-        }
-        else {
+        } else {
             Log.d(TAG, String.format("Sending: %s",tempBuffer));
         }
         mState = Constants.Bluetooth.SENDING;
@@ -190,10 +185,7 @@ public class ConnectedThread extends Thread {
                     }
                 }
             }
-
-
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e(TAG, ex.toString());
             cancel();
         }
@@ -217,7 +209,9 @@ public class ConnectedThread extends Thread {
         }
     }
 
-    public String getRemoveDeviceName() { return mSocket.getRemoteDevice().getName(); }
+    public String getRemoveDeviceName() {
+        return mSocket.getRemoteDevice().getName();
+    }
 
     public boolean isConnected() {
         return mSocket.isConnected();

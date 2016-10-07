@@ -11,10 +11,10 @@ import java.util.UUID;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/21/16
  *
- *
+ * Thread running during the connection process
  */
 public class ConnectThread extends Thread {
 
@@ -26,27 +26,22 @@ public class ConnectThread extends Thread {
     private UUID MY_UUID;
     private ConnectedThread mConnectedThread;
 
-    public ConnectThread(BluetoothDevice device, boolean secure)
-    {
+    public ConnectThread(BluetoothDevice device, boolean secure) {
         mDevice = device;
         mSocket = null;
         mSocketType = secure ? "Secure" : "Insecure";
         BluetoothSocket tmp = null;
         mConnectedThread = null;
 
-
-        // Get a BluetoothSocket for a connection with the
-        // given BluetoothDevice
+        // Get a BluetoothSocket for a connection with the given BluetoothDevice
         try {
             if (secure) {
-                if(MY_UUID == null)
-                {
+                if(MY_UUID == null) {
                     MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_SECURE);
                 }
                 tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
             } else {
-                if(MY_UUID == null)
-                {
+                if(MY_UUID == null) {
                     MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_INSECURE);
                 }
                 tmp = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
@@ -63,8 +58,7 @@ public class ConnectThread extends Thread {
 
         // Make a connection to the BluetoothSocket
         try {
-            // This is a blocking call and will only return on a
-            // successful connection or an exception
+            // This is a blocking call and will only return on a successful connection or an exception
             mSocket.connect();
         } catch (IOException e) {
             Log.e(TAG,e.getMessage());
@@ -98,10 +92,8 @@ public class ConnectThread extends Thread {
         mConnectedThread = null;
     }
 
-    public boolean write(String message)
-    {
-        if(mConnectedThread != null)
-        {
+    public boolean write(String message) {
+        if(mConnectedThread != null) {
             return mConnectedThread.write(message.getBytes());
         }
         return false;

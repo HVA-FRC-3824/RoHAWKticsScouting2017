@@ -5,8 +5,10 @@ import android.annotation.SuppressLint;
 import com.github.mikephil.charting.data.BarEntry;
 
 /**
- * @author Andrew Messing
- *         Created: 9/3/16
+ * @author frc3824
+ * Created: 9/3/16
+ *
+ *
  */
 @SuppressLint("ParcelCreator")
 public class BarEntryWithTeamNumber extends BarEntry {

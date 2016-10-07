@@ -1,8 +1,10 @@
-package frc3824.rohawkticsscouting2017.TheBlueAlliance.TBA_models;
+package frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel;
 
 /**
- * @author Andrew Messing
- *         Created: 8/14/16
+ * @author frc3824
+ * Created: 8/14/16
+ *
+ * Data Model to hold event data from The Blue Alliance
  */
 public class TBA_Event {
 
@@ -32,8 +34,7 @@ public class TBA_Event {
         public String[] picks;
     }
 
-    public static class Webcast
-    {
+    public static class Webcast {
         public String type;
         public String channel;
         public String file;
