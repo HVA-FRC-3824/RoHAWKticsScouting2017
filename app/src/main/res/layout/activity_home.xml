@@ -79,6 +79,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
+            app:src="@drawable/calendar_color"
             app:text="Match Schedule"
             app:textColor="@color/white"
             app:textSize="10sp" />
@@ -149,6 +150,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
+            app:src="@drawable/basketball_field_black"
             app:text="Match Planning"
             app:textColor="@color/white"
             app:textSize="10sp" />
@@ -171,6 +173,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
+            app:src="@drawable/robot_2_color"
             app:text="View Team"
             app:textColor="@color/white"
             app:textSize="10sp" />
@@ -182,6 +185,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
+            app:src="@drawable/numbered_list_color"
             app:text="View Rankings"
             app:textColor="@color/white"
             app:textSize="10sp" />
@@ -216,6 +220,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
+            app:src="@drawable/bulleted_list_color"
             app:text="View Pick List"
             app:textColor="@color/white"
             app:textSize="10sp" />
@@ -227,6 +232,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
+            app:src="@drawable/server_color"
             app:text="Server"
             app:textColor="@color/white"
             app:textSize="10sp" />
@@ -277,5 +283,33 @@
             app:textColor="@color/white"
             app:textSize="10sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Status"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/wifi_black"
+                android:id="@+id/wifi_status"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bluetooth_black"
+                android:id="@+id/bluetooth_status"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/usb_off_color"
+                android:id="@+id/usb_status"/>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
