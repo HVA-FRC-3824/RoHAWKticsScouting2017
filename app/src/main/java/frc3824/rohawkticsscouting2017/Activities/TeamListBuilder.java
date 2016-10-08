@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_TeamListBuilder;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_TeamListBuilderDialog;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -32,8 +34,7 @@ public class TeamListBuilder extends Activity implements View.OnClickListener{
     private Database mDatabase;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_list_builder);
 
@@ -51,8 +52,20 @@ public class TeamListBuilder extends Activity implements View.OnClickListener{
 
         builder.setTitle("Add Team");
         View dialogView = mLayoutInflator.inflate(R.layout.dialog_team_list_builder, null);
-        final EditText teamNumberEdit = (EditText)findViewById(R.id.team_number);
-        final EditText nicknameEdit = (EditText)findViewById(R.id.nickname);
+        final EditText teamNumberEdit = (EditText) dialogView.findViewById(R.id.team_number);
+        final EditText nicknameEdit = (EditText) dialogView.findViewById(R.id.nickname);
+        final ListView lv = (ListView) dialogView.findViewById(R.id.match_list);
+        final ArrayList<Integer> match_numbers = new ArrayList<>();
+        final LVA_TeamListBuilderDialog lva = new LVA_TeamListBuilderDialog(this, match_numbers);
+        lv.setAdapter(lva);
+        final EditText addMatchNumberEdit = (EditText)dialogView.findViewById(R.id.match_number);
+        dialogView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                match_numbers.add(Integer.parseInt(addMatchNumberEdit.getText().toString()));
+                lva.notifyDataSetChanged();
+            }
+        });
         builder.setView(dialogView);
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -64,6 +77,7 @@ public class TeamListBuilder extends Activity implements View.OnClickListener{
                 TID tid = new TID();
                 tid.team_number = team_number;
                 tid.nickname = nickname;
+                tid.match_numbers = match_numbers;
                 mDatabase.setTID(tid);
                 mLVA.notifyDataSetChanged();
             }
