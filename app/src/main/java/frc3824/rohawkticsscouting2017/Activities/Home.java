@@ -6,12 +6,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -107,6 +110,23 @@ public class Home extends Activity implements View.OnClickListener{
         {
             Database.getInstance();
             Storage.getInstance();
+        }
+
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(bluetoothAdapter != null && bluetoothAdapter.isEnabled())
+        {
+            ((ImageView)findViewById(R.id.bluetooth_status)).setImageResource(R.drawable.bluetooth_color);
+        }
+
+        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        if (wifi.isWifiEnabled()){
+            ((ImageView)findViewById(R.id.wifi_status)).setImageResource(R.drawable.wifi_color);
+        }
+
+        Intent intent = this.registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
+        if(intent.getExtras().getBoolean("connected"))
+        {
+            ((ImageView)findViewById(R.id.usb_status)).setImageResource(R.drawable.usb_on_color);
         }
     }
 
