@@ -1,155 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="8dp">
+
     <RelativeLayout
+        android:id="@+id/basic_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/basic_search">
+        android:layout_height="wrap_content">
+
         <TextView
+            android:id="@+id/basic_search_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Basic Search"
             android:textColor="@color/black"
-            android:textSize="20sp"
-            android:id="@+id/basic_search_label"/>
+            android:textSize="20sp" />
+
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/basic_search_label"
             android:id="@+id/basic_search_edittext"
-            android:layout_toLeftOf="@+id/basic_search_button"
-            android:layout_alignParentLeft="true"/>
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/basic_search_label"
+            android:layout_toLeftOf="@+id/basic_search_button" />
+
+        <ImageView
+            android:id="@+id/basic_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:id="@+id/basic_search_button"/>
+            android:layout_below="@id/basic_search_label"
+            android:src="@drawable/search_color" />
+
         <RadioGroup
+            android:id="@+id/basic_search_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_below="@id/basic_search_edittext"
-            android:id="@+id/basic_search_type">
+            android:orientation="horizontal">
+
             <RadioButton
+                android:id="@+id/basic_match_number_option"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="By Match Number"
-                android:id="@+id/basic_match_number_option"/>
+                android:text="By Match Number" />
+
             <RadioButton
+                android:id="@+id/basic_team_number_option"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="By Team Number"
-                android:id="@+id/basic_team_number_option"/>
+                android:text="By Team Number" />
+
             <RadioButton
+                android:id="@+id/basic_content_option"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="By Content"
-                android:id="@+id/basic_content_option"/>
+                android:text="By Content" />
         </RadioGroup>
     </RelativeLayout>
-    <Button
+
+    <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+        android:id="@+id/basic_search_open"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Basic Search"
-        android:id="@+id/basic_search_open"
-        android:visibility="gone"/>
+        android:background="@color/navy_blue"
+        android:visibility="gone"
+        app:src="@drawable/collapse_color"
+        app:text="Basic Search"
+        app:textColor="@color/white"
+        app:textSize="8sp" />
+
     <LinearLayout
+        android:id="@+id/advanced_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/advanced_search"
         android:visibility="gone">
+
         <TextView
+            android:id="@+id/advanced_match_number_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Match Number"
-            android:id="@+id/advanced_match_number_label"/>
+            android:textColor="@color/black" />
+
         <LinearLayout
+            android:id="@+id/advanced_match_number_criteria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/advanced_match_number_criteria">
-            <Button
+            android:orientation="vertical">
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/advanced_match_number_criteria_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Criteria"
-                android:id="@+id/advanced_match_number_criteria_add"/>
+                android:background="@color/navy_blue"
+                app:src="@drawable/plus_math_color"
+                app:text="Add Criteria"
+                app:textColor="@color/white"
+                app:textSize="8sp" />
         </LinearLayout>
+
         <TextView
+            android:id="@+id/advanced_team_number_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Team Number"
-            android:id="@+id/advanced_team_number_label"/>
+            android:textColor="@color/black" />
+
         <LinearLayout
+            android:id="@+id/advanced_team_number_criteria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/advanced_team_number_criteria">
-            <Button
+            android:orientation="vertical">
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/advanced_team_number_criteria_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Criteria"
-                android:id="@+id/advanced_team_number_criteria_add"/>
+                android:background="@color/navy_blue"
+                app:src="@drawable/plus_math_color"
+                app:text="Add Criteria"
+                app:textColor="@color/white"
+                app:textSize="8sp" />
         </LinearLayout>
+
         <TextView
+            android:id="@+id/advanced_content_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Content"
-            android:id="@+id/advanced_content_label"/>
+            android:textColor="@color/black" />
+
         <LinearLayout
+            android:id="@+id/advanced_content_criteria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/advanced_content_criteria">
-            <Button
+            android:orientation="vertical">
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/advanced_content_criteria_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Criteria"
-                android:id="@+id/advanced_content_criteria_add"/>
+                android:background="@color/navy_blue"
+                app:src="@drawable/plus_math_color"
+                app:text="Add Criteria"
+                app:textColor="@color/white"
+                app:textSize="8sp" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/match_notes_checkbox"
-                android:text="Match Notes"/>
-            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Match Notes" />
+
+            <CheckBox
                 android:id="@+id/super_notes_checkbox"
-                android:text="Super Notes"/>
-            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Super Notes" />
+
+            <CheckBox
                 android:id="@+id/drive_team_notes_checkbox"
-                android:text="Drive Team Notes"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drive Team Notes" />
         </LinearLayout>
-        <Button
+
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+            android:id="@+id/advanced_search_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Filter"
-            android:textColor="@color/black"
-            android:id="@+id/advanced_search_button"/>
+            android:background="@color/navy_blue"
+            app:text="Filter"
+            app:textColor="@color/white"
+            app:textSize="8sp" />
     </LinearLayout>
-    <Button
+
+    <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+        android:id="@+id/advanced_search_open"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Advanced Search"
-        android:id="@+id/advanced_search_open" />
+        android:background="@color/navy_blue"
+        app:src="@drawable/expand_color"
+        app:text="Advanced Search"
+        app:textColor="@color/white"
+        app:textSize="8sp" />
 
     <ListView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/list_view"/>
+        android:layout_weight="1" />
 </LinearLayout>

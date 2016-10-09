@@ -3,7 +3,8 @@
     xmlns:dslv="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/columbia_blue">
     
     <frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView
         android:layout_width="match_parent"
