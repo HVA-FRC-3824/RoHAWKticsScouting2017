@@ -23,6 +23,7 @@ public class LVA_DoNotPick extends ArrayAdapter<Integer> implements View.OnClick
 
     private final static String TAG = "LVA_DoNotPick";
 
+    private Context mContext;
     private ArrayList<Integer> mDnpTeams;
     private ArrayList<Integer> mOtherTeams;
     private ArrayAdapter<Integer> mOtherAdapter;
@@ -34,12 +35,13 @@ public class LVA_DoNotPick extends ArrayAdapter<Integer> implements View.OnClick
         mOtherTeams = teams;
         mDatabase = Database.getInstance();
         mOtherAdapter = other;
+        mContext = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item_dnp, null);
         //}
 
