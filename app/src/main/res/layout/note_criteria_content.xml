@@ -4,11 +4,10 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contains"
-        android:textColor="@color/black" />
+        android:id="@+id/criteria_type"/>
     <EditText
         android:layout_width="0dp"
         android:layout_height="wrap_content"

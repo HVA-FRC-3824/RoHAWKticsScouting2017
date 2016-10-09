@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     android:padding="8dp"
     android:background="@color/columbia_blue">
+    <android.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/navy_blue"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:elevation="4dp"
+        android:logo="@drawable/logo_icon_large"
+        android:title="Event Comparison"/>
 
     <Spinner
         android:layout_width="match_parent"

@@ -24,8 +24,7 @@ public class NoteView {
     public int team_number;
     public String note;
 
-    public static String toString(NoteType nt)
-    {
+    public static String toString(NoteType nt) {
        switch (nt)
        {
            case MATCH:

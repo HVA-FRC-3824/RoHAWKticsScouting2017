@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Map;
+
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -32,8 +35,7 @@ public class ViewNotesFragment extends Fragment{
         mTeamNumber = teamNumber;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_notes, container, false);
 
         TextView matchNotes = (TextView)view.findViewById(R.id.match_notes);
@@ -45,21 +47,26 @@ public class ViewNotesFragment extends Fragment{
         Team team = database.getTeam(mTeamNumber);
         String matchNotesText = "";
         String superNotesText = "";
-        for(int matchNumber : team.info.match_numbers)
-        {
-            TMD tim = database.getTMD(matchNumber, mTeamNumber);
-            if(tim != null && tim.notes != null && tim.notes != "") {
-                matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tim.notes);
+        for(int matchNumber : team.info.match_numbers) {
+            TMD tm = database.getTMD(matchNumber, mTeamNumber);
+            if(tm != null && tm.notes != null && tm.notes != "") {
+                matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tm.notes);
             }
             SMD sm = database.getSMD(matchNumber);
             if(sm != null && sm.notes != null && sm.notes != "") {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }
         }
+
+        TDTF tdtf = database.getTDTF(mTeamNumber);
+        String feedbackText = "";
+        for(Map.Entry<Integer, String> entry: tdtf.feedback.entrySet()){
+            feedbackText += String.format("Match %d:\n\t%s\n", entry.getKey(), entry.getValue());
+        }
+
         matchNotes.setText(matchNotesText);
         superNotes.setText(superNotesText);
-
-        //TODO: fill in drive team feedback
+        driveTeamFeedback.setText(feedbackText);
 
         return view;
     }

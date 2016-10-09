@@ -6,6 +6,15 @@
     android:orientation="vertical"
     android:padding="8dp"
     android:background="@color/columbia_blue">
+    <android.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/navy_blue"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:elevation="4dp"
+        android:logo="@drawable/logo_icon_large"
+        android:title="Notes"/>
 
     <RelativeLayout
         android:id="@+id/basic_search"
@@ -28,13 +37,14 @@
             android:layout_below="@id/basic_search_label"
             android:layout_toLeftOf="@+id/basic_search_button" />
 
-        <ImageView
+        <Button
             android:id="@+id/basic_search_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/basic_search_label"
-            android:src="@drawable/search_color" />
+            android:text="Search"
+            android:drawableRight="@drawable/search_color" />
 
         <RadioGroup
             android:id="@+id/basic_search_type"

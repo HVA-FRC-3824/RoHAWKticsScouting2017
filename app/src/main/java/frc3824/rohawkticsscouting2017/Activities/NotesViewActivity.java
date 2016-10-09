@@ -28,7 +28,7 @@ import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
  * Activity for filtering through notes
  */
 
-//TODO: create add/or and contains/does not contain for content criteria
+//TODO: create add/or for content criteria
 public class NotesViewActivity extends Activity implements View.OnClickListener {
 
     private final static String TAG = "NotesViewActivity";
@@ -61,8 +61,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
     //endregion
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes_view);
 
@@ -139,6 +138,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
                 //endregion
                 break;
             case R.id.basic_search_button:
+                basicSearch();
                 break;
             case R.id.advanced_match_number_criteria_add:
                 mAdvancedSearchMatchNumberCriteria.addView(new NoteCriteriaNumber(this), 0);
@@ -155,17 +155,76 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         }
     }
 
-    private void advancedSearch()
-    {
+    private void basicSearch(){
+        int search_type = -1;
+        int number = -1;
+        String content = "";
+
+        switch (mBasicSearchType.getCheckedRadioButtonId())
+        {
+            case R.id.basic_match_number_option:
+                search_type = 0;
+                number = Integer.parseInt(mBasicSearchEditText.getText().toString());
+                break;
+            case R.id.basic_team_number_option:
+                search_type = 1;
+                number = Integer.parseInt(mBasicSearchEditText.getText().toString());
+                break;
+            case R.id.basic_content_option:
+                search_type = 2;
+                content = mBasicSearchEditText.getText().toString();
+                break;
+            default:
+                assert(false);
+        }
+
+        mFilteredNotes = new ArrayList<>(mAllNotes);
+        for(int i = 0; i < mFilteredNotes.size(); i++) {
+            NoteView nv = mFilteredNotes.get(i);
+            switch (search_type){
+                case 0:
+                    if(nv.match_number != number){
+                        mFilteredNotes.remove(i);
+                        i--;
+                        continue;
+                    }
+                    break;
+                case 1:
+                    if(nv.team_number != number){
+                        mFilteredNotes.remove(i);
+                        i--;
+                        continue;
+                    }
+                    break;
+                case 2:
+                    if(!nv.note.contains(content)){
+                        mFilteredNotes.remove(i);
+                        i--;
+                        continue;
+                    }
+                    break;
+            }
+        }
+        mAdapter = new LVA_NotesView(this, mFilteredNotes);
+        mListView.setAdapter(mAdapter);
+    }
+
+    private void advancedSearch() {
         cleanGoneViews();
 
         ArrayList<Integer[]> matchRanges = getMatchRanges();
         ArrayList<Integer[]> teamRanges = getTeamRanges();
 
         ArrayList<String> contains = new ArrayList<>();
+        ArrayList<String> dnContains = new ArrayList<>();
         for(int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++)
         {
-            contains.add(((NoteCriteriaContent)mAdvancedSearchContentCriteria.getChildAt(i)).getContains());
+            NoteCriteriaContent ncc = ((NoteCriteriaContent)mAdvancedSearchContentCriteria.getChildAt(i));
+            if(ncc.getType() == 0) {
+                contains.add(ncc.getContent());
+            } else {
+                dnContains.add(ncc.getContent());
+            }
         }
 
         mFilteredNotes = new ArrayList<>(mAllNotes);
@@ -188,20 +247,43 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
                 continue;
             }
 
-            if(filterContents(nv, contains))
+            if(filterContents(nv, contains, dnContains))
             {
                 mFilteredNotes.remove(i);
                 i--;
                 continue;
+            }
+
+            switch (nv.note_type)
+            {
+                case MATCH:
+                    if(!mMatchNotesCheckbox.isChecked()){
+                        mFilteredNotes.remove(i);
+                        i--;
+                        continue;
+                    }
+                    break;
+                case SUPER:
+                    if(!mSuperNotesCheckbox.isChecked()){
+                        mFilteredNotes.remove(i);
+                        i--;
+                        continue;
+                    }
+                    break;
+                case DRIVE_TEAM:
+                    if(!mDriveTeamNotesCheckbox.isChecked()){
+                        mFilteredNotes.remove(i);
+                        i--;
+                        continue;
+                    }
+                    break;
             }
         }
         mAdapter = new LVA_NotesView(this, mFilteredNotes);
         mListView.setAdapter(mAdapter);
     }
 
-    private void cleanGoneViews()
-    {
-        // Remove all the "Gone" views
+    private void cleanGoneViews() {
         for(int i = 0; i < mAdvancedSearchMatchNumberCriteria.getChildCount(); i++)
         {
             if(mAdvancedSearchMatchNumberCriteria.getChildAt(i).getVisibility() == View.GONE)
@@ -281,44 +363,62 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
     //endregion
 
     //region filters
-    private boolean filterMatches(NoteView nv, ArrayList<Integer[]> matchRanges)
-    {
-        for(int j = 0; j < matchRanges.size(); j++)
-        {
+    /**
+     * Function that determines if note should be filtered based on match number
+     *
+     * @param nv
+     * @param matchRanges
+     * @return
+     */
+    private boolean filterMatches(NoteView nv, ArrayList<Integer[]> matchRanges) {
+        for(int j = 0; j < matchRanges.size(); j++) {
             int before = matchRanges.get(j)[0];
             int after = matchRanges.get(j)[1];
-            if(nv.match_number >= before && nv.match_number <= after)
-            {
+            if(nv.match_number >= before && nv.match_number <= after) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean filterTeams(NoteView nv, ArrayList<Integer[]> teamRanges)
-    {
-        for(int j = 0; j < teamRanges.size(); j++)
-        {
+    /**
+     * Function that determines if note should be filtered based on team number
+     *
+     * @param nv
+     * @param teamRanges
+     * @return
+     */
+    private boolean filterTeams(NoteView nv, ArrayList<Integer[]> teamRanges) {
+        for(int j = 0; j < teamRanges.size(); j++) {
             int before = teamRanges.get(j)[0];
             int after = teamRanges.get(j)[1];
-            if(nv.team_number >= before && nv.team_number <= after)
-            {
+            if(nv.team_number >= before && nv.team_number <= after) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean filterContents(NoteView nv, ArrayList<String> contains)
-    {
-        for(int j = 0; j < contains.size(); j++)
-        {
-            if(nv.note.contains(contains.get(j)))
-            {
-                return false;
+    /**
+     * Function that determines if note should be filtered based on content
+     *
+     * @param nv
+     * @param contains
+     * @param dnContains
+     * @return
+     */
+    private boolean filterContents(NoteView nv, ArrayList<String> contains, ArrayList<String> dnContains) {
+        for(int j = 0; j < contains.size(); j++) {
+            if(!nv.note.contains(contains.get(j))) {
+                return true;
             }
         }
-        return true;
+        for(int j = 0; j < dnContains.size(); j++) {
+            if(nv.note.contains(dnContains.get(j))) {
+                return true;
+            }
+        }
+        return false;
     }
     //endregion
 }
