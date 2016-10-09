@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight=".25"
-        android:id="@+id/note_type"/>
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="4dp">
 
     <TextView
+        android:id="@+id/note_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".25"
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
+
+    <TextView
         android:id="@+id/match_number"
-        android:layout_marginLeft="16dp"/>
-    <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_weight=".25"
-        android:id="@+id/team_number"
-        android:layout_marginLeft="16dp"/>
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
+
     <TextView
+        android:id="@+id/team_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_weight=".25"
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/note"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:id="@+id/note"/>
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
 
 </LinearLayout>
