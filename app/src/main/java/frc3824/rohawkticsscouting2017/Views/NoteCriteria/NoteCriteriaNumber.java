@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.R;
 
@@ -23,6 +24,7 @@ public class NoteCriteriaNumber extends RelativeLayout implements AdapterView.On
     private Spinner mCriteriaType;
     private EditText mBefore;
     private EditText mAfter;
+    private TextView mHyphen;
     private String[] mTypes = {"Between", "Before", "After"};
     private Button mRemove;
 
@@ -39,6 +41,7 @@ public class NoteCriteriaNumber extends RelativeLayout implements AdapterView.On
 
         mBefore = (EditText)findViewById(R.id.before);
         mAfter = (EditText)findViewById(R.id.after);
+        mHyphen = (TextView)findViewById(R.id.hyphen);
 
         mRemove = (Button)findViewById(R.id.remove);
         mRemove.setOnClickListener(this);
@@ -61,25 +64,30 @@ public class NoteCriteriaNumber extends RelativeLayout implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        switch (pos)
-        {
+        switch (pos) {
+            // Between
             case 0:
                 mBefore.setVisibility(VISIBLE);
                 mBefore.setText("");
                 mAfter.setVisibility(VISIBLE);
                 mAfter.setText("");
+                mHyphen.setVisibility(VISIBLE);
                 break;
+            // Before
             case 1:
-                mBefore.setVisibility(VISIBLE);
-                mBefore.setText("");
-                mAfter.setVisibility(GONE);
-                mAfter.setText("");
-                break;
-            case 2:
                 mBefore.setVisibility(GONE);
                 mBefore.setText("");
                 mAfter.setVisibility(VISIBLE);
                 mAfter.setText("");
+                mHyphen.setVisibility(GONE);
+                break;
+            // After
+            case 2:
+                mBefore.setVisibility(VISIBLE);
+                mBefore.setText("");
+                mAfter.setVisibility(GONE);
+                mAfter.setText("");
+                mHyphen.setVisibility(GONE);
                 break;
         }
     }

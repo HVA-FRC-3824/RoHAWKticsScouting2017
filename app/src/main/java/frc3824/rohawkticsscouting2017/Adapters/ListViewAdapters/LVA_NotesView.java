@@ -14,9 +14,9 @@ import frc3824.rohawkticsscouting2017.R;
 
 /**
  * @author frc3824
- * Created: 9/6/16
- *
- * List View Adapter
+ *         Created: 9/6/16
+ *         <p>
+ *         List View Adapter
  */
 public class LVA_NotesView extends ArrayAdapter<NoteView> {
 
@@ -38,16 +38,16 @@ public class LVA_NotesView extends ArrayAdapter<NoteView> {
 
         NoteView nv = mNotes.get(position);
 
-        TextView matchType = (TextView)convertView.findViewById(R.id.note_type);
+        TextView matchType = (TextView) convertView.findViewById(R.id.note_type);
         matchType.setText(NoteView.toString(nv.note_type));
 
-        TextView matchNumber = (TextView)convertView.findViewById(R.id.match_number);
+        TextView matchNumber = (TextView) convertView.findViewById(R.id.match_number);
         matchNumber.setText(String.valueOf(nv.match_number));
 
-        TextView teamNumber = (TextView)convertView.findViewById(R.id.team_number);
+        TextView teamNumber = (TextView) convertView.findViewById(R.id.team_number);
         teamNumber.setText(String.valueOf(nv.team_number));
 
-        TextView note = (TextView)convertView.findViewById(R.id.note);
+        TextView note = (TextView) convertView.findViewById(R.id.note);
         note.setText(nv.note);
 
         return convertView;

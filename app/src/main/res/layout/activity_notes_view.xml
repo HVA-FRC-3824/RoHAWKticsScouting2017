@@ -14,12 +14,15 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:elevation="4dp"
         android:logo="@drawable/logo_icon_large"
+        android:layout_marginBottom="4dp"
         android:title="Notes"/>
 
     <RelativeLayout
         android:id="@+id/basic_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/basic_search_label"
@@ -34,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:inputType="number"
             android:layout_below="@id/basic_search_label"
             android:layout_toLeftOf="@+id/basic_search_button" />
 
@@ -73,23 +77,22 @@
         </RadioGroup>
     </RelativeLayout>
 
-    <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-        android:id="@+id/basic_search_open"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/navy_blue"
-        android:visibility="gone"
-        app:src="@drawable/collapse_color"
-        app:text="Basic Search"
-        app:textColor="@color/white"
-        app:textSize="8sp" />
-
     <LinearLayout
         android:id="@+id/advanced_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="8dp"
         android:visibility="gone">
+
+        <TextView
+            android:id="@+id/advanced_search_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Advanced Search"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/advanced_match_number_label"
@@ -198,15 +201,37 @@
             app:textSize="8sp" />
     </LinearLayout>
 
-    <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-        android:id="@+id/advanced_search_open"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/navy_blue"
-        app:src="@drawable/expand_color"
-        app:text="Advanced Search"
-        app:textColor="@color/white"
-        app:textSize="8sp" />
+        android:orientation="horizontal">
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+            android:id="@+id/basic_search_open"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/navy_blue"
+            app:src="@drawable/expand_color"
+            app:text="Basic Search"
+            app:textColor="@color/white"
+            app:textSize="8sp" />
+
+        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+            android:id="@+id/advanced_search_open"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="4dp"
+            android:background="@color/navy_blue"
+            app:src="@drawable/collapse_color"
+            app:text="Advanced Search"
+            app:textColor="@color/white"
+            app:textSize="8sp" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/list_item_note"
+        android:id="@+id/header"/>
 
     <ListView
         android:id="@+id/list_view"

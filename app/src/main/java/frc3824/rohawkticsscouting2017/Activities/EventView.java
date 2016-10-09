@@ -56,8 +56,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
     private ArrayList<String> mCurrentTeamNumbers;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
 
@@ -154,8 +153,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         }
     }
 
-    private void foulSecondary(int position)
-    {
+    private void foulSecondary(int position) {
         mLLDChart.setVisibility(View.VISIBLE);
         mBarChart.setVisibility(View.GONE);
 
@@ -264,8 +262,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         }
     }
 
-    private void postMatchSecondary(int position)
-    {
+    private void postMatchSecondary(int position) {
         mLLDChart.setVisibility(View.GONE);
         mBarChart.setVisibility(View.VISIBLE);
 

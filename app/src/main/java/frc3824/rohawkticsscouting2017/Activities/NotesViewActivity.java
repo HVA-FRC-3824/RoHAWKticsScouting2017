@@ -1,7 +1,9 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,8 @@ import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_NotesView;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Utilities.Utilities;
+import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaContent;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
 
@@ -29,28 +34,31 @@ import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
  */
 
 //TODO: create add/or for content criteria
-public class NotesViewActivity extends Activity implements View.OnClickListener {
+public class NotesViewActivity extends Activity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private final static String TAG = "NotesViewActivity";
 
     //region variables
+    private boolean mSearchBasic;
+
     private RelativeLayout mBasicSearch;
-    private Button mBasicSearchOpen;
+    private ImageTextButton mBasicSearchOpen;
     private RadioGroup mBasicSearchType;
     private EditText mBasicSearchEditText;
     private Button mBasicSearchButton;
 
     private LinearLayout mAdvancedSearch;
-    private Button mAdvancedSearchOpen;
+    private ImageTextButton mAdvancedSearchOpen;
     private LinearLayout mAdvancedSearchMatchNumberCriteria;
-    private Button mAdvancedSearchMatchNumberCriteriaAdd;
+    private ImageTextButton mAdvancedSearchMatchNumberCriteriaAdd;
     private LinearLayout mAdvancedSearchTeamNumberCriteria;
-    private Button mAdvancedSearchTeamNumberCriteriaAdd;
+    private ImageTextButton mAdvancedSearchTeamNumberCriteriaAdd;
     private LinearLayout mAdvancedSearchContentCriteria;
-    private Button mAdvancedSearchContentCriteriaAdd;
+    private ImageTextButton mAdvancedSearchContentCriteriaAdd;
     private CheckBox mMatchNotesCheckbox;
     private CheckBox mSuperNotesCheckbox;
     private CheckBox mDriveTeamNotesCheckbox;
+    private ImageTextButton mAdvancedSearchButton;
 
     private ListView mListView;
     private LVA_NotesView mAdapter;
@@ -67,30 +75,41 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
 
         //region Basic Search Find Views
         mBasicSearch = (RelativeLayout)findViewById(R.id.basic_search);
-        mBasicSearchOpen = (Button)findViewById(R.id.basic_search_open);
+        mBasicSearchOpen = (ImageTextButton)findViewById(R.id.basic_search_open);
         mBasicSearchOpen.setOnClickListener(this);
         mBasicSearchType = (RadioGroup)findViewById(R.id.basic_search_type);
         mBasicSearchType.check(R.id.basic_match_number_option);
+        mBasicSearchType.setOnCheckedChangeListener(this);
         mBasicSearchEditText = (EditText)findViewById(R.id.basic_search_edittext);
         mBasicSearchButton = (Button)findViewById(R.id.basic_search_button);
+        mBasicSearchButton.setOnClickListener(this);
         //endregion
 
         //region Advanced Search Find Views
         mAdvancedSearch = (LinearLayout)findViewById(R.id.advanced_search);
-        mAdvancedSearchOpen = (Button)findViewById(R.id.advanced_search_open);
+        mAdvancedSearchOpen = (ImageTextButton)findViewById(R.id.advanced_search_open);
         mAdvancedSearchOpen.setOnClickListener(this);
         mAdvancedSearchMatchNumberCriteria = (LinearLayout)mAdvancedSearch.findViewById(R.id.advanced_match_number_criteria);
-        mAdvancedSearchMatchNumberCriteriaAdd = (Button)mAdvancedSearchMatchNumberCriteria.findViewById(R.id.advanced_match_number_criteria_add);
+        mAdvancedSearchMatchNumberCriteriaAdd = (ImageTextButton)mAdvancedSearchMatchNumberCriteria.findViewById(R.id.advanced_match_number_criteria_add);
         mAdvancedSearchMatchNumberCriteriaAdd.setOnClickListener(this);
         mAdvancedSearchTeamNumberCriteria = (LinearLayout)mAdvancedSearch.findViewById(R.id.advanced_team_number_criteria);
-        mAdvancedSearchTeamNumberCriteriaAdd = (Button)mAdvancedSearchTeamNumberCriteria.findViewById(R.id.advanced_team_number_criteria_add);
+        mAdvancedSearchTeamNumberCriteriaAdd = (ImageTextButton)mAdvancedSearchTeamNumberCriteria.findViewById(R.id.advanced_team_number_criteria_add);
         mAdvancedSearchTeamNumberCriteriaAdd.setOnClickListener(this);
         mAdvancedSearchContentCriteria = (LinearLayout)mAdvancedSearch.findViewById(R.id.advanced_content_criteria);
-        mAdvancedSearchContentCriteriaAdd = (Button)mAdvancedSearchContentCriteria.findViewById(R.id.advanced_content_criteria_add);
+        mAdvancedSearchContentCriteriaAdd = (ImageTextButton)mAdvancedSearchContentCriteria.findViewById(R.id.advanced_content_criteria_add);
         mAdvancedSearchContentCriteriaAdd.setOnClickListener(this);
         mMatchNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.match_notes_checkbox);
         mSuperNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.super_notes_checkbox);
         mDriveTeamNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.drive_team_notes_checkbox);
+        mAdvancedSearchButton = (ImageTextButton)mAdvancedSearch.findViewById(R.id.advanced_search_button);
+        mAdvancedSearchButton.setOnClickListener(this);
+        //endregion
+
+        //region list header setup
+        ((TextView)(findViewById(R.id.header).findViewById(R.id.note_type))).setText("Note Type");
+        ((TextView)(findViewById(R.id.header).findViewById(R.id.match_number))).setText("Match Number");
+        ((TextView)(findViewById(R.id.header).findViewById(R.id.team_number))).setText("Team Number");
+        ((TextView)(findViewById(R.id.header).findViewById(R.id.note))).setText("Note");
         //endregion
 
         mLayoutInflator = getLayoutInflater();
@@ -102,6 +121,10 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         mFilteredNotes = new ArrayList<>(mAllNotes);
         mAdapter = new LVA_NotesView(this, mFilteredNotes);
         mListView.setAdapter(mAdapter);
+
+        Utilities.setupUi(this, findViewById(android.R.id.content));
+        mSearchBasic = true;
+
     }
 
     @Override
@@ -109,33 +132,38 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         switch (view.getId())
         {
             case R.id.basic_search_open:
-                //region Basic Search Open
-                mBasicSearch.setVisibility(View.VISIBLE);
-                mAdvancedSearch.setVisibility(View.GONE);
-                mBasicSearchOpen.setVisibility(View.GONE);
-                mAdvancedSearchOpen.setVisibility(View.VISIBLE);
-                // Remove all the advanced search views that are no longer needed
-                for(int i = 0; i < mAdvancedSearchMatchNumberCriteria.getChildCount() - 1; i++)
-                {
-                    mAdvancedSearchMatchNumberCriteria.removeViewAt(0);
+                if(!mSearchBasic) {
+                    clearFilters();
+                    //region Basic Search Open
+                    mBasicSearch.setVisibility(View.VISIBLE);
+                    mAdvancedSearch.setVisibility(View.GONE);
+                    mBasicSearchOpen.setImage(R.drawable.expand_color);
+                    mAdvancedSearchOpen.setImage(R.drawable.collapse_color);
+                    // Remove all the advanced search views that are no longer needed
+                    for (int i = 0; i < mAdvancedSearchMatchNumberCriteria.getChildCount() - 1; i++) {
+                        mAdvancedSearchMatchNumberCriteria.removeViewAt(0);
+                    }
+                    for (int i = 0; i < mAdvancedSearchTeamNumberCriteria.getChildCount() - 1; i++) {
+                        mAdvancedSearchTeamNumberCriteria.removeViewAt(0);
+                    }
+                    for (int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++) {
+                        mAdvancedSearchContentCriteria.removeViewAt(0);
+                    }
+                    //endregion
+                    mSearchBasic = true;
                 }
-                for(int i = 0; i < mAdvancedSearchTeamNumberCriteria.getChildCount() - 1; i++)
-                {
-                    mAdvancedSearchTeamNumberCriteria.removeViewAt(0);
-                }
-                for(int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++)
-                {
-                    mAdvancedSearchContentCriteria.removeViewAt(0);
-                }
-                //endregion
                 break;
             case R.id.advanced_search_open:
-                //region Advanced Search Open
-                mBasicSearch.setVisibility(View.GONE);
-                mAdvancedSearch.setVisibility(View.VISIBLE);
-                mBasicSearchOpen.setVisibility(View.VISIBLE);
-                mAdvancedSearchOpen.setVisibility(View.GONE);
-                //endregion
+                if(mSearchBasic) {
+                    clearFilters();
+                    //region Advanced Search Open
+                    mBasicSearch.setVisibility(View.GONE);
+                    mAdvancedSearch.setVisibility(View.VISIBLE);
+                    mBasicSearchOpen.setImage(R.drawable.collapse_color);
+                    mAdvancedSearchOpen.setImage(R.drawable.expand_color);
+                    //endregion
+                    mSearchBasic = false;
+                }
                 break;
             case R.id.basic_search_button:
                 basicSearch();
@@ -155,20 +183,39 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         }
     }
 
+    private void clearFilters(){
+        mFilteredNotes = new ArrayList<>(mAllNotes);
+        mAdapter = new LVA_NotesView(this, mFilteredNotes);
+        mListView.setAdapter(mAdapter);
+    }
+
     private void basicSearch(){
+        Log.d(TAG, mBasicSearchEditText.getText().toString());
+        if(mBasicSearchEditText.getText().toString().equals("")){
+            clearFilters();
+            return;
+        }
+
         int search_type = -1;
         int number = -1;
         String content = "";
 
-        switch (mBasicSearchType.getCheckedRadioButtonId())
-        {
+        switch (mBasicSearchType.getCheckedRadioButtonId()) {
             case R.id.basic_match_number_option:
                 search_type = 0;
-                number = Integer.parseInt(mBasicSearchEditText.getText().toString());
+                try {
+                    number = Integer.parseInt(mBasicSearchEditText.getText().toString());
+                } catch (NumberFormatException e){
+                    return;
+                }
                 break;
             case R.id.basic_team_number_option:
                 search_type = 1;
-                number = Integer.parseInt(mBasicSearchEditText.getText().toString());
+                try {
+                    number = Integer.parseInt(mBasicSearchEditText.getText().toString());
+                } catch (NumberFormatException e){
+                    return;
+                }
                 break;
             case R.id.basic_content_option:
                 search_type = 2;
@@ -217,8 +264,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
 
         ArrayList<String> contains = new ArrayList<>();
         ArrayList<String> dnContains = new ArrayList<>();
-        for(int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++)
-        {
+        for(int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++) {
             NoteCriteriaContent ncc = ((NoteCriteriaContent)mAdvancedSearchContentCriteria.getChildAt(i));
             if(ncc.getType() == 0) {
                 contains.add(ncc.getContent());
@@ -228,34 +274,29 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         }
 
         mFilteredNotes = new ArrayList<>(mAllNotes);
-        for(int i = 0; i < mFilteredNotes.size(); i++)
-        {
+        for(int i = 0; i < mFilteredNotes.size(); i++) {
             NoteView nv = mFilteredNotes.get(i);
 
-            if(filterMatches(nv, matchRanges))
-            {
+            if(matchRanges.size() > 0 && filterMatches(nv, matchRanges)) {
                 mFilteredNotes.remove(i);
                 i--;
                 continue;
             }
 
 
-            if(filterTeams(nv, teamRanges))
-            {
+            if(teamRanges.size() > 0 && filterTeams(nv, teamRanges)) {
                 mFilteredNotes.remove(i);
                 i--;
                 continue;
             }
 
-            if(filterContents(nv, contains, dnContains))
-            {
+            if((contains.size()  > 0 || dnContains.size() > 0) && filterContents(nv, contains, dnContains)) {
                 mFilteredNotes.remove(i);
                 i--;
                 continue;
             }
 
-            switch (nv.note_type)
-            {
+            switch (nv.note_type) {
                 case MATCH:
                     if(!mMatchNotesCheckbox.isChecked()){
                         mFilteredNotes.remove(i);
@@ -311,33 +352,29 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
     }
 
     //region get ranges
-    private ArrayList<Integer[]> getMatchRanges()
-    {
+    private ArrayList<Integer[]> getMatchRanges() {
         ArrayList<Integer[]> rv = new ArrayList<>();
-        for(int i = 0; i < mAdvancedSearchMatchNumberCriteria.getChildCount() - 1; i++)
-        {
+        for(int i = 0; i < mAdvancedSearchMatchNumberCriteria.getChildCount() - 1; i++) {
             NoteCriteriaNumber ncn = (NoteCriteriaNumber)mAdvancedSearchMatchNumberCriteria.getChildAt(i);
-            switch (ncn.getType())
-            {
+            switch (ncn.getType()) {
                 //Between
                 case 0:
                     rv.add(new Integer[]{ncn.getBefore(), ncn.getAfter()});
                     break;
                 //Before
                 case 1:
-                    rv.add(new Integer[]{ncn.getBefore(), -1});
+                    rv.add(new Integer[]{Integer.MIN_VALUE, ncn.getAfter()});
                     break;
                 //After
                 case 2:
-                    rv.add(new Integer[]{-1, ncn.getAfter()});
+                    rv.add(new Integer[]{ncn.getBefore(), Integer.MAX_VALUE});
                     break;
             }
         }
         return rv;
     }
 
-    private ArrayList<Integer[]> getTeamRanges()
-    {
+    private ArrayList<Integer[]> getTeamRanges() {
         ArrayList<Integer[]> rv = new ArrayList<>();
         for(int i = 0; i < mAdvancedSearchTeamNumberCriteria.getChildCount() - 1; i++)
         {
@@ -350,11 +387,11 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
                     break;
                 //Before
                 case 1:
-                    rv.add(new Integer[]{ncn.getBefore(), -1});
+                    rv.add(new Integer[]{ncn.getBefore(), Integer.MAX_VALUE});
                     break;
                 //After
                 case 2:
-                    rv.add(new Integer[]{-1, ncn.getAfter()});
+                    rv.add(new Integer[]{Integer.MIN_VALUE, ncn.getAfter()});
                     break;
             }
         }
@@ -421,4 +458,19 @@ public class NotesViewActivity extends Activity implements View.OnClickListener 
         return false;
     }
     //endregion
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        switch (i){
+            case R.id.basic_match_number_option:
+                mBasicSearchEditText.setInputType(2);
+                break;
+            case R.id.basic_team_number_option:
+                mBasicSearchEditText.setInputType(2);
+                break;
+            case R.id.basic_content_option:
+                mBasicSearchEditText.setInputType(1);
+                break;
+        }
+    }
 }

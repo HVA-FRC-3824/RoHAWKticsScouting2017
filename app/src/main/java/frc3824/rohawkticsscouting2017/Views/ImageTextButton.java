@@ -42,4 +42,10 @@ public class ImageTextButton extends LinearLayout{
             imageView.setImageResource(resource_id);
         }
     }
+
+    public void setImage(int resource_id)
+    {
+        ImageView imageView = (ImageView) findViewById(R.id.icon);
+        imageView.setImageResource(resource_id);
+    }
 }
