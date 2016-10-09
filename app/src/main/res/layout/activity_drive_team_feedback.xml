@@ -11,7 +11,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/navy_blue"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:logo="@drawable/logo_icon_large"/>
 
     <TextView
         android:id="@+id/partner_1"

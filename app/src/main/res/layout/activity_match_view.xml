@@ -14,7 +14,7 @@
         android:background="@color/navy_blue"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:elevation="4dp"
-        />
+        android:logo="@drawable/logo_icon_large"/>
 
     <LinearLayout
         android:layout_width="match_parent"
