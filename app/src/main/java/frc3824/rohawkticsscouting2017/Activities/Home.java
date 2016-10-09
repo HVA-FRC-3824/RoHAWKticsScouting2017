@@ -128,8 +128,8 @@ public class Home extends Activity implements View.OnClickListener{
             ((ImageView)findViewById(R.id.wifi_status)).setImageResource(R.drawable.wifi_color);
         }
 
-        Intent intent = this.registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
-        if(intent.getExtras().getBoolean("connected"))
+        Intent intent = registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
+        if(intent != null && intent.getExtras().getBoolean("connected"))
         {
             ((ImageView)findViewById(R.id.usb_status)).setImageResource(R.drawable.usb_on_color);
         }

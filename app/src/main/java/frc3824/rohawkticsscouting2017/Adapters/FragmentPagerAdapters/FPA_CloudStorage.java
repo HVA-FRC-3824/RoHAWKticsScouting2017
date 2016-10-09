@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Fragments.CloudStorage.CloudDebugFragment;
-import frc3824.rohawkticsscouting2017.Fragments.CloudStorage.CloudPickListFragment;
 import frc3824.rohawkticsscouting2017.Fragments.CloudStorage.CloudRobotPictureFragment;
 import frc3824.rohawkticsscouting2017.Fragments.CloudStorage.CloudStrategyFragment;
 
@@ -22,7 +21,7 @@ public class FPA_CloudStorage extends FragmentPagerAdapter {
 
     private final static String TAG = "FPA_CloudStorage";
 
-    private String mTabTitles[] = new String[]{"Robot Picture", "Strategy", "Pick List", "Debug"};
+    private String mTabTitles[] = new String[]{"Robot Picture", "Strategy", "Debug"};
     private Map<Integer, Fragment> mFragments = new HashMap<>();
 
 
@@ -33,13 +32,10 @@ public class FPA_CloudStorage extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment f = null;
-        if(mFragments.containsKey(position))
-        {
+        if(mFragments.containsKey(position)) {
             f = mFragments.get(position);
-        }
-        else {
-            switch (position)
-            {
+        } else {
+            switch (position) {
                 case 0:
                     f = new CloudRobotPictureFragment();
                     break;
@@ -47,13 +43,9 @@ public class FPA_CloudStorage extends FragmentPagerAdapter {
                     f = new CloudStrategyFragment();
                     break;
                 case 2:
-                    f = new CloudPickListFragment();
-                    break;
-                case 3:
                     f = new CloudDebugFragment();
                     break;
             }
-
 
             mFragments.put(position, f);
         }
@@ -67,8 +59,7 @@ public class FPA_CloudStorage extends FragmentPagerAdapter {
      * @return the title of the tab
      */
     @Override
-    public String getPageTitle(int position)
-    {
+    public String getPageTitle(int position) {
         return mTabTitles[position];
     }
 

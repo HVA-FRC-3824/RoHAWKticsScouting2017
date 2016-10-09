@@ -10,7 +10,7 @@ import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/11/16
  *
  * Fragment that contains all the widgets for scouting during the autonomous portion of a match
@@ -19,14 +19,11 @@ public class AutoFragment extends ScoutFragment{
 
     private final static String TAG = "AutoFragment";
 
-    public AutoFragment() {
-    }
+    public AutoFragment() {}
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auto, container, false);
-        if(mValueMap != null)
-        {
+        if(mValueMap != null) {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);
         }
 

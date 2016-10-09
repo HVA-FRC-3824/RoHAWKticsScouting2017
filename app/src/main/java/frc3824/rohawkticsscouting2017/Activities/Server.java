@@ -1,10 +1,14 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v7.app.NotificationCompat;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -38,9 +42,15 @@ public class Server extends Activity {
     private TextView mLogView;
     private Map<String, TextView> mLabels;
 
+    private NotificationManager mNotificationManager;
+    private int mNotificationId;
+    private NotificationCompat.Builder mMatchNotificationBuilder;
+    private NotificationCompat.Builder mSuperNotificationBuilder;
+    private Intent mNotificationIntent;
+    private PendingIntent mNotificationPendingIntent;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
 
@@ -61,15 +71,13 @@ public class Server extends Activity {
         mLabels.put(Constants.Bluetooth.Device_Names.SERVER, (TextView)findViewById(R.id.server));
         mLabels.put(Constants.Bluetooth.Device_Names.STRATEGY, (TextView)findViewById(R.id.strategy));
         mLabels.put(Constants.Bluetooth.Device_Names.DRIVETEAM, (TextView)findViewById(R.id.driveteam));
-        for(TextView tv: mLabels.values())
-        {
+        for(TextView tv: mLabels.values()) {
             tv.setBackgroundColor(Color.RED);
         }
 
         mAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if(mAdapter == null)
-        {
+        if(mAdapter == null) {
             Log.e(TAG, "This device does not have bluetooth");
             mCircularBuffer.insert("This device does not support bluetooth.", Constants.Server_Log_Colors.RED);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -80,8 +88,7 @@ public class Server extends Activity {
             return;
         }
 
-        if(!mAdapter.isEnabled())
-        {
+        if(!mAdapter.isEnabled()) {
             Log.d(TAG, "Bluetooth is not enabled");
             mCircularBuffer.insert("Bluetooth is not enabled", Constants.Server_Log_Colors.RED);
             mCircularBuffer.insert("Enabling bluetooth...", Constants.Server_Log_Colors.YELLOW);
@@ -99,6 +106,27 @@ public class Server extends Activity {
                 mLogView.setText(Html.fromHtml(mCircularBuffer.toString()));
             }
         }
+
+        mNotificationId = 1;
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mNotificationIntent = new Intent(this, Server.class);
+        mNotificationPendingIntent = PendingIntent.getActivity(this, 0, mNotificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mMatchNotificationBuilder = new NotificationCompat.Builder(this);
+        mMatchNotificationBuilder.setContentTitle("Received Match Data");
+        mMatchNotificationBuilder.setContentText("");
+        mMatchNotificationBuilder.setSmallIcon(R.drawable.logo);
+        mMatchNotificationBuilder.setContentIntent(mNotificationPendingIntent);
+
+        mSuperNotificationBuilder = new NotificationCompat.Builder(this);
+        mSuperNotificationBuilder.setContentTitle("Received Super Data");
+        mSuperNotificationBuilder.setContentText("");
+        mSuperNotificationBuilder.setSmallIcon(R.drawable.logo);
+        mSuperNotificationBuilder.setContentIntent(mNotificationPendingIntent);
+
+
         if(Looper.myLooper() == null) {
             Looper.prepare();
         }
@@ -107,14 +135,12 @@ public class Server extends Activity {
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
         mAcceptThread.cancel();
     }
 
-    private class SyncHandler extends BluetoothHandler
-    {
+    private class SyncHandler extends BluetoothHandler {
         @Override
         public void displayText(String text) {
             Log.d(TAG, text);
@@ -138,8 +164,7 @@ public class Server extends Activity {
         }
 
         @Override
-        public void connectionAdded(String name)
-        {
+        public void connectionAdded(String name) {
             mLabels.get(name).setBackgroundColor(Color.GREEN);
         }
 
@@ -152,12 +177,16 @@ public class Server extends Activity {
         @Override
         public void dataRecieved(TMD tmd)
         {
+            mNotificationManager.notify(mNotificationId, mMatchNotificationBuilder.build());
+            mNotificationId++;
             Aggregate.aggregateForTeam(tmd.team_number);
         }
 
         @Override
         public void dataRecieved(SMD smd)
         {
+            mNotificationManager.notify(mNotificationId, mSuperNotificationBuilder.build());
+            mNotificationId++;
             Aggregate.aggregateForSuper();
         }
     }

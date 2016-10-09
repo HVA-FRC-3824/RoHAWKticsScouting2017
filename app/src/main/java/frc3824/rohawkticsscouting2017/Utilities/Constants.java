@@ -231,6 +231,15 @@ public interface Constants {
         }
     }
 
+    interface Notifications {
+        int MATCH_RECIEVED = 1;
+        int SUPER_RECIEVED = 2;
+        int UPLOAD_STRATEGIES = 3;
+        int DOWNLOAD_STRATEGIES = 4;
+        int UPLOAD_ROBOT_PICTURES = 5;
+        int DOWNLOAD_ROBOT_PICTURES = 6;
+    }
+
     interface Server_Log_Colors {
         String RED = "red";
         String BLUE = "blue";
