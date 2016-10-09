@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,8 @@ public class MatchList extends Activity implements View.OnClickListener{
                     break;
                 case Constants.Intent_Extras.SUPER_SCOUTING:
                 case Constants.Intent_Extras.MATCH_VIEWING:
+                    button.setBackgroundColor(ContextCompat.getColor(this, R.color.navy_blue);
+                    button.setTextColor(Color.WHITE);
                     button.setText(String.format("Match: %d", match_number));
                     break;
                 case Constants.Intent_Extras.DRIVE_TEAM_FEEDBACK:
@@ -123,6 +126,8 @@ public class MatchList extends Activity implements View.OnClickListener{
                     {
                         continue;
                     }
+                    button.setBackgroundColor(ContextCompat.getColor(this, R.color.navy_blue);
+                    button.setTextColor(Color.WHITE);
                     break;
             }
             button.setOnClickListener(this);

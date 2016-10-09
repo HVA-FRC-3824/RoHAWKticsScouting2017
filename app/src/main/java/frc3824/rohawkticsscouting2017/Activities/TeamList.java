@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,8 +31,7 @@ public class TeamList extends Activity implements View.OnClickListener{
     private String mNextPage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_list);
 
@@ -45,22 +45,22 @@ public class TeamList extends Activity implements View.OnClickListener{
         lp.setMargins(4, 4, 4, 4);
 
         ArrayList<Integer> teams = database.getTeamNumbers();
-        for(int i = 0; i < teams.size(); i++)
-        {
+        for(int i = 0; i < teams.size(); i++) {
             int team_number = teams.get(i);
             Button button = new Button(this);
             button.setLayoutParams(lp);
             button.setText(String.format("Team: %d", team_number));
-            if(mNextPage.equals(Constants.Intent_Extras.PIT_SCOUTING))
-            {
-                if(database.getTPD(team_number).pit_scouted)
-                {
-                    button.setBackgroundColor(Color.GREEN);
-                }
-                else
-                {
-                    button.setBackgroundColor(Color.RED);
-                }
+            switch (mNextPage){
+                case Constants.Intent_Extras.PIT_SCOUTING:
+                    if(database.getTPD(team_number).pit_scouted) {
+                        button.setBackgroundColor(Color.GREEN);
+                    } else {
+                        button.setBackgroundColor(Color.RED);
+                    }
+                    break;
+                case Constants.Intent_Extras.TEAM_VIEWING:
+                    button.setBackgroundColor(ContextCompat.getColor(this, R.color.navy_blue));
+                    button.setTextColor(Color.WHITE);
             }
             button.setOnClickListener(this);
             button.setId(team_number);
