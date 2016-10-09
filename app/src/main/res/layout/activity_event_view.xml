@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/columbia_blue"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="vertical">
 
         <android.widget.Toolbar
             android:id="@+id/toolbar"
@@ -23,54 +22,61 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             android:title="Event Comparison" />
 
-        <Spinner
-            android:id="@+id/main_dropdown"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <Spinner
-            android:id="@+id/secondary_dropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/white" />
+            <Spinner
+                android:id="@+id/main_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
 
-        <frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_Chart
-            android:id="@+id/lld_chart"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:visibility="gone" />
+            <Spinner
+                android:id="@+id/secondary_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/white" />
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bar_chart"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:visibility="gone" />
+            <frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_Chart
+                android:id="@+id/lld_chart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:visibility="gone" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/bar_chart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_gravity="start"
         android:background="@color/white"
-        android:layout_gravity="start">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Team Numbers"
-            android:textAlignment="center"
             android:background="@color/navy_blue"
-            android:textColor="@color/white"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:textSize="20sp"/>
+            android:text="Team Numbers"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <ListView
             android:id="@+id/drawer_list"
