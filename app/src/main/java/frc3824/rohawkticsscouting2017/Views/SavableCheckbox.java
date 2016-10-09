@@ -47,6 +47,7 @@ public class SavableCheckbox extends SavableView implements View.OnClickListener
 
     /**
      * Clicking anywhere in the view modifies the checkbox
+     *
      * @param view this view
      */
     @Override
@@ -60,26 +61,25 @@ public class SavableCheckbox extends SavableView implements View.OnClickListener
 
     /**
      * Saves the checkbox value to the map
+     *
      * @param map the map that the value is saved to
      * @return any error messages
      */
     @Override
-    public String writeToMap(ScoutMap map)
-    {
+    public String writeToMap(ScoutMap map) {
         map.put(mKey, mCheckbox.isChecked());
         return "";
     }
 
     /**
      * Restores the checkbox values based on the map
+     *
      * @param map the map that the checkbox value is restored from
      * @return any error messages
      */
     @Override
-    public String restoreFromMap(ScoutMap map)
-    {
-        if(map.contains(mKey))
-        {
+    public String restoreFromMap(ScoutMap map) {
+        if(map.contains(mKey)) {
             try {
                 setChecked(map.getBoolean(mKey));
             } catch (ScoutValue.TypeException e) {

@@ -153,22 +153,17 @@ public class MatchList extends Activity implements View.OnClickListener{
         }
     }
 
-    private void goToMatchScouting(int match_number)
-    {
+    private void goToMatchScouting(int match_number) {
         Intent intent = new Intent(this, MatchScouting.class);
-        if(match_number == 0)
-        {
+        if(match_number == 0) {
             intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
-        }
-        else
-        {
+        } else {
             intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
         }
         startActivity(intent);
     }
 
-    private void goToSuperScouting(int match_number)
-    {
+    private void goToSuperScouting(int match_number) {
         Intent intent = new Intent(this, SuperScouting.class);
         if(match_number == 0)
         {
@@ -181,8 +176,7 @@ public class MatchList extends Activity implements View.OnClickListener{
         startActivity(intent);
     }
 
-    private void goToMatchViewing(int match_number)
-    {
+    private void goToMatchViewing(int match_number) {
         Intent intent = new Intent(this, MatchView.class);
         if(match_number == 0)
         {
@@ -269,16 +263,14 @@ public class MatchList extends Activity implements View.OnClickListener{
         }
     }
 
-    public void goToDriveTeamFeedback(int match_number)
-    {
+    public void goToDriveTeamFeedback(int match_number) {
         Intent intent = new Intent(this, DriveTeamFeedback.class);
         intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
         startActivity(intent);
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         startActivity(new Intent(this, Home.class));
     }
 }

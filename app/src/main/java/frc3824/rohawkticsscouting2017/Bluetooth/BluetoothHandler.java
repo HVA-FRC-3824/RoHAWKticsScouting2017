@@ -35,8 +35,7 @@ public class BluetoothHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         String message;
-        switch (msg.what)
-        {
+        switch (msg.what) {
             case Constants.Bluetooth.Message_Type.COULD_NOT_CONNECT:
                 displayText("Could not connect", Constants.Server_Log_Colors.RED);
                 break;
@@ -77,7 +76,7 @@ public class BluetoothHandler extends Handler {
                     case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
                         TMD tmd = mGson.fromJson(message.substring(1), TMD.class);
                         mDatabase.setTMD(tmd);
-                        dataRecieved(tmd);
+                        dataReceived(tmd);
                         displayText("Match Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.PIT_HEADER:
@@ -87,7 +86,7 @@ public class BluetoothHandler extends Handler {
                     case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
                         SMD smd = mGson.fromJson(message.substring(1), SMD.class);
                         mDatabase.setSMD(smd);
-                        dataRecieved(smd);
+                        dataReceived(smd);
                         displayText("Super Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
@@ -108,6 +107,6 @@ public class BluetoothHandler extends Handler {
     public void displayText(String message, String color){}
     public void connectionAdded(String message){}
     public void connectionLost(String message){}
-    public void dataRecieved(TMD tmd){}
-    public void dataRecieved(SMD smd){}
+    public void dataReceived(TMD tmd){}
+    public void dataReceived(SMD smd){}
 }

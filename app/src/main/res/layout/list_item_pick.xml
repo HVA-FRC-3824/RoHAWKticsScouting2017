@@ -9,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:contentDescription="Robot image" />
 
     <TextView
         android:id="@+id/team_number"
@@ -86,22 +87,22 @@
         android:text="View" />
 
 
-    <View
+    <ImageView
         android:id="@+id/red_card"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@id/view_button"
-        android:background="@color/bright_red"
+        android:src="@drawable/soccer_car_red"
         android:visibility="gone" />
 
-    <View
+    <ImageView
         android:id="@+id/yellow_card"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@id/red_card"
-        android:background="#ffea00"
+        android:src="@drawable/soccer_card_yellow"
         android:visibility="gone" />
 
     <ImageView
@@ -109,6 +110,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_alignParentTop="true"
+        android:contentDescription="Icon for robot that has died on the field"
         android:layout_toLeftOf="@id/yellow_card"
         android:src="@drawable/skull_color"
         android:visibility="gone" />

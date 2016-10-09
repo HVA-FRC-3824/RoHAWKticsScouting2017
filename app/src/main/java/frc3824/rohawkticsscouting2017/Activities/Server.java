@@ -34,6 +34,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  */
 public class Server extends Activity {
 
+    //region variables
     private final static String TAG = "Server";
 
     private AcceptThread mAcceptThread;
@@ -43,11 +44,16 @@ public class Server extends Activity {
     private Map<String, TextView> mLabels;
 
     private NotificationManager mNotificationManager;
-    private int mNotificationId;
+
+    private int mMatchNotificationId;
     private NotificationCompat.Builder mMatchNotificationBuilder;
+
+    private int mSuperNotificationId;
     private NotificationCompat.Builder mSuperNotificationBuilder;
+
     private Intent mNotificationIntent;
     private PendingIntent mNotificationPendingIntent;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,24 +113,23 @@ public class Server extends Activity {
             }
         }
 
-        mNotificationId = 1;
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         mNotificationIntent = new Intent(this, Server.class);
         mNotificationPendingIntent = PendingIntent.getActivity(this, 0, mNotificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        mMatchNotificationId = Constants.Notifications.MATCH_RECIEVED;
         mMatchNotificationBuilder = new NotificationCompat.Builder(this);
         mMatchNotificationBuilder.setContentTitle("Received Match Data");
-        mMatchNotificationBuilder.setContentText("");
         mMatchNotificationBuilder.setSmallIcon(R.drawable.logo);
-        mMatchNotificationBuilder.setContentIntent(mNotificationPendingIntent);
+        //mMatchNotificationBuilder.setContentIntent(mNotificationPendingIntent);
 
+        mSuperNotificationId = Constants.Notifications.SUPER_RECIEVED;
         mSuperNotificationBuilder = new NotificationCompat.Builder(this);
         mSuperNotificationBuilder.setContentTitle("Received Super Data");
-        mSuperNotificationBuilder.setContentText("");
         mSuperNotificationBuilder.setSmallIcon(R.drawable.logo);
-        mSuperNotificationBuilder.setContentIntent(mNotificationPendingIntent);
+        //mSuperNotificationBuilder.setContentIntent(mNotificationPendingIntent);
 
 
         if(Looper.myLooper() == null) {
@@ -175,18 +180,14 @@ public class Server extends Activity {
         }
 
         @Override
-        public void dataRecieved(TMD tmd)
-        {
-            mNotificationManager.notify(mNotificationId, mMatchNotificationBuilder.build());
-            mNotificationId++;
+        public void dataReceived(TMD tmd) {
+            mNotificationManager.notify(mMatchNotificationId, mMatchNotificationBuilder.build());
             Aggregate.aggregateForTeam(tmd.team_number);
         }
 
         @Override
-        public void dataRecieved(SMD smd)
-        {
-            mNotificationManager.notify(mNotificationId, mSuperNotificationBuilder.build());
-            mNotificationId++;
+        public void dataReceived(SMD smd) {
+            mNotificationManager.notify(mSuperNotificationId, mSuperNotificationBuilder.build());
             Aggregate.aggregateForSuper();
         }
     }

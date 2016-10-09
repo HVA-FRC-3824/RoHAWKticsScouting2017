@@ -16,7 +16,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/11/16
  *
  * Savable set of radiobuttons that has a label attached.
@@ -70,15 +70,12 @@ public class SavableRadioButtons extends SavableView {
     }
 
     @Override
-    public String restoreFromMap(ScoutMap map)
-    {
-        if(map.contains(mKey))
-        {
+    public String restoreFromMap(ScoutMap map) {
+        if(map.contains(mKey)) {
             try {
                 String selectedString = map.getString(mKey);
                 int index = Arrays.asList(mResourceStrings).indexOf(selectedString);
-                if(index > -1)
-                {
+                if(index > -1) {
                     mRadioButtons.check(index);
                 }
             } catch (ScoutValue.TypeException e) {

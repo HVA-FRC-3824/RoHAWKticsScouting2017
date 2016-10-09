@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/11/16
  *
  * Abstract base class for all custom widgets that save and retrieve data

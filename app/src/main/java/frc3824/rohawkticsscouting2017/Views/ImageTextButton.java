@@ -13,8 +13,10 @@ import android.widget.TextView;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
- *         Created: 9/26/16
+ * @author frc3824
+ * Created: 9/26/16
+ *
+ * Button that contains both an image and text in the center
  */
 public class ImageTextButton extends LinearLayout{
 

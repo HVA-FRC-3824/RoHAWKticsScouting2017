@@ -13,8 +13,10 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
- *         Created: 8/11/16
+ * @author frc3824
+ * Created: 8/11/16
+ *
+ * An edittext for numbers that has a label and can be saved
  */
 public class SavableNumeric extends SavableView {
 
@@ -40,8 +42,7 @@ public class SavableNumeric extends SavableView {
     }
 
     @Override
-    public String writeToMap(ScoutMap map)
-    {
+    public String writeToMap(ScoutMap map) {
         if(String.valueOf(mNumeric.getText()).equals(""))
             map.put(mKey, 0.0);
         else
@@ -50,10 +51,8 @@ public class SavableNumeric extends SavableView {
     }
 
     @Override
-    public String restoreFromMap(ScoutMap map)
-    {
-        if(map.contains(mKey))
-        {
+    public String restoreFromMap(ScoutMap map) {
+        if(map.contains(mKey)) {
             try {
                 mNumeric.setText(String.valueOf(map.getDouble(mKey)));
             } catch (ScoutValue.TypeException e) {

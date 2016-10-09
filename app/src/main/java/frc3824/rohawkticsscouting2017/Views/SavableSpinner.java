@@ -16,7 +16,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/12/16
  *
  * Savable spinner with a label attached
@@ -54,17 +54,14 @@ public class SavableSpinner extends SavableView {
     }
 
     @Override
-    public String writeToMap(ScoutMap map)
-    {
+    public String writeToMap(ScoutMap map) {
         map.put(mKey, String.valueOf(mSpinner.getSelectedItem()));
         return "";
     }
 
     @Override
-    public String restoreFromMap(ScoutMap map)
-    {
-        if(map.contains(mKey))
-        {
+    public String restoreFromMap(ScoutMap map) {
+        if(map.contains(mKey)) {
             try {
                 mSpinner.setSelection(Arrays.asList(mResourceStrings).indexOf(map.getString(mKey)));
             } catch (ScoutValue.TypeException e) {

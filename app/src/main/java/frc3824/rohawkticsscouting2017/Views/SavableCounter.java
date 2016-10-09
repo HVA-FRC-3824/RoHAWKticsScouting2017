@@ -14,7 +14,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/11/16
  *
  * Savable Counter that has a label attached. Clicking anywhere in the field increments the counter.
@@ -77,17 +77,14 @@ public class SavableCounter extends SavableView implements View.OnClickListener,
     }
 
     @Override
-    public String writeToMap(ScoutMap map)
-    {
+    public String writeToMap(ScoutMap map) {
         map.put(mKey, mCount);
         return "";
     }
 
     @Override
-    public String restoreFromMap(ScoutMap map)
-    {
-        if(map.contains(mKey))
-        {
+    public String restoreFromMap(ScoutMap map) {
+        if(map.contains(mKey)) {
             try {
                 mCount = map.getInt(mKey);
                 mCounter.setText(Integer.toString(mCount));

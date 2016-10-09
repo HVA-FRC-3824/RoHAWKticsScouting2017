@@ -17,15 +17,16 @@ import android.view.View;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/20/16
  *
- *
+ * Paint like view to draw on a background
  */
 public class DrawingView extends View{
 
     private final static String TAG = "PaintView";
 
+    //region variables
     private Path drawPath;
     private Paint drawPaint, canvasPaint;
     private int lastDrawColor;
@@ -35,9 +36,9 @@ public class DrawingView extends View{
     private Bitmap fieldBitmap;
     private float brushSize, lastBrushSize;
     private int screenWidth, screenHeight;
+    //endregion
 
-    public DrawingView(Context context, AttributeSet attrs)
-    {
+    public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         drawPath = new Path();
         drawPaint = new Paint();
@@ -56,8 +57,7 @@ public class DrawingView extends View{
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldW, int oldH)
-    {
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldH, oldW);
         screenWidth = w;
         screenHeight = h;
@@ -67,16 +67,14 @@ public class DrawingView extends View{
     }
 
     @Override
-    protected void onDraw(Canvas canvas)
-    {
+    protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(backgroundBitmap, 0, 0, canvasPaint);
         canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
         canvas.drawPath(drawPath, drawPaint);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
         float touchY = event.getY();
         switch (event.getAction()) {
@@ -97,15 +95,13 @@ public class DrawingView extends View{
         return true;
     }
 
-    public void setColor(String newColor)
-    {
+    public void setColor(String newColor) {
         invalidate();
         paintColor = Color.parseColor(newColor);
         drawPaint.setColor(paintColor);
     }
 
-    public void setBrushSize(float newSize)
-    {
+    public void setBrushSize(float newSize) {
         brushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 newSize, getResources().getDisplayMetrics());
         drawPaint.setStrokeWidth(brushSize);
@@ -114,18 +110,15 @@ public class DrawingView extends View{
     public void setLastBrushSize(float lastSize){
         lastBrushSize = lastSize;
     }
+
     public float getLastBrushSize() {
         return lastBrushSize;
     }
 
-    public void setErase(boolean isErase)
-    {
-        if(isErase)
-        {
+    public void setErase(boolean isErase) {
+        if(isErase) {
             drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        }
-        else
-        {
+        } else {
             drawPaint.setXfermode(null);
         }
     }
@@ -136,8 +129,7 @@ public class DrawingView extends View{
         invalidate();
     }
 
-    public void load(Bitmap bitmap)
-    {
+    public void load(Bitmap bitmap) {
         canvasBitmap = bitmap;
         drawCanvas = new Canvas(canvasBitmap);
         invalidate();

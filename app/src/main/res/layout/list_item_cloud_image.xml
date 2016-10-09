@@ -11,7 +11,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:contentDescription="Main image to be uploaded/downloaded" />
 
     <TextView
         android:id="@+id/filename"
@@ -32,8 +33,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/download"
         android:layout_marginRight="8dp"
-        android:text="upload"
-        android:drawableRight="@drawable/upload_to_cloud_color"/>
+        android:drawableRight="@drawable/upload_to_cloud_color"
+        android:text="upload" />
 
     <Button
         android:id="@+id/download"
@@ -43,8 +44,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/upload"
         android:layout_marginRight="8dp"
-        android:text="download"
-        android:drawableRight="@drawable/download_from_cloud_color" />
+        android:drawableRight="@drawable/download_from_cloud_color"
+        android:text="download" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

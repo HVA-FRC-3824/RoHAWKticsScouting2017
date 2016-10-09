@@ -16,8 +16,10 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 import frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView;
 
 /**
- * @author Andrew Messing
- *         Created: 8/24/16
+ * @author frc3824
+ * Created: 8/24/16
+ *
+ *
  */
 public class SavableQualitative extends SavableView implements DragSortListView.DropListener {
 
@@ -48,8 +50,7 @@ public class SavableQualitative extends SavableView implements DragSortListView.
         //mListView.setFloatViewManager(new SimpleFloatViewManager(mListView));
     }
 
-    public void setTeams(ArrayList<Integer> teams)
-    {
+    public void setTeams(ArrayList<Integer> teams) {
         mTeams = teams;
         mLva = new LVA_Qualitative(mContext, teams);
         mListView.setAdapter(mLva);
@@ -64,17 +65,14 @@ public class SavableQualitative extends SavableView implements DragSortListView.
     }
 
     @Override
-    public String writeToMap(ScoutMap map)
-    {
+    public String writeToMap(ScoutMap map) {
         map.put(mKey, mTeams);
         return "";
     }
 
     @Override
-    public String restoreFromMap(ScoutMap map)
-    {
-        if(map.contains(mKey))
-        {
+    public String restoreFromMap(ScoutMap map) {
+        if(map.contains(mKey)) {
             try {
                 mTeams = (ArrayList<Integer>)map.getObject(mKey);
             } catch (ScoutValue.TypeException e) {

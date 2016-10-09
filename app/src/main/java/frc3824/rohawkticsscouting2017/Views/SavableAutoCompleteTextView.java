@@ -14,7 +14,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/12/16
  *
  * Savable textbox that can autocomplete with an array of options
@@ -53,17 +53,14 @@ public class SavableAutoCompleteTextView extends SavableView {
     }
 
     @Override
-    public String writeToMap(ScoutMap map)
-    {
+    public String writeToMap(ScoutMap map) {
         map.put(mKey, mAutocompleteTextView.getText().toString());
         return "";
     }
 
     @Override
-    public String restoreFromMap(ScoutMap map)
-    {
-        if(map.contains(mKey))
-        {
+    public String restoreFromMap(ScoutMap map) {
+        if(map.contains(mKey)) {
             try {
                 mAutocompleteTextView.setText(map.getString(mKey));
             } catch (ScoutValue.TypeException e) {
