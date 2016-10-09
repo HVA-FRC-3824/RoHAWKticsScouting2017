@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin">
 
     <ImageView
+        android:id="@+id/robot_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/robot_picture"
         android:layout_gravity="center_horizontal" />
 
     <TextView
+        android:id="@+id/need_to_download"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/need_to_download"
         android:text="Image needs to be downloaded"
-        android:textSize="20sp"
         android:textAlignment="center"
         android:textColor="@color/bright_red"
-        android:visibility="gone"/>
+        android:textSize="20sp"
+        android:visibility="gone" />
 
     <Button
+        android:id="@+id/take_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take Picture"
-        android:id="@+id/take_picture"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:text="Take Picture" />
 
 </LinearLayout>

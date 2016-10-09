@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin">
 
     <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/post_dq"
-        app:label="DQed"
-        app:key="post_dq" />
-
-    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:key="post_dq"
+        app:label="DQed" />
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/post_stopped"
-        app:label="Stopped Moving"
-        app:key="post_stopped" />
-
-    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:key="post_stopped"
+        app:label="Stopped Moving" />
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/post_no_show"
-        app:label="No Show"
-        app:key="post_no_show" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="post_no_show"
+        app:label="No Show" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableEditText
+        android:id="@+id/post_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/post_notes"
-        app:label="Notes"
-        app:key="post_notes" />
+        app:key="post_notes"
+        app:label="Notes" />
 
 </LinearLayout>

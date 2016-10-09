@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin">
 
     <frc3824.rohawkticsscouting2017.Views.SavableCounter
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/foul_standard"
-        app:label="Foul:"
-        app:key="foul_standard"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="foul_standard"
+        app:label="Foul:" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableCounter
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/foul_tech"
-        app:label="Tech Foul:"
-        app:key="foul_tech"/>
-
-    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:key="foul_tech"
+        app:label="Tech Foul:" />
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/foul_yellow_card"
-        app:label="Yellow card:"
-        app:key="foul_yellow_card"/>
-
-    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:key="foul_yellow_card"
+        app:label="Yellow card:" />
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/foul_red_card"
-        app:label="Red Card:"
-        app:key="foul_red_card"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="foul_red_card"
+        app:label="Red Card:" />
 
 </LinearLayout>

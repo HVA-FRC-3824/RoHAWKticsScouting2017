@@ -59,6 +59,11 @@ public class Home extends Activity implements View.OnClickListener{
 
     private String mServerName;
 
+    /**
+     *
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,9 +146,9 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setText("User: Match Scout");
         mUserTypeTextView.setVisibility(View.VISIBLE);
 
-        String allianceColor = mSharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
+        String alliance_color = mSharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
         String userSubtype;
-        if(allianceColor == Constants.Alliance_Colors.BLUE)
+        if(alliance_color == Constants.Alliance_Colors.BLUE)
         {
             mUserSubTypeTextView.setTextColor(Color.BLUE);
             userSubtype = "Blue ";
@@ -268,9 +273,12 @@ public class Home extends Activity implements View.OnClickListener{
     }
     //endregion
 
+    /**
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
-        Log.d(TAG, "click");
         Intent intent;
         switch (view.getId())
         {

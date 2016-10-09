@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/columbia_blue">
 
     <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
@@ -16,11 +17,10 @@
         tools:context=".Activities.Settings">
 
         <Button
-            android:id="@+id/homeButton"
+            android:id="@+id/home_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/navy_blue"
-            android:onClick="home"
             android:text="Home"
             android:textColor="@color/white"
             android:visibility="invisible" />
@@ -177,10 +177,9 @@
 
         <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/save_button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/navy_blue"
-            android:onClick="saveSettings"
             app:text="Save"
             app:textSize="10sp"
             app:src="@drawable/save_color"
@@ -192,7 +191,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@color/navy_blue"
-            android:onClick="pullEvent"
             app:text="Pull event info"
             app:textSize="10sp"
             app:src="@drawable/download_from_cloud_color"
