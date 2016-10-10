@@ -130,7 +130,7 @@ public class Settings extends Activity implements OnClickListener{
                     case Constants.User_Types.ADMIN:
                         findViewById(R.id.alliance_number_label).setVisibility(View.VISIBLE);
                         findViewById(R.id.alliance_color_label).setVisibility(View.VISIBLE);
-                        findViewById(R.id.pit_group_label).setVisibility(View.VISIBLE);
+                        findViewById(R.id.pit_group_label).setVisibility(View.GONE);
                         findViewById(R.id.server_label).setVisibility(View.VISIBLE);
                         alliance_color_selector.setVisibility(View.VISIBLE);
                         alliance_number_selector.setVisibility(View.VISIBLE);
@@ -185,6 +185,8 @@ public class Settings extends Activity implements OnClickListener{
 
             }
         });
+        user_type_selector.setSelection(Arrays.asList(user_type_options).indexOf(
+                mSharedPreferences.getString(Constants.Settings.USER_TYPE, "")));
 
         String event_key = mSharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
 

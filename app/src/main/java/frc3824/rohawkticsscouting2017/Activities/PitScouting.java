@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -24,9 +25,14 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PitScoutDrawer;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.TeamNumberCheck;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -49,11 +55,16 @@ public class PitScouting extends Activity {
 
     private int mTeamNumber;
     private Database mDatabase;
-    private FPA_PitScouting mFPA;
     private String mEventKey;
+    private FPA_PitScouting mFPA;
 
     private int mTeamBefore;
     private int mTeamAfter;
+    private int mFirstTeamInPitGroup;
+    private int mLastTeamInPitGroup;
+
+    private ListView mDrawerList;
+    private LVA_PitScoutDrawer mLVA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +77,26 @@ public class PitScouting extends Activity {
         Bundle extras = getIntent().getExtras();
 
         mTeamNumber = extras.getInt(Constants.Intent_Extras.TEAM_NUMBER);
+        mDatabase = Database.getInstance();
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mEventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
-        mDatabase = Database.getInstance();
+        ArrayList<Integer> teams = mDatabase.getTeamNumbers();
+        if(shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.PIT_SCOUT)) {
+            int pit_group = shared_preferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
+            int group_size = (int) ((float) (teams.size()) / 6.0 + 0.5f);
+            int start = group_size * (pit_group - 1);
+            mFirstTeamInPitGroup = teams.get(start);
+            int end = group_size * (pit_group);
+            if (end > teams.size()) {
+                end = teams.size();
+            }
+            mLastTeamInPitGroup = teams.get(end - 1);
+            teams = new ArrayList(teams.subList(start, end));
+        } else {
+            mFirstTeamInPitGroup = teams.get(0);
+            mLastTeamInPitGroup = teams.get(teams.size() - 1);
+        }
 
         setTitle(String.format("Team: %d", mTeamNumber));
 
@@ -91,6 +118,19 @@ public class PitScouting extends Activity {
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);
+
+        mDrawerList = (ListView)findViewById(R.id.drawer_list);
+        ArrayList<TeamNumberCheck> tncs = new ArrayList<>();
+        for(int team_number: teams){
+            if(mDatabase.getTPD(team_number).pit_scouted){
+                tncs.add(new TeamNumberCheck(team_number, true));
+            } else {
+                tncs.add(new TeamNumberCheck(team_number));
+            }
+        }
+
+        mLVA = new LVA_PitScoutDrawer(this, tncs);
+        mDrawerList.setAdapter(mLVA);
     }
 
     /**
@@ -102,14 +142,13 @@ public class PitScouting extends Activity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO: check if next or previous is in the group
         getMenuInflater().inflate(R.menu.team_overflow, menu);
         mTeamBefore = mDatabase.getTeamNumberBefore(mTeamNumber);
-        if (mTeamBefore == 0) {
+        if (mTeamBefore == 0 || mTeamBefore < mFirstTeamInPitGroup) {
             menu.removeItem(R.id.previous_team);
         }
         mTeamAfter = mDatabase.getTeamNumberAfter(mTeamNumber);
-        if (mTeamAfter == 0) {
+        if (mTeamAfter == 0 || mTeamAfter > mLastTeamInPitGroup) {
             menu.removeItem(R.id.next_team);
         }
         return true;

@@ -1,10 +1,13 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,6 +41,8 @@ public class TeamList extends Activity implements View.OnClickListener{
         Bundle extras = getIntent().getExtras();
         mNextPage = extras.getString(Constants.Intent_Extras.NEXT_PAGE);
 
+
+
         Database database = Database.getInstance();
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.team_list);
@@ -45,7 +50,23 @@ public class TeamList extends Activity implements View.OnClickListener{
         lp.setMargins(4, 4, 4, 4);
 
         ArrayList<Integer> teams = database.getTeamNumbers();
-        for(int i = 0; i < teams.size(); i++) {
+
+        // For pit scouting show only the team in group
+        int start = 0;
+        int end = teams.size();
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
+        String user_type = sharedPreferences.getString(Constants.Settings.USER_TYPE, "");
+        if(user_type.equals(Constants.User_Types.PIT_SCOUT)){
+            int pit_group = sharedPreferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
+            int group_size = (int)((float)(teams.size()) / 6.0 + 0.5f);
+            start = group_size * (pit_group - 1);
+            end = group_size * (pit_group);
+            if(end > teams.size()){
+                end = teams.size();
+            }
+        }
+
+        for(int i = start; i < end; i++) {
             int team_number = teams.get(i);
             Button button = new Button(this);
             button.setLayoutParams(lp);

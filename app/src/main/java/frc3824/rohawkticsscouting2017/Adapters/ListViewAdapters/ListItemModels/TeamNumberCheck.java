@@ -17,4 +17,9 @@ public class TeamNumberCheck {
         this.team_number = team_number;
         this.check = false;
     }
+
+    public TeamNumberCheck(int team_number, boolean check){
+        this.team_number = team_number;
+        this.check = check;
+    }
 }
