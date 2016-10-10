@@ -151,7 +151,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
-            app:src="@drawable/basketball_field_black"
+            app:src="@drawable/basketball_field_white"
             app:text="Match Planning"
             app:textColor="@color/white"
             app:textSize="10sp" />

@@ -134,7 +134,7 @@ public class Settings extends Activity implements OnClickListener{
                         findViewById(R.id.server_label).setVisibility(View.VISIBLE);
                         alliance_color_selector.setVisibility(View.VISIBLE);
                         alliance_number_selector.setVisibility(View.VISIBLE);
-                        pit_group_selector.setVisibility(View.VISIBLE);
+                        pit_group_selector.setVisibility(View.GONE);
                         server_selector.setVisibility(View.VISIBLE);
                         break;
                     case Constants.User_Types.MATCH_SCOUT:

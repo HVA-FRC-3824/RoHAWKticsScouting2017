@@ -1,6 +1,7 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,12 +45,10 @@ public class LVA_MatchScoutDrawer extends ArrayAdapter<MatchNumberCheck> {
         TextView match_number = (TextView)convertView.findViewById(R.id.match_number);
         match_number.setText(String.format("Match %d", mnc.match_number));
 
-        ImageView imageView = (ImageView)convertView.findViewById(R.id.icon);
-
         if(mnc.check){
-            imageView.setImageResource(R.drawable.check_2_color);
+            convertView.setBackgroundColor(Color.GREEN);
         } else {
-            imageView.setImageBitmap(null);
+            convertView.setBackgroundColor(Color.RED);
         }
 
         return convertView;

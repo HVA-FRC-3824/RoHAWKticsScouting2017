@@ -1,6 +1,7 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +44,10 @@ public class LVA_PitScoutDrawer extends ArrayAdapter<TeamNumberCheck> {
         TextView team_number = (TextView)convertView.findViewById(R.id.team_number);
         team_number.setText(String.format("%d", tnc.team_number));
 
-        ImageView imageView = (ImageView)convertView.findViewById(R.id.icon);
-
         if(tnc.check){
-            imageView.setImageResource(R.drawable.check_2_color);
+            convertView.setBackgroundColor(Color.GREEN);
         } else {
-            imageView.setImageBitmap(null);
+            convertView.setBackgroundColor(Color.RED);
         }
 
         return convertView;

@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 
 import java.util.ArrayList;
 
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_TeamList;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -27,7 +29,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * Displays a list of buttons with all the team at the given event. Can lead to Pit Scouting or Team
  * View.
  */
-public class TeamList extends Activity implements View.OnClickListener{
+public class TeamList extends Activity{
 
     private final static String TAG = "TeamList";
 
@@ -41,13 +43,7 @@ public class TeamList extends Activity implements View.OnClickListener{
         Bundle extras = getIntent().getExtras();
         mNextPage = extras.getString(Constants.Intent_Extras.NEXT_PAGE);
 
-
-
         Database database = Database.getInstance();
-
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.team_list);
-        TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(4, 4, 4, 4);
 
         ArrayList<Integer> teams = database.getTeamNumbers();
 
@@ -66,48 +62,22 @@ public class TeamList extends Activity implements View.OnClickListener{
             }
         }
 
+        ArrayList<Integer> team_numbers = new ArrayList<>();
         for(int i = start; i < end; i++) {
-            int team_number = teams.get(i);
-            Button button = new Button(this);
-            button.setLayoutParams(lp);
-            button.setText(String.format("Team: %d", team_number));
-            switch (mNextPage){
-                case Constants.Intent_Extras.PIT_SCOUTING:
-                    if(database.getTPD(team_number).pit_scouted) {
-                        button.setBackgroundColor(Color.GREEN);
-                    } else {
-                        button.setBackgroundColor(Color.RED);
-                    }
-                    break;
-                case Constants.Intent_Extras.TEAM_VIEWING:
-                    button.setBackgroundColor(ContextCompat.getColor(this, R.color.navy_blue));
-                    button.setTextColor(Color.WHITE);
-            }
-            button.setOnClickListener(this);
-            button.setId(team_number);
-            linearLayout.addView(button);
+            team_numbers.add(teams.get(i));
         }
 
+
+        ListView listView = (ListView)findViewById(R.id.team_list);
+        LVA_TeamList.TeamListType tlt = LVA_TeamList.TeamListType.PIT_SCOUT;
+        if(mNextPage.equals(Constants.Intent_Extras.TEAM_VIEWING)){
+            tlt = LVA_TeamList.TeamListType.TEAM_VIEW;
+        }
+        LVA_TeamList lva= new LVA_TeamList(this, team_numbers, tlt);
+        listView.setAdapter(lva);
     }
 
-    @Override
-    public void onClick(View view) {
-        Intent intent = null;
-        switch (mNextPage)
-        {
-            case Constants.Intent_Extras.PIT_SCOUTING:
-                intent = new Intent(this, PitScouting.class);
-                intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, view.getId());
-                startActivity(intent);
-                break;
-            case Constants.Intent_Extras.TEAM_VIEWING:
-                intent = new Intent(this, TeamView.class);
-                intent.putExtra(Constants.Intent_Extras.TEAM_NUMBER, view.getId());
-                startActivity(intent);
-            default:
-                assert false;
-        }
-    }
+
 
     @Override
     public void onBackPressed()
