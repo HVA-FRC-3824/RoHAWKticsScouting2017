@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -115,7 +114,7 @@ public class Settings extends Activity implements OnClickListener{
         server_selector.setSelection(Arrays.asList(server_options).indexOf(
                 mSharedPreferences.getString(Constants.Settings.SERVER, "")));
 
-        mUserTypeSelector = (Spinner) findViewById(R.id.type_selector);
+        mUserTypeSelector = (Spinner) findViewById(R.id.user_type_selector);
         Spinner user_type_selector = mUserTypeSelector;
         String[] user_type_options = new String[]{Constants.User_Types.MATCH_SCOUT, Constants.User_Types.PIT_SCOUT,
                 Constants.User_Types.SUPER_SCOUT, Constants.User_Types.DRIVE_TEAM, Constants.User_Types.STRATEGY,
@@ -128,54 +127,34 @@ public class Settings extends Activity implements OnClickListener{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (parent.getItemAtPosition(position).toString()) {
                     case Constants.User_Types.ADMIN:
-                        findViewById(R.id.alliance_number_label).setVisibility(View.VISIBLE);
-                        findViewById(R.id.alliance_color_label).setVisibility(View.VISIBLE);
-                        findViewById(R.id.pit_group_label).setVisibility(View.GONE);
-                        findViewById(R.id.server_label).setVisibility(View.VISIBLE);
-                        alliance_color_selector.setVisibility(View.VISIBLE);
-                        alliance_number_selector.setVisibility(View.VISIBLE);
-                        pit_group_selector.setVisibility(View.GONE);
-                        server_selector.setVisibility(View.VISIBLE);
+                        findViewById(R.id.alliance_number).setVisibility(View.GONE);
+                        findViewById(R.id.alliance_color).setVisibility(View.GONE);
+                        findViewById(R.id.pit_group).setVisibility(View.GONE);
+                        findViewById(R.id.server).setVisibility(View.VISIBLE);
                         break;
                     case Constants.User_Types.MATCH_SCOUT:
-                        findViewById(R.id.alliance_number_label).setVisibility(View.VISIBLE);
-                        findViewById(R.id.alliance_color_label).setVisibility(View.VISIBLE);
-                        findViewById(R.id.pit_group_label).setVisibility(View.GONE);
-                        findViewById(R.id.server_label).setVisibility(View.VISIBLE);
-                        alliance_color_selector.setVisibility(View.VISIBLE);
-                        alliance_number_selector.setVisibility(View.VISIBLE);
-                        pit_group_selector.setVisibility(View.GONE);
-                        server_selector.setVisibility(View.VISIBLE);
+                        findViewById(R.id.alliance_number).setVisibility(View.VISIBLE);
+                        findViewById(R.id.alliance_color).setVisibility(View.VISIBLE);
+                        findViewById(R.id.pit_group).setVisibility(View.GONE);
+                        findViewById(R.id.server).setVisibility(View.VISIBLE);
                         break;
                     case Constants.User_Types.PIT_SCOUT:
-                        findViewById(R.id.alliance_number_label).setVisibility(View.GONE);
-                        findViewById(R.id.alliance_color_label).setVisibility(View.GONE);
-                        findViewById(R.id.pit_group_label).setVisibility(View.VISIBLE);
-                        findViewById(R.id.server_label).setVisibility(View.VISIBLE);
-                        alliance_color_selector.setVisibility(View.GONE);
-                        alliance_number_selector.setVisibility(View.GONE);
-                        pit_group_selector.setVisibility(View.VISIBLE);
-                        server_selector.setVisibility(View.VISIBLE);
+                        findViewById(R.id.alliance_number).setVisibility(View.GONE);
+                        findViewById(R.id.alliance_color).setVisibility(View.GONE);
+                        findViewById(R.id.pit_group).setVisibility(View.VISIBLE);
+                        findViewById(R.id.server).setVisibility(View.VISIBLE);
                         break;
                     case Constants.User_Types.SERVER:
-                        findViewById(R.id.alliance_number_label).setVisibility(View.GONE);
-                        findViewById(R.id.alliance_color_label).setVisibility(View.GONE);
-                        findViewById(R.id.pit_group_label).setVisibility(View.GONE);
-                        findViewById(R.id.server_label).setVisibility(View.GONE);
-                        alliance_color_selector.setVisibility(View.GONE);
-                        alliance_number_selector.setVisibility(View.GONE);
-                        pit_group_selector.setVisibility(View.GONE);
-                        server_selector.setVisibility(View.GONE);
+                        findViewById(R.id.alliance_number).setVisibility(View.GONE);
+                        findViewById(R.id.alliance_color).setVisibility(View.GONE);
+                        findViewById(R.id.pit_group).setVisibility(View.GONE);
+                        findViewById(R.id.server).setVisibility(View.GONE);
                         break;
                     default:
-                        findViewById(R.id.alliance_number_label).setVisibility(View.GONE);
-                        findViewById(R.id.alliance_color_label).setVisibility(View.GONE);
-                        findViewById(R.id.pit_group_label).setVisibility(View.GONE);
-                        findViewById(R.id.server_label).setVisibility(View.VISIBLE);
-                        alliance_color_selector.setVisibility(View.GONE);
-                        alliance_number_selector.setVisibility(View.GONE);
-                        pit_group_selector.setVisibility(View.GONE);
-                        server_selector.setVisibility(View.VISIBLE);
+                        findViewById(R.id.alliance_number).setVisibility(View.GONE);
+                        findViewById(R.id.alliance_color).setVisibility(View.GONE);
+                        findViewById(R.id.pit_group).setVisibility(View.GONE);
+                        findViewById(R.id.server).setVisibility(View.VISIBLE);
                         break;
                 }
             }

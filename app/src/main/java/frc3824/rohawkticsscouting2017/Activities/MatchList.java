@@ -101,7 +101,8 @@ public class MatchList extends Activity{
         if(mNextPage.equals(Constants.Intent_Extras.MATCH_SCOUTING)){
             String alliance_color = sharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
             int alliance_number = sharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
-            lva.setAlliance(alliance_color, alliance_number);
+            lva.setMatchScoutExtras(sharedPreferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.ADMIN),
+                    alliance_color, alliance_number);
         }
         listView.setAdapter(lva);
     }

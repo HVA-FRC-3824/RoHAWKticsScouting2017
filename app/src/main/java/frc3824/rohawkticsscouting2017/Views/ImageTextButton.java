@@ -22,6 +22,9 @@ public class ImageTextButton extends LinearLayout{
 
     private final static String TAG = "ImageTextButton";
 
+    private TextView mTextView;
+    private ImageView mImageView;
+    private int mImageResourceId;
 
     public ImageTextButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,23 +32,33 @@ public class ImageTextButton extends LinearLayout{
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.image_text_button, this);
 
-        TextView textView = (TextView) findViewById(R.id.text);
+        mTextView= (TextView) findViewById(R.id.text);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ImageTextButton);
-        textView.setText(typedArray.getString(R.styleable.ImageTextButton_text));
-        textView.setTextColor(typedArray.getColor(R.styleable.ImageTextButton_textColor, Color.WHITE));
-        textView.setTextSize(typedArray.getDimensionPixelSize(R.styleable.ImageTextButton_textSize, 12));
+        mTextView.setText(typedArray.getString(R.styleable.ImageTextButton_text));
+        mTextView.setTextColor(typedArray.getColor(R.styleable.ImageTextButton_textColor, Color.WHITE));
+        mTextView.setTextSize(typedArray.getDimensionPixelSize(R.styleable.ImageTextButton_textSize, 12));
 
-        ImageView imageView = (ImageView) findViewById(R.id.icon);
+        mImageView = (ImageView) findViewById(R.id.icon);
         int resource_id = typedArray.getResourceId(R.styleable.ImageTextButton_src, -1);
+        mImageResourceId = resource_id;
+
         if(resource_id > -1)
         {
-            imageView.setImageResource(resource_id);
+            mImageView.setImageResource(resource_id);
         }
+    }
+
+    public void setText(String text){
+        mTextView.setText(text);
+    }
+
+    public int getImageResourceId(){
+        return mImageResourceId;
     }
 
     public void setImage(int resource_id)
     {
-        ImageView imageView = (ImageView) findViewById(R.id.icon);
-        imageView.setImageResource(resource_id);
+        mImageView.setImageResource(resource_id);
+        mImageResourceId = resource_id;
     }
 }
