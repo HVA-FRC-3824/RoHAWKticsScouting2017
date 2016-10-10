@@ -202,6 +202,7 @@ public class Settings extends Activity implements OnClickListener{
         {
             findViewById(R.id.home_button).setVisibility(View.VISIBLE);
             findViewById(R.id.pull_event_button).setVisibility(View.VISIBLE);
+            mBackAllowed = true;
         }
 
         mProgressBar = (ProgressBar)findViewById(R.id.progress_bar);

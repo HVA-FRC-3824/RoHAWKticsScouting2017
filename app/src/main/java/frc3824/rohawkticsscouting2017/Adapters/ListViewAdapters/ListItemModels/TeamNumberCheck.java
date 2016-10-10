@@ -15,5 +15,6 @@ public class TeamNumberCheck {
 
     public TeamNumberCheck(int team_number){
         this.team_number = team_number;
+        this.check = false;
     }
 }

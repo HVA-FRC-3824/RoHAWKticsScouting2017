@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -24,10 +25,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_SuperScouting;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
 import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
@@ -58,9 +62,11 @@ public class SuperScouting extends Activity{
     private FPA_SuperScouting mFPA;
     private String mServerName;
 
+    private ListView mDrawerList;
+    private LVA_MatchScoutDrawer mLVA;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_super_scouting);
 
@@ -79,6 +85,19 @@ public class SuperScouting extends Activity{
         if(mMatchNumber > 0)
         {
             setTitle(String.format("Match: %d", mMatchNumber));
+
+            mDrawerList = (ListView)findViewById(R.id.drawer_list);
+            ArrayList<MatchNumberCheck> mncs = new ArrayList<>();
+            for(int i = 1; i <= mDatabase.getNumberOfMatches(); i++){
+                if(mDatabase.getSMD(i) != null){
+                    mncs.add(new MatchNumberCheck(i, true));
+                } else {
+                    mncs.add(new MatchNumberCheck(i));
+                }
+            }
+
+            mLVA = new LVA_MatchScoutDrawer(this, mncs);
+            mDrawerList.setAdapter(mLVA);
         }
         else
         {

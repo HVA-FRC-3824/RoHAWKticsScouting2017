@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -24,10 +25,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
 import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
@@ -55,11 +59,16 @@ public class MatchScouting extends Activity {
     private int mTeamNumber = -1;
     private int mMatchNumber = -1;
 
+    private String mAllianceColor;
+    private int mAllianceNumber;
+
     private boolean mPractice = false;
 
     private Database mDatabase;
-
     private String mServerName;
+
+    private ListView mDrawerList;
+    private LVA_MatchScoutDrawer mLVA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,23 +82,36 @@ public class MatchScouting extends Activity {
         mMatchNumber = extras.getInt(Constants.Intent_Extras.MATCH_NUMBER);
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String allianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
-        int allianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
+        mAllianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
+        mAllianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
         mServerName = shared_preferences.getString(Constants.Settings.SERVER, "");
 
         mDatabase = Database.getInstance();
 
         if (mMatchNumber > 0) {
-            if (allianceColor.equals(Constants.Alliance_Colors.BLUE)) {
-                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(allianceNumber - 1);
+            if (mAllianceColor.equals(Constants.Alliance_Colors.BLUE)) {
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(mAllianceNumber - 1);
             } else {
-                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(allianceNumber + 2);
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(mAllianceNumber + 2);
             }
 
             setTitle(String.format("Match Number: %d Team Number: %d", mMatchNumber, mTeamNumber));
-        }
-        // mMatchNumber is -1 for practice matches
-        else {
+
+            mDrawerList = (ListView)findViewById(R.id.drawer_list);
+            ArrayList<MatchNumberCheck> mncs = new ArrayList<>();
+            for(int i = 1; i <= mDatabase.getNumberOfMatches(); i++){
+                if(mDatabase.getTMD(i,  mDatabase.getMatch(i).teams.get(mAllianceNumber - 1)) != null){
+                    mncs.add(new MatchNumberCheck(i, true));
+                } else {
+                    mncs.add(new MatchNumberCheck(i));
+                }
+            }
+
+            mLVA = new LVA_MatchScoutDrawer(this, mncs);
+            mDrawerList.setAdapter(mLVA);
+
+        } else {
+            // mMatchNumber is -1 for practice matches
             mPractice = true;
             setTitle("Practice Match");
         }
@@ -104,12 +126,11 @@ public class MatchScouting extends Activity {
             mFPA.setValueMap(tim.toMap());
         }
         viewPager.setAdapter(mFPA);
-        // Set the off screen page limit to more than the number of fragments
         viewPager.setOffscreenPageLimit(mFPA.getCount());
 
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.match_scouting_tab_layout);
-        if (allianceColor.equals(Constants.Alliance_Colors.BLUE)) {
+        if (mAllianceColor.equals(Constants.Alliance_Colors.BLUE)) {
             tabLayout.setBackgroundColor(Color.BLUE);
         } else {
             tabLayout.setBackgroundColor(Color.RED);

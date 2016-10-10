@@ -147,14 +147,13 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setVisibility(View.VISIBLE);
 
         String alliance_color = mSharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
+        Log.d(TAG, alliance_color);
         String userSubtype;
-        if(alliance_color == Constants.Alliance_Colors.BLUE)
+        if(alliance_color.equals(Constants.Alliance_Colors.BLUE))
         {
             mUserSubTypeTextView.setTextColor(Color.BLUE);
             userSubtype = "Blue ";
-        }
-        else
-        {
+        } else {
             mUserSubTypeTextView.setTextColor(Color.RED);
             userSubtype = "Red ";
         }

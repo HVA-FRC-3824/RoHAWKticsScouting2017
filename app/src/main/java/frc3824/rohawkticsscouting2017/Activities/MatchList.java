@@ -93,18 +93,17 @@ public class MatchList extends Activity implements View.OnClickListener{
                     int team_number = -1;
                     String allianceColor = sharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
                     int allianceNumber = sharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
-                    if (allianceColor == Constants.Alliance_Colors.BLUE) {
+                    if (allianceColor.equals(Constants.Alliance_Colors.BLUE)) {
                         team_number = match.teams.get(allianceNumber - 1);
+                        button.setBackgroundColor(Color.BLUE);
+
                     } else {
                         team_number = match.teams.get(allianceNumber + 2);
+                        button.setBackgroundColor(Color.RED);
+
                     }
 
                     button.setText(String.format("Match: %d - Team: %d", match_number, team_number));
-                    if (allianceColor == Constants.Alliance_Colors.BLUE) {
-                        button.setBackgroundColor(Color.BLUE);
-                    } else {
-                        button.setBackgroundColor(Color.RED);
-                    }
                     break;
                 case Constants.Intent_Extras.SUPER_SCOUTING:
                 case Constants.Intent_Extras.MATCH_VIEWING:
