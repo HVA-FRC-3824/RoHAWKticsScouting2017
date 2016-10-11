@@ -1,6 +1,7 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,79 +28,65 @@ public class LVA_EventViewDrawer extends ArrayAdapter<TeamNumberCheck> {
 
     private Context mContext;
     private ArrayList<TeamNumberCheck> mTeamNumbers;
-    private boolean all;
-    private EventView mEv;
+    private EventView mEventView;
+    private boolean mEnabled;
 
-    public LVA_EventViewDrawer(Context context, ArrayList<TeamNumberCheck> objects, EventView ev) {
+    public LVA_EventViewDrawer(Context context, ArrayList<TeamNumberCheck> objects, EventView eventView) {
         super(context, R.layout.list_item_event_view_drawer, objects);
         mTeamNumbers = objects;
         mContext = context;
-        mEv = ev;
+        mEventView = eventView;
+        mEnabled = true;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        if(convertView == null){
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item_event_view_drawer, null);
         }
 
-        if(position == 0){
-            final TeamNumberCheck team_number = mTeamNumbers.get(position);
+        final TeamNumberCheck team_number = mTeamNumbers.get(position);
 
-            ((TextView) convertView.findViewById(R.id.team_number)).setText("All");
+        String label = "";
+        switch (position){
+            case 0:
+                label = "All";
+                break;
+            case 1:
+                label = "Top 5";
+                break;
+            case 2:
+                label = "Top 10";
+                break;
+            case 3:
+                label = "Top 24";
+                break;
+            default:
+                label = String.valueOf(team_number.team_number);
+        }
+        ((TextView) convertView.findViewById(R.id.team_number)).setText(label);
 
-            CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-            checkBox.setChecked(team_number.check);
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    all = b;
-                    if(b) {
-                        for (int i = 0; i < mTeamNumbers.size(); i++) {
-                            mTeamNumbers.get(i).check = true;
-                        }
-                    } else {
-                        mTeamNumbers.get(0).check = false;
-                    }
-                    notifyDataSetChanged();
-                    mEv.updateChart();
-                }
-            });
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+
+        checkBox.setChecked(team_number.check);
+
+        if(position < 4){
+            checkBox.setEnabled(true);
         } else {
-
-            final TeamNumberCheck team_number = mTeamNumbers.get(position);
-
-            ((TextView) convertView.findViewById(R.id.team_number)).setText(String.valueOf(team_number.team_number));
-
-            CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-            if(all){
-                checkBox.setChecked(true);
-                checkBox.setEnabled(false);
-            } else {
-                checkBox.setChecked(team_number.check);
-                checkBox.setEnabled(true);
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        team_number.check = b;
-                        mEv.updateChart();
-                    }
-                });
-            }
+            checkBox.setEnabled(mEnabled);
         }
 
         return convertView;
     }
 
-    public ArrayList<Integer> getChecked(){
-        ArrayList<Integer> team_numbers = new ArrayList<>();
-        for(int i = 1; i < mTeamNumbers.size(); i++){
-            TeamNumberCheck tnc = mTeamNumbers.get(i);
-            if(tnc.check) {
-                team_numbers.add(tnc.team_number);
-            }
-        }
-        return team_numbers;
+    public void setEnabled(boolean enabled){
+        mEnabled = enabled;
     }
+
+    public boolean getEnabled(){
+        return mEnabled;
+    }
+
+
 }

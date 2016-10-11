@@ -20,6 +20,11 @@
         />
 
     <item
+        android:id="@+id/switch_team"
+        android:title="Switch Team"
+        android:icon="@drawable/replace_color"/>
+
+    <item
         android:id="@+id/previous_match"
         android:title="Previous Match"
         android:icon="@drawable/previous_color"

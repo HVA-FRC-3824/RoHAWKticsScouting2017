@@ -61,6 +61,7 @@ public class MatchScouting extends Activity {
 
     private String mAllianceColor;
     private int mAllianceNumber;
+    private boolean mAdmin;
 
     private boolean mPractice = false;
 
@@ -85,6 +86,7 @@ public class MatchScouting extends Activity {
         mAllianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
         mAllianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
         mServerName = shared_preferences.getString(Constants.Settings.SERVER, "");
+        mAdmin = shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.ADMIN);
 
         mDatabase = Database.getInstance();
 
@@ -140,6 +142,7 @@ public class MatchScouting extends Activity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    // TODO: Create option for admin to switch which alliance color and/or number
     /**
      * Creates the overflow menu for the toolbar. Removes previous match or next match options if
      * they do not exist.
@@ -155,6 +158,9 @@ public class MatchScouting extends Activity {
         }
         if (mPractice || mMatchNumber == mDatabase.getNumberOfMatches()) {
             menu.removeItem(R.id.next_match);
+        }
+        if(!mAdmin){
+            menu.removeItem(R.id.switch_team);
         }
         return true;
     }
@@ -211,6 +217,9 @@ public class MatchScouting extends Activity {
                 break;
             case R.id.next_match:
                 next_press();
+                break;
+            case R.id.switch_team:
+                //TODO: add switching team
                 break;
             default:
                 assert false;

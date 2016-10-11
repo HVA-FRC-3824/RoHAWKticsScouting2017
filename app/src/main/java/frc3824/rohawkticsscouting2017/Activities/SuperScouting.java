@@ -141,6 +141,7 @@ public class SuperScouting extends Activity{
         if (mPractice || mMatchNumber == mDatabase.getNumberOfMatches()) {
             menu.removeItem(R.id.next_match);
         }
+        menu.removeItem(R.id.switch_team);
         return true;
     }
 

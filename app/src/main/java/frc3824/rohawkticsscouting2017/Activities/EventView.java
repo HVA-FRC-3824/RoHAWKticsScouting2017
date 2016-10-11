@@ -17,7 +17,11 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_EventViewDrawer;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.TeamNumberCheck;
@@ -34,12 +38,12 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
- *         Created: 8/23/16
- *         <p/>
- *         An activity for comparing all the teams at an event
+ * @author frc3824
+ * Created: 8/23/16
+ *
+ * An activity for comparing all the teams at an event
  */
-public class EventView extends Activity implements AdapterView.OnItemSelectedListener {
+public class EventView extends Activity implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
     private final static String TAG = "EventView";
 
@@ -59,14 +63,21 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
     private XAxis mXAxis;
     private YAxis mYAxis;
     private ArrayList<Integer> mTeamNumbers;
-    private ArrayList<Integer> mFilteredTeamNumbers;
+    private ArrayList<TeamNumberCheck> mTeamNumbersSelect;
     private ArrayList<String> mCurrentTeamNumbers;
+    private ArrayList<Integer> mSortedTeamNumbers;
+
+    private final int ALL = 0;
+    private final int TOP_5 = 1;
+    private final int TOP_10 = 2;
+    private final int TOP_24 = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
 
+        //region Dropdown Setup
         mMainDropdown = (Spinner) findViewById(R.id.main_dropdown);
         mMainAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line,
                 Constants.Event_View.Main_Dropdown_Options.OPTIONS);
@@ -75,6 +86,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
 
         mSecondaryDropdown = (Spinner) findViewById(R.id.secondary_dropdown);
         mSecondaryDropdown.setOnItemSelectedListener(this);
+        //endregion
 
         //region Low Level Data Chart Setup
         mLLDChart = (LLD_Chart) findViewById(R.id.lld_chart);
@@ -121,16 +133,30 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         mDatabase = Database.getInstance();
         mTeamNumbers = mDatabase.getTeamNumbers();
 
+        //region Drawer Setup
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
-        ArrayList<TeamNumberCheck> tnc = new ArrayList<>();
-        tnc.add(new TeamNumberCheck(-1));
+        mTeamNumbersSelect = new ArrayList<>();
+        mTeamNumbersSelect.add(new TeamNumberCheck(-1)); // All
+        mTeamNumbersSelect.add(new TeamNumberCheck(-1)); // Top 5
+        mTeamNumbersSelect.add(new TeamNumberCheck(-1)); // Top 10
+        mTeamNumbersSelect.add(new TeamNumberCheck(-1)); // Top 24
         for (Integer team_number : mTeamNumbers) {
-            tnc.add(new TeamNumberCheck(team_number));
+            mTeamNumbersSelect.add(new TeamNumberCheck(team_number, true));
         }
-        mLVA = new LVA_EventViewDrawer(this, tnc, this);
+        mLVA = new LVA_EventViewDrawer(this, mTeamNumbersSelect, this);
         mDrawerList.setAdapter(mLVA);
+        mDrawerList.setOnItemClickListener(this);
+        //endregion
     }
 
+    /**
+     * For the dropdowns (spinners)
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param l
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
         switch (parent.getId()) {
@@ -160,7 +186,6 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
     public void updateChart() {
         int main_dropdown_position = mMainDropdown.getSelectedItemPosition();
         int secondary_dropdown_position = mSecondaryDropdown.getSelectedItemPosition();
-        mFilteredTeamNumbers = mLVA.getChecked();
 
         switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_dropdown_position]) {
             case Constants.Event_View.Main_Dropdown_Options.FOULS:
@@ -182,8 +207,11 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         LLD_Data data;
         entries = new ArrayList<>();
         mCurrentTeamNumbers = new ArrayList<>();
-        for (int i = 0; i < mFilteredTeamNumbers.size(); i++) {
-            TCD tcd = mDatabase.getTCD(mFilteredTeamNumbers.get(i));
+        for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
+            if(!mTeamNumbersSelect.get(i).check){
+                continue;
+            }
+            TCD tcd = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
             if (tcd != null) {
                 mCurrentTeamNumbers.add(String.valueOf(tcd.team_number));
                 switch (Constants.Event_View.Foul_Secondary_Options.OPTIONS[position]) {
@@ -221,6 +249,46 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
 
         mLLDChart.notifyDataSetChanged();
         mLLDChart.invalidate();
+
+        mSortedTeamNumbers = new ArrayList<>();
+        final Map<Integer, Double> sort_values = new HashMap<>();
+        for (int i = 0; i < mTeamNumbers.size(); i++) {
+            TCD tcd = mDatabase.getTCD(mTeamNumbers.get(i));
+            if (tcd != null) {
+                switch (Constants.Event_View.Foul_Secondary_Options.OPTIONS[position]) {
+                    case Constants.Event_View.Foul_Secondary_Options.STANDARD_FOULS:
+                        //region Fouls
+                        mSortedTeamNumbers.add(tcd.team_number);
+                        sort_values.put(tcd.team_number, tcd.fouls.total);
+                        break;
+                    //endregion
+                    case Constants.Event_View.Foul_Secondary_Options.TECH_FOULS:
+                        //region Tech Fouls
+                        mSortedTeamNumbers.add(tcd.team_number);
+                        sort_values.put(tcd.team_number, tcd.tech_fouls.total);
+                        break;
+                    //endregion
+                    case Constants.Event_View.Foul_Secondary_Options.YELLOW_CARDS:
+                        //region Yellow Cards
+                        mSortedTeamNumbers.add(tcd.team_number);
+                        sort_values.put(tcd.team_number, tcd.yellow_cards.total);
+                        break;
+                    //endregion
+                    case Constants.Event_View.Foul_Secondary_Options.RED_CARDS:
+                        //region Red Cards
+                        mSortedTeamNumbers.add(tcd.team_number);
+                        sort_values.put(tcd.team_number, tcd.red_cards.total);
+                        break;
+                    //endregion
+                }
+            }
+        }
+        Collections.sort(mSortedTeamNumbers, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer i1, Integer i2) {
+                return Double.compare(sort_values.get(i1), sort_values.get(i2));
+            }
+        });
     }
 
     private void postMatchSecondary(int position) {
@@ -232,9 +300,11 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         BarData data;
         entries = new ArrayList<>();
         mCurrentTeamNumbers = new ArrayList<>();
-        mCurrentTeamNumbers = new ArrayList<>();
-        for (int i = 0; i < mFilteredTeamNumbers.size(); i++) {
-            TCD tcd = mDatabase.getTCD(mFilteredTeamNumbers.get(i));
+        for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
+            if(!mTeamNumbersSelect.get(i).check){
+                continue;
+            }
+            TCD tcd = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
             if (tcd != null) {
                 mCurrentTeamNumbers.add(String.valueOf(tcd.team_number));
                 switch (Constants.Event_View.Post_Match_Secondary_Options.OPTIONS[position]) {
@@ -268,10 +338,148 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
 
         mBarChart.notifyDataSetChanged();
         mBarChart.invalidate();
+
+        mSortedTeamNumbers = new ArrayList<>();
+        final Map<Integer, Double> sort_values = new HashMap<>();
+        for(int i = 4; i < mTeamNumbers.size(); i++){
+            TCD tcd = mDatabase.getTCD(mTeamNumbers.get(i));
+            if (tcd != null) {
+                switch (Constants.Event_View.Post_Match_Secondary_Options.OPTIONS[position]) {
+                    case Constants.Event_View.Post_Match_Secondary_Options.DQ:
+                        //region DQ
+                        mSortedTeamNumbers.add(tcd.team_number);
+                        sort_values.put(tcd.team_number, tcd.dq.total);
+                        break;
+                    //endregion
+                    case Constants.Event_View.Post_Match_Secondary_Options.NO_SHOW:
+                        //region No Show
+                        mSortedTeamNumbers.add(tcd.team_number);
+                        sort_values.put(tcd.team_number, tcd.no_show.total);
+                        break;
+                    //endregion
+                    case Constants.Event_View.Post_Match_Secondary_Options.STOPPED_MOVING:
+                        //region Stopped Moving
+                        mSortedTeamNumbers.add(tcd.team_number);
+                        sort_values.put(tcd.team_number, tcd.stopped_moving.total);
+                        break;
+                    //endregion
+                }
+            }
+        }
+
+        Collections.sort(mSortedTeamNumbers, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer i1, Integer i2) {
+                return Double.compare(sort_values.get(i1), sort_values.get(i2));
+            }
+        });
+    }
+
+    public ArrayList<Integer> getTop(int top){
+        return new ArrayList<>(mSortedTeamNumbers.subList(0, top));
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    /**
+     * For the nav drawer
+     *
+     * @param adapterView
+     * @param view
+     * @param position
+     * @param l
+     */
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        boolean new_check = !mTeamNumbersSelect.get(position).check;
+        ArrayList<Integer> top;
+        switch (position){
+            case ALL:
+                for(int i = 0; i < 4; i++){
+                    mTeamNumbersSelect.get(i).check = false;
+                }
+                mTeamNumbersSelect.get(position).check = new_check;
+                if(new_check) {
+                    for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
+                        mTeamNumbersSelect.get(i).check = true;
+                    }
+                }
+                mLVA.setEnabled(!new_check);
+                mLVA.notifyDataSetChanged();
+                updateChart();
+                break;
+            case TOP_5:
+                top = getTop(5);
+                for(int i = 0; i < 4; i++){
+                    mTeamNumbersSelect.get(i).check = false;
+                }
+                mTeamNumbersSelect.get(position).check = new_check;
+                if(new_check) {
+                    for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
+                        mTeamNumbersSelect.get(i).check = false;
+                        for (int j = 0; j < top.size(); j++) {
+                            if (mTeamNumbersSelect.get(i).team_number == top.get(j)) {
+                                mTeamNumbersSelect.get(i).check = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                mLVA.setEnabled(!new_check);
+                mLVA.notifyDataSetChanged();
+                updateChart();
+                break;
+            case TOP_10:
+                top = getTop(10);
+                for(int i = 0; i < 4; i++){
+                    mTeamNumbersSelect.get(i).check = false;
+                }
+                mTeamNumbersSelect.get(position).check = new_check;
+                if(new_check) {
+                    for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
+                        mTeamNumbersSelect.get(i).check = false;
+                        for (int j = 0; j < top.size(); j++) {
+                            if (mTeamNumbersSelect.get(i).team_number == top.get(j)) {
+                                mTeamNumbersSelect.get(i).check = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                mLVA.setEnabled(!new_check);
+                mLVA.notifyDataSetChanged();
+                updateChart();
+                break;
+            case TOP_24:
+                top = getTop(24);
+                for(int i = 0; i < 4; i++){
+                    mTeamNumbersSelect.get(i).check = false;
+                }
+                mTeamNumbersSelect.get(position).check = new_check;
+                if(new_check) {
+                    for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
+                        mTeamNumbersSelect.get(i).check = false;
+                        for (int j = 0; j < top.size(); j++) {
+                            if (mTeamNumbersSelect.get(i).team_number == top.get(j)) {
+                                mTeamNumbersSelect.get(i).check = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                mLVA.setEnabled(!new_check);
+                mLVA.notifyDataSetChanged();
+                updateChart();
+                break;
+            default:
+                if(mLVA.getEnabled()) {
+                    mTeamNumbersSelect.get(position).check = new_check;
+                    mLVA.notifyDataSetChanged();
+                    updateChart();
+                }
+        }
     }
 }

@@ -42,8 +42,7 @@ public class DriveTeamFeedback extends Activity {
     private TID mTid;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drive_team_feedback);
 
@@ -111,6 +110,7 @@ public class DriveTeamFeedback extends Activity {
         if (mMatchNumber == mTid.match_numbers.get(mTid.match_numbers.size() - 1)) {
             menu.removeItem(R.id.next_match);
         }
+        menu.removeItem(R.id.switch_team);
         return true;
     }
 

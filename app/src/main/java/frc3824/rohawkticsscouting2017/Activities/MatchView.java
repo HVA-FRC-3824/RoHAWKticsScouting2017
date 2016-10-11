@@ -135,6 +135,7 @@ public class MatchView extends Activity {
         if (mMatchNumber == -1 || mMatchNumber == mDatabase.getNumberOfMatches()) {
             menu.removeItem(R.id.next_match);
         }
+        menu.removeItem(R.id.switch_team);
         menu.removeItem(R.id.save);
         return true;
     }
