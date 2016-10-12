@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.os.AsyncTaskCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -239,7 +240,7 @@ public class MatchScouting extends Activity {
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                Log.d(TAG, "save pressed");
                 // Collect values from all the custom elements
                 List<ScoutFragment> fragmentList = mFPA.getAllFragments();
                 ScoutMap data = new ScoutMap();
@@ -251,7 +252,7 @@ public class MatchScouting extends Activity {
                 if (error.equals("")) {
                     Log.d(TAG, "Saving values");
                     if (!mPractice) {
-                        new SaveTask().execute(data);
+                        new SaveTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
                     }
 
                     // Go to the next match
@@ -276,7 +277,8 @@ public class MatchScouting extends Activity {
         builder.setNegativeButton("Continue w/o Saving", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Go to the next match
+                Log.d(TAG, "Cont W/O Saving");
+                // Go to home
                 Intent intent = new Intent(MatchScouting.this, Home.class);
                 startActivity(intent);
             }
@@ -296,7 +298,7 @@ public class MatchScouting extends Activity {
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                Log.d(TAG, "save pressed");
                 // Collect values from all the custom elements
                 List<ScoutFragment> fragmentList = mFPA.getAllFragments();
                 ScoutMap data = new ScoutMap();
@@ -308,7 +310,7 @@ public class MatchScouting extends Activity {
                 if (error.equals("")) {
                     Log.d(TAG, "Saving values");
                     if (!mPractice) {
-                        new SaveTask().execute(data);
+                        new SaveTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
                     }
 
                     Intent intent = new Intent(MatchScouting.this, MatchList.class);
@@ -332,6 +334,7 @@ public class MatchScouting extends Activity {
         builder.setNegativeButton("Continue w/o Saving", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Log.d(TAG, "Cont W/O Saving");
                 Intent intent = new Intent(MatchScouting.this, MatchList.class);
                 intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.MATCH_SCOUTING);
                 startActivity(intent);
@@ -355,7 +358,7 @@ public class MatchScouting extends Activity {
         if (error.equals("")) {
             Log.d(TAG, "Saving values");
             if (!mPractice) {
-                new SaveTask().execute(data);
+                new SaveTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
             }
         } else {
             Toast.makeText(MatchScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
@@ -387,7 +390,7 @@ public class MatchScouting extends Activity {
                 if (error.equals("")) {
                     Log.d(TAG, "Saving values");
                     if (!mPractice) {
-                        new SaveTask().execute(data);
+                        new SaveTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
                     }
 
                     // Go to the next match
@@ -416,7 +419,8 @@ public class MatchScouting extends Activity {
         builder.setNegativeButton("Continue w/o Saving", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Go to the next match
+                Log.d(TAG, "Cont W/O Saving");
+                // Go to the previous match
                 Intent intent = new Intent(MatchScouting.this, MatchScouting.class);
                 if (mPractice) {
                     intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, -1);
@@ -444,6 +448,7 @@ public class MatchScouting extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                Log.d(TAG, "Save pressed");
                 // Collect values from all the custom elements
                 List<ScoutFragment> fragmentList = mFPA.getAllFragments();
                 ScoutMap data = new ScoutMap();
@@ -453,9 +458,9 @@ public class MatchScouting extends Activity {
                 }
 
                 if (error.equals("")) {
-                    Log.d(TAG, "Saving values");
                     if (!mPractice) {
-                        new SaveTask().execute(data);
+                        Log.d(TAG, "Saving values");
+                        new SaveTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
                     }
 
                     // Go to the next match
@@ -467,6 +472,7 @@ public class MatchScouting extends Activity {
                     }
                     startActivity(intent);
                 } else {
+                    Log.e(TAG, error);
                     Toast.makeText(MatchScouting.this, String.format("Error: %s", error), Toast.LENGTH_LONG).show();
                 }
             }
@@ -484,6 +490,7 @@ public class MatchScouting extends Activity {
         builder.setNegativeButton("Continue w/o Saving", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Log.d(TAG, "Cont W/O Saving");
                 // Go to the next match
                 Intent intent = new Intent(MatchScouting.this, MatchScouting.class);
                 if (mPractice) {
@@ -509,6 +516,8 @@ public class MatchScouting extends Activity {
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
+            map.put(Constants.Settings.ALLIANCE_COLOR, mAllianceColor);
+            map.put(Constants.Settings.ALLIANCE_NUMBER, mAllianceNumber);
             TMD tmd = new TMD(map);
             mDatabase.setTMD(tmd);
 
