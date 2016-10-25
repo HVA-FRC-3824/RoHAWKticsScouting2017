@@ -342,10 +342,10 @@ public class Settings extends Activity implements OnClickListener{
                     Collections.sort(info.match_numbers);
                     database.setTID(info);
 
-                    TPD pit = new TPD();
-                    pit.team_number = tbaTeam.team_number;
-                    pit.pit_scouted = false;
-                    database.setTPD(pit);
+//                    TPD pit = new TPD();
+//                    pit.team_number = tbaTeam.team_number;
+//                    pit.pit_scouted = false;
+//                    database.setTPD(pit);
 
                     TPA pick = new TPA();
                     pick.team_number = tbaTeam.team_number;

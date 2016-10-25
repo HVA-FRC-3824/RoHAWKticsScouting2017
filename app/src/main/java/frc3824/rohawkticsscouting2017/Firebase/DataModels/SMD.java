@@ -21,6 +21,7 @@ public class SMD {
     private final static String TAG = "SMD";
 
     public int match_number;
+    public String scout_name;
 
     // Qualitative
 
@@ -48,6 +49,7 @@ public class SMD {
     public SMD(ScoutMap map) {
         try {
             match_number = map.getInt(Constants.Intent_Extras.MATCH_NUMBER);
+            scout_name = map.getString(Constants.Super_Scouting.SCOUT_NAME);
 
             blue_speed = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_SPEED);
             blue_torque = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_TORQUE);
@@ -71,6 +73,7 @@ public class SMD {
         ScoutMap map = new ScoutMap();
         
         map.put(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+        map.put(Constants.Super_Scouting.SCOUT_NAME, scout_name);
 
         map.put(Constants.Super_Scouting.Qualitative.BLUE_SPEED, blue_speed);
         map.put(Constants.Super_Scouting.Qualitative.BLUE_TORQUE, blue_torque);
