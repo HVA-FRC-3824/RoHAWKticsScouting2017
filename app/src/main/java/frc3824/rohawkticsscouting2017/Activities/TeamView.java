@@ -93,6 +93,7 @@ public class TeamView extends Activity {
             menu.removeItem(R.id.next_team);
         }
         menu.removeItem(R.id.save);
+        menu.removeItem(R.id.scout_name);
         return true;
     }
 

@@ -128,6 +128,7 @@ public class SuperScouting extends Activity{
         SMD sm = mDatabase.getSMD(mMatchNumber);
         if (sm != null) {
             mFPA.setValueMap(sm.toMap());
+            mScoutName = sm.scout_name;
         }
         viewPager.setAdapter(mFPA);
         // Set the off screen page limit to more than the number of fragments
@@ -180,7 +181,9 @@ public class SuperScouting extends Activity{
                 });
             }
         });
-        mLogisticsDialog.show();
+        if(mScoutName == null || mScoutName.equals("")) {
+            mLogisticsDialog.show();
+        }
     }
 
     /**
@@ -255,6 +258,9 @@ public class SuperScouting extends Activity{
                 break;
             case R.id.next_match:
                 next_press();
+                break;
+            case R.id.scout_name:
+                mLogisticsDialog.show();
                 break;
             default:
                 assert false;

@@ -122,6 +122,7 @@ public class PitScouting extends Activity {
         TPD team = mDatabase.getTPD(mTeamNumber);
         if (team != null) {
             mFPA.setValueMap(team.toMap());
+            mScoutName = team.scout_name;
         }
 
         viewPager.setAdapter(mFPA);
@@ -134,60 +135,55 @@ public class PitScouting extends Activity {
         tabLayout.setupWithViewPager(viewPager);
 
         mDrawerList = (ListView)findViewById(R.id.drawer_list);
-        ArrayList<TeamNumberCheck> tncs = new ArrayList<>();
-        for(int team_number: teams){
-            if(mDatabase.getTPD(team_number) != null){
-                tncs.add(new TeamNumberCheck(team_number, true));
-            } else {
-                tncs.add(new TeamNumberCheck(team_number));
-            }
-        }
 
-        mLVA = new LVA_PitScoutDrawer(this, tncs);
+        mLVA = new LVA_PitScoutDrawer(this, mDatabase.getTeamNumbers());
         mDrawerList.setAdapter(mLVA);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
-        ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
+            mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
+            ((TextView) mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
 
-        mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
-        if(!mLastScoutName.equals("")){
-            String[] arr = {mLastScoutName};
-            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-            mScoutNameTextView.setAdapter(aa);
-        }
-        builder.setView(mLogisticsView);
-
-        mLogisticsIncorrect = (TextView)mLogisticsView.findViewById(R.id.incorrect);
-        mLogisticsScoutNameBackground = mLogisticsView.findViewById(R.id.scout_name_background);
-
-        builder.setPositiveButton("Ok", null);
-        builder.setCancelable(false);
-        mLogisticsDialog = builder.create();
-        mLogisticsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        mScoutName = mScoutNameTextView.getText().toString();
-                        if(mScoutName.equals("")){
-                            mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
-                            mLogisticsIncorrect.setVisibility(View.VISIBLE);
-                        } else {
-                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                            edit.putString(Constants.Settings.LAST_PIT_SCOUT, mScoutName);
-                            edit.commit();
-                            mLogisticsDialog.dismiss();
-                        }
-                    }
-                });
+            mScoutNameTextView = (AutoCompleteTextView) mLogisticsView.findViewById(R.id.scout_name);
+            if (!mLastScoutName.equals("")) {
+                String[] arr = {mLastScoutName};
+                ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
+                mScoutNameTextView.setAdapter(aa);
             }
-        });
-        mLogisticsDialog.show();
+            builder.setView(mLogisticsView);
+
+            mLogisticsIncorrect = (TextView) mLogisticsView.findViewById(R.id.incorrect);
+            mLogisticsScoutNameBackground = mLogisticsView.findViewById(R.id.scout_name_background);
+
+            builder.setPositiveButton("Ok", null);
+            builder.setCancelable(false);
+            mLogisticsDialog = builder.create();
+            mLogisticsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                    b.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+                            mScoutName = mScoutNameTextView.getText().toString();
+                            if (mScoutName.equals("")) {
+                                mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
+                                mLogisticsIncorrect.setVisibility(View.VISIBLE);
+                            } else {
+                                SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
+                                edit.putString(Constants.Settings.LAST_PIT_SCOUT, mScoutName);
+                                edit.commit();
+                                mLogisticsDialog.dismiss();
+                            }
+                        }
+                    });
+                }
+            });
+        if(mScoutName == null || mScoutName.equals("")) {
+            mScoutNameTextView.setText(mScoutName);
+            mLogisticsDialog.show();
+        }
     }
 
     /**
@@ -263,6 +259,9 @@ public class PitScouting extends Activity {
                 break;
             case R.id.next_team:
                 next_press();
+                break;
+            case R.id.scout_name:
+                mLogisticsDialog.show();
                 break;
             default:
                 assert false;

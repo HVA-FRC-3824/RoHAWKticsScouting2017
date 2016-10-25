@@ -143,6 +143,7 @@ public class MatchScouting extends Activity{
         TMD tim = mDatabase.getTMD(mMatchNumber, mTeamNumber);
         if (tim != null) {
             mFPA.setValueMap(tim.toMap());
+            mScoutName = tim.scout_name;
         }
         viewPager.setAdapter(mFPA);
         viewPager.setOffscreenPageLimit(mFPA.getCount());
@@ -206,7 +207,9 @@ public class MatchScouting extends Activity{
                 });
             }
         });
-        mLogisticsDialog.show();
+        if(mScoutName == null || mScoutName.equals("")) {
+            mLogisticsDialog.show();
+        }
 
     }
 
@@ -288,6 +291,9 @@ public class MatchScouting extends Activity{
                 break;
             case R.id.switch_team:
                 //TODO: add switching team
+                break;
+            case R.id.scout_name:
+                mLogisticsDialog.show();
                 break;
             default:
                 assert false;

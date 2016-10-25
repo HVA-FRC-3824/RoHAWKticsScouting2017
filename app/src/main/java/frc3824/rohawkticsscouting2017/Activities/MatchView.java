@@ -137,6 +137,7 @@ public class MatchView extends Activity {
         }
         menu.removeItem(R.id.switch_team);
         menu.removeItem(R.id.save);
+        menu.removeItem(R.id.scout_name);
         return true;
     }
 
