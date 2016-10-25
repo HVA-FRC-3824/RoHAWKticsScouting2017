@@ -10,4 +10,4 @@ android:
     - android-25
 
 script:
-  - ./gradlew build --debug
+  - ./gradlew build --stacktrace
