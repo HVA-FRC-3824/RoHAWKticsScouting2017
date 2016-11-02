@@ -29,9 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
-import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PitScoutDrawer;
-import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.TeamNumberCheck;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -472,10 +470,10 @@ public class PitScouting extends Activity {
             map.put(Constants.Pit_Scouting.PIT_SCOUTED, true);
 
             // Change picture filename to use event id and team number
-            if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH)) {
+            if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS)) {
                 String picture_filename = null;
                 try {
-                    picture_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
+                    picture_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
                     if (!picture_filename.equals("")) {
                         File picture = new File(picture_filename);
                         if (picture.exists() && picture.length() > 0) {
@@ -488,10 +486,10 @@ public class PitScouting extends Activity {
                             newPicture.delete();
                             copy(picture, newPicture);
                             picture.delete();
-                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
-                            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH, newPicture.getAbsolutePath());
+                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
+                            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, newPicture.getAbsolutePath());
                         } else {
-                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
+                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
                         }
                     }
                 } catch (ScoutValue.TypeException | IOException e) {

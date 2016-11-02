@@ -25,7 +25,7 @@ public class EndgameFragment extends ScoutFragment{
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_endgame, container, false);
+        View view = inflater.inflate(R.layout.fragment_match_endgame, container, false);
         if(mValueMap != null)
         {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);

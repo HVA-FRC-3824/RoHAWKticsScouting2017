@@ -43,8 +43,7 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
     private String mCurrentStrategyName;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_planning);
 
@@ -59,20 +58,11 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
         mMediumBrush = 20;
         mLargeBrush = 30;
 
-        ImageButton drawBtn = (ImageButton) findViewById(R.id.draw_btn);
-        drawBtn.setOnClickListener(this);
-
-        ImageButton eraseBtn = (ImageButton) findViewById(R.id.erase_btn);
-        eraseBtn.setOnClickListener(this);
-
-        ImageButton newBtn = (ImageButton) findViewById(R.id.new_btn);
-        newBtn.setOnClickListener(this);
-
-        ImageButton saveBtn = (ImageButton) findViewById(R.id.save_btn);
-        saveBtn.setOnClickListener(this);
-
-        ImageButton openBtn = (ImageButton) findViewById(R.id.open_btn);
-        openBtn.setOnClickListener(this);
+        findViewById(R.id.draw_btn).setOnClickListener(this);
+        findViewById(R.id.erase_btn).setOnClickListener(this);
+        findViewById(R.id.new_btn).setOnClickListener(this);
+        findViewById(R.id.save_btn).setOnClickListener(this);
+        findViewById(R.id.open_btn).setOnClickListener(this);
 
         mDrawingView.setBrushSize(mExtraSmallBrush);
     }
@@ -91,7 +81,7 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
             mDrawingView.setColor(color);
             imgView.setImageDrawable(getResources().getDrawable(R.drawable.paint_pressed, null));
             mCurrentPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint, null));
-            mCurrentPaint = (ImageButton) view;
+            mCurrentPaint = imgView;
         }
     }
 
@@ -110,17 +100,12 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
             case R.id.erase_btn:
                 eraseButtonClicked();
                 break;
-
             case R.id.new_btn:
                 newButtonClicked();
                 break;
-
-            // Saves drawn image to file
             case R.id.save_btn:
                 saveButtonClicked();
                 break;
-
-            // Recovers the last saved drawn image
             case R.id.open_btn:
                 openButtonClicked();
                 break;
@@ -128,8 +113,7 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
         }
     }
 
-    private void drawButtonClicked()
-    {
+    private void drawButtonClicked() {
         mDrawingView.setErase(false);
         final Dialog brushDialog = new Dialog(this);
         brushDialog.setTitle("Brush size:");
@@ -181,8 +165,7 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
         brushDialog.show();
     }
 
-    private void eraseButtonClicked()
-    {
+    private void eraseButtonClicked() {
         final Dialog eraser_brushDialog = new Dialog(this);
         eraser_brushDialog.setTitle("Eraser size:");
         eraser_brushDialog.setContentView(R.layout.dialog_brush_chooser);
@@ -233,8 +216,7 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
         eraser_brushDialog.show();
     }
 
-    private void newButtonClicked()
-    {
+    private void newButtonClicked() {
         AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
         newDialog.setTitle("New drawing");
         newDialog.setMessage("Start new strategy (you will lose the current strategy)?");
@@ -255,8 +237,7 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
         newDialog.show();
     }
 
-    private void saveButtonClicked()
-    {
+    private void saveButtonClicked() {
         AlertDialog.Builder saveDialog = new AlertDialog.Builder(this);
         saveDialog.setTitle("Save strategy");
         LayoutInflater inflater = this.getLayoutInflater();
@@ -319,8 +300,7 @@ public class MatchPlanning extends Activity implements View.OnClickListener{
         saveDialog.show();
     }
 
-    private void openButtonClicked()
-    {
+    private void openButtonClicked() {
         AlertDialog.Builder openDialog = new AlertDialog.Builder(this);
         openDialog.setTitle("Load strategy");
         final ArrayList<Strategy> mStrategies = Database.getInstance().getStrategies();

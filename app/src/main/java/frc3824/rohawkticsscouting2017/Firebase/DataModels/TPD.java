@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
+
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
@@ -28,8 +30,9 @@ public class TPD {
     public boolean pit_scouted;
 
     // Robot Image
-    public String robot_image_filepath;
-    public String robot_image_url;
+    public int robot_image_default;
+    public ArrayList<String> robot_image_filepath;
+    public ArrayList<String> robot_image_url;
 
     // Dimensions
     public double weight;
@@ -46,14 +49,20 @@ public class TPD {
 
     public TPD(){}
 
-    public TPD(ScoutMap map)
-    {
+    public TPD(ScoutMap map) {
         try {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);
 
             pit_scouted = map.getBoolean(Constants.Pit_Scouting.PIT_SCOUTED);
 
-            robot_image_filepath = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH);
+            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT)){
+                robot_image_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
+            }
+
+            robot_image_filepath = (ArrayList)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
+            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_URLS)) {
+                robot_image_url = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_URLS);
+            }
 
             width = map.getDouble(Constants.Pit_Scouting.Dimensions.WIDTH);
             length = map.getDouble(Constants.Pit_Scouting.Dimensions.LENGTH);
@@ -71,16 +80,15 @@ public class TPD {
     }
 
     @Exclude
-    public ScoutMap toMap()
-    {
+    public ScoutMap toMap() {
         ScoutMap map = new ScoutMap();
 
         map.put(Constants.Intent_Extras.TEAM_NUMBER, team_number);
 
         map.put(Constants.Pit_Scouting.PIT_SCOUTED, pit_scouted);
 
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATH, robot_image_filepath);
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URL, robot_image_url);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, robot_image_filepath);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URLS, robot_image_url);
 
         map.put(Constants.Pit_Scouting.Dimensions.WIDTH, width);
         map.put(Constants.Pit_Scouting.Dimensions.LENGTH, length);

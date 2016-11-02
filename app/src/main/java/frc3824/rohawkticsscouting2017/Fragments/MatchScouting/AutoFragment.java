@@ -22,7 +22,7 @@ public class AutoFragment extends ScoutFragment{
     public AutoFragment() {}
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_auto, container, false);
+        View view = inflater.inflate(R.layout.fragment_match_auto, container, false);
         if(mValueMap != null) {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);
         }

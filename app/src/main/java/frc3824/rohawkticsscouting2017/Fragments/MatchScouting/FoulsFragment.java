@@ -24,7 +24,7 @@ public class FoulsFragment extends ScoutFragment{
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_fouls, container, false);
+        View view = inflater.inflate(R.layout.fragment_match_fouls, container, false);
         if(mValueMap != null)
         {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);

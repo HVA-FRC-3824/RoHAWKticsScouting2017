@@ -23,7 +23,7 @@ public class DimensionsFragment extends ScoutFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_dimensions, container, false);
+        View view = inflater.inflate(R.layout.fragment_pit_dimensions, container, false);
         if(mValueMap != null)
         {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);
