@@ -12,6 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.TeamNumberCheck;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
@@ -20,16 +22,18 @@ import frc3824.rohawkticsscouting2017.R;
  *
  *
  */
-public class LVA_PitScoutDrawer extends ArrayAdapter<TeamNumberCheck> {
+public class LVA_PitScoutDrawer extends ArrayAdapter<Integer> {
 
     private final static String TAG = "LVA_PitScoutDrawer";
-    private ArrayList<TeamNumberCheck> mTeamNumbers;
+    private ArrayList<Integer> mTeamNumbers;
     private Context mContext;
+    private Database mDatabase;
 
-    public LVA_PitScoutDrawer(Context context, ArrayList<TeamNumberCheck> objects) {
+    public LVA_PitScoutDrawer(Context context, ArrayList<Integer> objects) {
         super(context, R.layout.list_item_pit_scout_drawer, objects);
         mTeamNumbers = objects;
         mContext = context;
+        mDatabase = Database.getInstance();
     }
 
     @Override
@@ -39,15 +43,24 @@ public class LVA_PitScoutDrawer extends ArrayAdapter<TeamNumberCheck> {
             convertView = inflater.inflate(R.layout.list_item_pit_scout_drawer, null);
         }
 
-        TeamNumberCheck tnc = mTeamNumbers.get(position);
+        int team_number = mTeamNumbers.get(position);
 
-        TextView team_number = (TextView)convertView.findViewById(R.id.team_number);
-        team_number.setText(String.format("%d", tnc.team_number));
+        TextView tnView = (TextView)convertView.findViewById(R.id.team_number);
+        tnView.setText(String.format("%d", team_number));
 
-        if(tnc.check){
+        TPD tpd = mDatabase.getTPD(team_number);
+
+        if(tpd != null){
             convertView.setBackgroundColor(Color.GREEN);
+
+            if(!tpd.robot_image_filepath.equals("")){
+                convertView.findViewById(R.id.image).setVisibility(View.VISIBLE);
+            } else {
+                convertView.findViewById(R.id.image).setVisibility(View.GONE);
+            }
         } else {
             convertView.setBackgroundColor(Color.RED);
+            convertView.findViewById(R.id.image).setVisibility(View.GONE);
         }
 
         return convertView;

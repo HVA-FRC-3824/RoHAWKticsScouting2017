@@ -12,13 +12,18 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.os.AsyncTaskCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -39,9 +44,9 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
+import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
-import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**
@@ -50,7 +55,7 @@ import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
  *
  * Activity that handles match scouting. Also takes care of saving, and switching between matches.
  */
-public class MatchScouting extends Activity {
+public class MatchScouting extends Activity{
 
 
     private final static String TAG = "MatchScouting";
@@ -62,6 +67,8 @@ public class MatchScouting extends Activity {
 
     private String mAllianceColor;
     private int mAllianceNumber;
+    private String mLastScoutName;
+    private String mScoutName;
     private boolean mAdmin;
 
     private boolean mPractice = false;
@@ -71,6 +78,13 @@ public class MatchScouting extends Activity {
 
     private ListView mDrawerList;
     private LVA_MatchScoutDrawer mLVA;
+
+    private AlertDialog mLogisticsDialog;
+    private View mLogisticsView;
+    private TextView mLogisticsAlliance;
+    private AutoCompleteTextView mScoutNameTextView;
+    private View mLogisticsScoutNameBackground;
+    private TextView mLogisticsIncorrect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +102,8 @@ public class MatchScouting extends Activity {
         mAllianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
         mServerName = shared_preferences.getString(Constants.Settings.SERVER, "");
         mAdmin = shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.ADMIN);
+        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_MATCH_SCOUT, "");
+
 
         mDatabase = Database.getInstance();
 
@@ -127,6 +143,7 @@ public class MatchScouting extends Activity {
         TMD tim = mDatabase.getTMD(mMatchNumber, mTeamNumber);
         if (tim != null) {
             mFPA.setValueMap(tim.toMap());
+            mScoutName = tim.scout_name;
         }
         viewPager.setAdapter(mFPA);
         viewPager.setOffscreenPageLimit(mFPA.getCount());
@@ -141,6 +158,59 @@ public class MatchScouting extends Activity {
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_match_logistics, null);
+        ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Match Number: %d", mMatchNumber));
+
+        mLogisticsAlliance = (TextView)mLogisticsView.findViewById(R.id.alliance);
+        mLogisticsAlliance.setText(String.format("%s %d", mAllianceColor.equals(Constants.Alliance_Colors.BLUE) ? "Blue" : "Red", mAllianceNumber));
+        if(mAllianceColor.equals(Constants.Alliance_Colors.BLUE)){
+            mLogisticsAlliance.setTextColor(Color.BLUE);
+        } else {
+            mLogisticsAlliance.setTextColor(Color.RED);
+        }
+        mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
+        if(!mLastScoutName.equals("")){
+            String[] arr = {mLastScoutName};
+            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
+            mScoutNameTextView.setAdapter(aa);
+        }
+        builder.setView(mLogisticsView);
+
+        mLogisticsIncorrect = (TextView)mLogisticsView.findViewById(R.id.incorrect);
+        mLogisticsScoutNameBackground = mLogisticsView.findViewById(R.id.scout_name_background);
+
+        builder.setPositiveButton("Ok", null);
+        builder.setCancelable(false);
+        mLogisticsDialog = builder.create();
+        mLogisticsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        mScoutName = mScoutNameTextView.getText().toString();
+                        if(mScoutName.equals("")){
+                            mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
+                            mLogisticsIncorrect.setVisibility(View.VISIBLE);
+                        } else {
+                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
+                            edit.putString(Constants.Settings.LAST_MATCH_SCOUT, mScoutName);
+                            edit.commit();
+                            mLogisticsDialog.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+        if(mScoutName == null || mScoutName.equals("")) {
+            mLogisticsDialog.show();
+        }
+
     }
 
     // TODO: Create option for admin to switch which alliance color and/or number
@@ -222,6 +292,9 @@ public class MatchScouting extends Activity {
             case R.id.switch_team:
                 //TODO: add switching team
                 break;
+            case R.id.scout_name:
+                mLogisticsDialog.show();
+                break;
             default:
                 assert false;
         }
@@ -283,6 +356,7 @@ public class MatchScouting extends Activity {
                 startActivity(intent);
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -340,6 +414,7 @@ public class MatchScouting extends Activity {
                 startActivity(intent);
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -430,6 +505,7 @@ public class MatchScouting extends Activity {
                 startActivity(intent);
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -501,6 +577,7 @@ public class MatchScouting extends Activity {
                 startActivity(intent);
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -518,6 +595,7 @@ public class MatchScouting extends Activity {
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
             map.put(Constants.Settings.ALLIANCE_COLOR, mAllianceColor);
             map.put(Constants.Settings.ALLIANCE_NUMBER, mAllianceNumber);
+            map.put(Constants.Match_Scouting.SCOUT_NAME, mScoutName);
             TMD tmd = new TMD(map);
             mDatabase.setTMD(tmd);
 

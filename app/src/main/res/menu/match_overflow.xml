@@ -36,4 +36,10 @@
         android:icon="@drawable/next_color"
         />
 
+    <item
+        android:id="@+id/scout_name"
+        android:title="Change Scout Name"
+        android:icon="@drawable/id_verified_color"
+        />
+
 </menu>

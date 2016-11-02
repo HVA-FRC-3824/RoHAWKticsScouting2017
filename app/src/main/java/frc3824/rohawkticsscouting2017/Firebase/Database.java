@@ -962,7 +962,7 @@ public class Database {
     //region Team Numbers
     public ArrayList<Integer> getTeamNumbers()
     {
-        ArrayList<Integer> team_numbers = new ArrayList<>(mTPDs.keySet());
+        ArrayList<Integer> team_numbers = new ArrayList<>(mTIDs.keySet());
         Collections.sort(team_numbers);
         return team_numbers;
     }

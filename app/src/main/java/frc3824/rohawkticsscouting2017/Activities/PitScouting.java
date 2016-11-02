@@ -13,10 +13,16 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -33,9 +39,9 @@ import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PitScoutDraw
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.TeamNumberCheck;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
+import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
-import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
 
@@ -54,6 +60,8 @@ public class PitScouting extends Activity {
     private int mTeamNumber;
     private Database mDatabase;
     private String mEventKey;
+    private String mLastScoutName;
+    private String mScoutName;
     private FPA_PitScouting mFPA;
 
     private int mTeamBefore;
@@ -63,6 +71,12 @@ public class PitScouting extends Activity {
 
     private ListView mDrawerList;
     private LVA_PitScoutDrawer mLVA;
+
+    private AlertDialog mLogisticsDialog;
+    private View mLogisticsView;
+    private AutoCompleteTextView mScoutNameTextView;
+    private View mLogisticsScoutNameBackground;
+    private TextView mLogisticsIncorrect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +93,8 @@ public class PitScouting extends Activity {
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mEventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
+        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_PIT_SCOUT, "");
+
         ArrayList<Integer> teams = mDatabase.getTeamNumbers();
         if(shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.PIT_SCOUT)) {
             int pit_group = shared_preferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
@@ -104,8 +120,9 @@ public class PitScouting extends Activity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.pit_scouting_view_pager);
         mFPA = new FPA_PitScouting(getFragmentManager());
         TPD team = mDatabase.getTPD(mTeamNumber);
-        if (team != null && team.pit_scouted) {
+        if (team != null) {
             mFPA.setValueMap(team.toMap());
+            mScoutName = team.scout_name;
         }
 
         viewPager.setAdapter(mFPA);
@@ -118,17 +135,55 @@ public class PitScouting extends Activity {
         tabLayout.setupWithViewPager(viewPager);
 
         mDrawerList = (ListView)findViewById(R.id.drawer_list);
-        ArrayList<TeamNumberCheck> tncs = new ArrayList<>();
-        for(int team_number: teams){
-            if(mDatabase.getTPD(team_number).pit_scouted){
-                tncs.add(new TeamNumberCheck(team_number, true));
-            } else {
-                tncs.add(new TeamNumberCheck(team_number));
-            }
-        }
 
-        mLVA = new LVA_PitScoutDrawer(this, tncs);
+        mLVA = new LVA_PitScoutDrawer(this, mDatabase.getTeamNumbers());
         mDrawerList.setAdapter(mLVA);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
+            ((TextView) mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
+
+            mScoutNameTextView = (AutoCompleteTextView) mLogisticsView.findViewById(R.id.scout_name);
+            if (!mLastScoutName.equals("")) {
+                String[] arr = {mLastScoutName};
+                ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
+                mScoutNameTextView.setAdapter(aa);
+            }
+            builder.setView(mLogisticsView);
+
+            mLogisticsIncorrect = (TextView) mLogisticsView.findViewById(R.id.incorrect);
+            mLogisticsScoutNameBackground = mLogisticsView.findViewById(R.id.scout_name_background);
+
+            builder.setPositiveButton("Ok", null);
+            builder.setCancelable(false);
+            mLogisticsDialog = builder.create();
+            mLogisticsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                    b.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+                            mScoutName = mScoutNameTextView.getText().toString();
+                            if (mScoutName.equals("")) {
+                                mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
+                                mLogisticsIncorrect.setVisibility(View.VISIBLE);
+                            } else {
+                                SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
+                                edit.putString(Constants.Settings.LAST_PIT_SCOUT, mScoutName);
+                                edit.commit();
+                                mLogisticsDialog.dismiss();
+                            }
+                        }
+                    });
+                }
+            });
+        if(mScoutName == null || mScoutName.equals("")) {
+            mScoutNameTextView.setText(mScoutName);
+            mLogisticsDialog.show();
+        }
     }
 
     /**
@@ -204,6 +259,9 @@ public class PitScouting extends Activity {
                 break;
             case R.id.next_team:
                 next_press();
+                break;
+            case R.id.scout_name:
+                mLogisticsDialog.show();
                 break;
             default:
                 assert false;
@@ -467,7 +525,7 @@ public class PitScouting extends Activity {
         protected Void doInBackground(ScoutMap... scoutMaps) {
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
-            map.put(Constants.Pit_Scouting.PIT_SCOUTED, true);
+            map.put(Constants.Pit_Scouting.SCOUT_NAME, mScoutName);
 
             // Change picture filename to use event id and team number
             if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS)) {

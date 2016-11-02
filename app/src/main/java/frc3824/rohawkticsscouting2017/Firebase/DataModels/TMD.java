@@ -24,6 +24,7 @@ public class TMD {
     public int team_number;
     public String alliance_color;
     public int alliance_number;
+    public String scout_name;
 
     // Autonomous
 
@@ -52,6 +53,7 @@ public class TMD {
             match_number = map.getInt(Constants.Intent_Extras.MATCH_NUMBER);
             alliance_color = map.getString(Constants.Settings.ALLIANCE_COLOR);
             alliance_number = map.getInt(Constants.Settings.ALLIANCE_NUMBER);
+            scout_name = map.getString(Constants.Match_Scouting.SCOUT_NAME);
 
             // GAME SPECIFIC
 
@@ -77,6 +79,7 @@ public class TMD {
         map.put(Constants.Intent_Extras.MATCH_NUMBER, match_number);
         map.put(Constants.Settings.ALLIANCE_COLOR, alliance_color);
         map.put(Constants.Settings.ALLIANCE_NUMBER, alliance_number);
+        map.put(Constants.Match_Scouting.SCOUT_NAME, scout_name);
 
         // GAME SPECIFIC
 

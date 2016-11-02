@@ -26,6 +26,11 @@ public interface Constants {
         String ALLIANCE_NUMBER = "alliance_number";
         String PIT_GROUP_NUMBER = "pit_group_number";
         String SERVER = "server";
+
+        // Not really settings, but are in shared preferences
+        String LAST_MATCH_SCOUT = "last_match_scout";
+        String LAST_PIT_SCOUT = "last_pit_scout";
+        String LAST_SUPER_SCOUT = "last_super_scout";
     }
 
     interface User_Types {
@@ -92,6 +97,9 @@ public interface Constants {
     }
 
     interface Match_Scouting {
+
+        String SCOUT_NAME = "scout_name";
+
         interface Autonomous {
             // GAME SPECIFIC
         }
@@ -120,6 +128,7 @@ public interface Constants {
     }
 
     interface Pit_Scouting {
+        String SCOUT_NAME = "scout_name";
         String PIT_SCOUTED = "pit_scouted";
 
         String ROBOT_PICTURE_DEFAULT = "robot_picture_default";
@@ -143,6 +152,9 @@ public interface Constants {
     }
 
     interface Super_Scouting {
+
+        String SCOUT_NAME = "scout_name";
+
         // GAME SPECIFIC
 
 

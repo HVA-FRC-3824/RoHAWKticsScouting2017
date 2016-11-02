@@ -26,8 +26,7 @@ public class TPD {
         Pit Scouting
     */
     public int team_number;
-
-    public boolean pit_scouted;
+    public String scout_name;
 
     // Robot Image
     public int robot_image_default;
@@ -52,8 +51,7 @@ public class TPD {
     public TPD(ScoutMap map) {
         try {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);
-
-            pit_scouted = map.getBoolean(Constants.Pit_Scouting.PIT_SCOUTED);
+            scout_name = map.getString(Constants.Pit_Scouting.SCOUT_NAME);
 
             if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT)){
                 robot_image_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
@@ -84,8 +82,7 @@ public class TPD {
         ScoutMap map = new ScoutMap();
 
         map.put(Constants.Intent_Extras.TEAM_NUMBER, team_number);
-
-        map.put(Constants.Pit_Scouting.PIT_SCOUTED, pit_scouted);
+        map.put(Constants.Pit_Scouting.SCOUT_NAME, scout_name);
 
         map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, robot_image_filepath);
         map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URLS, robot_image_url);

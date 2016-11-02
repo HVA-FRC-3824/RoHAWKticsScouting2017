@@ -14,10 +14,16 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -61,9 +67,17 @@ public class SuperScouting extends Activity{
 
     private FPA_SuperScouting mFPA;
     private String mServerName;
+    private String mLastScoutName;
+    private String mScoutName;
 
     private ListView mDrawerList;
     private LVA_MatchScoutDrawer mLVA;
+
+    private AlertDialog mLogisticsDialog;
+    private View mLogisticsView;
+    private AutoCompleteTextView mScoutNameTextView;
+    private View mLogisticsScoutNameBackground;
+    private TextView mLogisticsIncorrect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +92,7 @@ public class SuperScouting extends Activity{
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mServerName = shared_preferences.getString(Constants.Settings.SERVER, "");
+        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_SUPER_SCOUT, "");
 
 
         mDatabase = Database.getInstance();
@@ -113,6 +128,7 @@ public class SuperScouting extends Activity{
         SMD sm = mDatabase.getSMD(mMatchNumber);
         if (sm != null) {
             mFPA.setValueMap(sm.toMap());
+            mScoutName = sm.scout_name;
         }
         viewPager.setAdapter(mFPA);
         // Set the off screen page limit to more than the number of fragments
@@ -123,6 +139,51 @@ public class SuperScouting extends Activity{
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
+        ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Match Number: %d", mMatchNumber));
+
+        mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
+        if(!mLastScoutName.equals("")){
+            String[] arr = {mLastScoutName};
+            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
+            mScoutNameTextView.setAdapter(aa);
+        }
+        builder.setView(mLogisticsView);
+
+        mLogisticsIncorrect = (TextView)mLogisticsView.findViewById(R.id.incorrect);
+        mLogisticsScoutNameBackground = mLogisticsView.findViewById(R.id.scout_name_background);
+
+        builder.setPositiveButton("Ok", null);
+        builder.setCancelable(false);
+        mLogisticsDialog = builder.create();
+        mLogisticsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        mScoutName = mScoutNameTextView.getText().toString();
+                        if(mScoutName.equals("")){
+                            mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
+                            mLogisticsIncorrect.setVisibility(View.VISIBLE);
+                        } else {
+                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
+                            edit.putString(Constants.Settings.LAST_SUPER_SCOUT, mScoutName);
+                            edit.commit();
+                            mLogisticsDialog.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+        if(mScoutName == null || mScoutName.equals("")) {
+            mLogisticsDialog.show();
+        }
     }
 
     /**
@@ -198,6 +259,9 @@ public class SuperScouting extends Activity{
             case R.id.next_match:
                 next_press();
                 break;
+            case R.id.scout_name:
+                mLogisticsDialog.show();
+                break;
             default:
                 assert false;
         }
@@ -258,6 +322,7 @@ public class SuperScouting extends Activity{
                 startActivity(intent);
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -314,6 +379,7 @@ public class SuperScouting extends Activity{
                 startActivity(intent);
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -471,6 +537,7 @@ public class SuperScouting extends Activity{
                 startActivity(intent);
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -485,6 +552,7 @@ public class SuperScouting extends Activity{
         protected Void doInBackground(ScoutMap... scoutMaps) {
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
+            map.put(Constants.Super_Scouting.SCOUT_NAME, mScoutName);
             SMD smd = new SMD(map);
             mDatabase.setSMD(smd);
 
