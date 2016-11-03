@@ -135,7 +135,8 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                                 switch (mImageType) {
                                     case Constants.Cloud.ROBOT_PICTURE:
                                         TPD t = mDatabase.getTPD(Integer.parseInt(ci.extra));
-                                        t.robot_image_url = ci.url;
+                                        int index = t.robot_image_filepaths.indexOf(ci.filepath);
+                                        t.robot_image_urls.add(index, ci.url);
                                         mDatabase.setTPD(t);
                                         break;
                                     case Constants.Cloud.STRATEGY:

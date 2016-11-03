@@ -1,44 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin">
+
+    <Button
+        android:id="@+id/take_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:id="@+id/delete_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:visibility="gone"
+        android:layout_above="@id/take_picture"/>
+
+    <Button
+        android:id="@+id/set_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Default"
+        android:visibility="gone"
+        android:layout_above="@id/delete_picture"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_above="@id/set_default">
+
         <ImageButton
+            android:id="@+id/left"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/double_left_color"/>
+            android:src="@drawable/double_left_color" />
+
         <ImageView
             android:id="@+id/robot_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Robot Picture"
-            android:layout_gravity="center_horizontal" />
+            android:layout_width="400dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Robot Picture" />
+
         <ImageButton
+            android:id="@+id/right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/double_right_color"/>
+            android:src="@drawable/double_right_color" />
     </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Set Default"
-        android:id="@+id/set_default"
-        android:visibility="gone"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete"
-        android:id="@+id/delete_picture"
-        android:visibility="gone"/>
-
     <TextView
         android:id="@+id/need_to_download"
         android:layout_width="match_parent"
@@ -48,12 +63,4 @@
         android:textColor="@color/bright_red"
         android:textSize="20sp"
         android:visibility="gone" />
-
-    <Button
-        android:id="@+id/take_picture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Take Picture" />
-
-</LinearLayout>
+</RelativeLayout>

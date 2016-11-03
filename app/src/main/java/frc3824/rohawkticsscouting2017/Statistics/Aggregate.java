@@ -86,11 +86,11 @@ public class Aggregate {
         team.second_pick.pick_ability = tc.secondPickAbility();
         team.third_pick.pick_ability = tc.thirdPickAbility();
 
-        if(team.pit.robot_image_filepath != null && team.pit.robot_image_filepath != "")
+        if(team.pit.robot_image_filepaths != null && team.pit.robot_image_filepaths.size() != 0)
         {
-            team.first_pick.robot_picture_filepath = team.pit.robot_image_filepath;
-            team.second_pick.robot_picture_filepath = team.pit.robot_image_filepath;
-            team.third_pick.robot_picture_filepath = team.pit.robot_image_filepath;
+            team.first_pick.robot_picture_filepath = team.pit.robot_image_filepaths.get(team.pit.robot_image_default);
+            team.second_pick.robot_picture_filepath = team.pit.robot_image_filepaths.get(team.pit.robot_image_default);
+            team.third_pick.robot_picture_filepath = team.pit.robot_image_filepaths.get(team.pit.robot_image_default);
         }
 
         /////////////////////////////////// GAME SPECIFIC ///////////////////////////////////

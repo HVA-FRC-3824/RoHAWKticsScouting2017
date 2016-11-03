@@ -96,7 +96,7 @@ public class PitScouting extends Activity {
         mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_PIT_SCOUT, "");
 
         ArrayList<Integer> teams = mDatabase.getTeamNumbers();
-        if(shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.PIT_SCOUT)) {
+        if (shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.PIT_SCOUT)) {
             int pit_group = shared_preferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
             int group_size = (int) ((float) (teams.size()) / 6.0 + 0.5f);
             int start = group_size * (pit_group - 1);
@@ -134,53 +134,53 @@ public class PitScouting extends Activity {
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);
 
-        mDrawerList = (ListView)findViewById(R.id.drawer_list);
+        mDrawerList = (ListView) findViewById(R.id.drawer_list);
 
         mLVA = new LVA_PitScoutDrawer(this, mDatabase.getTeamNumbers());
         mDrawerList.setAdapter(mLVA);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
-            ((TextView) mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
+        mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
+        ((TextView) mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
 
-            mScoutNameTextView = (AutoCompleteTextView) mLogisticsView.findViewById(R.id.scout_name);
-            if (!mLastScoutName.equals("")) {
-                String[] arr = {mLastScoutName};
-                ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-                mScoutNameTextView.setAdapter(aa);
-            }
-            builder.setView(mLogisticsView);
+        mScoutNameTextView = (AutoCompleteTextView) mLogisticsView.findViewById(R.id.scout_name);
+        if (!mLastScoutName.equals("")) {
+            String[] arr = {mLastScoutName};
+            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
+            mScoutNameTextView.setAdapter(aa);
+        }
+        builder.setView(mLogisticsView);
 
-            mLogisticsIncorrect = (TextView) mLogisticsView.findViewById(R.id.incorrect);
-            mLogisticsScoutNameBackground = mLogisticsView.findViewById(R.id.scout_name_background);
+        mLogisticsIncorrect = (TextView) mLogisticsView.findViewById(R.id.incorrect);
+        mLogisticsScoutNameBackground = mLogisticsView.findViewById(R.id.scout_name_background);
 
-            builder.setPositiveButton("Ok", null);
-            builder.setCancelable(false);
-            mLogisticsDialog = builder.create();
-            mLogisticsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                    b.setOnClickListener(new View.OnClickListener() {
+        builder.setPositiveButton("Ok", null);
+        builder.setCancelable(false);
+        mLogisticsDialog = builder.create();
+        mLogisticsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
 
-                        @Override
-                        public void onClick(View view) {
-                            mScoutName = mScoutNameTextView.getText().toString();
-                            if (mScoutName.equals("")) {
-                                mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
-                                mLogisticsIncorrect.setVisibility(View.VISIBLE);
-                            } else {
-                                SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                                edit.putString(Constants.Settings.LAST_PIT_SCOUT, mScoutName);
-                                edit.commit();
-                                mLogisticsDialog.dismiss();
-                            }
+                    @Override
+                    public void onClick(View view) {
+                        mScoutName = mScoutNameTextView.getText().toString();
+                        if (mScoutName.equals("")) {
+                            mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
+                            mLogisticsIncorrect.setVisibility(View.VISIBLE);
+                        } else {
+                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
+                            edit.putString(Constants.Settings.LAST_PIT_SCOUT, mScoutName);
+                            edit.commit();
+                            mLogisticsDialog.dismiss();
                         }
-                    });
-                }
-            });
-        if(mScoutName == null || mScoutName.equals("")) {
+                    }
+                });
+            }
+        });
+        if (mScoutName == null || mScoutName.equals("")) {
             mScoutNameTextView.setText(mScoutName);
             mLogisticsDialog.show();
         }
@@ -217,18 +217,16 @@ public class PitScouting extends Activity {
      */
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
-        if(featureId == Window.FEATURE_ACTION_BAR && menu != null){
-            if(menu.getClass().getSimpleName().equals("MenuBuilder")){
-                try{
+        if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+                try {
                     Method m = menu.getClass().getDeclaredMethod(
                             "setOptionalIconsVisible", Boolean.TYPE);
                     m.setAccessible(true);
                     m.invoke(menu, true);
-                }
-                catch(NoSuchMethodException e){
+                } catch (NoSuchMethodException e) {
                     Log.e(TAG, "onMenuOpened", e);
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -526,33 +524,37 @@ public class PitScouting extends Activity {
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
             map.put(Constants.Pit_Scouting.SCOUT_NAME, mScoutName);
-
             // Change picture filename to use event id and team number
             if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS)) {
-                String picture_filename = null;
                 try {
-                    picture_filename = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-                    if (!picture_filename.equals("")) {
-                        File picture = new File(picture_filename);
-                        if (picture.exists() && picture.length() > 0) {
-                            String newPathName = String.format("%s/robot_pictures/", mEventKey);
-                            File newPath = new File(getFilesDir(), newPathName);
-                            if (!newPath.exists()) {
-                                newPath.mkdirs();
+                    ArrayList<String> picture_filepaths = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
+                    ArrayList<String> new_picture_filepaths = new ArrayList<>();
+                    for (int i = 0; i < picture_filepaths.size(); i++) {
+                        String picture_filename = picture_filepaths.get(i);
+                        if (!picture_filename.equals("")) {
+                            File picture = new File(picture_filename);
+                            if (picture.exists() && picture.length() > 0) {
+                                String newPathName = String.format("%s/robot_pictures/", mEventKey);
+                                File newPath = new File(getFilesDir(), newPathName);
+                                if (!newPath.exists()) {
+                                    newPath.mkdirs();
+                                }
+                                File newPicture = new File(newPath, String.format("%d_%d.jpg", mTeamNumber, i));
+                                newPicture.delete();
+                                copy(picture, newPicture);
+                                picture.delete();
+                                new_picture_filepaths.add(newPicture.getAbsolutePath());
+                            } else {
+                                map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
                             }
-                            File newPicture = new File(newPath, String.format("%d.jpg", mTeamNumber));
-                            newPicture.delete();
-                            copy(picture, newPicture);
-                            picture.delete();
-                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-                            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, newPicture.getAbsolutePath());
-                        } else {
-                            map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
                         }
                     }
+                    map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
+                    map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, new_picture_filepaths);
                 } catch (ScoutValue.TypeException | IOException e) {
                     Log.e(TAG, e.getMessage());
                 }
+
             }
 
             TPD team = new TPD(map);
@@ -583,12 +585,12 @@ public class PitScouting extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_CAMERA_PERMISSION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                   mFPA.cameraHasPermission();
+                    mFPA.cameraHasPermission();
                 } else {
 
                     // permission denied, boo! Disable the

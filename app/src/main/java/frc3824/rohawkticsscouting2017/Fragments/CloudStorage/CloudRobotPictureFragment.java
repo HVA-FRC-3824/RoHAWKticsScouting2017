@@ -33,25 +33,32 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
     protected void getCloudImages(ArrayList<Integer> teams, boolean internet) {
         mCIs = new ArrayList<>();
         for(int team_number: teams) {
-            CloudImage ci = new CloudImage();
             TPD tpd = mDatabase.getTPD(team_number);
+            if(tpd == null)
+                continue;
+            for(int i = 0; i < tpd.robot_image_filepaths.size(); i++) {
+                CloudImage ci = new CloudImage();
 
-            ci.extra = String.valueOf(team_number);
-            ci.internet = internet;
+                ci.extra = String.valueOf(team_number);
+                ci.internet = internet;
 
-            if(tpd.robot_image_filepath != null && !tpd.robot_image_filepath.equals("")) {
-                if(new File(tpd.robot_image_filepath).exists()) {
-                    ci.local = true;
+                if (tpd.robot_image_filepaths != null && tpd.robot_image_filepaths.size() != 0) {
+
+                    if (new File(tpd.robot_image_filepaths.get(i)).exists()) {
+                        ci.local = true;
+                    }
+                    ci.filepath = tpd.robot_image_filepaths.get(i);
                 }
-                ci.filepath = tpd.robot_image_filepath;
-            }
 
-            if(tpd.robot_image_url != null && !tpd.robot_image_url.equals("")) {
-                ci.remote = true;
-                ci.url = tpd.robot_image_url;
-            }
+                if (tpd.robot_image_urls != null && tpd.robot_image_urls.size() != 0) {
+                    if(!tpd.robot_image_urls.get(i).equals("")) {
+                        ci.remote = true;
+                    }
+                    ci.url = tpd.robot_image_urls.get(i);
+                }
 
-            mCIs.add(ci);
+                mCIs.add(ci);
+            }
         }
     }
 

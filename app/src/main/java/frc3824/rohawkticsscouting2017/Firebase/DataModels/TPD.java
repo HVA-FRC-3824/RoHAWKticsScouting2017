@@ -30,8 +30,8 @@ public class TPD {
 
     // Robot Image
     public int robot_image_default;
-    public ArrayList<String> robot_image_filepath;
-    public ArrayList<String> robot_image_url;
+    public ArrayList<String> robot_image_filepaths;
+    public ArrayList<String> robot_image_urls;
 
     // Dimensions
     public double weight;
@@ -46,7 +46,10 @@ public class TPD {
     // Notes
     public String notes;
 
-    public TPD(){}
+    public TPD(){
+        robot_image_filepaths = new ArrayList<>();
+        robot_image_urls = new ArrayList<>();
+    }
 
     public TPD(ScoutMap map) {
         try {
@@ -57,9 +60,9 @@ public class TPD {
                 robot_image_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
             }
 
-            robot_image_filepath = (ArrayList)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
+            robot_image_filepaths = (ArrayList)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
             if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_URLS)) {
-                robot_image_url = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_URLS);
+                robot_image_urls = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_URLS);
             }
 
             width = map.getDouble(Constants.Pit_Scouting.Dimensions.WIDTH);
@@ -84,8 +87,9 @@ public class TPD {
         map.put(Constants.Intent_Extras.TEAM_NUMBER, team_number);
         map.put(Constants.Pit_Scouting.SCOUT_NAME, scout_name);
 
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, robot_image_filepath);
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URLS, robot_image_url);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT, robot_image_default);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, robot_image_filepaths);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URLS, robot_image_urls);
 
         map.put(Constants.Pit_Scouting.Dimensions.WIDTH, width);
         map.put(Constants.Pit_Scouting.Dimensions.LENGTH, length);
