@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -20,13 +22,17 @@ import frc3824.rohawkticsscouting2017.R;
  * @author Andrew Messing
  * Created: 8/17/16
  *
- *
+ * Fragment for the team view that displays all the pit information and most importantly the robot's
+ * pictures
  */
-public class PitDataFragment extends Fragment {
+public class PitDataFragment extends Fragment implements View.OnClickListener{
 
     private final static String TAG = "PitDataFragment";
 
     private int mTeamNumber;
+    private ArrayList<String> mPicturePaths;
+    private int mCurrentPicture;
+    private ImageView mImageView;
 
     public PitDataFragment(){}
 
@@ -37,14 +43,19 @@ public class PitDataFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_pit_data, container, false);
+        View view = inflater.inflate(R.layout.fragment_team_view_pit_data, container, false);
 
         TPD team = Database.getInstance().getTPD(mTeamNumber);
 
+        view.findViewById(R.id.left).setOnClickListener(this);
+        view.findViewById(R.id.right).setOnClickListener(this);
+
         if(team.robot_image_filepaths != null && team.robot_image_filepaths.size() != 0)
         {
-            ImageView imageView = (ImageView)view.findViewById(R.id.robot_picture);
-            displayPicture(team.robot_image_filepaths.get(team.robot_image_default), imageView);
+            mImageView= (ImageView)view.findViewById(R.id.robot_picture);
+            displayPicture(team.robot_image_filepaths.get(team.robot_image_default), mImageView);
+            mPicturePaths = team.robot_image_filepaths;
+            mCurrentPicture = team.robot_image_default;
         }
 
         ((TextView)view.findViewById(R.id.width)).setText(String.valueOf(team.width));
@@ -88,5 +99,25 @@ public class PitDataFragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
         imageView.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.left:
+                mCurrentPicture --;
+                if(mCurrentPicture < 0) {
+                    mCurrentPicture += mPicturePaths.size();
+                }
+                displayPicture(mPicturePaths.get(mCurrentPicture), mImageView);
+                break;
+            case R.id.right:
+                mCurrentPicture ++;
+                if(mCurrentPicture >= mPicturePaths.size()) {
+                    mCurrentPicture -= mPicturePaths.size();
+                }
+                displayPicture(mPicturePaths.get(mCurrentPicture), mImageView);
+                break;
+        }
     }
 }

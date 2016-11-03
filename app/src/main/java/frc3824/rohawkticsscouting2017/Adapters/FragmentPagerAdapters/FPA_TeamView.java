@@ -24,19 +24,15 @@ import frc3824.rohawkticsscouting2017.Fragments.TeamView.VisualsFragment;
 public class FPA_TeamView extends FragmentPagerAdapter {
 
     private final static String TAG = "FPA_TeamView";
-    private Database mDatabase;
-    private Storage mStorage;
     private int mTeamNumber;
 
     private String mTabTitles[] = new String[]{"Visuals", "Pit Data", "Match Data", "Notes", "Schedule"};
 
     private Map<Integer, Fragment> mFragments = new HashMap<>();
 
-    public FPA_TeamView(FragmentManager fm, int teamNumber, Database database, Storage storage) {
+    public FPA_TeamView(FragmentManager fm, int teamNumber) {
         super(fm);
         mTeamNumber = teamNumber;
-        mDatabase = database;
-        mStorage = storage;
     }
 
     @Override
@@ -52,6 +48,7 @@ public class FPA_TeamView extends FragmentPagerAdapter {
             {
                 case 0:
                     f = new VisualsFragment();
+                    ((VisualsFragment)f).setTeamNumber(mTeamNumber);
                     break;
                 case 1:
                     f = new PitDataFragment();
@@ -59,6 +56,7 @@ public class FPA_TeamView extends FragmentPagerAdapter {
                     break;
                 case 2:
                     f = new MatchDataFragment();
+                    ((MatchDataFragment)f).setTeamNumber(mTeamNumber);
                     break;
                 case 3:
                     f = new ViewNotesFragment();

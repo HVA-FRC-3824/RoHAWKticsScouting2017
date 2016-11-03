@@ -26,7 +26,7 @@ public class TeleopFragment extends ScoutFragment{
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_teleop, container, false);
+        View view = inflater.inflate(R.layout.fragment_match_teleop, container, false);
         if(mValueMap != null)
         {
             restoreContentsFromMap(mValueMap, (ViewGroup)view);

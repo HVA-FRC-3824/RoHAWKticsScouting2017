@@ -7,18 +7,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/robot_picture"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:contentDescription="Robot Picture" />
+            android:orientation="horizontal"
+            android:id="@+id/image_nav">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/double_left_color"
+                android:id="@+id/left"/>
+
+            <ImageView
+                android:id="@+id/robot_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="Robot Picture" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/double_right_color"
+                android:id="@+id/right"/>
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/dimensions_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/robot_picture"
+            android:layout_below="@+id/image_nav"
             android:text="Dimensions:"
             android:textColor="@color/black"
             android:textSize="30sp" />
