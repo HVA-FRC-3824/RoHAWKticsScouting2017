@@ -30,8 +30,7 @@ public class ScheduleFragment extends Fragment {
         mTeamNumber = teamNumber;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_schedule, container, false);
 
         ListView schedule = (ListView)view.findViewById(R.id.schedule);

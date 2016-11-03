@@ -1,6 +1,7 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import frc3824.rohawkticsscouting2017.Activities.MatchView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -75,7 +77,7 @@ public class LVA_ScheduleFragment extends ArrayAdapter<Integer> {
             }
         }
 
-        /*
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,7 +86,7 @@ public class LVA_ScheduleFragment extends ArrayAdapter<Integer> {
                 mContext.startActivity(intent);
             }
         });
-        */
+
         return convertView;
     }
 }
