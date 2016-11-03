@@ -78,6 +78,7 @@ public class LVA_TeamList extends ArrayAdapter<Integer>{
                 break;
             case TEAM_VIEW:
                 convertView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.navy_blue));
+                txt1.setTextColor(Color.WHITE);
                 convertView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

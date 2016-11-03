@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,105 +15,23 @@
         android:elevation="4dp"
         android:logo="@drawable/logo_icon_large"/>
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/bright_blue">
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
-            android:id="@+id/blue1"
-            tools:layout="@layout/fragment_match_view_team" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
-            android:id="@+id/blue2"
-            tools:layout="@layout/fragment_match_view_team" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
-            android:id="@+id/blue3"
-            tools:layout="@layout/fragment_match_view_team" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewPredictionFragment"
-            android:id="@+id/blue_prediction"
-            tools:layout="@layout/fragment_match_view_prediction" />
-    </LinearLayout>
-    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/match_view_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/match_view_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/bright_red">
-        <View
-        android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
-            android:id="@+id/red1"
-            tools:layout="@layout/fragment_match_view_team" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
-            android:id="@+id/red2"
-            tools:layout="@layout/fragment_match_view_team" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
-            android:id="@+id/red3"
-            tools:layout="@layout/fragment_match_view_team" />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewPredictionFragment"
-            android:id="@+id/red_prediction"
-            tools:layout="@layout/fragment_match_view_prediction" />
-    </LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </LinearLayout>

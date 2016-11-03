@@ -42,8 +42,7 @@ public class AllianceCalculations {
         return predictedScore(false);
     }
 
-    public double predictedScore(boolean elimination)
-    {
+    public double predictedScore(boolean elimination) {
         double pScore = 0.0;
 
         for(int i = 0; i < mAlliance.teams.size(); i++)
@@ -59,13 +58,11 @@ public class AllianceCalculations {
 
         std_pScore = sqrt(∑_(T in A) std_autoAbility(T)^2)
      */
-    public double std_predictedScore()
-    {
-        return std_predictedScore();
+    public double std_predictedScore() {
+        return std_predictedScore(false);
     }
 
-    public double std_predictedScore(boolean elimination)
-    {
+    public double std_predictedScore(boolean elimination) {
         double std_pScore = 0.0;
 
         for(int i = 0; i < mAlliance.teams.size(); i++)

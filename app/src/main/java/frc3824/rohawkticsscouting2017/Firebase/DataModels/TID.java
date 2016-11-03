@@ -2,6 +2,7 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class TID {
     public int team_number;
     public String nickname;
 
-    public List<Integer> match_numbers;
+    public ArrayList<Integer> match_numbers;
 
     public TID() {}
 }

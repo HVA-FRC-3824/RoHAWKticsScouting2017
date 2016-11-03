@@ -3,7 +3,7 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author frc3824
@@ -18,9 +18,9 @@ public class Match {
 
     public int match_number;
 
-    public List<Integer> teams;
+    public ArrayList<Integer> teams;
 
-    public List<Integer> scores;
+    public ArrayList<Integer> scores;
 
     public Match() {}
 

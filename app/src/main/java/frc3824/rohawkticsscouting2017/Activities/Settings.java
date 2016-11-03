@@ -291,7 +291,7 @@ public class Settings extends Activity implements OnClickListener{
 
                 int total = 2 * numberOfTeams + numberOfMatches;
                 int currentIndex = 0;
-                Map<Integer, List<Integer>> teamMatchNumbers = new HashMap<>();
+                Map<Integer, ArrayList<Integer>> teamMatchNumbers = new HashMap<>();
                 publishProgress(currentIndex, total);
                 for(TBA_Match tbaMatch: matches)
                 {

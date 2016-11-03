@@ -5,7 +5,10 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +16,9 @@ import android.view.Window;
 import android.widget.Toolbar;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
+import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -31,9 +36,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
 public class MatchView extends Activity {
 
     private final static String TAG = "MatchView";
-
     private int mMatchNumber;
-    private Database mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,78 +48,34 @@ public class MatchView extends Activity {
 
         Bundle extras = getIntent().getExtras();
 
-        mDatabase = Database.getInstance();
-
-        FragmentManager fm = getFragmentManager();
-
         mMatchNumber = extras.getInt(Constants.Intent_Extras.MATCH_NUMBER, -1);
-        MatchViewTeamFragment[] teamFragments = new MatchViewTeamFragment[6];
-        teamFragments[Constants.Match_Indices.BLUE1] = (MatchViewTeamFragment) fm.findFragmentById(R.id.blue1);
-        teamFragments[Constants.Match_Indices.BLUE2] = (MatchViewTeamFragment) fm.findFragmentById(R.id.blue2);
-        teamFragments[Constants.Match_Indices.BLUE3] = (MatchViewTeamFragment) fm.findFragmentById(R.id.blue3);
-        teamFragments[Constants.Match_Indices.RED1] = (MatchViewTeamFragment) fm.findFragmentById(R.id.red1);
-        teamFragments[Constants.Match_Indices.RED2] = (MatchViewTeamFragment) fm.findFragmentById(R.id.red2);
-        teamFragments[Constants.Match_Indices.RED3] = (MatchViewTeamFragment) fm.findFragmentById(R.id.red3);
 
-        MatchViewPredictionFragment bluePrediction = (MatchViewPredictionFragment) fm.findFragmentById(R.id.blue_prediction);
-        MatchViewPredictionFragment redPrediction = (MatchViewPredictionFragment) fm.findFragmentById(R.id.red_prediction);
-
+        ViewPager viewPager = (ViewPager)findViewById(R.id.match_view_view_pager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.match_view_tab_layout);
+        tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
+        tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
+        tabLayout.setupWithViewPager(viewPager);
         if(mMatchNumber == -1)
         {
-            int number = extras.getInt(Constants.Intent_Extras.BLUE1,-1);
-            Team blueTeam1 = mDatabase.getTeam(number);
-            teamFragments[Constants.Match_Indices.BLUE1].setTeam(blueTeam1);
+            setTitle("Custom Match");
+            ArrayList<Integer> teams = new ArrayList<>();
+            teams.add(extras.getInt(Constants.Intent_Extras.BLUE1,-1));
+            teams.add(extras.getInt(Constants.Intent_Extras.BLUE2,-1));
+            teams.add(extras.getInt(Constants.Intent_Extras.BLUE3,-1));
+            teams.add(extras.getInt(Constants.Intent_Extras.RED1,-1));
+            teams.add(extras.getInt(Constants.Intent_Extras.RED2,-1));
+            teams.add(extras.getInt(Constants.Intent_Extras.RED3,-1));
 
-            number = extras.getInt(Constants.Intent_Extras.BLUE2,-1);
-            Team blueTeam2 = mDatabase.getTeam(number);
-            teamFragments[Constants.Match_Indices.BLUE2].setTeam(blueTeam2);
-
-            number = extras.getInt(Constants.Intent_Extras.BLUE3,-1);
-            Team blueTeam3 = mDatabase.getTeam(number);
-            teamFragments[Constants.Match_Indices.BLUE3].setTeam(blueTeam3);
-
-            bluePrediction.setTeams(blueTeam1, blueTeam2, blueTeam3);
-
-            number = extras.getInt(Constants.Intent_Extras.RED1,-1);
-            Team redTeam1 = mDatabase.getTeam(number);
-            teamFragments[Constants.Match_Indices.RED1].setTeam(redTeam1);
-
-            number = extras.getInt(Constants.Intent_Extras.RED2,-1);
-            Team redTeam2 = mDatabase.getTeam(number);
-            teamFragments[Constants.Match_Indices.RED2].setTeam(redTeam2);
-
-            number = extras.getInt(Constants.Intent_Extras.RED3,-1);
-            Team redTeam3 = mDatabase.getTeam(number);
-            teamFragments[Constants.Match_Indices.RED3].setTeam(redTeam3);
-
-            redPrediction.setTeams(redTeam1, redTeam2, redTeam3);
-
-            bluePrediction.setOpponents(redTeam1, redTeam2, redTeam3);
-            redPrediction.setOpponents(blueTeam1, blueTeam2, blueTeam3);
+            FPA_MatchView fpa = new FPA_MatchView(getFragmentManager(), teams);
+            viewPager.setAdapter(fpa);
+            viewPager.setOffscreenPageLimit(fpa.getCount());
         }
         else
         {
             setTitle("Match Number: " + mMatchNumber);
-            Match match = mDatabase.getMatch(mMatchNumber);
-            Team[] blueAlliance = new Team[3];
-            Team[] redAlliance = new Team[3];
-            for(int i = 0; i < match.teams.size(); i++)
-            {
-                Team team = mDatabase.getTeam(match.teams.get(i));
-                teamFragments[i].setTeam(team);
-                if(i < 3)
-                {
-                    blueAlliance[i] = team;
-                }
-                else
-                {
-                    redAlliance[i - 3] = team;
-                }
-            }
-
-            bluePrediction.setTeams(blueAlliance[0], blueAlliance[1], blueAlliance[2]);
-            redPrediction.setTeams(redAlliance[0], redAlliance[1], redAlliance[2]);
-
+            FPA_MatchView fpa = new FPA_MatchView(getFragmentManager(), mMatchNumber);
+            viewPager.setAdapter(fpa);
+            viewPager.setOffscreenPageLimit(fpa.getCount());
         }
     }
 
@@ -132,7 +91,7 @@ public class MatchView extends Activity {
         if (mMatchNumber == -1 || mMatchNumber == 1) {
             menu.removeItem(R.id.previous_match);
         }
-        if (mMatchNumber == -1 || mMatchNumber == mDatabase.getNumberOfMatches()) {
+        if (mMatchNumber == -1 || mMatchNumber == Database.getInstance().getNumberOfMatches()) {
             menu.removeItem(R.id.next_match);
         }
         menu.removeItem(R.id.switch_team);
@@ -150,8 +109,7 @@ public class MatchView extends Activity {
      * @return
      */
     @Override
-    public boolean onMenuOpened(int featureId, Menu menu)
-    {
+    public boolean onMenuOpened(int featureId, Menu menu) {
         if(featureId == Window.FEATURE_ACTION_BAR && menu != null){
             if(menu.getClass().getSimpleName().equals("MenuBuilder")){
                 try{

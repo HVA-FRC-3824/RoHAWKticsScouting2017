@@ -24,6 +24,7 @@ public class MatchDataFragment extends Fragment {
     private final static String TAG = "MatchDataFragment";
 
     private ViewPager mViewPager;
+    private int mTeamNumber;
 
     public MatchDataFragment() {}
 
@@ -31,8 +32,10 @@ public class MatchDataFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_team_view_match_data, container, false);
 
         mViewPager = (ViewPager)view.findViewById(R.id.match_data_view_pager);
-
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.match_scouting_tab_layout);
+        FPA_TeamView_MatchData fpa = new FPA_TeamView_MatchData(getChildFragmentManager(), mTeamNumber);
+        mViewPager.setAdapter(fpa);
+        mViewPager.setOffscreenPageLimit(fpa.getCount());
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.match_data_tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(mViewPager);
@@ -41,9 +44,7 @@ public class MatchDataFragment extends Fragment {
     }
 
     public void setTeamNumber(int team_number){
-        FPA_TeamView_MatchData fpa = new FPA_TeamView_MatchData(getChildFragmentManager(), team_number);
-        mViewPager.setAdapter(fpa);
-        mViewPager.setOffscreenPageLimit(fpa.getCount());
+        mTeamNumber = team_number;
     }
 
 }

@@ -812,7 +812,9 @@ public class Database {
         {
             team.info = new TID();
             team.info.team_number = team_number;
+            team.info.match_numbers = new ArrayList<>();
         }
+        Collections.sort(team.info.match_numbers);
 
         team.pit = getTPD(team_number);
         if(team.pit == null)

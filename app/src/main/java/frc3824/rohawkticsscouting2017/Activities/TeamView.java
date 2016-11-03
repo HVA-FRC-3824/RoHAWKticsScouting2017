@@ -51,18 +51,13 @@ public class TeamView extends Activity {
 
         mTeamNumber = extras.getInt(Constants.Intent_Extras.TEAM_NUMBER);
 
-        SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String eventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
-        mDatabase = Database.getInstance(eventKey);
-        Storage storage = Storage.getInstance(eventKey);
-
         setTitle(String.format("Team: %d", mTeamNumber));
 
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager) findViewById(R.id.team_view_view_pager);
-        FPA_TeamView fpa = new FPA_TeamView(getFragmentManager(), mTeamNumber, mDatabase, storage);
+        FPA_TeamView fpa = new FPA_TeamView(getFragmentManager(), mTeamNumber);
 
         viewPager.setAdapter(fpa);
         viewPager.setOffscreenPageLimit(fpa.getCount());
@@ -84,6 +79,7 @@ public class TeamView extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.team_overflow, menu);
+        mDatabase = Database.getInstance();
         mTeamBefore = mDatabase.getTeamNumberBefore(mTeamNumber);
         if (mTeamBefore == 0) {
             menu.removeItem(R.id.previous_team);

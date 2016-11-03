@@ -121,7 +121,7 @@
             android:layout_below="@+id/width_label"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/length_label"
-            android:text="(in)"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/length"
             android:layout_below="@+id/dimensions_label"
-            android:text="(in)"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -142,7 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/length"
             android:layout_below="@+id/length_label"
-            android:text="(in)"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -152,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/length"
             android:layout_below="@+id/height_label"
-            android:text="(in)"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -163,7 +163,7 @@
             android:layout_below="@+id/misc_label"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/programming_language_label"
-            android:text="Java"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -173,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/notes_label"
             android:layout_marginLeft="16dp"
-            android:text="some notes..."
+            android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
 

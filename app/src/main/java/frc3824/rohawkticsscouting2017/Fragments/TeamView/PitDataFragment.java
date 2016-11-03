@@ -47,26 +47,26 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
 
         TPD team = Database.getInstance().getTPD(mTeamNumber);
 
-        view.findViewById(R.id.left).setOnClickListener(this);
-        view.findViewById(R.id.right).setOnClickListener(this);
+        if(team != null) {
+            view.findViewById(R.id.left).setOnClickListener(this);
+            view.findViewById(R.id.right).setOnClickListener(this);
 
-        if(team.robot_image_filepaths != null && team.robot_image_filepaths.size() != 0)
-        {
-            mImageView= (ImageView)view.findViewById(R.id.robot_picture);
-            displayPicture(team.robot_image_filepaths.get(team.robot_image_default), mImageView);
-            mPicturePaths = team.robot_image_filepaths;
-            mCurrentPicture = team.robot_image_default;
+            if (team.robot_image_filepaths != null && team.robot_image_filepaths.size() != 0) {
+                mImageView = (ImageView) view.findViewById(R.id.robot_picture);
+                displayPicture(team.robot_image_filepaths.get(team.robot_image_default), mImageView);
+                mPicturePaths = team.robot_image_filepaths;
+                mCurrentPicture = team.robot_image_default;
+            }
+
+            ((TextView) view.findViewById(R.id.width)).setText(String.format("%03.2f (in)", team.width));
+            ((TextView) view.findViewById(R.id.length)).setText(String.format("%03.2f (in)", team.length));
+            ((TextView) view.findViewById(R.id.height)).setText(String.format("%03.2f (in)", team.height));
+            ((TextView) view.findViewById(R.id.weight)).setText(String.format("%03.2f (in)", team.weight));
+
+            ((TextView) view.findViewById(R.id.programming_language)).setText(team.programming_language);
+
+            ((TextView) view.findViewById(R.id.notes)).setText(team.notes);
         }
-
-        ((TextView)view.findViewById(R.id.width)).setText(String.valueOf(team.width));
-        ((TextView)view.findViewById(R.id.length)).setText(String.valueOf(team.length));
-        ((TextView)view.findViewById(R.id.height)).setText(String.valueOf(team.height));
-        ((TextView)view.findViewById(R.id.weight)).setText(String.valueOf(team.weight));
-
-        ((TextView)view.findViewById(R.id.programming_language)).setText(team.programming_language);
-
-        ((TextView)view.findViewById(R.id.notes)).setText(team.notes);
-
         return view;
     }
 

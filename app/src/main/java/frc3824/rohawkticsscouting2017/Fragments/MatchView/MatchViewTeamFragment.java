@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
+import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
@@ -21,15 +22,19 @@ public class MatchViewTeamFragment extends Fragment {
     private final static String TAG = "MatchViewTeamFragment";
 
     private View mView;
+    private Team mTeam;
 
     public MatchViewTeamFragment() {}
 
-    public void setTeam(Team team) {
+    public void setTeam(int team_number) {
+
+        mTeam = Database.getInstance().getTeam(team_number);
+
         TextView teamNumber = (TextView)mView.findViewById(R.id.team_number);
-        teamNumber.setText(String.valueOf(team.team_number));
+        teamNumber.setText(String.valueOf(team_number));
 
         TextView numberOfMatches = (TextView)mView.findViewById(R.id.num_matches);
-        numberOfMatches.setText(String.valueOf(team.info.match_numbers.size()));
+        numberOfMatches.setText(String.format("%d/%d", mTeam.completed_matches.size(), mTeam.info.match_numbers.size()));
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

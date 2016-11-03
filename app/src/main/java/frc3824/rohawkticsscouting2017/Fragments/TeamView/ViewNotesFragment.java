@@ -17,7 +17,7 @@ import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/17/16
  *
  * The fragment that displays all the notes (except pit notes) for a specific team
@@ -49,19 +49,23 @@ public class ViewNotesFragment extends Fragment{
         String superNotesText = "";
         for(int matchNumber : team.info.match_numbers) {
             TMD tm = database.getTMD(matchNumber, mTeamNumber);
-            if(tm != null && tm.notes != null && tm.notes != "") {
+            if(tm != null && tm.notes != null && tm.notes.equals("")) {
                 matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tm.notes);
             }
             SMD sm = database.getSMD(matchNumber);
-            if(sm != null && sm.notes != null && sm.notes != "") {
+            if(sm != null && sm.notes != null && sm.notes.equals("")) {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }
         }
 
         TDTF tdtf = database.getTDTF(mTeamNumber);
         String feedbackText = "";
-        for(Map.Entry<Integer, String> entry: tdtf.feedback.entrySet()){
-            feedbackText += String.format("Match %d:\n\t%s\n", entry.getKey(), entry.getValue());
+        if(tdtf != null && tdtf.feedback != null) {
+            for (Map.Entry<Integer, String> entry : tdtf.feedback.entrySet()) {
+                if(entry.getValue() != null && !entry.getValue().equals("")) {
+                    feedbackText += String.format("Match %d:\n\t%s\n", entry.getKey(), entry.getValue());
+                }
+            }
         }
 
         matchNotes.setText(matchNotesText);
