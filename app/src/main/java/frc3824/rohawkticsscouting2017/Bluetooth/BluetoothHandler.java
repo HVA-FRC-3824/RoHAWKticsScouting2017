@@ -6,11 +6,11 @@ import android.os.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -74,28 +74,28 @@ public class BluetoothHandler extends Handler {
 
                 switch (message.charAt(0)) {
                     case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
-                        TMD tmd = mGson.fromJson(message.substring(1), TMD.class);
-                        mDatabase.setTMD(tmd);
-                        dataReceived(tmd);
+                        TeamMatchData teamMatchData = mGson.fromJson(message.substring(1), TeamMatchData.class);
+                        mDatabase.setTeamMatchData(teamMatchData);
+                        dataReceived(teamMatchData);
                         displayText("Match Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.PIT_HEADER:
-                        mDatabase.setTPD(mGson.fromJson(message.substring(1), TPD.class));
+                        mDatabase.setTPD(mGson.fromJson(message.substring(1), TeamPitData.class));
                         displayText("Pit Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
-                        SMD smd = mGson.fromJson(message.substring(1), SMD.class);
-                        mDatabase.setSMD(smd);
-                        dataReceived(smd);
+                        SuperMatchData superMatchData = mGson.fromJson(message.substring(1), SuperMatchData.class);
+                        mDatabase.setSMD(superMatchData);
+                        dataReceived(superMatchData);
                         displayText("Super Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
-                        TDTF tdtf = mGson.fromJson(message.substring(1), TDTF.class);
-                        mDatabase.setTDTF(tdtf);
+                        TeamDTFeedback teamDTFeedback = mGson.fromJson(message.substring(1), TeamDTFeedback.class);
+                        mDatabase.setTDTF(teamDTFeedback);
                         displayText("Feedback Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.CALC_HEADER:
-                        mDatabase.setTCD(mGson.fromJson(message.substring(1), TCD.class));
+                        mDatabase.setTCD(mGson.fromJson(message.substring(1), TeamCalculatedData.class));
                         displayText("Calculated Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                 }
@@ -107,6 +107,6 @@ public class BluetoothHandler extends Handler {
     public void displayText(String message, String color){}
     public void connectionAdded(String message){}
     public void connectionLost(String message){}
-    public void dataReceived(TMD tmd){}
-    public void dataReceived(SMD smd){}
+    public void dataReceived(TeamMatchData teamMatchData){}
+    public void dataReceived(SuperMatchData superMatchData){}
 }

@@ -44,7 +44,7 @@ public class LVA_Strategies extends ArrayAdapter<Strategy> {
         ImageView image = (ImageView) convertView.findViewById(R.id.image);
         TextView strategyNameTextView = (TextView) convertView.findViewById(R.id.strategy_name);
         String strategyName = strategy.filepath.substring(strategy.filepath.lastIndexOf('/') + 1);
-        strategyName = strategyName.substring(0, strategyName.lastIndexOf('.') + 1);
+        strategyName = strategyName.substring(0, strategyName.lastIndexOf('.'));
 
         if(!new File(strategy.filepath).exists())
         {

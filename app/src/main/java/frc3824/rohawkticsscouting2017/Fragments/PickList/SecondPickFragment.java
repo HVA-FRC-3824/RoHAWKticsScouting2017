@@ -2,7 +2,7 @@ package frc3824.rohawkticsscouting2017.Fragments.PickList;
 
 import java.util.ArrayList;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
 
 /**
  * @author frc3824
@@ -17,8 +17,8 @@ public class SecondPickFragment extends ScoutPickFragment {
     public SecondPickFragment(){}
 
     @Override
-    public ArrayList<TPA> setupTeamList() {
-        ArrayList<TPA> teams = new ArrayList<>();
+    public ArrayList<TeamPickAbility> setupTeamList() {
+        ArrayList<TeamPickAbility> teams = new ArrayList<>();
         for(int team_number: mDatabase.getTeamNumbers())
         {
             teams.add(mDatabase.getSecondTPA(team_number));
@@ -29,9 +29,9 @@ public class SecondPickFragment extends ScoutPickFragment {
 
     @Override
     public void save() {
-        for(TPA tpa: mTeams)
+        for(TeamPickAbility teamPickAbility : mTeams)
         {
-            mDatabase.setSecondTPA(tpa);
+            mDatabase.setSecondTPA(teamPickAbility);
         }
     }
 

@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,15 +27,14 @@ import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
 import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Statistics.Aggregate;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
-import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 
 /**
@@ -56,8 +56,12 @@ public class Home extends Activity implements View.OnClickListener{
     private TextView mUserSubTypeTextView;
 
     private String mEventKey;
-
     private String mServerName;
+
+    private boolean mScoutingOpenButton;
+    private boolean mStrategyOpenButton;
+    private boolean mPickListOpenButton;
+    private boolean mAdminOpenButton;
 
     /**
      *
@@ -116,6 +120,7 @@ public class Home extends Activity implements View.OnClickListener{
             Database.getInstance();
             Storage.getInstance();
         }
+        //Authentication.getInstance();
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(bluetoothAdapter != null && bluetoothAdapter.isEnabled())
@@ -162,6 +167,9 @@ public class Home extends Activity implements View.OnClickListener{
 
         mUserSubTypeTextView.setText(userSubtype);
         mUserSubTypeTextView.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.scouting_open_button).setOnClickListener(this);
+        mScoutingOpenButton = false;
     }
 
     private void userTypePitScoutSetup() {
@@ -177,6 +185,9 @@ public class Home extends Activity implements View.OnClickListener{
         int pitGroup = mSharedPreferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, -1);
         mUserTypeTextView.setText(String.format("Group Number: %d", pitGroup));
         mUserTypeTextView.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.scouting_open_button).setOnClickListener(this);
+        mScoutingOpenButton = false;
     }
 
     private void userTypeSuperScoutSetup() {
@@ -188,6 +199,9 @@ public class Home extends Activity implements View.OnClickListener{
 
         mUserTypeTextView.setText("User: Super Scout");
         mUserTypeTextView.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.scouting_open_button).setOnClickListener(this);
+        mScoutingOpenButton = false;
     }
 
     private void userTypeDriveTeamSetup() {
@@ -198,12 +212,22 @@ public class Home extends Activity implements View.OnClickListener{
 
         setupButton(R.id.view_team_button);
         setupButton(R.id.view_match_button);
+        setupButton(R.id.view_notes_button);
+        setupButton(R.id.view_rankings_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
 
         mUserTypeTextView.setText("User: Drive Team");
         mUserTypeTextView.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.scouting_open_button).setOnClickListener(this);
+        mScoutingOpenButton = false;
+        findViewById(R.id.strategy_open_button).setOnClickListener(this);
+        mStrategyOpenButton = false;
+
+        findViewById(R.id.pick_list_open_button).setOnClickListener(this);
+        mPickListOpenButton = false;
     }
 
     private void userTypeStrategySetup() {
@@ -227,6 +251,12 @@ public class Home extends Activity implements View.OnClickListener{
 
         mUserTypeTextView.setText("User: Strategy");
         mUserTypeTextView.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.strategy_open_button).setOnClickListener(this);
+        mStrategyOpenButton = false;
+
+        findViewById(R.id.pick_list_open_button).setOnClickListener(this);
+        mPickListOpenButton = false;
     }
 
     private void userTypeServerSetup() {
@@ -269,6 +299,18 @@ public class Home extends Activity implements View.OnClickListener{
 
         mUserTypeTextView.setText("User: Admin");
         mUserTypeTextView.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.scouting_open_button).setOnClickListener(this);
+        mScoutingOpenButton = false;
+
+        findViewById(R.id.strategy_open_button).setOnClickListener(this);
+        mStrategyOpenButton = false;
+
+        findViewById(R.id.pick_list_open_button).setOnClickListener(this);
+        mPickListOpenButton = false;
+
+        findViewById(R.id.admin_open_button).setOnClickListener(this);
+        mAdminOpenButton = false;
     }
     //endregion
 
@@ -339,7 +381,8 @@ public class Home extends Activity implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.match_planning_button:
-                intent = new Intent(this, MatchPlanning.class);
+                intent = new Intent(this, StrategyList.class);
+                //intent = new Intent(this, IndividualStrategyPlanning.class);
                 startActivity(intent);
                 break;
             case R.id.server_button:
@@ -361,6 +404,50 @@ public class Home extends Activity implements View.OnClickListener{
                 intent = new Intent(this, TeamListBuilder.class);
                 startActivity(intent);
                 break;
+            case R.id.scouting_open_button:
+                if(mScoutingOpenButton){
+                    findViewById(R.id.scouting_buttons).setVisibility(View.GONE);
+                    ((Button)findViewById(R.id.scouting_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.expand_color, 0, 0, 0);
+                    mScoutingOpenButton = false;
+                } else {
+                    findViewById(R.id.scouting_buttons).setVisibility(View.VISIBLE);
+                    ((Button)findViewById(R.id.scouting_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.collapse_color, 0, 0, 0);
+                    mScoutingOpenButton = true;
+                }
+                break;
+            case R.id.strategy_open_button:
+                if(mStrategyOpenButton){
+                    findViewById(R.id.strategy_buttons).setVisibility(View.GONE);
+                    ((Button)findViewById(R.id.strategy_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.expand_color, 0, 0, 0);
+                    mStrategyOpenButton = false;
+                } else {
+                    findViewById(R.id.strategy_buttons).setVisibility(View.VISIBLE);
+                    ((Button)findViewById(R.id.strategy_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.collapse_color, 0, 0, 0);
+                    mStrategyOpenButton = true;
+                }
+                break;
+            case R.id.pick_list_open_button:
+                if(mPickListOpenButton){
+                    findViewById(R.id.pick_list_buttons).setVisibility(View.GONE);
+                    ((Button)findViewById(R.id.pick_list_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.expand_color, 0, 0, 0);
+                    mPickListOpenButton = false;
+                } else {
+                    findViewById(R.id.pick_list_buttons).setVisibility(View.VISIBLE);
+                    ((Button)findViewById(R.id.pick_list_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.collapse_color, 0, 0, 0);
+                    mPickListOpenButton = true;
+                }
+                break;
+            case R.id.admin_open_button:
+                if(mAdminOpenButton){
+                    findViewById(R.id.admin_buttons).setVisibility(View.GONE);
+                    ((Button)findViewById(R.id.admin_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.expand_color, 0, 0, 0);
+                    mAdminOpenButton = false;
+                } else {
+                    findViewById(R.id.admin_buttons).setVisibility(View.VISIBLE);
+                    ((Button)findViewById(R.id.admin_open_button)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.collapse_color, 0, 0, 0);
+                    mAdminOpenButton = true;
+                }
+                break;
             default:
                 assert false;
         }
@@ -381,15 +468,15 @@ public class Home extends Activity implements View.OnClickListener{
 
         @Override
         protected Void doInBackground(ArrayList... arrayLists) {
-            ArrayList<TDTF> tdtfs = arrayLists[0];
+            ArrayList<TeamDTFeedback> teamDTFeedbacks = arrayLists[0];
 
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothQueue queue = BluetoothQueue.getInstance();
 
             if(bluetoothAdapter == null)
             {
-                for(TDTF tdtf: tdtfs) {
-                    queue.add(tdtf);
+                for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
+                    queue.add(teamDTFeedback);
                 }
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
                 return null;
@@ -417,8 +504,8 @@ public class Home extends Activity implements View.OnClickListener{
             if(server == null)
             {
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
-                for(TDTF tdtf: tdtfs) {
-                    queue.add(tdtf);
+                for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
+                    queue.add(teamDTFeedback);
                 }
                 return null;
             }
@@ -427,8 +514,8 @@ public class Home extends Activity implements View.OnClickListener{
             connectThread.start();
             while (!connectThread.isConnected());
             Gson gson = new GsonBuilder().create();
-            for(TDTF tdtf: tdtfs) {
-                if (connectThread.write(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(tdtf)))) {
+            for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
+                if (connectThread.write(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(teamDTFeedback)))) {
                     publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
                     List<String> queuedString = queue.getQueueList();
                     queue.clear();
@@ -438,13 +525,13 @@ public class Home extends Activity implements View.OnClickListener{
                             queueEmpty = false;
                             switch (s.charAt(0)) {
                                 case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), TMD.class));
+                                    queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
                                     break;
                                 case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), SMD.class));
+                                    queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
                                     break;
                                 case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), TDTF.class));
+                                    queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
                                     break;
                             }
                         }
@@ -454,7 +541,7 @@ public class Home extends Activity implements View.OnClickListener{
                     }
                 } else {
                     publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                    queue.add(tdtf);
+                    queue.add(teamDTFeedback);
                 }
             }
             connectThread.cancel();

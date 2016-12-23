@@ -40,9 +40,9 @@ import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDr
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
 import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -84,7 +84,7 @@ public class SuperScouting extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_super_scouting);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.super_scouting_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
@@ -123,9 +123,9 @@ public class SuperScouting extends Activity{
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager) findViewById(R.id.super_scouting_view_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         mFPA = new FPA_SuperScouting(getFragmentManager(), mMatchNumber);
-        SMD sm = mDatabase.getSMD(mMatchNumber);
+        SuperMatchData sm = mDatabase.getSMD(mMatchNumber);
         if (sm != null) {
             mFPA.setValueMap(sm.toMap());
             mScoutName = sm.scout_name;
@@ -135,7 +135,7 @@ public class SuperScouting extends Activity{
         viewPager.setOffscreenPageLimit(mFPA.getCount());
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.super_scouting_tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);
@@ -553,15 +553,15 @@ public class SuperScouting extends Activity{
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
             map.put(Constants.Super_Scouting.SCOUT_NAME, mScoutName);
-            SMD smd = new SMD(map);
-            mDatabase.setSMD(smd);
+            SuperMatchData superMatchData = new SuperMatchData(map);
+            mDatabase.setSMD(superMatchData);
 
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothQueue queue = BluetoothQueue.getInstance();
 
             if(bluetoothAdapter == null)
             {
-                queue.add(smd);
+                queue.add(superMatchData);
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
                 return null;
             }
@@ -588,7 +588,7 @@ public class SuperScouting extends Activity{
             if(server == null)
             {
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
-                queue.add(smd);
+                queue.add(superMatchData);
                 return null;
             }
 
@@ -596,7 +596,7 @@ public class SuperScouting extends Activity{
             connectThread.start();
             while (!connectThread.isConnected());
             Gson gson = new GsonBuilder().create();
-            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(smd))))
+            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(superMatchData))))
             {
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
                 List<String> queuedString = queue.getQueueList();
@@ -611,13 +611,13 @@ public class SuperScouting extends Activity{
                         switch (s.charAt(0))
                         {
                             case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
-                                queue.add(gson.fromJson(s.substring(1), TMD.class));
+                                queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
                                 break;
                             case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
-                                queue.add(gson.fromJson(s.substring(1), SMD.class));
+                                queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
                                 break;
                             case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
-                                queue.add(gson.fromJson(s.substring(1), TDTF.class));
+                                queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
                                 break;
                         }
                     }
@@ -630,7 +630,7 @@ public class SuperScouting extends Activity{
             else
             {
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                queue.add(smd);
+                queue.add(superMatchData);
             }
             connectThread.cancel();
 

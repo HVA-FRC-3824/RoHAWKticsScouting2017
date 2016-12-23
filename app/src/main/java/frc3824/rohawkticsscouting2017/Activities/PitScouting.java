@@ -36,8 +36,7 @@ import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PitScoutDrawer;
-import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.TeamNumberCheck;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.R;
@@ -83,7 +82,7 @@ public class PitScouting extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pit_scouting);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.pit_scouting_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
@@ -117,9 +116,9 @@ public class PitScouting extends Activity {
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pit_scouting_view_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         mFPA = new FPA_PitScouting(getFragmentManager());
-        TPD team = mDatabase.getTPD(mTeamNumber);
+        TeamPitData team = mDatabase.getTPD(mTeamNumber);
         if (team != null) {
             mFPA.setValueMap(team.toMap());
             mScoutName = team.scout_name;
@@ -128,7 +127,7 @@ public class PitScouting extends Activity {
         viewPager.setAdapter(mFPA);
         viewPager.setOffscreenPageLimit(mFPA.getCount());
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.pit_scouting_tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setBackgroundColor(Color.BLUE);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
@@ -557,7 +556,7 @@ public class PitScouting extends Activity {
 
             }
 
-            TPD team = new TPD(map);
+            TeamPitData team = new TeamPitData(map);
             mDatabase.setTPD(team);
 
             return null;

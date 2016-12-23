@@ -11,28 +11,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
  * @author Andrew Messing
  *         Created: 8/22/16
  */
-public class LVA_PredictedRanking extends ArrayAdapter<TRD> {
+public class LVA_PredictedRanking extends ArrayAdapter<TeamRankingData> {
 
     private final static String TAG = "LVA_PredictedRanking";
 
-    private ArrayList<TRD> mRankings;
+    private ArrayList<TeamRankingData> mRankings;
 
-    public LVA_PredictedRanking(Context context, ArrayList<TRD> objects) {
+    public LVA_PredictedRanking(Context context, ArrayList<TeamRankingData> objects) {
         super(context, R.layout.list_item_predicted_ranking, objects);
 
         mRankings = objects;
 
-        Collections.sort(objects, new Comparator<TRD>() {
+        Collections.sort(objects, new Comparator<TeamRankingData>() {
             @Override
-            public int compare(TRD trd, TRD t1) {
-                return Integer.compare(trd.rank, t1.rank);
+            public int compare(TeamRankingData teamRankingData, TeamRankingData t1) {
+                return Integer.compare(teamRankingData.rank, t1.rank);
             }
         });
     }
@@ -44,7 +44,7 @@ public class LVA_PredictedRanking extends ArrayAdapter<TRD> {
             convertView = inflater.inflate(R.layout.list_item_predicted_ranking, null);
         }
 
-        TRD ranking = mRankings.get(position);
+        TeamRankingData ranking = mRankings.get(position);
 
         ((TextView)convertView.findViewById(R.id.rank)).setText(String.valueOf(ranking.rank));
         ((TextView)convertView.findViewById(R.id.team_number)).setText(String.valueOf(ranking.team_number));

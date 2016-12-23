@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_TeamListBuilder;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_TeamListBuilderDialog;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -28,7 +28,7 @@ public class TeamListBuilder extends Activity implements View.OnClickListener{
 
     private final static String TAG = "TeamListBuilder";
 
-    private ArrayList<TID> mTIDs;
+    private ArrayList<TeamLogistics> mTeamLogisticses;
     private LayoutInflater mLayoutInflator;
     private LVA_TeamListBuilder mLVA;
     private Database mDatabase;
@@ -74,11 +74,11 @@ public class TeamListBuilder extends Activity implements View.OnClickListener{
                 int team_number = Integer.parseInt(teamNumberEdit.getText().toString());
                 String nickname = nicknameEdit.getText().toString();
 
-                TID tid = new TID();
-                tid.team_number = team_number;
-                tid.nickname = nickname;
-                tid.match_numbers = match_numbers;
-                mDatabase.setTID(tid);
+                TeamLogistics teamLogistics = new TeamLogistics();
+                teamLogistics.team_number = team_number;
+                teamLogistics.nickname = nickname;
+                teamLogistics.match_numbers = match_numbers;
+                mDatabase.setTID(teamLogistics);
                 mLVA.notifyDataSetChanged();
             }
         });

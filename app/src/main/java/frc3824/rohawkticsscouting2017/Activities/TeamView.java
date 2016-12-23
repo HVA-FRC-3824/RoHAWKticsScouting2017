@@ -1,9 +1,7 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -17,9 +15,7 @@ import android.widget.Toolbar;
 import java.lang.reflect.Method;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_TeamView;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
-import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -44,7 +40,7 @@ public class TeamView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.team_view_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
@@ -56,13 +52,13 @@ public class TeamView extends Activity {
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager) findViewById(R.id.team_view_view_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         FPA_TeamView fpa = new FPA_TeamView(getFragmentManager(), mTeamNumber);
 
         viewPager.setAdapter(fpa);
         viewPager.setOffscreenPageLimit(fpa.getCount());
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.team_view_tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setBackgroundColor(Color.BLUE);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);

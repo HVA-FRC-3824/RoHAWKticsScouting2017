@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.LowLevelStats;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 
@@ -45,7 +45,7 @@ public class Aggregate {
         List<Boolean> no_show = new ArrayList<>();
         List<Boolean> dq = new ArrayList<>();
 
-        for(TMD tmd: team.completed_matches.values())
+        for(TeamMatchData teamMatchData : team.completed_matches.values())
         {
             /////////////////////////////////// GAME SPECIFIC ///////////////////////////////////
 
@@ -54,15 +54,15 @@ public class Aggregate {
 
 
             // fouls
-            fouls.add(tmd.fouls);
-            tech_fouls.add(tmd.tech_fouls);
-            yellow_cards.add(tmd.yellow_card);
-            red_cards.add(tmd.red_card);
+            fouls.add(teamMatchData.fouls);
+            tech_fouls.add(teamMatchData.tech_fouls);
+            yellow_cards.add(teamMatchData.yellow_card);
+            red_cards.add(teamMatchData.red_card);
 
             // misc
-            stopped_moving.add(tmd.stopped_moving);
-            no_show.add(tmd.no_show);
-            dq.add(tmd.dq);
+            stopped_moving.add(teamMatchData.stopped_moving);
+            no_show.add(teamMatchData.no_show);
+            dq.add(teamMatchData.dq);
         }
 
         /////////////////////////////////// GAME SPECIFIC ///////////////////////////////////
@@ -118,42 +118,42 @@ public class Aggregate {
         Database database = Database.getInstance();
         Map<Integer, ZscoreTeam> teams = new HashMap<>();
 
-        for(SMD smd : database.getSMDs().values())
+        for(SuperMatchData superMatchData : database.getSMDs().values())
         {
             for(int i = 0; i < 3; i++) {
-                if (!teams.containsKey(smd.blue_speed.get(i))) {
-                    teams.put(smd.blue_speed.get(i), new ZscoreTeam(smd.blue_speed.get(i)));
+                if (!teams.containsKey(superMatchData.blue_speed.get(i))) {
+                    teams.put(superMatchData.blue_speed.get(i), new ZscoreTeam(superMatchData.blue_speed.get(i)));
                 }
-                if (!teams.containsKey(smd.red_speed.get(i))) {
-                    teams.put(smd.red_speed.get(i), new ZscoreTeam(smd.red_speed.get(i)));
+                if (!teams.containsKey(superMatchData.red_speed.get(i))) {
+                    teams.put(superMatchData.red_speed.get(i), new ZscoreTeam(superMatchData.red_speed.get(i)));
                 }
             }
 
-            teams.get(smd.blue_speed.get(0)).speed_values.add(4);
-            teams.get(smd.red_speed.get(0)).speed_values.add(4);
+            teams.get(superMatchData.blue_speed.get(0)).speed_values.add(4);
+            teams.get(superMatchData.red_speed.get(0)).speed_values.add(4);
 
-            teams.get(smd.blue_torque.get(0)).speed_values.add(4);
-            teams.get(smd.red_torque.get(0)).speed_values.add(4);
+            teams.get(superMatchData.blue_torque.get(0)).speed_values.add(4);
+            teams.get(superMatchData.red_torque.get(0)).speed_values.add(4);
 
-            teams.get(smd.blue_control.get(0)).speed_values.add(4);
-            teams.get(smd.red_control.get(0)).speed_values.add(4);
+            teams.get(superMatchData.blue_control.get(0)).speed_values.add(4);
+            teams.get(superMatchData.red_control.get(0)).speed_values.add(4);
 
-            teams.get(smd.blue_defense.get(0)).speed_values.add(4);
-            teams.get(smd.red_defense.get(0)).speed_values.add(4);
+            teams.get(superMatchData.blue_defense.get(0)).speed_values.add(4);
+            teams.get(superMatchData.red_defense.get(0)).speed_values.add(4);
 
             for(int i = 1; i < 3; i++)
             {
-                teams.get(smd.blue_speed.get(i)).speed_values.add(3 - i);
-                teams.get(smd.red_speed.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.blue_speed.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.red_speed.get(i)).speed_values.add(3 - i);
 
-                teams.get(smd.blue_torque.get(i)).speed_values.add(3 - i);
-                teams.get(smd.red_torque.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.blue_torque.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.red_torque.get(i)).speed_values.add(3 - i);
 
-                teams.get(smd.blue_control.get(i)).speed_values.add(3 - i);
-                teams.get(smd.red_control.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.blue_control.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.red_control.get(i)).speed_values.add(3 - i);
 
-                teams.get(smd.blue_defense.get(i)).speed_values.add(3 - i);
-                teams.get(smd.red_defense.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.blue_defense.get(i)).speed_values.add(3 - i);
+                teams.get(superMatchData.red_defense.get(i)).speed_values.add(3 - i);
             }
         }
 
@@ -252,21 +252,21 @@ public class Aggregate {
         {
             ZscoreTeam z = teams_list.get(i);
             z.defense_rank = i + 1;
-            TCD tcd = database.getTCD(z.team_number);
+            TeamCalculatedData teamCalculatedData = database.getTCD(z.team_number);
 
-            tcd.rank_speed = z.speed_rank;
-            tcd.zscore_speed = z.speed_zscore;
+            teamCalculatedData.rank_speed = z.speed_rank;
+            teamCalculatedData.zscore_speed = z.speed_zscore;
 
-            tcd.rank_torque = z.torque_rank;
-            tcd.zscore_torque = z.torque_zscore;
+            teamCalculatedData.rank_torque = z.torque_rank;
+            teamCalculatedData.zscore_torque = z.torque_zscore;
 
-            tcd.rank_control = z.control_rank;
-            tcd.zscore_control = z.control_zscore;
+            teamCalculatedData.rank_control = z.control_rank;
+            teamCalculatedData.zscore_control = z.control_zscore;
 
-            tcd.rank_defense = z.defense_rank;
-            tcd.zscore_defense = z.defense_zscore;
+            teamCalculatedData.rank_defense = z.defense_rank;
+            teamCalculatedData.zscore_defense = z.defense_zscore;
 
-            database.setTCD(tcd);
+            database.setTCD(teamCalculatedData);
         }
     }
 }

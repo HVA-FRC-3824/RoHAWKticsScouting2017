@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_TeamView_MatchData;
 import frc3824.rohawkticsscouting2017.R;
-import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author frc3824
@@ -31,11 +30,11 @@ public class MatchDataFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_match_data, container, false);
 
-        mViewPager = (ViewPager)view.findViewById(R.id.match_data_view_pager);
+        mViewPager = (ViewPager)view.findViewById(R.id.view_pager);
         FPA_TeamView_MatchData fpa = new FPA_TeamView_MatchData(getChildFragmentManager(), mTeamNumber);
         mViewPager.setAdapter(fpa);
         mViewPager.setOffscreenPageLimit(fpa.getCount());
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.match_data_tab_layout);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(mViewPager);

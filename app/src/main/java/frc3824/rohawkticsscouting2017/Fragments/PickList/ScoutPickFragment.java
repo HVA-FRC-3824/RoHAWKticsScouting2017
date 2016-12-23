@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PickList;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView;
@@ -24,10 +24,10 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
 
     private final static String TAG = "ScoutPickFragment";
 
-    protected ArrayList<TPA> mTeams;
+    protected ArrayList<TeamPickAbility> mTeams;
     protected Database mDatabase;
     private LVA_PickList mAdapter;
-    private Comparator<TPA> mComparator;
+    private Comparator<TeamPickAbility> mComparator;
     private DragSortListView mList;
 
     public ScoutPickFragment(){}
@@ -50,9 +50,9 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
             }
         }
 
-        mComparator = new Comparator<TPA>() {
+        mComparator = new Comparator<TeamPickAbility>() {
             @Override
-            public int compare(TPA t1, TPA t2) {
+            public int compare(TeamPickAbility t1, TeamPickAbility t2) {
                 if(t1.picked && t2.picked) {
                     return 0;
                 } else if(t1.picked) {
@@ -79,7 +79,7 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
     }
 
     // Should be Overridden by child class
-    public ArrayList<TPA> setupTeamList() {
+    public ArrayList<TeamPickAbility> setupTeamList() {
         return new ArrayList<>();
     }
 
@@ -92,7 +92,7 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reset:
-                for(TPA team: mTeams) {
+                for(TeamPickAbility team: mTeams) {
                     team.manual_ranking = -1;
                 }
                 Collections.sort(mTeams, mComparator);
@@ -104,13 +104,13 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
     @Override
     public void drop(int from, int to) {
 
-        TPA team = mTeams.get(from);
+        TeamPickAbility team = mTeams.get(from);
         mTeams.remove(team);
         mTeams.add(to, team);
 
         for(int i = 0; i < mTeams.size(); i++)
         {
-            TPA t = mTeams.get(i);
+            TeamPickAbility t = mTeams.get(i);
             t.manual_ranking = i + 1;
         }
 

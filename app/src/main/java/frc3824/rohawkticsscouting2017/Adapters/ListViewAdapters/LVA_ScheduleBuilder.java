@@ -21,8 +21,10 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
- *         Created: 9/25/16
+ * @author frc3824
+ * Created: 9/25/16
+ *
+ *
  */
 public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
 
@@ -128,12 +130,13 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
             }
         });
 
+
         // Set textboxes to correct width
         final View cv = convertView;
         convertView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                cv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                //cv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 int button_widths = edit.getMeasuredWidth() + delete.getMeasuredWidth();
                 int parent_width = ((View)cv.getParent()).getWidth();
@@ -148,6 +151,7 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
                 red3.setWidth(textview_width);
             }
         });
+
 
         return convertView;
     }

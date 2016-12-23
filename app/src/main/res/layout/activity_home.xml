@@ -85,53 +85,268 @@
             app:textColor="@color/white"
             app:textSize="10sp" />
 
-        <!-- Match Scouting -->
+
+        <Button
+            android:id="@+id/scouting_open_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/navy_blue"
+            android:drawableLeft="@drawable/expand_color"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Scouting"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/scouting_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <!-- Match Scouting -->
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/scout_match_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:text="Scout Match"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <!-- Pit Scouting -->
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/scout_pit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:text="Scout Pit"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <!-- Super Scouting -->
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/scout_super_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:text="Super Scout"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <!-- Drive Team -->
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/drive_team_feedback_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:text="Drive Team Feedback"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/strategy_open_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/navy_blue"
+            android:drawableLeft="@drawable/expand_color"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Strategy"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/strategy_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/view_match_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:text="View Match"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/match_planning_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:src="@drawable/basketball_field_white"
+                app:text="Match Planning"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/view_team_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:src="@drawable/robot_2_color"
+                app:text="View Team"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/pick_list_open_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/navy_blue"
+            android:drawableLeft="@drawable/expand_color"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Pick List"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/pick_list_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/view_pick_list_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:src="@drawable/bulleted_list_color"
+                app:text="View Pick List"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/view_event_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:text="View Event"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/view_rankings_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:src="@drawable/numbered_list_color"
+                app:text="View Rankings"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
+                android:id="@+id/view_notes_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/navy_blue"
+                android:visibility="gone"
+                app:src="@drawable/note_color"
+                app:text="View Notes"
+                app:textColor="@color/white"
+                app:textSize="10sp" />
+
+
+        </LinearLayout>
+
+    <Button
+        android:id="@+id/admin_open_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/navy_blue"
+        android:drawableLeft="@drawable/expand_color"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Admin"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/admin_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
         <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/scout_match_button"
+            android:id="@+id/cloud_storage_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
-            app:text="Scout Match"
+            app:src="@drawable/cloud_color"
+            app:text="Cloud Storage"
             app:textColor="@color/white"
             app:textSize="10sp" />
 
-        <!-- Pit Scouting -->
         <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/scout_pit_button"
+            android:id="@+id/team_list_builder_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
-            app:text="Scout Pit"
+            app:text="Team List Builder"
             app:textColor="@color/white"
             app:textSize="10sp" />
 
-        <!-- Super Scouting -->
         <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/scout_super_button"
+            android:id="@+id/aggregate_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
-            app:text="Super Scout"
+            app:src="@drawable/calculator_color"
+            app:text="Aggregate"
             app:textColor="@color/white"
             app:textSize="10sp" />
 
-        <!-- Drive Team -->
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/drive_team_feedback_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:text="Drive Team Feedback"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
+        </LinearLayout>
 
         <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/sync_feedback_button"
@@ -144,87 +359,6 @@
             app:textColor="@color/white"
             app:textSize="10sp" />
 
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/match_planning_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:src="@drawable/basketball_field_white"
-            app:text="Match Planning"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/view_match_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:text="View Match"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/view_team_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:src="@drawable/robot_2_color"
-            app:text="View Team"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/view_rankings_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:src="@drawable/numbered_list_color"
-            app:text="View Rankings"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/view_event_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:text="View Event"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/view_notes_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:src="@drawable/note_color"
-            app:text="View Notes"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/view_pick_list_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:src="@drawable/bulleted_list_color"
-            app:text="View Pick List"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
 
         <frc3824.rohawkticsscouting2017.Views.ImageTextButton
             android:id="@+id/server_button"
@@ -246,41 +380,6 @@
             android:background="@color/navy_blue"
             app:src="@drawable/settings_color"
             app:text="Settings"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/cloud_storage_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:src="@drawable/cloud_color"
-            app:text="Cloud Storage"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/aggregate_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:src="@drawable/calculator_color"
-            app:text="Aggregate"
-            app:textColor="@color/white"
-            app:textSize="10sp" />
-
-        <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-            android:id="@+id/team_list_builder_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/navy_blue"
-            android:visibility="gone"
-            app:text="Team List Builder"
             app:textColor="@color/white"
             app:textSize="10sp" />
 
@@ -317,7 +416,7 @@
                 android:id="@+id/auth_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/id_not_verified_color"/>
+                android:src="@drawable/id_not_verified_color" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

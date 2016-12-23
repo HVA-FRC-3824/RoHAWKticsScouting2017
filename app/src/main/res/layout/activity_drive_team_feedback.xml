@@ -6,7 +6,7 @@
     android:background="@color/columbia_blue">
 
     <android.widget.Toolbar
-        android:id="@+id/drive_team_feedback_toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/navy_blue"

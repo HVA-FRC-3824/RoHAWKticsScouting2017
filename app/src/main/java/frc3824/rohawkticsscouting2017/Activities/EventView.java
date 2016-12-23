@@ -32,7 +32,7 @@ import frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_Data;
 import frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_DataSet;
 import frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_Entry;
 import frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_MarkerView;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -211,28 +211,28 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
             }
-            TCD tcd = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
-            if (tcd != null) {
-                mCurrentTeamNumbers.add(String.valueOf(tcd.team_number));
+            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
+            if (teamCalculatedData != null) {
+                mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Foul_Secondary_Options.OPTIONS[position]) {
                     case Constants.Event_View.Foul_Secondary_Options.STANDARD_FOULS:
                         //region Fouls
-                        entries.add(new LLD_Entry(i, tcd.team_number, (float) tcd.fouls.max, (float) tcd.fouls.min, (float) tcd.fouls.average, (float) tcd.fouls.std));
+                        entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.fouls.max, (float) teamCalculatedData.fouls.min, (float) teamCalculatedData.fouls.average, (float) teamCalculatedData.fouls.std));
                         break;
                         //endregion
                     case Constants.Event_View.Foul_Secondary_Options.TECH_FOULS:
                         //region Tech Fouls
-                        entries.add(new LLD_Entry(i, tcd.team_number, (float) tcd.tech_fouls.max, (float) tcd.tech_fouls.min, (float) tcd.tech_fouls.average, (float) tcd.tech_fouls.std));
+                        entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.tech_fouls.max, (float) teamCalculatedData.tech_fouls.min, (float) teamCalculatedData.tech_fouls.average, (float) teamCalculatedData.tech_fouls.std));
                         break;
                         //endregion
                     case Constants.Event_View.Foul_Secondary_Options.YELLOW_CARDS:
                         //region Yellow Cards
-                        entries.add(new LLD_Entry(i, tcd.team_number, (float) tcd.yellow_cards.max, (float) tcd.yellow_cards.min, (float) tcd.yellow_cards.average, (float) tcd.yellow_cards.std));
+                        entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.yellow_cards.max, (float) teamCalculatedData.yellow_cards.min, (float) teamCalculatedData.yellow_cards.average, (float) teamCalculatedData.yellow_cards.std));
                         break;
                         //endregion
                     case Constants.Event_View.Foul_Secondary_Options.RED_CARDS:
                         //region Red Cards
-                        entries.add(new LLD_Entry(i, tcd.team_number, (float) tcd.red_cards.max, (float) tcd.red_cards.min, (float) tcd.red_cards.average, (float) tcd.red_cards.std));
+                        entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.red_cards.max, (float) teamCalculatedData.red_cards.min, (float) teamCalculatedData.red_cards.average, (float) teamCalculatedData.red_cards.std));
                         break;
                         //endregion
                 }
@@ -253,31 +253,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         mSortedTeamNumbers = new ArrayList<>();
         final Map<Integer, Double> sort_values = new HashMap<>();
         for (int i = 0; i < mTeamNumbers.size(); i++) {
-            TCD tcd = mDatabase.getTCD(mTeamNumbers.get(i));
-            if (tcd != null) {
+            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbers.get(i));
+            if (teamCalculatedData != null) {
                 switch (Constants.Event_View.Foul_Secondary_Options.OPTIONS[position]) {
                     case Constants.Event_View.Foul_Secondary_Options.STANDARD_FOULS:
                         //region Fouls
-                        mSortedTeamNumbers.add(tcd.team_number);
-                        sort_values.put(tcd.team_number, tcd.fouls.total);
+                        mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                        sort_values.put(teamCalculatedData.team_number, teamCalculatedData.fouls.total);
                         break;
                     //endregion
                     case Constants.Event_View.Foul_Secondary_Options.TECH_FOULS:
                         //region Tech Fouls
-                        mSortedTeamNumbers.add(tcd.team_number);
-                        sort_values.put(tcd.team_number, tcd.tech_fouls.total);
+                        mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                        sort_values.put(teamCalculatedData.team_number, teamCalculatedData.tech_fouls.total);
                         break;
                     //endregion
                     case Constants.Event_View.Foul_Secondary_Options.YELLOW_CARDS:
                         //region Yellow Cards
-                        mSortedTeamNumbers.add(tcd.team_number);
-                        sort_values.put(tcd.team_number, tcd.yellow_cards.total);
+                        mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                        sort_values.put(teamCalculatedData.team_number, teamCalculatedData.yellow_cards.total);
                         break;
                     //endregion
                     case Constants.Event_View.Foul_Secondary_Options.RED_CARDS:
                         //region Red Cards
-                        mSortedTeamNumbers.add(tcd.team_number);
-                        sort_values.put(tcd.team_number, tcd.red_cards.total);
+                        mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                        sort_values.put(teamCalculatedData.team_number, teamCalculatedData.red_cards.total);
                         break;
                     //endregion
                 }
@@ -304,23 +304,23 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
             }
-            TCD tcd = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
-            if (tcd != null) {
-                mCurrentTeamNumbers.add(String.valueOf(tcd.team_number));
+            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
+            if (teamCalculatedData != null) {
+                mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Post_Match_Secondary_Options.OPTIONS[position]) {
                     case Constants.Event_View.Post_Match_Secondary_Options.DQ:
                         //region DQ
-                        entries.add(new BarEntryWithTeamNumber(i, tcd.team_number, (float) tcd.dq.total));
+                        entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.dq.total));
                         break;
                         //endregion
                     case Constants.Event_View.Post_Match_Secondary_Options.NO_SHOW:
                         //region No Show
-                        entries.add(new BarEntryWithTeamNumber(i, tcd.team_number, (float) tcd.no_show.total));
+                        entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.no_show.total));
                         break;
                         //endregion
                     case Constants.Event_View.Post_Match_Secondary_Options.STOPPED_MOVING:
                         //region Stopped Moving
-                        entries.add(new BarEntryWithTeamNumber(i, tcd.team_number, (float) tcd.stopped_moving.total));
+                        entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.stopped_moving.total));
                         break;
                         //endregion
                 }
@@ -342,25 +342,25 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         mSortedTeamNumbers = new ArrayList<>();
         final Map<Integer, Double> sort_values = new HashMap<>();
         for(int i = 4; i < mTeamNumbers.size(); i++){
-            TCD tcd = mDatabase.getTCD(mTeamNumbers.get(i));
-            if (tcd != null) {
+            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbers.get(i));
+            if (teamCalculatedData != null) {
                 switch (Constants.Event_View.Post_Match_Secondary_Options.OPTIONS[position]) {
                     case Constants.Event_View.Post_Match_Secondary_Options.DQ:
                         //region DQ
-                        mSortedTeamNumbers.add(tcd.team_number);
-                        sort_values.put(tcd.team_number, tcd.dq.total);
+                        mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                        sort_values.put(teamCalculatedData.team_number, teamCalculatedData.dq.total);
                         break;
                     //endregion
                     case Constants.Event_View.Post_Match_Secondary_Options.NO_SHOW:
                         //region No Show
-                        mSortedTeamNumbers.add(tcd.team_number);
-                        sort_values.put(tcd.team_number, tcd.no_show.total);
+                        mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                        sort_values.put(teamCalculatedData.team_number, teamCalculatedData.no_show.total);
                         break;
                     //endregion
                     case Constants.Event_View.Post_Match_Secondary_Options.STOPPED_MOVING:
                         //region Stopped Moving
-                        mSortedTeamNumbers.add(tcd.team_number);
-                        sort_values.put(tcd.team_number, tcd.stopped_moving.total);
+                        mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                        sort_values.put(teamCalculatedData.team_number, teamCalculatedData.stopped_moving.total);
                         break;
                     //endregion
                 }

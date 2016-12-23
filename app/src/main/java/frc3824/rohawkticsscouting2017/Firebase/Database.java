@@ -1,5 +1,6 @@
 package frc3824.rohawkticsscouting2017.Firebase;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -18,15 +19,16 @@ import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchStrategy;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TCD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 
 /**
@@ -45,18 +47,19 @@ public class Database {
     //region Database References
     private DatabaseReference mEventRef;
     private DatabaseReference mScheduleRef;
-    private DatabaseReference mPitRef;
-    private DatabaseReference mSuperRef;
-    private DatabaseReference mFeedbackRef;
+    private DatabaseReference mTeamPitDataRef;
+    private DatabaseReference mSuperMatchDataRef;
+    private DatabaseReference mTeamDTFeedbackRef;
     private DatabaseReference mPartialMatchRef;
-    private DatabaseReference mCalulatedRef;
-    private DatabaseReference mInfoRef;
-    private DatabaseReference mStrategyRef;
-    private DatabaseReference mCurrentRankingRef;
-    private DatabaseReference mPredictedRankingRef;
-    private DatabaseReference mFirstPickRef;
-    private DatabaseReference mSecondPickRef;
-    private DatabaseReference mThirdPickRef;
+    private DatabaseReference mTeamCalulatedDataRef;
+    private DatabaseReference mTeamLogisticsRef;
+    private DatabaseReference mIndividualStrategyRef;
+    private DatabaseReference mMatchStrategyRef;
+    private DatabaseReference mCurrentTeamRankingDataRef;
+    private DatabaseReference mPredictedTeamRankingDataRef;
+    private DatabaseReference mFirstTeamPickAbilityRef;
+    private DatabaseReference mSecondTeamPickAbilityRef;
+    private DatabaseReference mThirdTeamPickAbilityRef;
     //endregion
 
     private String mEventKey;
@@ -64,18 +67,19 @@ public class Database {
     //region Maps
     private static Set<String> mEvents;
     private Map<Integer, Match> mSchedule;
-    private Map<Integer, SMD> mSMDs;
-    private Map<Integer, TPD> mTPDs;
-    private Map<String, TMD> mTMDs;
-    private Map<Integer, TDTF> mTDTFs;
-    private Map<Integer, TID> mTIDs;
-    private Map<Integer, TCD> mTCDs;
-    private Map<Integer, TRD> mCurrent_TRDs;
-    private Map<Integer, TRD> mPredicted_TRDs;
-    private Map<Integer, TPA> mFirst_TPA;
-    private Map<Integer, TPA> mSecond_TPA;
-    private Map<Integer, TPA> mThird_TPA;
-    private Map<String, Strategy> mStrategies;
+    private Map<Integer, SuperMatchData> mSuperMatchDataMap;
+    private Map<Integer, TeamPitData> mTeamPitDataMap;
+    private Map<String, TeamMatchData> mTeamMatchDataMap;
+    private Map<Integer, TeamDTFeedback> mTeamDTFeedbackMap;
+    private Map<Integer, TeamLogistics> mTeamLogisticsMap;
+    private Map<Integer, TeamCalculatedData> mTeamCalculatedDataMap;
+    private Map<Integer, TeamRankingData> mCurrentTeamRankingDataMap;
+    private Map<Integer, TeamRankingData> mPredictedTeamRankngDataMap;
+    private Map<Integer, TeamPickAbility> mFirstTeamPickAbilityMap;
+    private Map<Integer, TeamPickAbility> mSecondTeamPickAbilityMap;
+    private Map<Integer, TeamPickAbility> mThirdTeamPickAbilityMap;
+    private Map<String, Strategy> mIndividualStrategyMap;
+    private Map<String, MatchStrategy> mMatchStrategyMap;
     //endregion
 
     private static Database mSingleton;
@@ -185,24 +189,24 @@ public class Database {
 
         //region Partial Matches
         mPartialMatchRef = mEventRef.child("partial_match");
-        mTMDs = new HashMap<>();
+        mTeamMatchDataMap = new HashMap<>();
         mPartialMatchRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "partial_match.onChildAdded: " + dataSnapshot.getKey());
-                mTMDs.put(dataSnapshot.getKey(),dataSnapshot.getValue(TMD.class));
+                mTeamMatchDataMap.put(dataSnapshot.getKey(),dataSnapshot.getValue(TeamMatchData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "partial_match.onChildChanged: " + dataSnapshot.getKey());
-                mTMDs.put(dataSnapshot.getKey(),dataSnapshot.getValue(TMD.class));
+                mTeamMatchDataMap.put(dataSnapshot.getKey(),dataSnapshot.getValue(TeamMatchData.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "partial_match.onChildRemoved: " + dataSnapshot.getKey());
-                mTMDs.remove(dataSnapshot.getKey());
+                mTeamMatchDataMap.remove(dataSnapshot.getKey());
             }
 
             @Override
@@ -218,25 +222,25 @@ public class Database {
         //endregion
 
         //region Pit
-        mPitRef = mEventRef.child("pit");
-        mTPDs = new HashMap<>();
-        mPitRef.addChildEventListener(new ChildEventListener() {
+        mTeamPitDataRef = mEventRef.child("pit");
+        mTeamPitDataMap = new HashMap<>();
+        mTeamPitDataRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "pit.onChildAdded: " + dataSnapshot.getKey());
-                mTPDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPD.class));
+                mTeamPitDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPitData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "pit.onChildChanged: " + dataSnapshot.getKey());
-                mTPDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPD.class));
+                mTeamPitDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPitData.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "pit.onChildRemoved: " + dataSnapshot.getKey());
-                mTPDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mTeamPitDataMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -252,25 +256,25 @@ public class Database {
         //endregion
 
         //region Super
-        mSuperRef = mEventRef.child("super_match");
-        mSMDs = new HashMap<>();
-        mSuperRef.addChildEventListener(new ChildEventListener() {
+        mSuperMatchDataRef = mEventRef.child("super_match");
+        mSuperMatchDataMap = new HashMap<>();
+        mSuperMatchDataRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "super_match.onChildAdded: " + dataSnapshot.getKey());
-                mSMDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(SMD.class));
+                mSuperMatchDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(SuperMatchData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "super_match.onChildChanged: " + dataSnapshot.getKey());
-                mSMDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(SMD.class));
+                mSuperMatchDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(SuperMatchData.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "super_match.onChildRemoved: " + dataSnapshot.getKey());
-                mSMDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mSuperMatchDataMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -286,25 +290,25 @@ public class Database {
         //endregion
 
         //region Drive Team Feedback
-        mFeedbackRef = mEventRef.child("feedback");
-        mTDTFs = new HashMap<>();
-        mFeedbackRef.addChildEventListener(new ChildEventListener() {
+        mTeamDTFeedbackRef = mEventRef.child("feedback");
+        mTeamDTFeedbackMap = new HashMap<>();
+        mTeamDTFeedbackRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "feedback.onChildAdded: " + dataSnapshot.getKey());
-                mTDTFs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TDTF.class));
+                mTeamDTFeedbackMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamDTFeedback.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "feedback.onChildChanged: " + dataSnapshot.getKey());
-                mTDTFs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TDTF.class));
+                mTeamDTFeedbackMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamDTFeedback.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "feedback.onChildRemoved: " + dataSnapshot.getKey());
-                mTDTFs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mTeamDTFeedbackMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -320,25 +324,25 @@ public class Database {
         //endregion
 
         //region Team Info
-        mInfoRef = mEventRef.child("info");
-        mTIDs = new HashMap<>();
-        mInfoRef.addChildEventListener(new ChildEventListener() {
+        mTeamLogisticsRef = mEventRef.child("info");
+        mTeamLogisticsMap = new HashMap<>();
+        mTeamLogisticsRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "info.onChildAdded: " + dataSnapshot.getKey());
-                mTIDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TID.class));
+                mTeamLogisticsMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamLogistics.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "info.onChildChanged: " + dataSnapshot.getKey());
-                mTIDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TID.class));
+                mTeamLogisticsMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamLogistics.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "info.onChildRemoved: " + dataSnapshot.getKey());
-                mTIDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mTeamLogisticsMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -354,25 +358,25 @@ public class Database {
         //endregion
 
         //region Calculated
-        mCalulatedRef = mEventRef.child("calculated");
-        mTCDs = new HashMap<>();
-        mCalulatedRef.addChildEventListener(new ChildEventListener() {
+        mTeamCalulatedDataRef = mEventRef.child("calculated");
+        mTeamCalculatedDataMap = new HashMap<>();
+        mTeamCalulatedDataRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "calc.onChildAdded: " + dataSnapshot.getKey());
-                mTCDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TCD.class));
+                mTeamCalculatedDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamCalculatedData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "calc.onChildChanged: " + dataSnapshot.getKey());
-                mTCDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TCD.class));
+                mTeamCalculatedDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamCalculatedData.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "calc.onChildRemoved: " + dataSnapshot.getKey());
-                mTCDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mTeamCalculatedDataMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -388,59 +392,94 @@ public class Database {
         //endregion
 
         //region Strategy
-        mStrategyRef = mEventRef.child("strategies");
-        mStrategies = new HashMap<>();
-        mStrategyRef.addChildEventListener(new ChildEventListener() {
+        mIndividualStrategyRef = mEventRef.child("strategies").child("individual");
+        mIndividualStrategyMap = new HashMap<>();
+        mIndividualStrategyRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "strategies.onChildAdded: " + dataSnapshot.getKey());
-                mStrategies.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
+                Log.v(TAG, "strategies.individual.onChildAdded: " + dataSnapshot.getKey());
+                mIndividualStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "strategies.onChildChanged: " + dataSnapshot.getKey());
-                mStrategies.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
+                Log.v(TAG, "strategies.individual.onChildChanged: " + dataSnapshot.getKey());
+                mIndividualStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.v(TAG, "strategies.onChildRemoved: " + dataSnapshot.getKey());
-                mStrategies.remove(dataSnapshot.getKey());
+                Log.v(TAG, "strategies.individual.onChildRemoved: " + dataSnapshot.getKey());
+                mIndividualStrategyMap.remove(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "strategies.onChildMoved: " + dataSnapshot.getKey());
+                Log.v(TAG, "strategies.individual.onChildMoved: " + dataSnapshot.getKey());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.v(TAG, "strategies.onCancelled");
+                Log.v(TAG, "strategies.individual.onCancelled");
+            }
+        });
+        //endregion
+
+        //region Match Strategy
+        mMatchStrategyRef = mEventRef.child("strategies").child("match");
+        mMatchStrategyMap = new HashMap<>();
+        mMatchStrategyRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.match.onChildAdded: " + dataSnapshot.getKey());
+                mMatchStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(MatchStrategy.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.match.onChildChanged: " + dataSnapshot.getKey());
+                mMatchStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(MatchStrategy.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "strategies.match.onChildRemoved: " + dataSnapshot.getKey());
+                mMatchStrategyMap.remove(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.match.onChildMoved: " + dataSnapshot.getKey());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "strategies.match.onCancelled");
             }
         });
         //endregion
 
         //region Current Ranking
-        mCurrentRankingRef = mEventRef.child("rankings").child("current");
-        mCurrent_TRDs = new HashMap<>();
-        mCurrentRankingRef.addChildEventListener(new ChildEventListener() {
+        mCurrentTeamRankingDataRef = mEventRef.child("rankings").child("current");
+        mCurrentTeamRankingDataMap = new HashMap<>();
+        mCurrentTeamRankingDataRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "current_ranking.onChildAdded: " + dataSnapshot.getKey());
-                mCurrent_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mCurrentTeamRankingDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "current_ranking.onChildChanged: " + dataSnapshot.getKey());
-                mCurrent_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mCurrentTeamRankingDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "current_ranking.onChildRemoved: " + dataSnapshot.getKey());
-                mCurrent_TRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mCurrentTeamRankingDataMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -456,25 +495,25 @@ public class Database {
         //endregion
 
         //region Predicted Ranking
-        mPredictedRankingRef = mEventRef.child("rankings").child("predicted");
-        mPredicted_TRDs = new HashMap<>();
-        mPredictedRankingRef.addChildEventListener(new ChildEventListener() {
+        mPredictedTeamRankingDataRef = mEventRef.child("rankings").child("predicted");
+        mPredictedTeamRankngDataMap = new HashMap<>();
+        mPredictedTeamRankingDataRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "predicted_ranking.onChildAdded: " + dataSnapshot.getKey());
-                mPredicted_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mPredictedTeamRankngDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "predicted_ranking.onChildChanged: " + dataSnapshot.getKey());
-                mPredicted_TRDs.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TRD.class));
+                mPredictedTeamRankngDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "predicted_ranking.onChildRemoved: " + dataSnapshot.getKey());
-                mPredicted_TRDs.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mPredictedTeamRankngDataMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -490,25 +529,25 @@ public class Database {
         //endregion
 
         //region First Pick
-        mFirstPickRef = mEventRef.child("first_pick");
-        mFirst_TPA = new HashMap<>();
-        mFirstPickRef.addChildEventListener(new ChildEventListener() {
+        mFirstTeamPickAbilityRef = mEventRef.child("first_pick");
+        mFirstTeamPickAbilityMap = new HashMap<>();
+        mFirstTeamPickAbilityRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "first_pick.onChildAdded: " + dataSnapshot.getKey());
-                mFirst_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+                mFirstTeamPickAbilityMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPickAbility.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "first_pick.onChildChanged: " + dataSnapshot.getKey());
-                mFirst_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+                mFirstTeamPickAbilityMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPickAbility.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "first_pick.onChildRemoved: " + dataSnapshot.getKey());
-                mFirst_TPA.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mFirstTeamPickAbilityMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -524,25 +563,25 @@ public class Database {
         //endregion
 
         //region Second Pick
-        mSecondPickRef = mEventRef.child("second_pick");
-        mSecond_TPA = new HashMap<>();
-        mSecondPickRef.addChildEventListener(new ChildEventListener() {
+        mSecondTeamPickAbilityRef = mEventRef.child("second_pick");
+        mSecondTeamPickAbilityMap = new HashMap<>();
+        mSecondTeamPickAbilityRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "second_pick.onChildAdded: " + dataSnapshot.getKey());
-                mSecond_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+                mSecondTeamPickAbilityMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPickAbility.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "second_pick.onChildChanged: " + dataSnapshot.getKey());
-                mSecond_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+                mSecondTeamPickAbilityMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPickAbility.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "second_pick.onChildRemoved: " + dataSnapshot.getKey());
-                mSecond_TPA.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mSecondTeamPickAbilityMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -558,25 +597,25 @@ public class Database {
         //endregion
 
         //region Third Pick
-        mThirdPickRef = mEventRef.child("third_pick");
-        mThird_TPA = new HashMap<>();
-        mThirdPickRef.addChildEventListener(new ChildEventListener() {
+        mThirdTeamPickAbilityRef = mEventRef.child("third_pick");
+        mThirdTeamPickAbilityMap = new HashMap<>();
+        mThirdTeamPickAbilityRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "third_pick.onChildAdded: " + dataSnapshot.getKey());
-                mThird_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+                mThirdTeamPickAbilityMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPickAbility.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "third_pick.onChildChanged: " + dataSnapshot.getKey());
-                mThird_TPA.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TPA.class));
+                mThirdTeamPickAbilityMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamPickAbility.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "third_pick.onChildRemoved: " + dataSnapshot.getKey());
-                mThird_TPA.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mThirdTeamPickAbilityMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -621,124 +660,122 @@ public class Database {
     //endregion
 
     //region Match Scouting Data
-    public void setTMD(TMD tmd)
-    {
-        mPartialMatchRef.child(String.format("%d_%d", tmd.match_number,tmd.team_number)).setValue(tmd);
+    public void setTeamMatchData(TeamMatchData teamMatchData) {
+        mPartialMatchRef.child(String.format("%d_%d", teamMatchData.match_number, teamMatchData.team_number)).setValue(teamMatchData);
     }
 
-    public TMD getTMD(int match_number, int team_number)
-    {
-        return mTMDs.get(String.format("%d_%d", match_number, team_number));
+    public TeamMatchData getTeamMatchData(int match_number, int team_number) {
+        return mTeamMatchDataMap.get(String.format("%d_%d", match_number, team_number));
     }
     //endregion
 
     //region Pit Scouting Data
-    public void setTPD(TPD tpd)
+    public void setTPD(TeamPitData teamPitData)
     {
-        mPitRef.child(String.format("%d", tpd.team_number)).setValue(tpd);
+        mTeamPitDataRef.child(String.format("%d", teamPitData.team_number)).setValue(teamPitData);
     }
 
-    public TPD getTPD(int team_number)
+    public TeamPitData getTPD(int team_number)
     {
-        return mTPDs.get(team_number);
+        return mTeamPitDataMap.get(team_number);
     }
     //endregion
 
     //region Super Scouting Data
-    public void setSMD(SMD smd) {
-        mSuperRef.child(String.format("%d", smd.match_number)).setValue(smd);
+    public void setSMD(SuperMatchData superMatchData) {
+        mSuperMatchDataRef.child(String.format("%d", superMatchData.match_number)).setValue(superMatchData);
     }
 
-    public SMD getSMD(int match_number) {
-        return mSMDs.get(String.format("%d",match_number));
+    public SuperMatchData getSMD(int match_number) {
+        return mSuperMatchDataMap.get(String.format("%d",match_number));
     }
 
-    public Map<Integer, SMD> getSMDs() { return  mSMDs; }
+    public Map<Integer, SuperMatchData> getSMDs() { return mSuperMatchDataMap; }
     //endregion
 
     //region Drive Team Feedback Data
-    public void setTDTF(TDTF tdtf) {
-        mFeedbackRef.child(String.format("%d", tdtf.team_number)).setValue(tdtf);
+    public void setTDTF(TeamDTFeedback teamDTFeedback) {
+        mTeamDTFeedbackRef.child(String.format("%d", teamDTFeedback.team_number)).setValue(teamDTFeedback);
     }
 
-    public TDTF getTDTF(int team_number)
+    public TeamDTFeedback getTDTF(int team_number)
     {
-        return mTDTFs.get(String.format("%d", team_number));
+        return mTeamDTFeedbackMap.get(String.format("%d", team_number));
     }
 
-    public ArrayList<TDTF> getTDTFs() {
-        return new ArrayList<>(mTDTFs.values());
+    public ArrayList<TeamDTFeedback> getTDTFs() {
+        return new ArrayList<>(mTeamDTFeedbackMap.values());
     }
     //endregion
 
     //region Team Info
-    public void setTID(TID tid)
+    public void setTID(TeamLogistics teamLogistics)
     {
-        mInfoRef.child(String.format("%d", tid.team_number)).setValue(tid);
+        mTeamLogisticsRef.child(String.format("%d", teamLogistics.team_number)).setValue(teamLogistics);
     }
 
-    public TID getTID(int team_number)
+    public TeamLogistics getTID(int team_number)
     {
-        return mTIDs.get(team_number);
+        return mTeamLogisticsMap.get(team_number);
     }
 
     public void removeTID(int team_number){
-        mInfoRef.child(String.format("%d", team_number)).removeValue();
+        mTeamLogisticsRef.child(String.format("%d", team_number)).removeValue();
     }
     //endregion
 
     //region Calculated data
-    public void setTCD(TCD tcd)
+    public void setTCD(TeamCalculatedData teamCalculatedData)
     {
-        mCalulatedRef.child(String.format("%d",tcd.team_number)).setValue(tcd);
+        mTeamCalulatedDataRef.child(String.format("%d", teamCalculatedData.team_number)).setValue(teamCalculatedData);
     }
 
-    public TCD getTCD(int team_number){ return mTCDs.get(team_number); }
+    public TeamCalculatedData getTCD(int team_number){ return mTeamCalculatedDataMap.get(team_number); }
     //endregion
 
     //region Pick List Data
     //region First Pick
-    public void setFirstTPA(TPA first)
+    public void setFirstTPA(TeamPickAbility first)
     {
-        mFirstPickRef.child(String.valueOf(first.team_number)).setValue(first);
+        mFirstTeamPickAbilityRef.child(String.valueOf(first.team_number)).setValue(first);
     }
 
-    public TPA getFirstTPA(int team_number)
+    public TeamPickAbility getFirstTPA(int team_number)
     {
-        return mFirst_TPA.get(team_number);
+        return mFirstTeamPickAbilityMap.get(team_number);
     }
     //endregion
 
     //region Second Pick
-    public void setSecondTPA(TPA second)
+    public void setSecondTPA(TeamPickAbility second)
     {
-        mSecondPickRef.child(String.valueOf(second.team_number)).setValue(second);
+        mSecondTeamPickAbilityRef.child(String.valueOf(second.team_number)).setValue(second);
     }
 
-    public TPA getSecondTPA(int team_number)
+    public TeamPickAbility getSecondTPA(int team_number)
     {
-        return mSecond_TPA.get(team_number);
+        return mSecondTeamPickAbilityMap.get(team_number);
     }
     //endregion
 
     //region Third Pick
-    public void setThirdTPA(TPA third)
+    public void setThirdTPA(TeamPickAbility third)
     {
-        mThirdPickRef.child(String.valueOf(third.team_number)).setValue(third);
+        mThirdTeamPickAbilityRef.child(String.valueOf(third.team_number)).setValue(third);
     }
 
-    public TPA getThirdTPA(int team_number)
+    public TeamPickAbility getThirdTPA(int team_number)
     {
-        return mThird_TPA.get(team_number);
+        return mThirdTeamPickAbilityMap.get(team_number);
     }
     //endregion
 
     //region DNP
     public void setDNP(int team_number, boolean dnp)
     {
-        mFirstPickRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
-        mSecondPickRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
-        mThirdPickRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mFirstTeamPickAbilityRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mSecondTeamPickAbilityRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mThirdTeamPickAbilityRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
     }
 
     public ArrayList<Integer> getDnpList()
@@ -747,7 +784,7 @@ public class Database {
         // Remove all teams that are not set to do not pick
         for(int i = 0; i < teams.size(); i++)
         {
-            if(!mFirst_TPA.get(teams.get(i)).dnp)
+            if(!mFirstTeamPickAbilityMap.get(teams.get(i)).dnp)
             {
                 teams.remove(i);
                 i--;
@@ -759,44 +796,44 @@ public class Database {
 
     public void setPicked(int team_number, boolean picked)
     {
-        mFirstPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
-        mSecondPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
-        mThirdPickRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mFirstTeamPickAbilityRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mSecondTeamPickAbilityRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mThirdTeamPickAbilityRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
     }
     //endregion
 
     //region Rankings
     //region Current Rankings
-    public void setCurrentTRD(TRD trd)
+    public void setCurrentTRD(TeamRankingData teamRankingData)
     {
-        mCurrentRankingRef.child(String.format("%d", trd.team_number)).setValue(trd);
+        mCurrentTeamRankingDataRef.child(String.format("%d", teamRankingData.team_number)).setValue(teamRankingData);
     }
 
-    public TRD getCurrentTRD(int team_number)
+    public TeamRankingData getCurrentTRD(int team_number)
     {
-        return mCurrent_TRDs.get(team_number);
+        return mCurrentTeamRankingDataMap.get(team_number);
     }
 
-    public Map<Integer, TRD> getCurrentRankings()
+    public Map<Integer, TeamRankingData> getCurrentRankings()
     {
-        return mCurrent_TRDs;
+        return mCurrentTeamRankingDataMap;
     }
     //endregion
 
     //region Predicted Rankings
-    public void setPredictedTRD(TRD trd)
+    public void setPredictedTRD(TeamRankingData teamRankingData)
     {
-        mPredictedRankingRef.child(String.format("%d", trd.team_number)).setValue(trd);
+        mPredictedTeamRankingDataRef.child(String.format("%d", teamRankingData.team_number)).setValue(teamRankingData);
     }
 
-    public TRD getPredictedTRD(int team_number)
+    public TeamRankingData getPredictedTRD(int team_number)
     {
-        return mPredicted_TRDs.get(team_number);
+        return mPredictedTeamRankngDataMap.get(team_number);
     }
 
-    public Map<Integer, TRD> getPredictedRankings()
+    public Map<Integer, TeamRankingData> getPredictedRankings()
     {
-        return mPredicted_TRDs;
+        return mPredictedTeamRankngDataMap;
     }
     //endregion
     //endregion
@@ -810,7 +847,7 @@ public class Database {
         team.info = getTID(team_number);
         if(team.info == null)
         {
-            team.info = new TID();
+            team.info = new TeamLogistics();
             team.info.team_number = team_number;
             team.info.match_numbers = new ArrayList<>();
         }
@@ -819,65 +856,65 @@ public class Database {
         team.pit = getTPD(team_number);
         if(team.pit == null)
         {
-            team.pit = new TPD();
+            team.pit = new TeamPitData();
             team.pit.team_number = team_number;
         }
 
         team.drive_team_feedback = getTDTF(team_number);
         if(team.drive_team_feedback == null)
         {
-            team.drive_team_feedback = new TDTF();
+            team.drive_team_feedback = new TeamDTFeedback();
             team.drive_team_feedback.team_number = team_number;
         }
 
         team.calc = getTCD(team_number);
         if(team.calc == null)
         {
-            team.calc = new TCD();
+            team.calc = new TeamCalculatedData();
             team.calc.team_number = team_number;
         }
 
         team.completed_matches = new HashMap<>();
         for(int match_number : team.info.match_numbers)
         {
-            TMD tmd = getTMD(match_number, team_number);
-            if(tmd != null) {
-                team.completed_matches.put(match_number, tmd);
+            TeamMatchData teamMatchData = getTeamMatchData(match_number, team_number);
+            if(teamMatchData != null) {
+                team.completed_matches.put(match_number, teamMatchData);
             }
         }
 
         team.current_ranking = getCurrentTRD(team_number);
         if(team.current_ranking == null)
         {
-            team.current_ranking = new TRD();
+            team.current_ranking = new TeamRankingData();
             team.current_ranking.team_number = team_number;
         }
 
         team.predicted_ranking = getPredictedTRD(team_number);
         if(team.predicted_ranking == null)
         {
-            team.predicted_ranking = new TRD();
+            team.predicted_ranking = new TeamRankingData();
             team.predicted_ranking.team_number = team_number;
         }
 
         team.first_pick = getFirstTPA(team_number);
         if(team.first_pick == null)
         {
-            team.first_pick = new TPA();
+            team.first_pick = new TeamPickAbility();
             team.first_pick.team_number = team_number;
         }
 
         team.second_pick = getSecondTPA(team_number);
         if(team.second_pick == null)
         {
-            team.second_pick = new TPA();
+            team.second_pick = new TeamPickAbility();
             team.second_pick.team_number = team_number;
         }
 
         team.third_pick = getThirdTPA(team_number);
         if(team.third_pick == null)
         {
-            team.third_pick = new TPA();
+            team.third_pick = new TeamPickAbility();
             team.third_pick.team_number = team_number;
         }
 
@@ -890,9 +927,9 @@ public class Database {
         setTID(team.info);
         setTPD(team.pit);
         setTDTF(team.drive_team_feedback);
-        for(TMD entry: team.completed_matches.values())
+        for(TeamMatchData entry: team.completed_matches.values())
         {
-            setTMD(entry);
+            setTeamMatchData(entry);
         }
         setCurrentTRD(team.current_ranking);
         setPredictedTRD(team.predicted_ranking);
@@ -901,13 +938,13 @@ public class Database {
         setThirdTPA(team.third_pick);
     }
 
-    public List<TMD> getCompletedMatches(int team_number)
+    public List<TeamMatchData> getCompletedMatches(int team_number)
     {
         Team team = getTeam(team_number);
-        List<TMD> completedMatches = new ArrayList<>();
+        List<TeamMatchData> completedMatches = new ArrayList<>();
         for(int match_number: team.info.match_numbers)
         {
-            TMD tim = getTMD(match_number, team_number);
+            TeamMatchData tim = getTeamMatchData(match_number, team_number);
             if(tim != null)
             {
                 completedMatches.add(tim);
@@ -919,19 +956,26 @@ public class Database {
     //endregion
 
     //region Strategy
-    public void setStrategy(Strategy strategy)
-    {
-        mStrategyRef.child(strategy.name).setValue(strategy);
+    public void setStrategy(Strategy strategy) {
+        mIndividualStrategyRef.child(strategy.name).setValue(strategy);
     }
 
-    public Strategy getStrategy(String strategy_name)
-    {
-        return mStrategies.get(strategy_name);
+    public Strategy getStrategy(String strategy_name) {
+        return mIndividualStrategyMap.get(strategy_name);
     }
 
-    public ArrayList<Strategy> getStrategies()
-    {
-        return new ArrayList<>(mStrategies.values());
+    public ArrayList<Strategy> getStrategies() {
+        return new ArrayList<>(mIndividualStrategyMap.values());
+    }
+    //endregion
+
+    //region Match Strategy
+    public void setMatchStrategy(MatchStrategy strategy) {
+        mMatchStrategyRef.child(String.valueOf(strategy.match_number)).setValue(strategy);
+    }
+
+    public MatchStrategy getMatchStrategy(int match_number) {
+        return mMatchStrategyMap.get(String.valueOf(match_number));
     }
     //endregion
 
@@ -939,22 +983,22 @@ public class Database {
     public ArrayList<NoteView> getAllNotes()
     {
         ArrayList<NoteView> notes = new ArrayList<>();
-        for(TMD tmd: mTMDs.values())
+        for(TeamMatchData teamMatchData : mTeamMatchDataMap.values())
         {
             NoteView note = new NoteView();
             note.note_type = NoteView.NoteType.MATCH;
-            note.match_number = tmd.match_number;
-            note.team_number = tmd.team_number;
-            note.note = tmd.notes;
+            note.match_number = teamMatchData.match_number;
+            note.team_number = teamMatchData.team_number;
+            note.note = teamMatchData.notes;
             notes.add(note);
         }
-        for(SMD smd: mSMDs.values())
+        for(SuperMatchData superMatchData : mSuperMatchDataMap.values())
         {
             NoteView note = new NoteView();
             note.note_type = NoteView.NoteType.SUPER;
-            note.match_number = smd.match_number;
+            note.match_number = superMatchData.match_number;
             note.team_number = -1;
-            note.note = smd.notes;
+            note.note = superMatchData.notes;
             notes.add(note);
         }
         return notes;
@@ -964,7 +1008,7 @@ public class Database {
     //region Team Numbers
     public ArrayList<Integer> getTeamNumbers()
     {
-        ArrayList<Integer> team_numbers = new ArrayList<>(mTIDs.keySet());
+        ArrayList<Integer> team_numbers = new ArrayList<>(mTeamLogisticsMap.keySet());
         Collections.sort(team_numbers);
         return team_numbers;
     }

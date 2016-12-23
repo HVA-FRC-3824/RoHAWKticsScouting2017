@@ -35,7 +35,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Activities.Home">
+        <activity android:name=".Activities.Home" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,6 +45,7 @@
         <activity android:name=".Activities.CloudStorage" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.EventView" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchList" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.IndividualStrategyPlanning" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchPlanning" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchScouting" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchView" android:screenOrientation="landscape"/>
@@ -56,6 +57,7 @@
         <activity android:name=".Activities.ScheduleBuilder"/>
         <activity android:name=".Activities.Server" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.Settings" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.StrategyList" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.SuperScouting" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.TeamList" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.TeamView" android:screenOrientation="landscape"/>

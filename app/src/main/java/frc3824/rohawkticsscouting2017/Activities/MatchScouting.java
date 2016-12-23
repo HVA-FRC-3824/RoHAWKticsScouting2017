@@ -40,9 +40,9 @@ import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDr
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
 import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.R;
@@ -91,7 +91,7 @@ public class MatchScouting extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_scouting);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.match_scouting_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
@@ -119,7 +119,7 @@ public class MatchScouting extends Activity{
             mDrawerList = (ListView)findViewById(R.id.drawer_list);
             ArrayList<MatchNumberCheck> mncs = new ArrayList<>();
             for(int i = 1; i <= mDatabase.getNumberOfMatches(); i++){
-                if(mDatabase.getTMD(i,  mDatabase.getMatch(i).teams.get(mAllianceNumber - 1)) != null){
+                if(mDatabase.getTeamMatchData(i,  mDatabase.getMatch(i).teams.get(mAllianceNumber - 1)) != null){
                     mncs.add(new MatchNumberCheck(i, true));
                 } else {
                     mncs.add(new MatchNumberCheck(i));
@@ -138,9 +138,9 @@ public class MatchScouting extends Activity{
         findViewById(android.R.id.content).setKeepScreenOn(true);
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager) findViewById(R.id.match_scouting_view_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         mFPA = new FPA_MatchScouting(getFragmentManager());
-        TMD tim = mDatabase.getTMD(mMatchNumber, mTeamNumber);
+        TeamMatchData tim = mDatabase.getTeamMatchData(mMatchNumber, mTeamNumber);
         if (tim != null) {
             mFPA.setValueMap(tim.toMap());
             mScoutName = tim.scout_name;
@@ -149,7 +149,7 @@ public class MatchScouting extends Activity{
         viewPager.setOffscreenPageLimit(mFPA.getCount());
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.match_scouting_tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         if (mAllianceColor.equals(Constants.Alliance_Colors.BLUE)) {
             tabLayout.setBackgroundColor(Color.BLUE);
         } else {
@@ -596,15 +596,15 @@ public class MatchScouting extends Activity{
             map.put(Constants.Settings.ALLIANCE_COLOR, mAllianceColor);
             map.put(Constants.Settings.ALLIANCE_NUMBER, mAllianceNumber);
             map.put(Constants.Match_Scouting.SCOUT_NAME, mScoutName);
-            TMD tmd = new TMD(map);
-            mDatabase.setTMD(tmd);
+            TeamMatchData teamMatchData = new TeamMatchData(map);
+            mDatabase.setTeamMatchData(teamMatchData);
 
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothQueue queue = BluetoothQueue.getInstance();
 
             if(bluetoothAdapter == null)
             {
-                queue.add(tmd);
+                queue.add(teamMatchData);
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
                 return null;
             }
@@ -631,7 +631,7 @@ public class MatchScouting extends Activity{
             if(server == null)
             {
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
-                queue.add(tmd);
+                queue.add(teamMatchData);
                 return null;
             }
 
@@ -639,7 +639,7 @@ public class MatchScouting extends Activity{
             connectThread.start();
             while (!connectThread.isConnected());
             Gson gson = new GsonBuilder().create();
-            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(tmd))))
+            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(teamMatchData))))
             {
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
                 List<String> queuedString = queue.getQueueList();
@@ -653,13 +653,13 @@ public class MatchScouting extends Activity{
                         switch (s.charAt(0))
                         {
                             case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
-                                queue.add(gson.fromJson(s.substring(1), TMD.class));
+                                queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
                                 break;
                             case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
-                                queue.add(gson.fromJson(s.substring(1), SMD.class));
+                                queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
                                 break;
                             case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
-                                queue.add(gson.fromJson(s.substring(1), TDTF.class));
+                                queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
                                 break;
                         }
                     }
@@ -672,7 +672,7 @@ public class MatchScouting extends Activity{
             else
             {
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                queue.add(tmd);
+                queue.add(teamMatchData);
             }
             connectThread.cancel();
 

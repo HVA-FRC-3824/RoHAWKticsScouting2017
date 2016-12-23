@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dslv="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/columbia_blue">
@@ -12,22 +12,26 @@
         android:background="@color/navy_blue"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:elevation="4dp"
+        android:layout_alignParentTop="true"
         android:logo="@drawable/logo_icon_large"
         android:title="Scheduler Builder"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add"
+        android:drawableRight="@drawable/plus_math_black"
+        android:text="Add"
+        android:layout_alignParentBottom="true"/>
     
     <frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:id="@+id/listview"
         android:dividerHeight="4dp"
         dslv:drag_enabled="true"
-        dslv:drag_start_mode="onLongPress"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:id="@+id/add"
-        android:drawableRight="@drawable/plus_math_black"
-        android:text="Add"/>
+        dslv:drag_start_mode="onLongPress"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/add"/>
 
-</LinearLayout>
+
+</RelativeLayout>

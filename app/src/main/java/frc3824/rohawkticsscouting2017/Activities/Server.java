@@ -19,8 +19,8 @@ import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Bluetooth.AcceptThread;
 import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothHandler;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Statistics.Aggregate;
 import frc3824.rohawkticsscouting2017.Utilities.CircularBuffer;
@@ -180,13 +180,13 @@ public class Server extends Activity {
         }
 
         @Override
-        public void dataReceived(TMD tmd) {
+        public void dataReceived(TeamMatchData teamMatchData) {
             mNotificationManager.notify(mMatchNotificationId, mMatchNotificationBuilder.build());
-            Aggregate.aggregateForTeam(tmd.team_number);
+            Aggregate.aggregateForTeam(teamMatchData.team_number);
         }
 
         @Override
-        public void dataReceived(SMD smd) {
+        public void dataReceived(SuperMatchData superMatchData) {
             mNotificationManager.notify(mSuperNotificationId, mSuperNotificationBuilder.build());
             Aggregate.aggregateForSuper();
         }

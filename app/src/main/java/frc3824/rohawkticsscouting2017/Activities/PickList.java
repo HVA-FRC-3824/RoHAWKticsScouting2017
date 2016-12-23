@@ -28,20 +28,20 @@ public class PickList extends Activity implements ViewPager.OnPageChangeListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.pick_list_view_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         setTitle("Pick List");
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager)findViewById(R.id.pick_list_view_view_pager);
+        ViewPager viewPager = (ViewPager)findViewById(R.id.view_pager);
         mFPA = new FPA_PickList(getFragmentManager());
 
         viewPager.setAdapter(mFPA);
         viewPager.setOffscreenPageLimit(mFPA.getCount());
         viewPager.setOnPageChangeListener(this);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.pick_list_view_tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setBackgroundColor(Color.BLUE);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);

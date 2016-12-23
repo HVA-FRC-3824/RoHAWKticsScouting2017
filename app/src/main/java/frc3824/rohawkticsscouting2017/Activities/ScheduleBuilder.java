@@ -34,8 +34,7 @@ public class ScheduleBuilder extends Activity implements View.OnClickListener, D
     private LVA_ScheduleBuilder mLVA;
     private Database mDatabase;
 
-    public void onCreate(Bundle savedBundleInstance)
-    {
+    public void onCreate(Bundle savedBundleInstance) {
         super.onCreate(savedBundleInstance);
         setContentView(R.layout.activity_schedule_builder);
 

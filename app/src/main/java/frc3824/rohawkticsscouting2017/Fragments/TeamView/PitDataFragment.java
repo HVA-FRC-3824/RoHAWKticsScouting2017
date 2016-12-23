@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -45,7 +44,7 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
     {
         View view = inflater.inflate(R.layout.fragment_team_view_pit_data, container, false);
 
-        TPD team = Database.getInstance().getTPD(mTeamNumber);
+        TeamPitData team = Database.getInstance().getTPD(mTeamNumber);
 
         if(team != null) {
             view.findViewById(R.id.left).setOnClickListener(this);

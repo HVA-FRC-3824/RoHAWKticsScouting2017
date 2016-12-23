@@ -1,5 +1,9 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
+import android.graphics.Color;
+import android.graphics.Point;
+import android.util.Pair;
+
 /**
  * @author frc3824
  * Created: 8/10/16
@@ -70,6 +74,7 @@ public interface Constants {
         String PIT_SCOUTING = "pit_scouting";
         String MATCH_VIEWING = "match_viewing";
         String TEAM_VIEWING = "team_viewing";
+        String MATCH_PLAN_NAME = "match_plan_name";
 
         String BLUE1 = "blue1";
         String BLUE2 = "blue2";
@@ -290,5 +295,55 @@ public interface Constants {
         }
 
         // GAME SPECIFIC
+    }
+
+    interface StrategyPlanning {
+        interface Auto_Endgame {
+            int BLUE_X = 125;
+            int RED_X = 1400;
+            int BLUE1Y = 200;
+            int BLUE2Y = 500;
+            int BLUE3Y = 800;
+            int RED1Y = 800;
+            int RED2Y = 500;
+            int RED3Y = 200;
+            Point BLUE1_POSITION = new Point(BLUE_X, BLUE1Y);
+            Point BLUE2_POSITION = new Point(BLUE_X, BLUE2Y);
+            Point BLUE3_POSITION = new Point(BLUE_X, BLUE3Y);
+            Point RED1_POSITION = new Point(RED_X, RED1Y);
+            Point RED2_POSITION = new Point(RED_X, RED2Y);
+            Point RED3_POSITION = new Point(RED_X, RED3Y);
+            Point[] POSITIONS = {BLUE1_POSITION, BLUE2_POSITION, BLUE3_POSITION, RED1_POSITION, RED2_POSITION, RED3_POSITION};
+
+            float RADIUS = 60.0f;
+        }
+
+        interface Teleop {
+            int BLUE_X = 125;
+            int RED_X = 1400;
+            int BLUE1Y = 200;
+            int BLUE2Y = 500;
+            int BLUE3Y = 800;
+            int RED1Y = 800;
+            int RED2Y = 500;
+            int RED3Y = 200;
+            Point BLUE1_POSITION = new Point(BLUE_X, BLUE1Y);
+            Point BLUE2_POSITION = new Point(BLUE_X, BLUE2Y);
+            Point BLUE3_POSITION = new Point(BLUE_X, BLUE3Y);
+            Point RED1_POSITION = new Point(RED_X, RED1Y);
+            Point RED2_POSITION = new Point(RED_X, RED2Y);
+            Point RED3_POSITION = new Point(RED_X, RED3Y);
+            Point[] POSITIONS = {BLUE1_POSITION, BLUE2_POSITION, BLUE3_POSITION, RED1_POSITION, RED2_POSITION, RED3_POSITION};
+
+            float RADIUS = 60.0f;
+        }
+
+        int BLUE1_COLOR = Color.rgb(0,191,255);
+        int BLUE2_COLOR = Color.rgb(30,144,255);
+        int BLUE3_COLOR = Color.rgb(0,0,255);
+        int RED1_COLOR = Color.rgb(220,20,60);
+        int RED2_COLOR = Color.rgb(255,0,0);
+        int RED3_COLOR = Color.rgb(139,0,0);
+        int[] COLORS = {BLUE1_COLOR, BLUE2_COLOR, BLUE3_COLOR, RED1_COLOR, RED2_COLOR, RED3_COLOR};
     }
 }

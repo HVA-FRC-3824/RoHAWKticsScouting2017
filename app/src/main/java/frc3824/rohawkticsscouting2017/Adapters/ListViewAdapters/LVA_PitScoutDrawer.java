@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -46,12 +46,12 @@ public class LVA_PitScoutDrawer extends ArrayAdapter<Integer> {
         TextView tnView = (TextView)convertView.findViewById(R.id.team_number);
         tnView.setText(String.format("%d", team_number));
 
-        TPD tpd = mDatabase.getTPD(team_number);
+        TeamPitData teamPitData = mDatabase.getTPD(team_number);
 
-        if(tpd != null){
+        if(teamPitData != null){
             convertView.setBackgroundColor(Color.GREEN);
 
-            if(tpd.robot_image_filepaths.size() != 0){
+            if(teamPitData.robot_image_filepaths.size() != 0){
                 convertView.findViewById(R.id.image).setVisibility(View.VISIBLE);
             } else {
                 convertView.findViewById(R.id.image).setVisibility(View.GONE);

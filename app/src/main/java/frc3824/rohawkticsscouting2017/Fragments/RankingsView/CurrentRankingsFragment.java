@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CurrentRanking;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -32,9 +32,9 @@ public class CurrentRankingsFragment extends Fragment {
 
         Database database = Database.getInstance();
 
-        Map<Integer, TRD> rankings = database.getCurrentRankings();
+        Map<Integer, TeamRankingData> rankings = database.getCurrentRankings();
 
-        ArrayList<TRD> rankingsList = new ArrayList<>(rankings.values());
+        ArrayList<TeamRankingData> rankingsList = new ArrayList<>(rankings.values());
         LVA_CurrentRanking lva = new LVA_CurrentRanking(getContext(), rankingsList);
 
         ListView lv = (ListView)view.findViewById(R.id.list);

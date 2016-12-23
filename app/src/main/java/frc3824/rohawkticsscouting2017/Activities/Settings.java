@@ -21,15 +21,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TRD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
@@ -335,19 +333,19 @@ public class Settings extends Activity implements OnClickListener{
                 publishProgress(currentIndex, total);
                 for(TBA_Team tbaTeam: teams)
                 {
-                    TID info = new TID();
+                    TeamLogistics info = new TeamLogistics();
                     info.team_number = tbaTeam.team_number;
                     info.nickname = tbaTeam.nickname;
                     info.match_numbers = teamMatchNumbers.get(info.team_number);
                     Collections.sort(info.match_numbers);
                     database.setTID(info);
 
-//                    TPD pit = new TPD();
+//                    TeamPitData pit = new TeamPitData();
 //                    pit.team_number = tbaTeam.team_number;
 //                    pit.pit_scouted = false;
 //                    database.setTPD(pit);
 
-                    TPA pick = new TPA();
+                    TeamPickAbility pick = new TeamPickAbility();
                     pick.team_number = tbaTeam.team_number;
                     pick.nickname = tbaTeam.nickname;
                     pick.manual_ranking = -1;
@@ -361,7 +359,7 @@ public class Settings extends Activity implements OnClickListener{
                 publishProgress(currentIndex, total);
                 for(TBA_Ranking tbaRanking: rankings)
                 {
-                    TRD ranking = new TRD();
+                    TeamRankingData ranking = new TeamRankingData();
                     ranking.team_number = tbaRanking.team_number;
                     ranking.rank = tbaRanking.rank;
                     ranking.RPs = tbaRanking.RPs;

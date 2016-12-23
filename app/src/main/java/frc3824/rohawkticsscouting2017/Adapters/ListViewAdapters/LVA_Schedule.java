@@ -43,12 +43,40 @@ public class LVA_Schedule extends ArrayAdapter<Integer> {
 
         if(position == 0) {
             ((TextView) convertView.findViewById(R.id.match_number)).setText(String.format("Match Number", matchNumber));
-            ((TextView) convertView.findViewById(R.id.blue1)).setText("Blue 1");
-            ((TextView) convertView.findViewById(R.id.blue2)).setText("Blue 2");
-            ((TextView) convertView.findViewById(R.id.blue3)).setText("Blue 3");
-            ((TextView) convertView.findViewById(R.id.red1)).setText("Red 1");
-            ((TextView) convertView.findViewById(R.id.red2)).setText("Red 2");
-            ((TextView) convertView.findViewById(R.id.red3)).setText("Red 3");
+            TextView textView = (TextView) convertView.findViewById(R.id.blue1);
+            textView.setText("Blue 1");
+            textView.setBackgroundColor(Color.BLUE);
+            textView.setTextColor(Color.WHITE);
+
+            textView = (TextView) convertView.findViewById(R.id.blue2);
+            textView.setText("Blue 2");
+            textView.setBackgroundColor(Color.BLUE);
+            textView.setTextColor(Color.WHITE);
+
+
+            textView = (TextView) convertView.findViewById(R.id.blue3);
+            textView.setText("Blue 3");
+            textView.setBackgroundColor(Color.BLUE);
+            textView.setTextColor(Color.WHITE);
+
+
+            textView = (TextView) convertView.findViewById(R.id.red1);
+            textView.setText("Red 1");
+            textView.setBackgroundColor(Color.RED);
+            textView.setTextColor(Color.WHITE);
+
+
+            textView = (TextView) convertView.findViewById(R.id.red2);
+            textView.setText("Red 2");
+            textView.setBackgroundColor(Color.RED);
+            textView.setTextColor(Color.WHITE);
+
+
+            textView = (TextView) convertView.findViewById(R.id.red3);
+            textView.setText("Red 3");
+            textView.setBackgroundColor(Color.RED);
+            textView.setTextColor(Color.WHITE);
+
         } else {
 
             ((TextView) convertView.findViewById(R.id.match_number)).setText(String.format("%d", matchNumber));
@@ -68,10 +96,13 @@ public class LVA_Schedule extends ArrayAdapter<Integer> {
                 teamTextViews[i].setText(String.valueOf(team_number));
                 if (team_number == Constants.OUR_TEAM_NUMBER) {
                     teamTextViews[i].setBackgroundColor(Color.YELLOW);
+                    teamTextViews[i].setTextColor(Color.BLACK);
                 } else if(i < 3) {
                     teamTextViews[i].setBackgroundColor(Color.BLUE);
+                    teamTextViews[i].setTextColor(Color.WHITE);
                 } else {
                     teamTextViews[i].setBackgroundColor(Color.RED);
+                    teamTextViews[i].setTextColor(Color.WHITE);
                 }
             }
         }

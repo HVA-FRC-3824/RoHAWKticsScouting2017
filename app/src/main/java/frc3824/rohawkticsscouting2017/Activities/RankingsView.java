@@ -28,20 +28,20 @@ public class RankingsView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rankings_view);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.rankings_view_toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         setTitle("Rankings");
 
         // Set up tabs and pages for different fragments of a match
-        ViewPager viewPager = (ViewPager) findViewById(R.id.rankings_view_view_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         mFPA = new FPA_RankingsView(getFragmentManager());
         viewPager.setAdapter(mFPA);
         // Set the off screen page limit to more than the number of fragments
         viewPager.setOffscreenPageLimit(mFPA.getCount());
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.rankings_view_tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);

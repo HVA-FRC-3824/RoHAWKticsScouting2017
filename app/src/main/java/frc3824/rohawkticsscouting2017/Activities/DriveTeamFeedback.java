@@ -17,8 +17,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -39,14 +39,14 @@ public class DriveTeamFeedback extends Activity {
     private EditText mPartner1Note;
     private EditText mPartner2Note;
     private Database mDatabase;
-    private TID mTid;
+    private TeamLogistics mTeamLogistics;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drive_team_feedback);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.drive_team_feedback_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
@@ -90,7 +90,7 @@ public class DriveTeamFeedback extends Activity {
         mPartner1Note = (EditText)findViewById(R.id.partner_1_note);
         mPartner2Note = (EditText)findViewById(R.id.partner_2_note);
 
-        mTid = mDatabase.getTID(Constants.OUR_TEAM_NUMBER);
+        mTeamLogistics = mDatabase.getTID(Constants.OUR_TEAM_NUMBER);
     }
 
     /**
@@ -104,10 +104,10 @@ public class DriveTeamFeedback extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.match_overflow, menu);
 
-        if (mMatchNumber == mTid.match_numbers.get(0)) {
+        if (mMatchNumber == mTeamLogistics.match_numbers.get(0)) {
             menu.removeItem(R.id.previous_match);
         }
-        if (mMatchNumber == mTid.match_numbers.get(mTid.match_numbers.size() - 1)) {
+        if (mMatchNumber == mTeamLogistics.match_numbers.get(mTeamLogistics.match_numbers.size() - 1)) {
             menu.removeItem(R.id.next_match);
         }
         menu.removeItem(R.id.switch_team);
@@ -259,23 +259,23 @@ public class DriveTeamFeedback extends Activity {
      * Saves the current data
      */
     private void save_press() {
-        TDTF tdtf1 = mDatabase.getTDTF(mPartner1);
-        if(tdtf1 == null)
+        TeamDTFeedback teamDTFeedback1 = mDatabase.getTDTF(mPartner1);
+        if(teamDTFeedback1 == null)
         {
-            tdtf1 = new TDTF();
-            tdtf1.team_number = mPartner1;
-            tdtf1.feedback = new HashMap<>();
+            teamDTFeedback1 = new TeamDTFeedback();
+            teamDTFeedback1.team_number = mPartner1;
+            teamDTFeedback1.feedback = new HashMap<>();
         }
-        tdtf1.feedback.put(mMatchNumber, mPartner1Note.getText().toString());
+        teamDTFeedback1.feedback.put(mMatchNumber, mPartner1Note.getText().toString());
 
-        TDTF tdtf2 = mDatabase.getTDTF(mPartner2);
-        if(tdtf2 == null)
+        TeamDTFeedback teamDTFeedback2 = mDatabase.getTDTF(mPartner2);
+        if(teamDTFeedback2 == null)
         {
-            tdtf2 = new TDTF();
-            tdtf2.team_number = mPartner2;
-            tdtf2.feedback = new HashMap<>();
+            teamDTFeedback2 = new TeamDTFeedback();
+            teamDTFeedback2.team_number = mPartner2;
+            teamDTFeedback2.feedback = new HashMap<>();
         }
-        tdtf2.feedback.put(mMatchNumber, mPartner2Note.getText().toString());
+        teamDTFeedback2.feedback.put(mMatchNumber, mPartner2Note.getText().toString());
 
         Log.d(TAG, "Saving values");
 
@@ -300,11 +300,11 @@ public class DriveTeamFeedback extends Activity {
                 // Go to the previous match
                 Intent intent = new Intent(DriveTeamFeedback.this, DriveTeamFeedback.class);
 
-                for(int i = 0; i < mTid.match_numbers.size(); i++)
+                for(int i = 0; i < mTeamLogistics.match_numbers.size(); i++)
                 {
-                    if(mTid.match_numbers.get(i) == mMatchNumber)
+                    if(mTeamLogistics.match_numbers.get(i) == mMatchNumber)
                     {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTid.match_numbers.get(i - 1));
+                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTeamLogistics.match_numbers.get(i - 1));
                         break;
                     }
                 }
@@ -327,11 +327,11 @@ public class DriveTeamFeedback extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 // Go to the previous match
                 Intent intent = new Intent(DriveTeamFeedback.this, DriveTeamFeedback.class);
-                for(int i = 0; i < mTid.match_numbers.size(); i++)
+                for(int i = 0; i < mTeamLogistics.match_numbers.size(); i++)
                 {
-                    if(mTid.match_numbers.get(i) == mMatchNumber)
+                    if(mTeamLogistics.match_numbers.get(i) == mMatchNumber)
                     {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTid.match_numbers.get(i - 1));
+                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTeamLogistics.match_numbers.get(i - 1));
                         break;
                     }
                 }
@@ -360,11 +360,11 @@ public class DriveTeamFeedback extends Activity {
 
                 // Go to the next match
                 Intent intent = new Intent(DriveTeamFeedback.this, DriveTeamFeedback.class);
-                for(int i = 0; i < mTid.match_numbers.size(); i++)
+                for(int i = 0; i < mTeamLogistics.match_numbers.size(); i++)
                 {
-                    if(mTid.match_numbers.get(i) == mMatchNumber)
+                    if(mTeamLogistics.match_numbers.get(i) == mMatchNumber)
                     {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTid.match_numbers.get(i + 1));
+                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTeamLogistics.match_numbers.get(i + 1));
                         break;
                     }
                 }
@@ -387,11 +387,11 @@ public class DriveTeamFeedback extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 // Go to the next match
                 Intent intent = new Intent(DriveTeamFeedback.this, DriveTeamFeedback.class);
-                for(int i = 0; i < mTid.match_numbers.size(); i++)
+                for(int i = 0; i < mTeamLogistics.match_numbers.size(); i++)
                 {
-                    if(mTid.match_numbers.get(i) == mMatchNumber)
+                    if(mTeamLogistics.match_numbers.get(i) == mMatchNumber)
                     {
-                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTid.match_numbers.get(i + 1));
+                        intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, mTeamLogistics.match_numbers.get(i + 1));
                         break;
                     }
                 }

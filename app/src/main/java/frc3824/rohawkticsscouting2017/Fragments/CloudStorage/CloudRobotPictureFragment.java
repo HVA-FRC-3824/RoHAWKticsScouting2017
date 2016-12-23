@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CloudImage;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 import static frc3824.rohawkticsscouting2017.Utilities.Constants.Notifications.DOWNLOAD_ROBOT_PICTURES;
@@ -33,28 +33,28 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
     protected void getCloudImages(ArrayList<Integer> teams, boolean internet) {
         mCIs = new ArrayList<>();
         for(int team_number: teams) {
-            TPD tpd = mDatabase.getTPD(team_number);
-            if(tpd == null)
+            TeamPitData teamPitData = mDatabase.getTPD(team_number);
+            if(teamPitData == null)
                 continue;
-            for(int i = 0; i < tpd.robot_image_filepaths.size(); i++) {
+            for(int i = 0; i < teamPitData.robot_image_filepaths.size(); i++) {
                 CloudImage ci = new CloudImage();
 
                 ci.extra = String.valueOf(team_number);
                 ci.internet = internet;
 
-                if (tpd.robot_image_filepaths != null && tpd.robot_image_filepaths.size() != 0) {
+                if (teamPitData.robot_image_filepaths != null && teamPitData.robot_image_filepaths.size() != 0) {
 
-                    if (new File(tpd.robot_image_filepaths.get(i)).exists()) {
+                    if (new File(teamPitData.robot_image_filepaths.get(i)).exists()) {
                         ci.local = true;
                     }
-                    ci.filepath = tpd.robot_image_filepaths.get(i);
+                    ci.filepath = teamPitData.robot_image_filepaths.get(i);
                 }
 
-                if (tpd.robot_image_urls != null && tpd.robot_image_urls.size() != 0) {
-                    if(!tpd.robot_image_urls.get(i).equals("")) {
+                if (teamPitData.robot_image_urls != null && teamPitData.robot_image_urls.size() != 0) {
+                    if(!teamPitData.robot_image_urls.get(i).equals("")) {
                         ci.remote = true;
                     }
-                    ci.url = tpd.robot_image_urls.get(i);
+                    ci.url = teamPitData.robot_image_urls.get(i);
                 }
 
                 mCIs.add(ci);

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TID;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -23,16 +23,16 @@ import frc3824.rohawkticsscouting2017.R;
  *
  *
  */
-public class LVA_TeamListBuilder extends ArrayAdapter<TID> {
+public class LVA_TeamListBuilder extends ArrayAdapter<TeamLogistics> {
 
     private final static String TAG = "LVA_TeamListBuilder";
 
-    private ArrayList<TID> mTeams;
+    private ArrayList<TeamLogistics> mTeams;
     private Context mContext;
     private LayoutInflater mLayoutInflator;
     private Database mDatabase;
 
-    public LVA_TeamListBuilder(Context context, ArrayList<TID> objects) {
+    public LVA_TeamListBuilder(Context context, ArrayList<TeamLogistics> objects) {
         super(context, R.layout.list_item_team_list_builder, objects);
         mTeams = objects;
         mContext = context;
@@ -47,13 +47,13 @@ public class LVA_TeamListBuilder extends ArrayAdapter<TID> {
             convertView = mLayoutInflator.inflate(R.layout.list_item_team_list_builder, null);
         }
 
-        final TID tid = mTeams.get(position);
+        final TeamLogistics teamLogistics = mTeams.get(position);
 
         TextView team_number = (TextView)convertView.findViewById(R.id.team_number);
-        team_number.setText(String.valueOf(tid.team_number));
+        team_number.setText(String.valueOf(teamLogistics.team_number));
 
         TextView nickname = (TextView)convertView.findViewById(R.id.nickname);
-        nickname.setText(tid.nickname);
+        nickname.setText(teamLogistics.nickname);
 
         ImageButton edit = (ImageButton)convertView.findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -61,20 +61,20 @@ public class LVA_TeamListBuilder extends ArrayAdapter<TID> {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
-                builder.setTitle(String.format("Edit Team Number: %d", tid.team_number));
+                builder.setTitle(String.format("Edit Team Number: %d", teamLogistics.team_number));
                 View dialogView = mLayoutInflator.inflate(R.layout.dialog_team_list_builder, null);
                 final EditText teamNumberEdit = (EditText)dialogView.findViewById(R.id.team_number);
-                teamNumberEdit.setText(String.valueOf(tid.team_number));
+                teamNumberEdit.setText(String.valueOf(teamLogistics.team_number));
                 final EditText nicknameEdit = (EditText)dialogView.findViewById(R.id.nickname);
-                nicknameEdit.setText(tid.nickname);
+                nicknameEdit.setText(teamLogistics.nickname);
 
                 builder.setView(dialogView);
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        tid.team_number = Integer.parseInt(teamNumberEdit.getText().toString());
-                        tid.nickname = nicknameEdit.getText().toString();
-                        mDatabase.setTID(tid);
+                        teamLogistics.team_number = Integer.parseInt(teamNumberEdit.getText().toString());
+                        teamLogistics.nickname = nicknameEdit.getText().toString();
+                        mDatabase.setTID(teamLogistics);
                         notifyDataSetChanged();
                     }
                 });
@@ -92,7 +92,7 @@ public class LVA_TeamListBuilder extends ArrayAdapter<TID> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.removeTID(tid.team_number);
+                mDatabase.removeTID(teamLogistics.team_number);
                 mTeams.remove(position);
                 notifyDataSetChanged();
             }

@@ -6,9 +6,9 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
@@ -21,9 +21,9 @@ public class BluetoothQueue {
 
     private final static String TAG = "BluetoothQueue";
 
-    private ArrayList<TMD> mTMDs;
-    private ArrayList<SMD> mSMDs;
-    private ArrayList<TDTF> mTDTFs;
+    private ArrayList<TeamMatchData> mTeamMatchDatas;
+    private ArrayList<SuperMatchData> mSuperMatchDatas;
+    private ArrayList<TeamDTFeedback> mTeamDTFeedbacks;
 
     private static BluetoothQueue mQueue;
 
@@ -35,46 +35,46 @@ public class BluetoothQueue {
     }
 
     private BluetoothQueue() {
-        mTMDs = new ArrayList<>();
-        mSMDs = new ArrayList<>();
-        mTDTFs = new ArrayList<>();
+        mTeamMatchDatas = new ArrayList<>();
+        mSuperMatchDatas = new ArrayList<>();
+        mTeamDTFeedbacks = new ArrayList<>();
     }
 
-    public void add(TMD tmd)
+    public void add(TeamMatchData teamMatchData)
     {
-        mTMDs.add(tmd);
+        mTeamMatchDatas.add(teamMatchData);
     }
 
-    public void add(SMD smd)
+    public void add(SuperMatchData superMatchData)
     {
-        mSMDs.add(smd);
+        mSuperMatchDatas.add(superMatchData);
     }
 
-    public void add(TDTF tdtf) {
-        mTDTFs.add(tdtf);
+    public void add(TeamDTFeedback teamDTFeedback) {
+        mTeamDTFeedbacks.add(teamDTFeedback);
     }
 
     public List<String> getQueueList() {
         List<String> rv = new ArrayList<>();
         Gson mGson = new GsonBuilder().create();
-        for(TMD tmd: mTMDs) {
-            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.MATCH_HEADER, mGson.toJson(tmd)));
+        for(TeamMatchData teamMatchData : mTeamMatchDatas) {
+            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.MATCH_HEADER, mGson.toJson(teamMatchData)));
         }
 
-        for(SMD smd: mSMDs) {
-            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.SUPER_HEADER, mGson.toJson(smd)));
+        for(SuperMatchData superMatchData : mSuperMatchDatas) {
+            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.SUPER_HEADER, mGson.toJson(superMatchData)));
         }
 
-        for(TDTF tdtf: mTDTFs) {
-            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, mGson.toJson(tdtf)));
+        for(TeamDTFeedback teamDTFeedback : mTeamDTFeedbacks) {
+            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, mGson.toJson(teamDTFeedback)));
         }
 
         return rv;
     }
 
     public void clear() {
-        mTMDs.clear();
-        mSMDs.clear();
-        mTDTFs.clear();
+        mTeamMatchDatas.clear();
+        mSuperMatchDatas.clear();
+        mTeamDTFeedbacks.clear();
     }
 }

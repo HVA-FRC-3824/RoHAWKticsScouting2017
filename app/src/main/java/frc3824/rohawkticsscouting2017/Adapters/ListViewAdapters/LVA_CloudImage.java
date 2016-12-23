@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
@@ -134,7 +134,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
 
                                 switch (mImageType) {
                                     case Constants.Cloud.ROBOT_PICTURE:
-                                        TPD t = mDatabase.getTPD(Integer.parseInt(ci.extra));
+                                        TeamPitData t = mDatabase.getTPD(Integer.parseInt(ci.extra));
                                         int index = t.robot_image_filepaths.indexOf(ci.filepath);
                                         t.robot_image_urls.add(index, ci.url);
                                         mDatabase.setTPD(t);

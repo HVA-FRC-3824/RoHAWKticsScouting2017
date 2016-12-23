@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import frc3824.rohawkticsscouting2017.Activities.TeamView;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TPA;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -27,14 +27,14 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * @author Andrew Messing
  *         Created: 8/23/16
  */
-public class LVA_PickList extends ArrayAdapter<TPA>{
+public class LVA_PickList extends ArrayAdapter<TeamPickAbility>{
 
     private final static String TAG = "LVA_PickList";
 
-    private ArrayList<TPA> mTeams;
+    private ArrayList<TeamPickAbility> mTeams;
     private Context mContext;
 
-    public LVA_PickList(Context context, ArrayList<TPA> objects) {
+    public LVA_PickList(Context context, ArrayList<TeamPickAbility> objects) {
         super(context, R.layout.list_item_pick, objects);
         mTeams = objects;
         mContext = context;
@@ -53,7 +53,7 @@ public class LVA_PickList extends ArrayAdapter<TPA>{
             convertView = inflater.inflate(R.layout.list_item_pick, null);
         }
 
-        final TPA team = mTeams.get(position);
+        final TeamPickAbility team = mTeams.get(position);
 
         if(team.picked)
         {
@@ -117,9 +117,9 @@ public class LVA_PickList extends ArrayAdapter<TPA>{
             public void onClick(View view) {
                 Database.getInstance().setPicked(team.team_number, !team.picked);
                 team.picked = !team.picked;
-                Collections.sort(mTeams, new Comparator<TPA>() {
+                Collections.sort(mTeams, new Comparator<TeamPickAbility>() {
                     @Override
-                    public int compare(TPA t1, TPA t2) {
+                    public int compare(TeamPickAbility t1, TeamPickAbility t2) {
                         if(t1.picked && t2.picked)
                         {
                             return 0;

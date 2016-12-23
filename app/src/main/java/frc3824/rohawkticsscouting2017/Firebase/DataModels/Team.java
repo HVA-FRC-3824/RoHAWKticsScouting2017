@@ -18,21 +18,21 @@ public class Team {
     public int team_number;
 
     // Collected data
-    public Map<Integer, TMD> completed_matches;
-    public TID info;
-    public TPD pit;
-    public TDTF drive_team_feedback;
+    public Map<Integer, TeamMatchData> completed_matches;
+    public TeamLogistics info;
+    public TeamPitData pit;
+    public TeamDTFeedback drive_team_feedback;
 
-    public TCD calc;
+    public TeamCalculatedData calc;
 
     // Rankings
-    public TRD current_ranking;
-    public TRD predicted_ranking;
+    public TeamRankingData current_ranking;
+    public TeamRankingData predicted_ranking;
 
     // Picks
-    public TPA first_pick;
-    public TPA second_pick;
-    public TPA third_pick;
+    public TeamPickAbility first_pick;
+    public TeamPickAbility second_pick;
+    public TeamPickAbility third_pick;
 
     public Team() {}
 }

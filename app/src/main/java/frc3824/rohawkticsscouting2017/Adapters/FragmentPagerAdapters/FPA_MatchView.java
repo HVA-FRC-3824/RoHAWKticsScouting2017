@@ -6,9 +6,12 @@ import android.support.v13.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
+import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewAllianceFragment;
+import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewMatchPlanFragment;
 import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewPredictionFragment;
 import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewStrategyFragment;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 import static frc3824.rohawkticsscouting2017.R.id.match_number;
 
@@ -22,7 +25,7 @@ public class FPA_MatchView extends FragmentPagerAdapter {
 
     private final static String TAG = "FPA_MatchView";
 
-    private String mTabTitles[] = new String[]{"Blue", "Red", "Strategy", "Prediction"};
+    private String[] mTabTitles;
     private int mMatchNumber;
     private ArrayList<Integer> mTeams;
     private boolean custom;
@@ -30,12 +33,19 @@ public class FPA_MatchView extends FragmentPagerAdapter {
     public FPA_MatchView(FragmentManager fm, int match_number) {
         super(fm);
         mMatchNumber = match_number;
+        mTeams = Database.getInstance().getMatch(mMatchNumber).teams;
+        if(mTeams.contains(Constants.OUR_TEAM_NUMBER)){
+            mTabTitles = new String[]{"Blue", "Red", "Strategy", "Match Plan", "Prediction"};
+        } else {
+            mTabTitles = new String[]{"Blue", "Red", "Strategy", "Prediction"};
+        }
         custom = false;
     }
 
     public FPA_MatchView(FragmentManager fm, ArrayList<Integer> teams) {
         super(fm);
-        teams = teams;
+        mTeams = teams;
+        mTabTitles = new String[]{"Blue", "Red", "Strategy", "Prediction"};
         custom = true;
     }
 
@@ -68,8 +78,21 @@ public class FPA_MatchView extends FragmentPagerAdapter {
                 }
                 break;
             case 3:
+                if(mTabTitles.length == 4) {
+                    f = new MatchViewPredictionFragment();
+                    if (custom) {
+                        ((MatchViewPredictionFragment) f).setMatch(mTeams);
+                    } else {
+                        ((MatchViewPredictionFragment) f).setMatch(mMatchNumber);
+                    }
+                } else {
+                    f = new MatchViewMatchPlanFragment();
+                    ((MatchViewMatchPlanFragment) f).setMatch(mMatchNumber);
+                }
+                break;
+            case 4:
                 f = new MatchViewPredictionFragment();
-                if(custom){
+                if (custom) {
                     ((MatchViewPredictionFragment) f).setMatch(mTeams);
                 } else {
                     ((MatchViewPredictionFragment) f).setMatch(mMatchNumber);

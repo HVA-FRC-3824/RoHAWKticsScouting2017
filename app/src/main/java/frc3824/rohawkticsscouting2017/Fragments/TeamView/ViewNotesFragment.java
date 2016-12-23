@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import java.util.Map;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SMD;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TDTF;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TMD;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -48,20 +48,20 @@ public class ViewNotesFragment extends Fragment{
         String matchNotesText = "";
         String superNotesText = "";
         for(int matchNumber : team.info.match_numbers) {
-            TMD tm = database.getTMD(matchNumber, mTeamNumber);
+            TeamMatchData tm = database.getTeamMatchData(matchNumber, mTeamNumber);
             if(tm != null && tm.notes != null && tm.notes.equals("")) {
                 matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tm.notes);
             }
-            SMD sm = database.getSMD(matchNumber);
+            SuperMatchData sm = database.getSMD(matchNumber);
             if(sm != null && sm.notes != null && sm.notes.equals("")) {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }
         }
 
-        TDTF tdtf = database.getTDTF(mTeamNumber);
+        TeamDTFeedback teamDTFeedback = database.getTDTF(mTeamNumber);
         String feedbackText = "";
-        if(tdtf != null && tdtf.feedback != null) {
-            for (Map.Entry<Integer, String> entry : tdtf.feedback.entrySet()) {
+        if(teamDTFeedback != null && teamDTFeedback.feedback != null) {
+            for (Map.Entry<Integer, String> entry : teamDTFeedback.feedback.entrySet()) {
                 if(entry.getValue() != null && !entry.getValue().equals("")) {
                     feedbackText += String.format("Match %d:\n\t%s\n", entry.getKey(), entry.getValue());
                 }

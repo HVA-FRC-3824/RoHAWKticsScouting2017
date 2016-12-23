@@ -1,10 +1,7 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -19,11 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchView;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
-import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewPredictionFragment;
-import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -43,15 +36,15 @@ public class MatchView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_view);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.match_view_toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
 
         mMatchNumber = extras.getInt(Constants.Intent_Extras.MATCH_NUMBER, -1);
 
-        ViewPager viewPager = (ViewPager)findViewById(R.id.match_view_view_pager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.match_view_tab_layout);
+        ViewPager viewPager = (ViewPager)findViewById(R.id.view_pager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
         tabLayout.setupWithViewPager(viewPager);

@@ -7,7 +7,7 @@
     android:background="@color/columbia_blue">
 
     <android.widget.Toolbar
-        android:id="@+id/match_view_toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/navy_blue"
@@ -22,14 +22,14 @@
         android:layout_marginTop="8dp">
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/match_view_tab_layout"
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/match_view_view_pager"
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
