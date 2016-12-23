@@ -229,7 +229,7 @@ public class StrategyDrawingView extends View {
         return mLastBrushSize;
     }
 
-    public void setmErase(boolean isErase) {
+    public void setErase(boolean isErase) {
         mErase = isErase;
         if(isErase) {
             mDrawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));

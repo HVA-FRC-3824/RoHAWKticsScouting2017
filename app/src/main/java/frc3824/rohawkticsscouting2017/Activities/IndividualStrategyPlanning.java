@@ -37,7 +37,8 @@ import frc3824.rohawkticsscouting2017.Views.StrategyDrawingView;
  */
 public class IndividualStrategyPlanning extends Activity implements View.OnClickListener{
 
-    private final static String TAG = "IndividualStrategyPlanning";
+    // Shortened due to TAG length limit for logging
+    private final static String TAG = "IndividualStrategyPlan";
 
     private StrategyDrawingView mDrawingView;
     private ImageButton mCurrentPaint;
@@ -56,7 +57,7 @@ public class IndividualStrategyPlanning extends Activity implements View.OnClick
         mDrawingView = (StrategyDrawingView) findViewById(R.id.drawing);
 
         LinearLayout paintLayout = (LinearLayout) findViewById(R.id.paint_colors);
-        mCurrentPaint = (ImageButton) paintLayout.getChildAt(3); //black
+        mCurrentPaint = (ImageButton) paintLayout.getChildAt(5); //black
         mCurrentPaint.setImageDrawable(getResources().getDrawable(R.drawable.paint_pressed, null));
 
         mExtraSmallBrush = 5;
@@ -71,14 +72,9 @@ public class IndividualStrategyPlanning extends Activity implements View.OnClick
         findViewById(R.id.open_btn).setOnClickListener(this);
 
         mDrawingView.setBrushSize(mExtraSmallBrush);
-    }
 
-
-    @Override
-    protected void onResume(){
-        super.onResume();
         Bundle extras = getIntent().getExtras();
-        if(extras.containsKey(Constants.Intent_Extras.MATCH_PLAN_NAME)){
+        if(extras != null && extras.containsKey(Constants.Intent_Extras.MATCH_PLAN_NAME)){
             mCurrentStrategyName = extras.getString(Constants.Intent_Extras.MATCH_PLAN_NAME);
             String imageName = mCurrentStrategyName + ".png";
             Log.d(TAG, mCurrentStrategyName);
