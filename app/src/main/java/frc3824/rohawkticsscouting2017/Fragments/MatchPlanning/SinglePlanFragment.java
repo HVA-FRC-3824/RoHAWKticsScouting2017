@@ -97,7 +97,7 @@ public class SinglePlanFragment extends Fragment implements View.OnClickListener
     }
 
     private void drawButtonClicked() {
-        mDrawingView.setmErase(false);
+        mDrawingView.setErase(false);
         final Dialog brushDialog = new Dialog(getContext());
         brushDialog.setTitle("Brush size:");
         brushDialog.setContentView(R.layout.dialog_brush_chooser);
@@ -179,7 +179,7 @@ public class SinglePlanFragment extends Fragment implements View.OnClickListener
         eraser_extraSmallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawingView.setmErase(true);
+                mDrawingView.setErase(true);
                 mDrawingView.setBrushSize(mExtraSmallBrush);
                 eraser_brushDialog.dismiss();
             }
@@ -190,7 +190,7 @@ public class SinglePlanFragment extends Fragment implements View.OnClickListener
         eraser_smallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawingView.setmErase(true);
+                mDrawingView.setErase(true);
                 mDrawingView.setBrushSize(mSmallBrush);
                 eraser_brushDialog.dismiss();
             }
@@ -201,7 +201,7 @@ public class SinglePlanFragment extends Fragment implements View.OnClickListener
         eraser_mediumBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawingView.setmErase(true);
+                mDrawingView.setErase(true);
                 mDrawingView.setBrushSize(mMediumBrush);
                 eraser_brushDialog.dismiss();
             }
@@ -212,7 +212,7 @@ public class SinglePlanFragment extends Fragment implements View.OnClickListener
         eraser_largeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawingView.setmErase(true);
+                mDrawingView.setErase(true);
                 mDrawingView.setBrushSize(mLargeBrush);
                 eraser_brushDialog.dismiss();
             }
