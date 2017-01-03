@@ -17,8 +17,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-import frc3824.rohawkticsscouting2017.Bluetooth.AcceptThread;
-import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothHandler;
+import frc3824.rohawkticsscouting2017.Comms.AcceptThread;
+import frc3824.rohawkticsscouting2017.Comms.MessageHandler;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.R;
@@ -145,7 +145,7 @@ public class Server extends Activity {
         mAcceptThread.cancel();
     }
 
-    private class SyncHandler extends BluetoothHandler {
+    private class SyncHandler extends MessageHandler {
         @Override
         public void displayText(String text) {
             Log.d(TAG, text);

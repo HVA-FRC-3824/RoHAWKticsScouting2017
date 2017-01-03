@@ -6,16 +6,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -25,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
-import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
+import frc3824.rohawkticsscouting2017.Comms.MessageQueue;
+import frc3824.rohawkticsscouting2017.Comms.ConnectThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
@@ -75,7 +72,7 @@ public class Home extends Activity implements View.OnClickListener{
 
         ((TextView)findViewById(R.id.version)).setText(String.format("Version: %s", Constants.VERSION));
 
-        setupButton(R.id.settings_button);
+        setupImageButton(R.id.settings_button);
 
         mSharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         String user_type = mSharedPreferences.getString(Constants.Settings.USER_TYPE, "");
@@ -121,29 +118,13 @@ public class Home extends Activity implements View.OnClickListener{
             Storage.getInstance();
         }
         //Authentication.getInstance();
-
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(bluetoothAdapter != null && bluetoothAdapter.isEnabled())
-        {
-            ((ImageView)findViewById(R.id.bluetooth_status)).setImageResource(R.drawable.bluetooth_color);
-        }
-
-        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
-        if (wifi.isWifiEnabled()){
-            ((ImageView)findViewById(R.id.wifi_status)).setImageResource(R.drawable.wifi_color);
-        }
-
-        Intent intent = registerReceiver(null, new IntentFilter("android.hardware.usb.action.USB_STATE"));
-        if(intent != null && intent.getExtras().getBoolean("connected"))
-        {
-            ((ImageView)findViewById(R.id.usb_status)).setImageResource(R.drawable.usb_on_color);
-        }
     }
 
     //region User Type Setups
     private void userTypeMatchScoutSetup() {
-        setupButton(R.id.schedule_button);
-        setupButton(R.id.scout_match_button);
+        setupImageButton(R.id.schedule_button);
+        setupImageButton(R.id.scout_match_button);
+        setupButton(R.id.scouting_open_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -173,8 +154,9 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     private void userTypePitScoutSetup() {
-        setupButton(R.id.schedule_button);
-        setupButton(R.id.scout_pit_button);
+        setupImageButton(R.id.schedule_button);
+        setupImageButton(R.id.scout_pit_button);
+        setupButton(R.id.scouting_open_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -191,8 +173,9 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     private void userTypeSuperScoutSetup() {
-        setupButton(R.id.schedule_button);
-        setupButton(R.id.scout_super_button);
+        setupImageButton(R.id.schedule_button);
+        setupImageButton(R.id.scout_super_button);
+        setupButton(R.id.scouting_open_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -205,15 +188,17 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     private void userTypeDriveTeamSetup() {
-        setupButton(R.id.schedule_button);
-        setupButton(R.id.match_planning_button);
-        setupButton(R.id.drive_team_feedback_button);
-        setupButton(R.id.sync_feedback_button);
+        setupImageButton(R.id.schedule_button);
+        setupImageButton(R.id.match_planning_button);
+        setupImageButton(R.id.drive_team_feedback_button);
+        setupImageButton(R.id.sync_feedback_button);
+        setupButton(R.id.scouting_open_button);
 
-        setupButton(R.id.view_team_button);
-        setupButton(R.id.view_match_button);
-        setupButton(R.id.view_notes_button);
-        setupButton(R.id.view_rankings_button);
+        setupImageButton(R.id.view_team_button);
+        setupImageButton(R.id.view_match_button);
+        setupImageButton(R.id.view_notes_button);
+        setupImageButton(R.id.view_rankings_button);
+        setupButton(R.id.strategy_open_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -231,20 +216,22 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     private void userTypeStrategySetup() {
-        setupButton(R.id.schedule_button);
+        setupImageButton(R.id.schedule_button);
 
-        setupButton(R.id.sync_feedback_button);
+        setupImageButton(R.id.sync_feedback_button);
 
-        setupButton(R.id.view_team_button);
-        setupButton(R.id.view_match_button);
-        setupButton(R.id.view_rankings_button);
-        setupButton(R.id.view_event_button);
-        setupButton(R.id.view_pick_list_button);
-        setupButton(R.id.view_notes_button);
+        setupImageButton(R.id.view_team_button);
+        setupImageButton(R.id.view_match_button);
+        setupImageButton(R.id.view_rankings_button);
+        setupImageButton(R.id.view_event_button);
+        setupImageButton(R.id.view_pick_list_button);
+        setupImageButton(R.id.view_notes_button);
+        setupButton(R.id.strategy_open_button);
+        setupButton(R.id.pick_list_open_button);
 
-        setupButton(R.id.match_planning_button);
+        setupImageButton(R.id.match_planning_button);
 
-        setupButton(R.id.aggregate_button);
+        setupImageButton(R.id.aggregate_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -260,8 +247,8 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     private void userTypeServerSetup() {
-        setupButton(R.id.schedule_button);
-        setupButton(R.id.server_button);
+        setupImageButton(R.id.schedule_button);
+        setupImageButton(R.id.server_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -271,28 +258,33 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     private void userTypeAdminSetup() {
-        setupButton(R.id.schedule_button);
-        setupButton(R.id.scout_match_button);
-        setupButton(R.id.scout_pit_button);
-        setupButton(R.id.scout_super_button);
-        setupButton(R.id.drive_team_feedback_button);
-        setupButton(R.id.sync_feedback_button);
+        setupImageButton(R.id.schedule_button);
+        setupImageButton(R.id.scout_match_button);
+        setupImageButton(R.id.scout_pit_button);
+        setupImageButton(R.id.scout_super_button);
+        setupImageButton(R.id.drive_team_feedback_button);
+        setupImageButton(R.id.sync_feedback_button);
+        setupButton(R.id.scouting_open_button);
 
-        setupButton(R.id.view_team_button);
-        setupButton(R.id.view_match_button);
-        setupButton(R.id.view_rankings_button);
-        setupButton(R.id.view_event_button);
-        setupButton(R.id.view_pick_list_button);
-        setupButton(R.id.view_notes_button);
+        setupImageButton(R.id.view_team_button);
+        setupImageButton(R.id.view_match_button);
+        setupImageButton(R.id.view_rankings_button);
+        setupImageButton(R.id.view_event_button);
+        setupImageButton(R.id.view_pick_list_button);
+        setupImageButton(R.id.view_notes_button);
+        setupButton(R.id.strategy_open_button);
+        setupButton(R.id.pick_list_open_button);
 
-        setupButton(R.id.match_planning_button);
+        setupImageButton(R.id.match_planning_button);
 
-        setupButton(R.id.server_button);
+        setupImageButton(R.id.server_button);
 
-        setupButton(R.id.cloud_storage_button);
+        setupImageButton(R.id.cloud_storage_button);
 
-        setupButton(R.id.aggregate_button);
-        setupButton(R.id.team_list_builder_button);
+        setupImageButton(R.id.aggregate_button);
+        setupImageButton(R.id.team_list_builder_button);
+        setupImageButton(R.id.scouting_accuracy_button);
+        setupButton(R.id.admin_open_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -404,6 +396,10 @@ public class Home extends Activity implements View.OnClickListener{
                 intent = new Intent(this, TeamListBuilder.class);
                 startActivity(intent);
                 break;
+            case R.id.scouting_accuracy_button:
+                intent = new Intent(this, DisplayScoutAccuracy.class);
+                startActivity(intent);
+                break;
             case R.id.scouting_open_button:
                 if(mScoutingOpenButton){
                     findViewById(R.id.scouting_buttons).setVisibility(View.GONE);
@@ -454,12 +450,23 @@ public class Home extends Activity implements View.OnClickListener{
     }
 
     /**
+     * Makes the image button visible and attaches the on click listener
+     *
+     * @param btn
+     */
+    private void setupImageButton(int btn) {
+        ImageTextButton button = (ImageTextButton) findViewById(btn);
+        button.setVisibility(View.VISIBLE);
+        button.setOnClickListener(this);
+    }
+
+    /**
      * Makes the button visible and attaches the on click listener
      *
      * @param btn id for the button to be set up
      */
     private void setupButton(int btn) {
-        ImageTextButton button = (ImageTextButton) findViewById(btn);
+        Button button = (Button) findViewById(btn);
         button.setVisibility(View.VISIBLE);
         button.setOnClickListener(this);
     }
@@ -471,7 +478,7 @@ public class Home extends Activity implements View.OnClickListener{
             ArrayList<TeamDTFeedback> teamDTFeedbacks = arrayLists[0];
 
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            BluetoothQueue queue = BluetoothQueue.getInstance();
+            MessageQueue queue = MessageQueue.getInstance();
 
             if(bluetoothAdapter == null)
             {

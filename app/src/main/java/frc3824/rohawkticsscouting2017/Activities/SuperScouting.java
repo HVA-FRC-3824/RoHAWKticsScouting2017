@@ -38,8 +38,8 @@ import java.util.Set;
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_SuperScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
-import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
-import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
+import frc3824.rohawkticsscouting2017.Comms.MessageQueue;
+import frc3824.rohawkticsscouting2017.Comms.ConnectThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
@@ -557,7 +557,7 @@ public class SuperScouting extends Activity{
             mDatabase.setSMD(superMatchData);
 
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            BluetoothQueue queue = BluetoothQueue.getInstance();
+            MessageQueue queue = MessageQueue.getInstance();
 
             if(bluetoothAdapter == null)
             {

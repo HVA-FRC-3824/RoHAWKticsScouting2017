@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Bluetooth;
+package frc3824.rohawkticsscouting2017.Comms;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -6,6 +6,8 @@ import android.os.Looper;
 import android.util.Log;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -47,7 +49,8 @@ public class ConnectThread extends Thread {
                 tmp = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
             }
         } catch (IOException e) {
-            Log.e(TAG, "Socket create() failed", e);
+            Log.d(TAG, "", e);
+
         }
         mSocket = tmp;
     }
@@ -61,14 +64,53 @@ public class ConnectThread extends Thread {
             // This is a blocking call and will only return on a successful connection or an exception
             mSocket.connect();
         } catch (IOException e) {
-            Log.e(TAG,e.getMessage());
-            // Close the socket
+            // The above works for android to android bluetooth
+            // The below works for android to rpi bluetooth
+            Class<?> clazz = mSocket.getRemoteDevice().getClass();
+            Class<?>[] paramTypes = new Class<?>[] {Integer.TYPE};
+            Method m = null;
             try {
-                mSocket.close();
-            } catch (IOException e2) {
-                Log.e(TAG, "unable to close() socket during connection failure", e2);
+                m = clazz.getMethod("createRfcommSocket", paramTypes);
+                Object[] params = new Object[] {Integer.valueOf(1)};
+                mSocket = (BluetoothSocket) m.invoke(mSocket.getRemoteDevice(), params);
+                mSocket.connect();
+
+            } catch (NoSuchMethodException e1) {
+                e1.printStackTrace();
+                // Close the socket
+                try {
+                    mSocket.close();
+                } catch (IOException e2) {
+                    Log.e(TAG, "unable to close() socket during connection failure", e2);
+                }
+                return;
+            } catch (InvocationTargetException e1) {
+                e1.printStackTrace();
+                // Close the socket
+                try {
+                    mSocket.close();
+                } catch (IOException e2) {
+                    Log.e(TAG, "unable to close() socket during connection failure", e2);
+                }
+                return;
+            } catch (IllegalAccessException e1) {
+                e1.printStackTrace();
+                // Close the socket
+                try {
+                    mSocket.close();
+                } catch (IOException e2) {
+                    Log.e(TAG, "unable to close() socket during connection failure", e2);
+                }
+                return;
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                try {
+                    mSocket.close();
+                } catch (IOException e2) {
+                    Log.e(TAG, "unable to close() socket during connection failure", e2);
+                }
+                return;
             }
-            return;
         }
 
         if(Looper.myLooper() == null) {
@@ -76,7 +118,7 @@ public class ConnectThread extends Thread {
         }
 
         // Start the thread to manage the connection and perform transmissions
-        mConnectedThread = new ConnectedThread(mSocket, new BluetoothHandler());
+        mConnectedThread = new ConnectedThread(mSocket, new MessageHandler());
         mConnectedThread.start();
         while (isConnected());
         Log.i(TAG, "END mConnectThread");

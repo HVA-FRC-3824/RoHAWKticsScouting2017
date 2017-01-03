@@ -19,12 +19,16 @@ public class TeamCalculatedData {
 
     public int team_number;
 
-    // Autonomous
+    public LowLevelStats total_points;
 
+    // Autonomous
+    public LowLevelStats auto_points;
 
     // Teleop
+    public LowLevelStats teleop_points;
 
     // Endgame
+    public  LowLevelStats endgame_points;
 
     // Post Match
     public LowLevelStats no_show;

@@ -20,6 +20,7 @@ import java.util.Set;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchStrategy;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
@@ -60,6 +61,7 @@ public class Database {
     private DatabaseReference mFirstTeamPickAbilityRef;
     private DatabaseReference mSecondTeamPickAbilityRef;
     private DatabaseReference mThirdTeamPickAbilityRef;
+    private DatabaseReference mScoutAccuracyRef;
     //endregion
 
     private String mEventKey;
@@ -80,6 +82,7 @@ public class Database {
     private Map<Integer, TeamPickAbility> mThirdTeamPickAbilityMap;
     private Map<String, Strategy> mIndividualStrategyMap;
     private Map<String, MatchStrategy> mMatchStrategyMap;
+    private Map<String, ScoutAccuracy> mScoutAccuracyMap;
     //endregion
 
     private static Database mSingleton;
@@ -629,6 +632,40 @@ public class Database {
             }
         });
         //endregion
+
+        //region Scout Accuracy
+        mScoutAccuracyRef = mEventRef.child("scout_accuracy");
+        mScoutAccuracyMap = new HashMap<>();
+        mScoutAccuracyRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "scout_accuracy.onChildAdded" + dataSnapshot.getKey());
+                mScoutAccuracyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(ScoutAccuracy.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "scout_accuracy.onChildChanged" + dataSnapshot.getKey());
+                mScoutAccuracyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(ScoutAccuracy.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "scout_accuracy.onChildRemoved" + dataSnapshot.getKey());
+                mScoutAccuracyMap.remove(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "scout_accuracy.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "scout_accuracy.onCancelled");
+            }
+        });
+        //endregion
         //endregion
 
         mEventKey = eventKey;
@@ -1002,6 +1039,20 @@ public class Database {
             notes.add(note);
         }
         return notes;
+    }
+    //endregion
+
+    //region Scout Accuracy
+    public void setScoutAccuracy(ScoutAccuracy scout){
+        mScoutAccuracyRef.child(scout.name).setValue(scout);
+    }
+
+    public ScoutAccuracy getScoutAccuracy(String name){
+        return mScoutAccuracyMap.get(name);
+    }
+
+    public ArrayList<ScoutAccuracy> getScoutAccuracies(){
+        return new ArrayList<>(mScoutAccuracyMap.values());
     }
     //endregion
 

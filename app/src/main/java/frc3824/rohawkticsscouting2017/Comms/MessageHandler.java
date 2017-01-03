@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Bluetooth;
+package frc3824.rohawkticsscouting2017.Comms;
 
 import android.os.Handler;
 import android.os.Message;
@@ -20,14 +20,14 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  *
  *
  */
-public class BluetoothHandler extends Handler {
+public class MessageHandler extends Handler {
 
-    private final static String TAG = "BluetoothHandler";
+    private final static String TAG = "MessageHandler";
 
     private Gson mGson;
     private Database mDatabase;
 
-    public BluetoothHandler() {
+    public MessageHandler() {
         mGson = new GsonBuilder().create();
         mDatabase = Database.getInstance();
     }

@@ -105,7 +105,7 @@ public class Settings extends Activity implements OnClickListener{
         String[] server_options = new String[]{Constants.Bluetooth.Device_Names.BLUE1, Constants.Bluetooth.Device_Names.BLUE2, Constants.Bluetooth.Device_Names.BLUE3,
         Constants.Bluetooth.Device_Names.RED1, Constants.Bluetooth.Device_Names.RED2, Constants.Bluetooth.Device_Names.RED3,
         Constants.Bluetooth.Device_Names.SUPER, Constants.Bluetooth.Device_Names.SERVER, Constants.Bluetooth.Device_Names.STRATEGY,
-        Constants.Bluetooth.Device_Names.DRIVETEAM};
+        Constants.Bluetooth.Device_Names.DRIVETEAM, Constants.Bluetooth.Device_Names.RED_PI, Constants.Socket.SERVER};
         ArrayAdapter<String> server_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, server_options);
         server_selector.setAdapter(server_adapter);

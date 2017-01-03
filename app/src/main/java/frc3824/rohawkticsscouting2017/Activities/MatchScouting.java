@@ -30,7 +30,9 @@ import android.widget.Toolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -38,8 +40,9 @@ import java.util.Set;
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
-import frc3824.rohawkticsscouting2017.Bluetooth.BluetoothQueue;
-import frc3824.rohawkticsscouting2017.Bluetooth.ConnectThread;
+import frc3824.rohawkticsscouting2017.Comms.ConnectThread;
+import frc3824.rohawkticsscouting2017.Comms.MessageQueue;
+import frc3824.rohawkticsscouting2017.Comms.SocketThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
@@ -599,8 +602,67 @@ public class MatchScouting extends Activity{
             TeamMatchData teamMatchData = new TeamMatchData(map);
             mDatabase.setTeamMatchData(teamMatchData);
 
+            if(mServerName.equals(Constants.Socket.SERVER)){
+                return socketVersion(teamMatchData);
+            } else {
+                return bluetoothVersion(teamMatchData);
+            }
+        }
+
+        private Void socketVersion(TeamMatchData teamMatchData){
+            try {
+                Socket socket = new Socket("localhost", Constants.Socket.PORT);
+
+                MessageQueue queue = MessageQueue.getInstance();
+                SocketThread socketThread = new SocketThread(socket);
+                socketThread.start();
+                Gson gson = new GsonBuilder().create();
+                if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(teamMatchData))))
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                    List<String> queuedString = queue.getQueueList();
+                    queue.clear();
+                    boolean queueEmpty = true;
+                    for (String s: queuedString)
+                    {
+                        if(!socketThread.write(s))
+                        {
+                            queueEmpty = false;
+                            switch (s.charAt(0))
+                            {
+                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
+                                    break;
+                            }
+                        }
+                    }
+                    if(queueEmpty && queuedString.size() > 0)
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                    }
+                }
+                else
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    queue.add(teamMatchData);
+                }
+                socketThread.cancel();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private Void bluetoothVersion(TeamMatchData teamMatchData){
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            BluetoothQueue queue = BluetoothQueue.getInstance();
+            MessageQueue queue = MessageQueue.getInstance();
 
             if(bluetoothAdapter == null)
             {
@@ -621,6 +683,7 @@ public class MatchScouting extends Activity{
             for(BluetoothDevice device: devices)
             {
                 String deviceName = device.getName();
+                Log.d(TAG, deviceName);
                 if(deviceName.equals(mServerName))
                 {
                     server = device;

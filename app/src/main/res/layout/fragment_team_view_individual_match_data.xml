@@ -1,6 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Surrogate"
+        android:textColor="@color/bright_red"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:id="@+id/surrogate_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:text="Points"/>
+
+    <include
+        layout="@layout/list_item_points"
+        android:id="@+id/points_header"/>
+
+    <include
+        layout="@layout/list_item_points"
+        android:id="@+id/points_body"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:text="Auto"/>
+
+    <include
+        layout="@layout/list_item_auto"
+        android:id="@+id/auto_header"/>
+
+    <include
+        layout="@layout/list_item_auto"
+        android:id="@+id/auto_body"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:text="Teleop"/>
+
+    <include
+        layout="@layout/list_item_teleop"
+        android:id="@+id/teleop_header"/>
+
+    <include
+        layout="@layout/list_item_teleop"
+        android:id="@+id/teleop_body"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:text="Endgame"/>
+
+    <include
+        layout="@layout/list_item_endgame"
+        android:id="@+id/endgame_header"/>
+
+    <include
+        layout="@layout/list_item_endgame"
+        android:id="@+id/endgame_body"/>
 
 </LinearLayout>

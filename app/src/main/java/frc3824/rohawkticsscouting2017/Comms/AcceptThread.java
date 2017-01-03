@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Bluetooth;
+package frc3824.rohawkticsscouting2017.Comms;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
@@ -26,11 +26,11 @@ public class AcceptThread extends Thread {
 
     private String mSocketType;
     private static UUID MY_UUID;
-    private BluetoothHandler mHandler;
+    private MessageHandler mHandler;
     private boolean mRunning;
     private ConnectionStatusThread mConnectionStatusThread;
 
-    public AcceptThread(BluetoothAdapter adapter, BluetoothHandler handler, boolean secure) {
+    public AcceptThread(BluetoothAdapter adapter, MessageHandler handler, boolean secure) {
         BluetoothServerSocket tmp = null;
         mSocketType = secure ? "Secure" : "Insecure";
         mHandler = handler;

@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Bluetooth;
+package frc3824.rohawkticsscouting2017.Comms;
 
 import android.os.Message;
 
@@ -21,9 +21,9 @@ public class ConnectionStatusThread extends Thread {
     private ArrayList<ConnectedThread> mConnections;
     private Stack<ConnectedThread> mToAdd;
     private boolean mRunning;
-    private BluetoothHandler mHandler;
+    private MessageHandler mHandler;
 
-    public ConnectionStatusThread(BluetoothHandler handler) {
+    public ConnectionStatusThread(MessageHandler handler) {
         mConnections = new ArrayList<>();
         mToAdd = new Stack<>();
         mHandler = handler;

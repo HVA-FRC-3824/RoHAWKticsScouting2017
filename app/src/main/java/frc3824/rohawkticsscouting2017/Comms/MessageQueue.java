@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Bluetooth;
+package frc3824.rohawkticsscouting2017.Comms;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,24 +17,24 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  *
  * Queue to hold data that fails to send.
  */
-public class BluetoothQueue {
+public class MessageQueue {
 
-    private final static String TAG = "BluetoothQueue";
+    private final static String TAG = "MessageQueue";
 
     private ArrayList<TeamMatchData> mTeamMatchDatas;
     private ArrayList<SuperMatchData> mSuperMatchDatas;
     private ArrayList<TeamDTFeedback> mTeamDTFeedbacks;
 
-    private static BluetoothQueue mQueue;
+    private static MessageQueue mQueue;
 
-    public static BluetoothQueue getInstance() {
+    public static MessageQueue getInstance() {
         if(mQueue == null) {
-            mQueue = new BluetoothQueue();
+            mQueue = new MessageQueue();
         }
         return mQueue;
     }
 
-    private BluetoothQueue() {
+    private MessageQueue() {
         mTeamMatchDatas = new ArrayList<>();
         mSuperMatchDatas = new ArrayList<>();
         mTeamDTFeedbacks = new ArrayList<>();

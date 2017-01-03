@@ -1,4 +1,4 @@
-package frc3824.rohawkticsscouting2017.Bluetooth;
+package frc3824.rohawkticsscouting2017.Comms;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Message;
@@ -28,10 +28,10 @@ public class ConnectedThread extends Thread {
     private InputStream mInputStream;
     private OutputStream mOutputStream;
     private int mState;
-    private BluetoothHandler mHandler;
+    private MessageHandler mHandler;
     private boolean running;
 
-    public ConnectedThread(BluetoothSocket socket, BluetoothHandler handler) {
+    public ConnectedThread(BluetoothSocket socket, MessageHandler handler) {
         Log.d(TAG, "create ConnectedThread");
         mSocket = socket;
         mHandler = handler;

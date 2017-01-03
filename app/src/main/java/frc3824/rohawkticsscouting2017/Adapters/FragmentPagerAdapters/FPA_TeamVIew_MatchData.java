@@ -38,7 +38,7 @@ public class FPA_TeamView_MatchData extends FragmentPagerAdapter {
             ((AllMatchDataFragment)f).setTeam(mTeam);
         } else {
             f = new IndividualMatchDataFragment();
-            ((IndividualMatchDataFragment)f).setTeam(mTeam);
+            ((IndividualMatchDataFragment)f).setTeamMatch(mTeam, position);
         }
         return f;
     }
@@ -54,8 +54,7 @@ public class FPA_TeamView_MatchData extends FragmentPagerAdapter {
      * @return the title of the tab
      */
     @Override
-    public String getPageTitle(int position)
-    {
+    public String getPageTitle(int position) {
 
         if(position == 0){
             return "All";

@@ -19,6 +19,8 @@ public class AllMatchDataFragment extends Fragment {
 
     private final static String TAG = "AllMatchDataFragment";
 
+    private Team mTeam;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_all_match_data, container, false);
 
@@ -26,6 +28,6 @@ public class AllMatchDataFragment extends Fragment {
     }
 
     public void setTeam(Team team){
-
+        mTeam = team;
     }
 }

@@ -21,5 +21,9 @@ public class TeamLogistics {
 
     public ArrayList<Integer> match_numbers;
 
-    public TeamLogistics() {}
+    public int surrogate_match_number;
+
+    public TeamLogistics() {
+        surrogate_match_number = -1;
+    }
 }

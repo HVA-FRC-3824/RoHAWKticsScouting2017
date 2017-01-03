@@ -26,11 +26,16 @@ public class TeamMatchData {
     public int alliance_number;
     public String scout_name;
 
+    public int total_points; // calculated by server
+
     // Autonomous
+    public int auto_points; // calculated by server
 
     // Teleop
+    public int teleop_points; // calculated by server
 
     // Endgame
+    public int endgame_points; // calculated by server
 
     //Post Match
     public boolean no_show;
@@ -44,10 +49,11 @@ public class TeamMatchData {
     public boolean yellow_card;
     public boolean red_card;
 
-    public TeamMatchData() {}
+    public TeamMatchData() {
+        total_points = -1; // Required for determining if point calculation have been made on the server
+    }
 
-    public TeamMatchData(ScoutMap map)
-    {
+    public TeamMatchData(ScoutMap map) {
         try {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);
             match_number = map.getInt(Constants.Intent_Extras.MATCH_NUMBER);

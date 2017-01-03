@@ -75,6 +75,7 @@ public interface Constants {
         String MATCH_VIEWING = "match_viewing";
         String TEAM_VIEWING = "team_viewing";
         String MATCH_PLAN_NAME = "match_plan_name";
+        String SCOUTER = "scouter";
 
         String BLUE1 = "blue1";
         String BLUE2 = "blue2";
@@ -189,6 +190,11 @@ public interface Constants {
         int STRATEGY = 1;
     }
 
+    interface Socket {
+        String SERVER = "Socket";
+        int PORT = 38240;
+    }
+
     interface Bluetooth {
         String NAME_SECURE = "SyncSecure";
         String UUID_SECURE = "fa87c0d0-afac-11de-8a39-0800200c9a66";
@@ -237,6 +243,7 @@ public interface Constants {
             String SERVER = "3824_Server";
             String STRATEGY = "3824_Strategy";
             String DRIVETEAM = "3824_Drive_Team";
+            String RED_PI = "raspberrypi";
         }
 
         interface Data_Transfer_Status
