@@ -3,7 +3,7 @@ frc3824.rohawkticsscouting2017.Activities
 frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters
 frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters
 frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels
-frc3824.rohawkticsscouting2017.Bluetooth
+frc3824.rohawkticsscouting2017.Comms
 frc3824.rohawkticsscouting2017.CustomCharts.BarChart
 frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart
 frc3824.rohawkticsscouting2017.Firebase
