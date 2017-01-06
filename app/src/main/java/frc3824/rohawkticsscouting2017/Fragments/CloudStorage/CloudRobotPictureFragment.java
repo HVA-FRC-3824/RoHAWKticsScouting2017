@@ -33,7 +33,7 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
     protected void getCloudImages(ArrayList<Integer> teams, boolean internet) {
         mCIs = new ArrayList<>();
         for(int team_number: teams) {
-            TeamPitData teamPitData = mDatabase.getTPD(team_number);
+            TeamPitData teamPitData = mDatabase.getTeamPitData(team_number);
             if(teamPitData == null)
                 continue;
             for(int i = 0; i < teamPitData.robot_image_filepaths.size(); i++) {

@@ -118,7 +118,7 @@ public class Aggregate {
         Database database = Database.getInstance();
         Map<Integer, ZscoreTeam> teams = new HashMap<>();
 
-        for(SuperMatchData superMatchData : database.getSMDs().values())
+        for(SuperMatchData superMatchData : database.getAllSuperMatchData().values())
         {
             for(int i = 0; i < 3; i++) {
                 if (!teams.containsKey(superMatchData.blue_speed.get(i))) {
@@ -252,7 +252,7 @@ public class Aggregate {
         {
             ZscoreTeam z = teams_list.get(i);
             z.defense_rank = i + 1;
-            TeamCalculatedData teamCalculatedData = database.getTCD(z.team_number);
+            TeamCalculatedData teamCalculatedData = database.getTeamCalculatedData(z.team_number);
 
             teamCalculatedData.rank_speed = z.speed_rank;
             teamCalculatedData.zscore_speed = z.speed_zscore;
@@ -266,7 +266,7 @@ public class Aggregate {
             teamCalculatedData.rank_defense = z.defense_rank;
             teamCalculatedData.zscore_defense = z.defense_zscore;
 
-            database.setTCD(teamCalculatedData);
+            database.setTeamCalculatedData(teamCalculatedData);
         }
     }
 }

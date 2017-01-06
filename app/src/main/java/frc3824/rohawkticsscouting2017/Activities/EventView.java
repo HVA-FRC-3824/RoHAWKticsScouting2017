@@ -211,7 +211,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
             }
-            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
+            TeamCalculatedData teamCalculatedData = mDatabase.getTeamCalculatedData(mTeamNumbersSelect.get(i).team_number);
             if (teamCalculatedData != null) {
                 mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Foul_Secondary_Options.OPTIONS[position]) {
@@ -253,7 +253,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         mSortedTeamNumbers = new ArrayList<>();
         final Map<Integer, Double> sort_values = new HashMap<>();
         for (int i = 0; i < mTeamNumbers.size(); i++) {
-            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbers.get(i));
+            TeamCalculatedData teamCalculatedData = mDatabase.getTeamCalculatedData(mTeamNumbers.get(i));
             if (teamCalculatedData != null) {
                 switch (Constants.Event_View.Foul_Secondary_Options.OPTIONS[position]) {
                     case Constants.Event_View.Foul_Secondary_Options.STANDARD_FOULS:
@@ -304,7 +304,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
             }
-            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbersSelect.get(i).team_number);
+            TeamCalculatedData teamCalculatedData = mDatabase.getTeamCalculatedData(mTeamNumbersSelect.get(i).team_number);
             if (teamCalculatedData != null) {
                 mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Post_Match_Secondary_Options.OPTIONS[position]) {
@@ -342,7 +342,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         mSortedTeamNumbers = new ArrayList<>();
         final Map<Integer, Double> sort_values = new HashMap<>();
         for(int i = 4; i < mTeamNumbers.size(); i++){
-            TeamCalculatedData teamCalculatedData = mDatabase.getTCD(mTeamNumbers.get(i));
+            TeamCalculatedData teamCalculatedData = mDatabase.getTeamCalculatedData(mTeamNumbers.get(i));
             if (teamCalculatedData != null) {
                 switch (Constants.Event_View.Post_Match_Secondary_Options.OPTIONS[position]) {
                     case Constants.Event_View.Post_Match_Secondary_Options.DQ:

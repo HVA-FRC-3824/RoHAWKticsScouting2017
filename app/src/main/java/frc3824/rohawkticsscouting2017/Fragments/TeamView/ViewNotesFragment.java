@@ -52,7 +52,7 @@ public class ViewNotesFragment extends Fragment{
             if(tm != null && tm.notes != null && tm.notes.equals("")) {
                 matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tm.notes);
             }
-            SuperMatchData sm = database.getSMD(matchNumber);
+            SuperMatchData sm = database.getSuperMatchData(matchNumber);
             if(sm != null && sm.notes != null && sm.notes.equals("")) {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }

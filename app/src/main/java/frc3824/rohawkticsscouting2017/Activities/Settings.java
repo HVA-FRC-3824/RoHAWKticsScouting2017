@@ -343,7 +343,7 @@ public class Settings extends Activity implements OnClickListener{
 //                    TeamPitData pit = new TeamPitData();
 //                    pit.team_number = tbaTeam.team_number;
 //                    pit.pit_scouted = false;
-//                    database.setTPD(pit);
+//                    database.setTeamPitData(pit);
 
                     TeamPickAbility pick = new TeamPickAbility();
                     pick.team_number = tbaTeam.team_number;

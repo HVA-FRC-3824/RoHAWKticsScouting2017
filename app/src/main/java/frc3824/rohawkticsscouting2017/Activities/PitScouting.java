@@ -118,7 +118,7 @@ public class PitScouting extends Activity {
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         mFPA = new FPA_PitScouting(getFragmentManager());
-        TeamPitData team = mDatabase.getTPD(mTeamNumber);
+        TeamPitData team = mDatabase.getTeamPitData(mTeamNumber);
         if (team != null) {
             mFPA.setValueMap(team.toMap());
             mScoutName = team.scout_name;
@@ -557,7 +557,7 @@ public class PitScouting extends Activity {
             }
 
             TeamPitData team = new TeamPitData(map);
-            mDatabase.setTPD(team);
+            mDatabase.setTeamPitData(team);
 
             return null;
         }

@@ -104,7 +104,7 @@ public class SuperScouting extends Activity{
             mDrawerList = (ListView)findViewById(R.id.drawer_list);
             ArrayList<MatchNumberCheck> mncs = new ArrayList<>();
             for(int i = 1; i <= mDatabase.getNumberOfMatches(); i++){
-                if(mDatabase.getSMD(i) != null){
+                if(mDatabase.getSuperMatchData(i) != null){
                     mncs.add(new MatchNumberCheck(i, true));
                 } else {
                     mncs.add(new MatchNumberCheck(i));
@@ -125,7 +125,7 @@ public class SuperScouting extends Activity{
         // Set up tabs and pages for different fragments of a match
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         mFPA = new FPA_SuperScouting(getFragmentManager(), mMatchNumber);
-        SuperMatchData sm = mDatabase.getSMD(mMatchNumber);
+        SuperMatchData sm = mDatabase.getSuperMatchData(mMatchNumber);
         if (sm != null) {
             mFPA.setValueMap(sm.toMap());
             mScoutName = sm.scout_name;
@@ -554,7 +554,7 @@ public class SuperScouting extends Activity{
             map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
             map.put(Constants.Super_Scouting.SCOUT_NAME, mScoutName);
             SuperMatchData superMatchData = new SuperMatchData(map);
-            mDatabase.setSMD(superMatchData);
+            mDatabase.setSuperMatchData(superMatchData);
 
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             MessageQueue queue = MessageQueue.getInstance();

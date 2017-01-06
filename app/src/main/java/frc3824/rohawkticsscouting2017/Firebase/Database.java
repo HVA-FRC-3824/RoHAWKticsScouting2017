@@ -1,6 +1,5 @@
 package frc3824.rohawkticsscouting2017.Firebase;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -707,27 +706,26 @@ public class Database {
     //endregion
 
     //region Pit Scouting Data
-    public void setTPD(TeamPitData teamPitData)
-    {
+    public void setTeamPitData(TeamPitData teamPitData) {
         mTeamPitDataRef.child(String.format("%d", teamPitData.team_number)).setValue(teamPitData);
     }
 
-    public TeamPitData getTPD(int team_number)
+    public TeamPitData getTeamPitData(int team_number)
     {
         return mTeamPitDataMap.get(team_number);
     }
     //endregion
 
     //region Super Scouting Data
-    public void setSMD(SuperMatchData superMatchData) {
+    public void setSuperMatchData(SuperMatchData superMatchData) {
         mSuperMatchDataRef.child(String.format("%d", superMatchData.match_number)).setValue(superMatchData);
     }
 
-    public SuperMatchData getSMD(int match_number) {
+    public SuperMatchData getSuperMatchData(int match_number) {
         return mSuperMatchDataMap.get(String.format("%d",match_number));
     }
 
-    public Map<Integer, SuperMatchData> getSMDs() { return mSuperMatchDataMap; }
+    public Map<Integer, SuperMatchData> getAllSuperMatchData() { return mSuperMatchDataMap; }
     //endregion
 
     //region Drive Team Feedback Data
@@ -762,12 +760,11 @@ public class Database {
     //endregion
 
     //region Calculated data
-    public void setTCD(TeamCalculatedData teamCalculatedData)
-    {
+    public void setTeamCalculatedData(TeamCalculatedData teamCalculatedData) {
         mTeamCalulatedDataRef.child(String.format("%d", teamCalculatedData.team_number)).setValue(teamCalculatedData);
     }
 
-    public TeamCalculatedData getTCD(int team_number){ return mTeamCalculatedDataMap.get(team_number); }
+    public TeamCalculatedData getTeamCalculatedData(int team_number){ return mTeamCalculatedDataMap.get(team_number); }
     //endregion
 
     //region Pick List Data
@@ -890,7 +887,7 @@ public class Database {
         }
         Collections.sort(team.info.match_numbers);
 
-        team.pit = getTPD(team_number);
+        team.pit = getTeamPitData(team_number);
         if(team.pit == null)
         {
             team.pit = new TeamPitData();
@@ -904,7 +901,7 @@ public class Database {
             team.drive_team_feedback.team_number = team_number;
         }
 
-        team.calc = getTCD(team_number);
+        team.calc = getTeamCalculatedData(team_number);
         if(team.calc == null)
         {
             team.calc = new TeamCalculatedData();
@@ -960,9 +957,9 @@ public class Database {
 
     public void setTeam(Team team)
     {
-        setTCD(team.calc);
+        setTeamCalculatedData(team.calc);
         setTID(team.info);
-        setTPD(team.pit);
+        setTeamPitData(team.pit);
         setTDTF(team.drive_team_feedback);
         for(TeamMatchData entry: team.completed_matches.values())
         {

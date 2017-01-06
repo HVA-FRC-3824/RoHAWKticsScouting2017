@@ -229,6 +229,7 @@ public interface Constants {
             char SUPER_HEADER = 'S';
             char CALC_HEADER = 'C';
             char FEEDBACK_HEADER = 'F';
+            char SYNC_HEADER = 'R';
         }
 
         interface Device_Names

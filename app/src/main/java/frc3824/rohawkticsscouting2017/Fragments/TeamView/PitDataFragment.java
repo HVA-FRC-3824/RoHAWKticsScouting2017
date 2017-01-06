@@ -44,7 +44,7 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
     {
         View view = inflater.inflate(R.layout.fragment_team_view_pit_data, container, false);
 
-        TeamPitData team = Database.getInstance().getTPD(mTeamNumber);
+        TeamPitData team = Database.getInstance().getTeamPitData(mTeamNumber);
 
         if(team != null) {
             view.findViewById(R.id.left).setOnClickListener(this);

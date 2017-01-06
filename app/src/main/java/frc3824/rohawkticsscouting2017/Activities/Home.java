@@ -18,12 +18,15 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Comms.MessageQueue;
 import frc3824.rohawkticsscouting2017.Comms.ConnectThread;
+import frc3824.rohawkticsscouting2017.Comms.SocketThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
@@ -344,7 +347,7 @@ public class Home extends Activity implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.sync_feedback_button:
-                new SaveTask().execute(mDatabase.getTDTFs());
+                new SyncFeedbackTask().execute(mDatabase.getTDTFs());
                 break;
             case R.id.view_team_button:
                 intent = new Intent(this, TeamList.class);
@@ -471,12 +474,20 @@ public class Home extends Activity implements View.OnClickListener{
         button.setOnClickListener(this);
     }
 
-    private class SaveTask extends AsyncTask<ArrayList, Integer, Void> {
+    private class SyncFeedbackTask extends AsyncTask<ArrayList, Integer, Void> {
 
         @Override
         protected Void doInBackground(ArrayList... arrayLists) {
             ArrayList<TeamDTFeedback> teamDTFeedbacks = arrayLists[0];
+            if(mServerName.equals(Constants.Socket.SERVER)){
+                socketVersion(teamDTFeedbacks);
+            } else {
+                bluetoothVersion(teamDTFeedbacks);
+            }
+            return null;
+        }
 
+        private void bluetoothVersion(ArrayList<TeamDTFeedback> teamDTFeedbacks){
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             MessageQueue queue = MessageQueue.getInstance();
 
@@ -486,7 +497,7 @@ public class Home extends Activity implements View.OnClickListener{
                     queue.add(teamDTFeedback);
                 }
                 publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
-                return null;
+                return;
             }
 
             if (!bluetoothAdapter.isEnabled())
@@ -514,7 +525,7 @@ public class Home extends Activity implements View.OnClickListener{
                 for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
                     queue.add(teamDTFeedback);
                 }
-                return null;
+                return;
             }
 
             ConnectThread connectThread = new ConnectThread(server,true);
@@ -553,7 +564,59 @@ public class Home extends Activity implements View.OnClickListener{
             }
             connectThread.cancel();
 
-            return null;
+            return;
+        }
+
+        private void socketVersion(ArrayList<TeamDTFeedback> teamDTFeedbacks){
+            try {
+                Socket socket = new Socket("localhost", Constants.Socket.PORT);
+
+                MessageQueue queue = MessageQueue.getInstance();
+                SocketThread socketThread = new SocketThread(socket);
+                socketThread.start();
+                Gson gson = new GsonBuilder().create();
+                if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(teamDTFeedbacks))))
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                    List<String> queuedString = queue.getQueueList();
+                    queue.clear();
+                    boolean queueEmpty = true;
+                    for (String s: queuedString)
+                    {
+                        if(!socketThread.write(s))
+                        {
+                            queueEmpty = false;
+                            switch (s.charAt(0))
+                            {
+                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
+                                    break;
+                            }
+                        }
+                    }
+                    if(queueEmpty && queuedString.size() > 0)
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                    }
+                }
+                else
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
+                        queue.add(teamDTFeedback);
+                    }
+                }
+                socketThread.cancel();
+
+            } catch (IOException e) {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+            }
         }
 
         @Override
@@ -577,6 +640,111 @@ public class Home extends Activity implements View.OnClickListener{
                     break;
                 case Constants.Bluetooth.Data_Transfer_Status.FAILURE:
                     builder.setTitle("Data transfer failure (Added to Queue)");
+                    builder.setIcon(getDrawable(R.drawable.error_color));
+                    break;
+            }
+            builder.show();
+        }
+    }
+
+    private class SyncTask extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (mServerName.equals(Constants.Socket.SERVER)) {
+                socketVersion();
+            } else {
+                bluetoothVersion();
+            }
+            return null;
+        }
+
+        private void socketVersion(){
+            try {
+                Socket socket = new Socket("localhost", Constants.Socket.PORT);
+                SocketThread socketThread = new SocketThread(socket);
+                socketThread.start();
+                if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                }
+                else
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                }
+                socketThread.cancel();
+
+            } catch (IOException e) {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+            }
+        }
+
+        private void bluetoothVersion(){
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            MessageQueue queue = MessageQueue.getInstance();
+
+            if(bluetoothAdapter == null)
+            {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
+                return;
+            }
+
+            if (!bluetoothAdapter.isEnabled())
+            {
+                bluetoothAdapter.enable();
+                while (!bluetoothAdapter.isEnabled());
+            }
+
+            Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+
+            BluetoothDevice server = null;
+            for(BluetoothDevice device: devices)
+            {
+                String deviceName = device.getName();
+                if(deviceName.equals(mServerName))
+                {
+                    server = device;
+                    break;
+                }
+            }
+
+            if(server == null)
+            {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
+                return;
+            }
+
+            ConnectThread connectThread = new ConnectThread(server,true);
+            connectThread.start();
+            while (!connectThread.isConnected());
+            if (connectThread.write(String.format("%c", Constants.Bluetooth.Message_Headers.SYNC_HEADER))) {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+            } else {
+                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+            }
+            connectThread.cancel();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+            switch (values[0]) {
+                case Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH:
+                    builder.setTitle("No bluetooth on this device!!!");
+                    builder.setIcon(getDrawable(R.drawable.bluetooth_2_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED:
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND:
+                    builder.setTitle("Server not found");
+                    builder.setIcon(getDrawable(R.drawable.error_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.SUCCESS:
+                    builder.setTitle("Sync Request Successful");
+                    builder.setIcon(getDrawable(R.drawable.ok_color));
+                    break;
+                case Constants.Bluetooth.Data_Transfer_Status.FAILURE:
+                    builder.setTitle("Sync Request Failure");
                     builder.setIcon(getDrawable(R.drawable.error_color));
                     break;
             }

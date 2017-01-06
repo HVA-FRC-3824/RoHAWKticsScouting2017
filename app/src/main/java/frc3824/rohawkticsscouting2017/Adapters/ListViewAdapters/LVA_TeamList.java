@@ -62,7 +62,7 @@ public class LVA_TeamList extends ArrayAdapter<Integer>{
 
         switch (mTeamListType){
             case PIT_SCOUT:
-                if(mDatabase.getTPD(team_number) != null) {
+                if(mDatabase.getTeamPitData(team_number) != null) {
                     convertView.setBackgroundColor(Color.GREEN);
                 } else {
                     convertView.setBackgroundColor(Color.RED);

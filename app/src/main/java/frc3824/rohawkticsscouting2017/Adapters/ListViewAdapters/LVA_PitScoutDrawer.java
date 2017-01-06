@@ -46,7 +46,7 @@ public class LVA_PitScoutDrawer extends ArrayAdapter<Integer> {
         TextView tnView = (TextView)convertView.findViewById(R.id.team_number);
         tnView.setText(String.format("%d", team_number));
 
-        TeamPitData teamPitData = mDatabase.getTPD(team_number);
+        TeamPitData teamPitData = mDatabase.getTeamPitData(team_number);
 
         if(teamPitData != null){
             convertView.setBackgroundColor(Color.GREEN);

@@ -6,11 +6,20 @@ import android.os.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchStrategy;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -80,12 +89,12 @@ public class MessageHandler extends Handler {
                         displayText("Match Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.PIT_HEADER:
-                        mDatabase.setTPD(mGson.fromJson(message.substring(1), TeamPitData.class));
+                        mDatabase.setTeamPitData(mGson.fromJson(message.substring(1), TeamPitData.class));
                         displayText("Pit Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
                         SuperMatchData superMatchData = mGson.fromJson(message.substring(1), SuperMatchData.class);
-                        mDatabase.setSMD(superMatchData);
+                        mDatabase.setSuperMatchData(superMatchData);
                         dataReceived(superMatchData);
                         displayText("Super Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
@@ -95,18 +104,115 @@ public class MessageHandler extends Handler {
                         displayText("Feedback Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.CALC_HEADER:
-                        mDatabase.setTCD(mGson.fromJson(message.substring(1), TeamCalculatedData.class));
+                        mDatabase.setTeamCalculatedData(mGson.fromJson(message.substring(1), TeamCalculatedData.class));
                         displayText("Calculated Data Received", Constants.Server_Log_Colors.YELLOW);
+                        break;
+                    case Constants.Bluetooth.Message_Headers.SYNC_HEADER:
+                        try {
+                            JSONObject response = new JSONObject(message.substring(1));
+
+                            JSONArray jsonArray = response.getJSONArray("match");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject match = jsonArray.getJSONObject(i);
+                                mDatabase.setTeamMatchData(mGson.fromJson(match.toString(), TeamMatchData.class));
+                            }
+
+                            jsonArray = response.getJSONArray("pit");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject pit = jsonArray.getJSONObject(i);
+                                mDatabase.setTeamPitData(mGson.fromJson(pit.toString(), TeamPitData.class));
+                            }
+
+                            jsonArray = response.getJSONArray("super");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject super_ = jsonArray.getJSONObject(i);
+                                mDatabase.setSuperMatchData(mGson.fromJson(super_.toString(), SuperMatchData.class));
+                            }
+
+                            jsonArray = response.getJSONArray("calc");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject calc = jsonArray.getJSONObject(i);
+                                mDatabase.setTeamCalculatedData(mGson.fromJson(calc.toString(), TeamCalculatedData.class));
+                            }
+
+                            jsonArray = response.getJSONArray("1st");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject tpa = jsonArray.getJSONObject(i);
+                                mDatabase.setFirstTPA(mGson.fromJson(tpa.toString(), TeamPickAbility.class));
+                            }
+
+                            jsonArray = response.getJSONArray("2nd");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject tpa = jsonArray.getJSONObject(i);
+                                mDatabase.setSecondTPA(mGson.fromJson(tpa.toString(), TeamPickAbility.class));
+                            }
+
+                            jsonArray = response.getJSONArray("3rd");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject tpa = jsonArray.getJSONObject(i);
+                                mDatabase.setThirdTPA(mGson.fromJson(tpa.toString(), TeamPickAbility.class));
+                            }
+
+                            jsonArray = response.getJSONArray("current");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject trd = jsonArray.getJSONObject(i);
+                                mDatabase.setCurrentTRD(mGson.fromJson(trd.toString(), TeamRankingData.class));
+                            }
+
+                            jsonArray = response.getJSONArray("predicted");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject trd = jsonArray.getJSONObject(i);
+                                mDatabase.setPredictedTRD(mGson.fromJson(trd.toString(), TeamRankingData.class));
+                            }
+
+                            jsonArray = response.getJSONArray("accuracy");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject sa = jsonArray.getJSONObject(i);
+                                mDatabase.setScoutAccuracy(mGson.fromJson(sa.toString(), ScoutAccuracy.class));
+                            }
+
+                            jsonArray = response.getJSONArray("strategy");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject s = jsonArray.getJSONObject(i);
+                                mDatabase.setStrategy(mGson.fromJson(s.toString(), Strategy.class));
+                            }
+
+                            jsonArray = response.getJSONArray("match_strategy");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject ms = jsonArray.getJSONObject(i);
+                                mDatabase.setMatchStrategy(mGson.fromJson(ms.toString(), MatchStrategy.class));
+                            }
+                        } catch (JSONException e) {
+                           displayText("Error is parsing the response", Constants.Server_Log_Colors.RED);
+                        }
+                        displayText("Sync Response Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                 }
                 break;
         }
     }
 
-    public void displayText(String message){}
-    public void displayText(String message, String color){}
-    public void connectionAdded(String message){}
-    public void connectionLost(String message){}
-    public void dataReceived(TeamMatchData teamMatchData){}
-    public void dataReceived(SuperMatchData superMatchData){}
+    public void displayText(String message){
+
+    }
+
+    public void displayText(String message, String color){
+
+    }
+
+    public void connectionAdded(String message){
+
+    }
+
+    public void connectionLost(String message){
+
+    }
+
+    public void dataReceived(TeamMatchData teamMatchData){
+
+    }
+
+    public void dataReceived(SuperMatchData superMatchData){
+
+    }
 }
