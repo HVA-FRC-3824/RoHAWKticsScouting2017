@@ -118,7 +118,7 @@ public class Aggregate {
         Database database = Database.getInstance();
         Map<Integer, ZscoreTeam> teams = new HashMap<>();
 
-        for(SuperMatchData superMatchData : database.getAllSuperMatchData().values())
+        for(SuperMatchData superMatchData : database.getAllSuperMatchData())
         {
             for(int i = 0; i < 3; i++) {
                 if (!teams.containsKey(superMatchData.blue_speed.get(i))) {

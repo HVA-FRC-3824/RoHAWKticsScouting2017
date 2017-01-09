@@ -29,6 +29,7 @@ public class ConnectedThread extends Thread {
     private OutputStream mOutputStream;
     private int mState;
     private MessageHandler mHandler;
+    private boolean mMessageReceived;
     private boolean running;
 
     public ConnectedThread(BluetoothSocket socket, MessageHandler handler) {
@@ -47,6 +48,7 @@ public class ConnectedThread extends Thread {
             Log.e(TAG, "temp sockets not created", e);
         }
 
+        mMessageReceived = false;
         mInputStream = tmpIn;
         mOutputStream = tmpOut;
         mState = Constants.Bluetooth.RECEIVING;
@@ -115,7 +117,7 @@ public class ConnectedThread extends Thread {
                         // Send the digest back to the client as a confirmation
                         Log.v(TAG, "Sending back digest for confirmation");
                         mOutputStream.write(digest);
-
+                        mMessageReceived = true;
                     } else {
                         Log.e(TAG, "Digest did not match.  Corrupt transfer?");
                         mHandler.sendEmptyMessage(Constants.Bluetooth.Message_Type.DIGEST_DID_NOT_MATCH);
@@ -130,6 +132,10 @@ public class ConnectedThread extends Thread {
             cancel();
         }
         Log.i(TAG, "END ConnectedThread");
+    }
+
+    public boolean messageReceived(){
+        return mMessageReceived;
     }
 
     /**

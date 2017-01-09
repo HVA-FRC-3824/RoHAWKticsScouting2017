@@ -341,7 +341,7 @@ public class IndividualStrategyPlanning extends Activity implements View.OnClick
     private void openButtonClicked() {
         AlertDialog.Builder openDialog = new AlertDialog.Builder(this);
         openDialog.setTitle("Load strategy");
-        final ArrayList<Strategy> mStrategies = Database.getInstance().getStrategies();
+        final ArrayList<Strategy> mStrategies = Database.getInstance().getAllStrategies();
         LVA_Strategies lva = new LVA_Strategies(this, mStrategies);
         openDialog.setAdapter(lva, new DialogInterface.OnClickListener() {
             @Override

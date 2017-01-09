@@ -129,6 +129,10 @@ public class ConnectThread extends Thread {
         return mSocket != null && mSocket.isConnected();
     }
 
+    public boolean messageReceived(){
+        return mConnectedThread != null && mConnectedThread.messageReceived();
+    }
+
     public void cancel() {
         mConnectedThread.cancel();
         mConnectedThread = null;

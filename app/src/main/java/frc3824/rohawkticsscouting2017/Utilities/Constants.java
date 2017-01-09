@@ -230,6 +230,8 @@ public interface Constants {
             char CALC_HEADER = 'C';
             char FEEDBACK_HEADER = 'F';
             char SYNC_HEADER = 'R';
+            char STRATEGY_HEADER = 'T';
+            char MATCH_STRATEGY_HEADER = 'A';
         }
 
         interface Device_Names

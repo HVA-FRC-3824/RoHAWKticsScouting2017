@@ -100,7 +100,7 @@ public class MessageHandler extends Handler {
                         break;
                     case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
                         TeamDTFeedback teamDTFeedback = mGson.fromJson(message.substring(1), TeamDTFeedback.class);
-                        mDatabase.setTDTF(teamDTFeedback);
+                        mDatabase.setTeamDTFeedback(teamDTFeedback);
                         displayText("Feedback Data Received", Constants.Server_Log_Colors.YELLOW);
                         break;
                     case Constants.Bluetooth.Message_Headers.CALC_HEADER:

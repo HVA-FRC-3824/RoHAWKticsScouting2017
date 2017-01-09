@@ -55,6 +55,7 @@ public class Home extends Activity implements View.OnClickListener{
     private TextView mUserTypeTextView;
     private TextView mUserSubTypeTextView;
 
+    private String mUserType;
     private String mEventKey;
     private String mServerName;
 
@@ -64,7 +65,7 @@ public class Home extends Activity implements View.OnClickListener{
     private boolean mAdminOpenButton;
 
     /**
-     *
+     *  Sets up what buttons to display on the home screen
      *
      * @param savedInstanceState
      */
@@ -78,7 +79,7 @@ public class Home extends Activity implements View.OnClickListener{
         setupImageButton(R.id.settings_button);
 
         mSharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        String user_type = mSharedPreferences.getString(Constants.Settings.USER_TYPE, "");
+        mUserType = mSharedPreferences.getString(Constants.Settings.USER_TYPE, "");
         mEventKey = mSharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
         mServerName = mSharedPreferences.getString(Constants.Settings.SERVER, "");
 
@@ -86,7 +87,8 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView = (TextView)findViewById(R.id.user_type);
         mUserSubTypeTextView = (TextView)findViewById(R.id.user_subtype);
 
-        switch (user_type)
+        // Run the setup function for the usr type
+        switch (mUserType)
         {
             case Constants.User_Types.MATCH_SCOUT:
                 userTypeMatchScoutSetup();
@@ -111,6 +113,7 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
         }
 
+        // Setup the database or reload it (to make the schedule and button list work)
         if(mEventKey != "") {
             mDatabase = Database.getInstance(mEventKey);
             Storage.getInstance(mEventKey);
@@ -120,14 +123,19 @@ public class Home extends Activity implements View.OnClickListener{
             Database.getInstance();
             Storage.getInstance();
         }
-        //Authentication.getInstance();
     }
 
     //region User Type Setups
+
+    /**
+     * Setup function if the user is a match scout
+     */
     private void userTypeMatchScoutSetup() {
         setupImageButton(R.id.schedule_button);
         setupImageButton(R.id.scout_match_button);
         setupButton(R.id.scouting_open_button);
+
+        setupImageButton(R.id.sync_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -156,10 +164,15 @@ public class Home extends Activity implements View.OnClickListener{
         mScoutingOpenButton = false;
     }
 
+    /**
+     * Setup function if the user is a pit scout
+     */
     private void userTypePitScoutSetup() {
         setupImageButton(R.id.schedule_button);
         setupImageButton(R.id.scout_pit_button);
         setupButton(R.id.scouting_open_button);
+
+        setupImageButton(R.id.sync_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -175,10 +188,15 @@ public class Home extends Activity implements View.OnClickListener{
         mScoutingOpenButton = false;
     }
 
+    /**
+     * Setup if the user is a super scout
+     */
     private void userTypeSuperScoutSetup() {
         setupImageButton(R.id.schedule_button);
         setupImageButton(R.id.scout_super_button);
         setupButton(R.id.scouting_open_button);
+
+        setupImageButton(R.id.sync_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -190,11 +208,13 @@ public class Home extends Activity implements View.OnClickListener{
         mScoutingOpenButton = false;
     }
 
+    /**
+     * Setup if the user is a drive team member
+     */
     private void userTypeDriveTeamSetup() {
         setupImageButton(R.id.schedule_button);
         setupImageButton(R.id.match_planning_button);
         setupImageButton(R.id.drive_team_feedback_button);
-        setupImageButton(R.id.sync_feedback_button);
         setupButton(R.id.scouting_open_button);
 
         setupImageButton(R.id.view_team_button);
@@ -202,6 +222,8 @@ public class Home extends Activity implements View.OnClickListener{
         setupImageButton(R.id.view_notes_button);
         setupImageButton(R.id.view_rankings_button);
         setupButton(R.id.strategy_open_button);
+
+        setupImageButton(R.id.sync_button);
 
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
@@ -218,10 +240,11 @@ public class Home extends Activity implements View.OnClickListener{
         mPickListOpenButton = false;
     }
 
+    /**
+     * Setup if the user is strategy team member
+     */
     private void userTypeStrategySetup() {
         setupImageButton(R.id.schedule_button);
-
-        setupImageButton(R.id.sync_feedback_button);
 
         setupImageButton(R.id.view_team_button);
         setupImageButton(R.id.view_match_button);
@@ -233,6 +256,8 @@ public class Home extends Activity implements View.OnClickListener{
         setupButton(R.id.pick_list_open_button);
 
         setupImageButton(R.id.match_planning_button);
+
+        setupImageButton(R.id.sync_button);
 
         setupImageButton(R.id.aggregate_button);
 
@@ -249,6 +274,9 @@ public class Home extends Activity implements View.OnClickListener{
         mPickListOpenButton = false;
     }
 
+    /**
+     * Setup if this tablet is running as the server
+     */
     private void userTypeServerSetup() {
         setupImageButton(R.id.schedule_button);
         setupImageButton(R.id.server_button);
@@ -260,13 +288,15 @@ public class Home extends Activity implements View.OnClickListener{
         mUserTypeTextView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Setup if the user is an admin
+     */
     private void userTypeAdminSetup() {
         setupImageButton(R.id.schedule_button);
         setupImageButton(R.id.scout_match_button);
         setupImageButton(R.id.scout_pit_button);
         setupImageButton(R.id.scout_super_button);
         setupImageButton(R.id.drive_team_feedback_button);
-        setupImageButton(R.id.sync_feedback_button);
         setupButton(R.id.scouting_open_button);
 
         setupImageButton(R.id.view_team_button);
@@ -289,6 +319,8 @@ public class Home extends Activity implements View.OnClickListener{
         setupImageButton(R.id.scouting_accuracy_button);
         setupButton(R.id.admin_open_button);
 
+        setupImageButton(R.id.sync_button);
+
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
 
@@ -310,7 +342,7 @@ public class Home extends Activity implements View.OnClickListener{
     //endregion
 
     /**
-     *
+     * Function that handles button clicks
      * @param view
      */
     @Override
@@ -345,9 +377,6 @@ public class Home extends Activity implements View.OnClickListener{
                 intent = new Intent(this, MatchList.class);
                 intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.DRIVE_TEAM_FEEDBACK);
                 startActivity(intent);
-                break;
-            case R.id.sync_feedback_button:
-                new SyncFeedbackTask().execute(mDatabase.getTDTFs());
                 break;
             case R.id.view_team_button:
                 intent = new Intent(this, TeamList.class);
@@ -474,179 +503,9 @@ public class Home extends Activity implements View.OnClickListener{
         button.setOnClickListener(this);
     }
 
-    private class SyncFeedbackTask extends AsyncTask<ArrayList, Integer, Void> {
-
-        @Override
-        protected Void doInBackground(ArrayList... arrayLists) {
-            ArrayList<TeamDTFeedback> teamDTFeedbacks = arrayLists[0];
-            if(mServerName.equals(Constants.Socket.SERVER)){
-                socketVersion(teamDTFeedbacks);
-            } else {
-                bluetoothVersion(teamDTFeedbacks);
-            }
-            return null;
-        }
-
-        private void bluetoothVersion(ArrayList<TeamDTFeedback> teamDTFeedbacks){
-            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            MessageQueue queue = MessageQueue.getInstance();
-
-            if(bluetoothAdapter == null)
-            {
-                for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
-                    queue.add(teamDTFeedback);
-                }
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
-                return;
-            }
-
-            if (!bluetoothAdapter.isEnabled())
-            {
-                bluetoothAdapter.enable();
-                while (!bluetoothAdapter.isEnabled());
-            }
-
-            Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
-
-            BluetoothDevice server = null;
-            for(BluetoothDevice device: devices)
-            {
-                String deviceName = device.getName();
-                if(deviceName.equals(mServerName))
-                {
-                    server = device;
-                    break;
-                }
-            }
-
-            if(server == null)
-            {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
-                for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
-                    queue.add(teamDTFeedback);
-                }
-                return;
-            }
-
-            ConnectThread connectThread = new ConnectThread(server,true);
-            connectThread.start();
-            while (!connectThread.isConnected());
-            Gson gson = new GsonBuilder().create();
-            for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
-                if (connectThread.write(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(teamDTFeedback)))) {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
-                    List<String> queuedString = queue.getQueueList();
-                    queue.clear();
-                    boolean queueEmpty = true;
-                    for (String s : queuedString) {
-                        if (!connectThread.write(s)) {
-                            queueEmpty = false;
-                            switch (s.charAt(0)) {
-                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
-                                    break;
-                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
-                                    break;
-                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
-                                    break;
-                            }
-                        }
-                    }
-                    if (queueEmpty && queuedString.size() > 0) {
-                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
-                    }
-                } else {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                    queue.add(teamDTFeedback);
-                }
-            }
-            connectThread.cancel();
-
-            return;
-        }
-
-        private void socketVersion(ArrayList<TeamDTFeedback> teamDTFeedbacks){
-            try {
-                Socket socket = new Socket("localhost", Constants.Socket.PORT);
-
-                MessageQueue queue = MessageQueue.getInstance();
-                SocketThread socketThread = new SocketThread(socket);
-                socketThread.start();
-                Gson gson = new GsonBuilder().create();
-                if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(teamDTFeedbacks))))
-                {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
-                    List<String> queuedString = queue.getQueueList();
-                    queue.clear();
-                    boolean queueEmpty = true;
-                    for (String s: queuedString)
-                    {
-                        if(!socketThread.write(s))
-                        {
-                            queueEmpty = false;
-                            switch (s.charAt(0))
-                            {
-                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
-                                    break;
-                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
-                                    break;
-                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
-                                    queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
-                                    break;
-                            }
-                        }
-                    }
-                    if(queueEmpty && queuedString.size() > 0)
-                    {
-                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
-                    }
-                }
-                else
-                {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                    for(TeamDTFeedback teamDTFeedback : teamDTFeedbacks) {
-                        queue.add(teamDTFeedback);
-                    }
-                }
-                socketThread.cancel();
-
-            } catch (IOException e) {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
-            switch (values[0])
-            {
-                case Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH:
-                    builder.setTitle("No bluetooth on this device!!!");
-                    builder.setIcon(getDrawable(R.drawable.bluetooth_2_color));
-                    break;
-                case Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED:
-                    break;
-                case Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND:
-                    builder.setTitle("Server not found");
-                    builder.setIcon(getDrawable(R.drawable.error_color));
-                    break;
-                case Constants.Bluetooth.Data_Transfer_Status.SUCCESS:
-                    builder.setTitle("Data transfer successful");
-                    builder.setIcon(getDrawable(R.drawable.ok_color));
-                    break;
-                case Constants.Bluetooth.Data_Transfer_Status.FAILURE:
-                    builder.setTitle("Data transfer failure (Added to Queue)");
-                    builder.setIcon(getDrawable(R.drawable.error_color));
-                    break;
-            }
-            builder.show();
-        }
-    }
-
+    /**
+     * Asynchronous task the handles asking for data from the server using bluetooth or usb socket
+     */
     private class SyncTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
@@ -659,19 +518,145 @@ public class Home extends Activity implements View.OnClickListener{
             return null;
         }
 
+        /**
+         * Handles syncing if using usb sockets
+         */
         private void socketVersion(){
             try {
                 Socket socket = new Socket("localhost", Constants.Socket.PORT);
                 SocketThread socketThread = new SocketThread(socket);
                 socketThread.start();
-                if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
-                {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                Gson gson = new GsonBuilder().create();
+                switch (mUserType){
+                    case Constants.User_Types.ADMIN:
+                        if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+                        break;
+                    case Constants.User_Types.STRATEGY:
+                        if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.STRATEGY_HEADER, gson.toJson(mDatabase.getAllStrategies()))))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+
+                        if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_STRATEGY_HEADER, gson.toJson(mDatabase.getAllMatchStrategies()))))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+
+
+                        if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+                        break;
+                    case Constants.User_Types.DRIVE_TEAM:
+                        if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(mDatabase.getAllTeamDTFeedbacks()))))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+
+                        if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+                        break;
+                    case Constants.User_Types.MATCH_SCOUT:
+                        if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(mDatabase.getAllTeamMatchData()))))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+
+                        if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+                        break;
+                    case Constants.User_Types.PIT_SCOUT:
+                        if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.PIT_HEADER, gson.toJson(mDatabase.getAllTeamPitData()))))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+
+                        if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+                        break;
+                    case Constants.User_Types.SUPER_SCOUT:
+                        if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(mDatabase.getAllSuperMatchData()))))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+
+                        if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                            while (!socketThread.messageReceived());
+                        }
+                        else
+                        {
+                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                        }
+                        break;
                 }
-                else
-                {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                }
+
                 socketThread.cancel();
 
             } catch (IOException e) {
@@ -679,6 +664,9 @@ public class Home extends Activity implements View.OnClickListener{
             }
         }
 
+        /**
+         * Handles syncing if using bluetooth
+         */
         private void bluetoothVersion(){
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             MessageQueue queue = MessageQueue.getInstance();
@@ -717,13 +705,139 @@ public class Home extends Activity implements View.OnClickListener{
             ConnectThread connectThread = new ConnectThread(server,true);
             connectThread.start();
             while (!connectThread.isConnected());
-            if (connectThread.write(String.format("%c", Constants.Bluetooth.Message_Headers.SYNC_HEADER))) {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
-            } else {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+            Gson gson = new GsonBuilder().create();
+            switch (mUserType){
+                case Constants.User_Types.ADMIN:
+                    if(connectThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+                    break;
+                case Constants.User_Types.STRATEGY:
+                    if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.STRATEGY_HEADER, gson.toJson(mDatabase.getAllStrategies()))))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+
+                    if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_STRATEGY_HEADER, gson.toJson(mDatabase.getAllMatchStrategies()))))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+
+
+                    if(connectThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+                    break;
+                case Constants.User_Types.DRIVE_TEAM:
+                    if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, gson.toJson(mDatabase.getAllTeamDTFeedbacks()))))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+
+                    if(connectThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+                    break;
+                case Constants.User_Types.MATCH_SCOUT:
+                    if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(mDatabase.getAllTeamMatchData()))))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+
+                    if(connectThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+                    break;
+                case Constants.User_Types.PIT_SCOUT:
+                    if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.PIT_HEADER, gson.toJson(mDatabase.getAllTeamPitData()))))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+
+                    if(connectThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+                    break;
+                case Constants.User_Types.SUPER_SCOUT:
+                    if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(mDatabase.getAllSuperMatchData()))))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+
+                    if(connectThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                        while (!connectThread.messageReceived());
+                    }
+                    else
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    }
+                    break;
             }
             connectThread.cancel();
         }
+
 
         @Override
         protected void onProgressUpdate(Integer... values) {

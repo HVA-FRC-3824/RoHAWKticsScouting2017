@@ -58,7 +58,7 @@ public class ViewNotesFragment extends Fragment{
             }
         }
 
-        TeamDTFeedback teamDTFeedback = database.getTDTF(mTeamNumber);
+        TeamDTFeedback teamDTFeedback = database.getTeamDTFeedback(mTeamNumber);
         String feedbackText = "";
         if(teamDTFeedback != null && teamDTFeedback.feedback != null) {
             for (Map.Entry<Integer, String> entry : teamDTFeedback.feedback.entrySet()) {

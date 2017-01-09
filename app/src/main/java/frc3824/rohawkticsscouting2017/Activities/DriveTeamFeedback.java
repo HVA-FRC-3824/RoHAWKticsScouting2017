@@ -259,7 +259,7 @@ public class DriveTeamFeedback extends Activity {
      * Saves the current data
      */
     private void save_press() {
-        TeamDTFeedback teamDTFeedback1 = mDatabase.getTDTF(mPartner1);
+        TeamDTFeedback teamDTFeedback1 = mDatabase.getTeamDTFeedback(mPartner1);
         if(teamDTFeedback1 == null)
         {
             teamDTFeedback1 = new TeamDTFeedback();
@@ -268,7 +268,7 @@ public class DriveTeamFeedback extends Activity {
         }
         teamDTFeedback1.feedback.put(mMatchNumber, mPartner1Note.getText().toString());
 
-        TeamDTFeedback teamDTFeedback2 = mDatabase.getTDTF(mPartner2);
+        TeamDTFeedback teamDTFeedback2 = mDatabase.getTeamDTFeedback(mPartner2);
         if(teamDTFeedback2 == null)
         {
             teamDTFeedback2 = new TeamDTFeedback();

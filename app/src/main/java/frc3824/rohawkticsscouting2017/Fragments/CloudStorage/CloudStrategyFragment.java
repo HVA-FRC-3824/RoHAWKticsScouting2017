@@ -21,7 +21,7 @@ public class CloudStrategyFragment extends CloudImageFragment{
     private final static String TAG = "CloudStrategyFragment";
 
     protected void setupLva(ListView listView, boolean internet){
-        ArrayList<Strategy> strategies = mDatabase.getStrategies();
+        ArrayList<Strategy> strategies = mDatabase.getAllStrategies();
         getCloudImages(strategies, internet);
 
         LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs, Constants.Cloud.STRATEGY);

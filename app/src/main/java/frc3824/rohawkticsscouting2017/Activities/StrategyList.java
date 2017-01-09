@@ -44,7 +44,7 @@ public class StrategyList extends Activity implements View.OnClickListener {
 
         Database database = Database.getInstance();
 
-        ArrayList<Strategy> strategies = database.getStrategies();
+        ArrayList<Strategy> strategies = database.getAllStrategies();
         strategies.add(0, new Strategy()); // To be replaced with button
         mIndividualList.setAdapter(new LVA_IndividualStrategy(this, strategies));
 

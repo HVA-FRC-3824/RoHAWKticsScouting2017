@@ -703,6 +703,10 @@ public class Database {
     public TeamMatchData getTeamMatchData(int match_number, int team_number) {
         return mTeamMatchDataMap.get(String.format("%d_%d", match_number, team_number));
     }
+
+    public ArrayList<TeamMatchData> getAllTeamMatchData(){
+        return new ArrayList<>(mTeamMatchDataMap.values());
+    }
     //endregion
 
     //region Pit Scouting Data
@@ -713,6 +717,10 @@ public class Database {
     public TeamPitData getTeamPitData(int team_number)
     {
         return mTeamPitDataMap.get(team_number);
+    }
+
+    public ArrayList<TeamPitData> getAllTeamPitData(){
+        return new ArrayList<>(mTeamPitDataMap.values());
     }
     //endregion
 
@@ -725,20 +733,21 @@ public class Database {
         return mSuperMatchDataMap.get(String.format("%d",match_number));
     }
 
-    public Map<Integer, SuperMatchData> getAllSuperMatchData() { return mSuperMatchDataMap; }
+    public ArrayList<SuperMatchData> getAllSuperMatchData() {
+        return new ArrayList<>(mSuperMatchDataMap.values());
+    }
     //endregion
 
     //region Drive Team Feedback Data
-    public void setTDTF(TeamDTFeedback teamDTFeedback) {
+    public void setTeamDTFeedback(TeamDTFeedback teamDTFeedback) {
         mTeamDTFeedbackRef.child(String.format("%d", teamDTFeedback.team_number)).setValue(teamDTFeedback);
     }
 
-    public TeamDTFeedback getTDTF(int team_number)
-    {
+    public TeamDTFeedback getTeamDTFeedback(int team_number) {
         return mTeamDTFeedbackMap.get(String.format("%d", team_number));
     }
 
-    public ArrayList<TeamDTFeedback> getTDTFs() {
+    public ArrayList<TeamDTFeedback> getAllTeamDTFeedbacks() {
         return new ArrayList<>(mTeamDTFeedbackMap.values());
     }
     //endregion
@@ -894,7 +903,7 @@ public class Database {
             team.pit.team_number = team_number;
         }
 
-        team.drive_team_feedback = getTDTF(team_number);
+        team.drive_team_feedback = getTeamDTFeedback(team_number);
         if(team.drive_team_feedback == null)
         {
             team.drive_team_feedback = new TeamDTFeedback();
@@ -960,7 +969,7 @@ public class Database {
         setTeamCalculatedData(team.calc);
         setTID(team.info);
         setTeamPitData(team.pit);
-        setTDTF(team.drive_team_feedback);
+        setTeamDTFeedback(team.drive_team_feedback);
         for(TeamMatchData entry: team.completed_matches.values())
         {
             setTeamMatchData(entry);
@@ -998,7 +1007,7 @@ public class Database {
         return mIndividualStrategyMap.get(strategy_name);
     }
 
-    public ArrayList<Strategy> getStrategies() {
+    public ArrayList<Strategy> getAllStrategies() {
         return new ArrayList<>(mIndividualStrategyMap.values());
     }
     //endregion
@@ -1010,6 +1019,10 @@ public class Database {
 
     public MatchStrategy getMatchStrategy(int match_number) {
         return mMatchStrategyMap.get(String.valueOf(match_number));
+    }
+
+    public ArrayList<MatchStrategy> getAllMatchStrategies(){
+        return new ArrayList<>(mMatchStrategyMap.values());
     }
     //endregion
 
