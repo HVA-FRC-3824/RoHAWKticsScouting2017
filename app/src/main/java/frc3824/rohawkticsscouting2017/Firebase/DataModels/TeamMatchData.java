@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.HashMap;
+
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
@@ -30,9 +32,17 @@ public class TeamMatchData {
 
     // Autonomous
     public int auto_points; // calculated by server
+    public boolean auto_baseline;
+    public Gears auto_gears;
+    public Shots auto_shots;
+    public int auto_hoppers;
 
     // Teleop
     public int teleop_points; // calculated by server
+    public Gears teleop_gears;
+    public Shots teleop_shots;
+    public int teleop_hoppers;
+    public int teleop_picked_up_gears;
 
     // Endgame
     public int endgame_points; // calculated by server
@@ -51,6 +61,10 @@ public class TeamMatchData {
 
     public TeamMatchData() {
         total_points = -1; // Required for determining if point calculation have been made on the server
+        auto_gears = new Gears();
+        teleop_gears = new Gears();
+        auto_shots = new Shots();
+        teleop_shots = new Shots();
     }
 
     public TeamMatchData(ScoutMap map) {
@@ -62,7 +76,16 @@ public class TeamMatchData {
             scout_name = map.getString(Constants.Match_Scouting.SCOUT_NAME);
 
             // GAME SPECIFIC
+            auto_baseline = map.getBoolean(Constants.Match_Scouting.Autonomous.AUTO_BASELINE);
+            auto_gears = (Gears)map.getObject(Constants.Match_Scouting.Autonomous.AUTO_GEARS);
+            auto_shots = (Shots)map.getObject(Constants.Match_Scouting.Autonomous.AUTO_SHOTS);
+            auto_hoppers = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HOPPERS);
 
+            teleop_gears = (Gears)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_GEARS);
+            teleop_shots = (Shots)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_SHOTS);
+            teleop_hoppers = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HOPPERS);
+            teleop_picked_up_gears = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_PICKED_UP_GEARS);
+            ////////////////
 
             fouls = map.getInt(Constants.Match_Scouting.Fouls.FOUL);
             tech_fouls = map.getInt(Constants.Match_Scouting.Fouls.TECH_FOUL);

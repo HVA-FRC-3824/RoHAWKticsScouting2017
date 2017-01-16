@@ -5,6 +5,12 @@
 
 
     <!-- Spinner Values -->
+    <string-array name="endgame_climb_options">
+        <item>No attempt</item>
+        <item>Did not finish in time</item>
+        <item>Robot fell</item>
+        <item>Successful</item>
+    </string-array>
 
 
     <!-- AutoComplete Values -->
@@ -15,6 +21,25 @@
         <!-- The above should really be the only options -->
         <item>Python</item>
         <item>C#</item>
+    </string-array>
+
+    <!-- Tags Values -->
+    <string-array name="post_tags_keys">
+        <item>_blocked_shots</item>
+        <item>_pinned_robot</item>
+        <item>_defended_loading_station</item>
+        <item>_defended_airship</item>
+        <item>_broke</item>
+        <item>_dumped_all_hoppers</item>
+    </string-array>
+
+    <string-array name="post_tags_labels">
+        <item>blocked shots</item>
+        <item>pinned robot</item>
+        <item>defended loading station</item>
+        <item>defended airship</item>
+        <item>broke</item>
+        <item>dumped all hoppers</item>
     </string-array>
 
 

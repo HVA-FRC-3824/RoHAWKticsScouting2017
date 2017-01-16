@@ -367,6 +367,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/navy_blue"
             android:visibility="gone"
+            app:src="@drawable/replace_color"
             app:text="Sync"
             app:textColor="@color/white"
             app:textSize="10sp" />
@@ -394,41 +395,5 @@
             app:text="Settings"
             app:textColor="@color/white"
             app:textSize="10sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                android:textColor="@color/black" />
-
-            <ImageView
-                android:id="@+id/wifi_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/wifi_black" />
-
-            <ImageView
-                android:id="@+id/bluetooth_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/bluetooth_black" />
-
-            <ImageView
-                android:id="@+id/usb_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/usb_off_color" />
-
-            <ImageView
-                android:id="@+id/auth_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/id_not_verified_color" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

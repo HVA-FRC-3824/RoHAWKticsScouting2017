@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_vertical_margin">
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/cross_base_line"
+        app:key="cross_base_line"
+        app:label="Crossed Base Line" />
+
+    <frc3824.rohawkticsscouting2017.Views.Steamworks.GearsInput
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/auto_gears"
+        app:key="auto_gears"
+        app:label="Gears" />
+
+    <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/auto_shots"
+        app:key="auto_shots" />
+    <!-- ^ Label not needed -->
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCounter
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/auto_hoppers"
+        app:key="auto_hoppers"
+        app:label="Hoppers Actived" />
 
 </LinearLayout>

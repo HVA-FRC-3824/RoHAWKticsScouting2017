@@ -10,7 +10,7 @@ import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/11/16
  *
  * Fragment that contains all the widgets for the information input after a match
@@ -23,8 +23,7 @@ public class PostMatchFragment extends ScoutFragment{
     }
 
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_match, container, false);
         if(mValueMap != null)
         {

@@ -108,14 +108,29 @@ public interface Constants {
 
         interface Autonomous {
             // GAME SPECIFIC
+            String AUTO_BASELINE = "auto_baseline";
+            String AUTO_GEARS = "auto_gears";
+            String AUTO_SHOTS = "auto_shots";
+            String AUTO_HOPPERS = "auto_hoppers";
         }
 
         interface Teleop {
             // GAME SPECIFIC
+            String TELEOP_GEARS = "teleop_gears";
+            String TELEOP_SHOTS = "teleop_shots";
+            String TELEOP_HOPPERS = "teleop_hoppers";
+            String TELEOP_PICKED_UP_GEARS = "teleop_picked_up_gears";
         }
 
         interface Endgame {
             // GAME SPECIFIC
+            String ENDGAME_CLIMB = "endgame_climb";
+            interface CLIMB_OPTIONS {
+                String NO_ATTEMPT = "No attempt";
+                String DID_NOT_FINISH_IN_TIME = "Did not finish in time";
+                String ROBOT_FELL = "Robot fell";
+                String SUCCESSFUL = "Successful";
+            }
         }
 
         interface Fouls {
@@ -130,6 +145,32 @@ public interface Constants {
             String STOPPED_MOVING = "post_stopped";
             String NO_SHOW = "post_no_show";
             String NOTES = "post_notes";
+            // TAGS
+            String TAGS = "post_tags";
+            interface Tags{
+                String BLOCK_SHOTS = "_blocked_shots";
+                String PINNED_ROBOT = "_pinned_robot";
+                String DEFENDED_LOADING_STATION = "_defended_loading_station";
+                String DEFENDED_AIRSHIP = "_defended_airship";
+                String BROKE = "_broke";
+                String DUMPED_ALL_HOPPERS = "_dumped_all_hoppers";
+            }
+        }
+
+        interface Custom {
+            interface Gears{
+                String FAR = "far";
+                String CENTER = "center";
+                String NEAR = "near";
+                String[] LOCATIONS = {FAR, CENTER, NEAR};
+            }
+
+            interface Shots{
+                String FAR = "far";
+                String CENTER = "center";
+                String NEAR = "near";
+                String[] LOCATIONS = {FAR, CENTER, NEAR};
+            }
         }
     }
 

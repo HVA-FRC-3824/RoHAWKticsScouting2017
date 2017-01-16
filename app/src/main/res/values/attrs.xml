@@ -18,6 +18,11 @@
         <attr name="autocomplete_values" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="SavableTags">
+        <attr name="labels" format="reference"/>
+        <attr name="keys" format="reference"/>
+    </declare-styleable>
+
     <declare-styleable name="ImageTextButton">
         <attr name="text" format="string"/>
         <attr name="textColor" format="color"/>

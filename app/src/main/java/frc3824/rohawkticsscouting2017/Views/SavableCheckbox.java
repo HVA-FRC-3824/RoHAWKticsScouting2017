@@ -35,11 +35,26 @@ public class SavableCheckbox extends SavableView implements View.OnClickListener
         mCheckbox = (CheckBox)findViewById(R.id.checkbox);
 
         // Set label and get key
-        TextView label = (TextView)findViewById(R.id.label);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
-        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        ((TextView)findViewById(R.id.label)).setText(typedArray.getString(R.styleable.SavableView_label));
         mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
+
+        // Clicking anywhere on the widget will affect the checkbox
+        setOnClickListener(this);
+    }
+
+    public SavableCheckbox(Context context, String label, String key) {
+        super(context, null);
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater.inflate(R.layout.savable_checkbox, this);
+
+        mCheckbox = (CheckBox)findViewById(R.id.checkbox);
+
+        // Set label and get key
+        ((TextView)findViewById(R.id.label)).setText(label);
+        mKey = key;
 
         // Clicking anywhere on the widget will affect the checkbox
         setOnClickListener(this);

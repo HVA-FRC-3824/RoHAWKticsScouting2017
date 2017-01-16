@@ -2,7 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin">
+
+    <frc3824.rohawkticsscouting2017.Views.Steamworks.GearsInput
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_gears"
+        app:key="teleop_gears"
+        app:label="Gears" />
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCounter
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_gears_picked_up"
+        app:key="teleop_picked_up_gears"
+        app:label="Gears picked up"/>
+
+    <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_shots"
+        app:key="teleop_shots"/>
+
+    <frc3824.rohawkticsscouting2017.Views.SavableCounter
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_hoppers"
+        app:key="teleop_hoppers"
+        app:label="Hoppers"/>
 
 </LinearLayout>
