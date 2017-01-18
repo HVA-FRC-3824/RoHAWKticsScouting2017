@@ -131,16 +131,23 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
                     gear.location = mLocationList.get(mLocation.getSelectedItemPosition());
                     gear.placed = mPlaced.isChecked();
                     gear.dropped = mDropped.isChecked();
-                    if(!(gear.placed || gear.dropped)){
+                    if(!(gear.placed || gear.dropped) || gear.placed && gear.dropped){
                         return;
                     }
                     mGears.set(whichGear, gear);
-                    gear = mGears.get(whichGear + 1);
+                    if(whichGear + 1 < mGears.size()) {
+                        gear = mGears.get(whichGear + 1);
 
-                    mLocation.setSelection(mLocationList.indexOf(gear.location));
-                    mPlaced.setChecked(gear.placed);
-                    mDropped.setChecked(gear.dropped);
-                    numGears.check(whichGear + 1);
+                        mLocation.setSelection(mLocationList.indexOf(gear.location));
+                        mPlaced.setChecked(gear.placed);
+                        mDropped.setChecked(gear.dropped);
+                        numGears.check(whichGear + 1);
+                    } else {
+                        mLocation.setSelection(0);
+                        mPlaced.setChecked(false);
+                        mDropped.setChecked(false);
+                        numGears.check(whichGear + 1);
+                    }
 
                 break;
             case R.id.add_button:
@@ -148,7 +155,7 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
                     gear.location = mLocationList.get(mLocation.getSelectedItemPosition());
                     gear.placed = mPlaced.isChecked();
                     gear.dropped = mDropped.isChecked();
-                    if(!(gear.placed || gear.dropped)){
+                    if(!(gear.placed || gear.dropped) || gear.placed && gear.dropped){
                         return;
                     }
                     mGears.add(gear);
@@ -167,11 +174,11 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
                 numGears.removeViewAt(lastRadio);
                 numGears.check(whichGear);
                 if (whichGear < mGears.size()) {
-                        gear = mGears.get(whichGear);
+                    gear = mGears.get(whichGear);
 
-                        mLocation.setSelection(mLocationList.indexOf(gear.location));
-                        mPlaced.setChecked(gear.placed);
-                        mDropped.setChecked(gear.dropped);
+                    mLocation.setSelection(mLocationList.indexOf(gear.location));
+                    mPlaced.setChecked(gear.placed);
+                    mDropped.setChecked(gear.dropped);
                 } else {
                     mLocation.setSelection(0);
                     mPlaced.setChecked(false);

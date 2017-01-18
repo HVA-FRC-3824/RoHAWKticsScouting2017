@@ -23,12 +23,43 @@ public class TeamCalculatedData {
 
     // Autonomous
     public LowLevelStats auto_points;
+    public LowLevelStats auto_baseline;
+    public LowLevelStats auto_total_gears_placed;
+    public LowLevelStats auto_near_gears_placed;
+    public LowLevelStats auto_center_gears_placed;
+    public LowLevelStats auto_far_gears_placed;
+    public LowLevelStats auto_total_gears_dropped;
+    public LowLevelStats auto_near_gears_dropped;
+    public LowLevelStats auto_center_gears_dropped;
+    public LowLevelStats auto_far_gears_dropped;
+    public LowLevelStats auto_high_goal_made;
+    public LowLevelStats auto_high_goal_missed;
+    public LowLevelStats auto_low_goal_made;
+    public LowLevelStats auto_low_goal_missed;
+    public LowLevelStats auto_hoppers;
 
     // Teleop
     public LowLevelStats teleop_points;
+    public LowLevelStats teleop_total_gears_placed;
+    public LowLevelStats teleop_near_gears_placed;
+    public LowLevelStats teleop_center_gears_placed;
+    public LowLevelStats teleop_far_gears_placed;
+    public LowLevelStats teleop_total_gears_dropped;
+    public LowLevelStats teleop_near_gears_dropped;
+    public LowLevelStats teleop_center_gears_dropped;
+    public LowLevelStats teleop_far_gears_dropped;
+    public LowLevelStats teleop_high_goal_made;
+    public LowLevelStats teleop_high_goal_missed;
+    public LowLevelStats teleop_low_goal_made;
+    public LowLevelStats teleop_low_goal_missed;
+    public LowLevelStats teleop_hoppers;
+    public LowLevelStats teleop_picked_up_gears;
 
     // Endgame
-    public  LowLevelStats endgame_points;
+    public LowLevelStats endgame_points;
+    public int endgame_climb_success;
+    public int endgame_climb_fell;
+    public int endgame_climb_failed;
 
     // Post Match
     public LowLevelStats no_show;

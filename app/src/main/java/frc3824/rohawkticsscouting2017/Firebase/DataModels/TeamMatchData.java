@@ -46,6 +46,7 @@ public class TeamMatchData {
 
     // Endgame
     public int endgame_points; // calculated by server
+    public String endgame_climb;
 
     //Post Match
     public boolean no_show;
@@ -85,6 +86,8 @@ public class TeamMatchData {
             teleop_shots = (Shots)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_SHOTS);
             teleop_hoppers = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HOPPERS);
             teleop_picked_up_gears = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_PICKED_UP_GEARS);
+
+            endgame_climb = map.getString(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB);
             ////////////////
 
             fouls = map.getInt(Constants.Match_Scouting.Fouls.FOUL);

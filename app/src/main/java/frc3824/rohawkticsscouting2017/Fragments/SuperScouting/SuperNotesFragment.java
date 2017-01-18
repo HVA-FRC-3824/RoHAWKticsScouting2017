@@ -19,8 +19,7 @@ public class SuperNotesFragment extends ScoutFragment {
 
     public SuperNotesFragment(){}
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_super_notes, container, false);
         if(mValueMap != null)
         {
