@@ -45,6 +45,7 @@
         <activity android:name=".Activities.CloudStorage" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.DisplayIndividualScoutAccuracy" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.DisplayScoutAccuracy" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.DriveTeamFeedback" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.EventView" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchList" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.IndividualStrategyPlanning" android:screenOrientation="landscape"/>
