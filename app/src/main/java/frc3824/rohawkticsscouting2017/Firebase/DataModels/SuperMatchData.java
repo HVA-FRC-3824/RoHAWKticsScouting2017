@@ -22,6 +22,7 @@ public class SuperMatchData {
 
     public int match_number;
     public String scout_name;
+    public long last_modified;
 
     // Qualitative
 

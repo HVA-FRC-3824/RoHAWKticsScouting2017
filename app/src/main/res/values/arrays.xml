@@ -2,6 +2,16 @@
 <resources>
 
     <!-- Radio Values -->
+    <string-array name="endgame_climb_time_options">
+        <item>N/A</item>
+        <item>&lt; 5s</item>
+        <item>&lt; 10s</item>
+        <item>&lt; 15s</item>
+        <item>&lt; 20s</item>
+        <item>&lt; 25s</item>
+        <item>&lt; 30s</item>
+        <item></item>
+    </string-array>
 
 
     <!-- Spinner Values -->
@@ -10,6 +20,14 @@
         <item>Did not finish in time</item>
         <item>Robot fell</item>
         <item>Successful</item>
+    </string-array>
+
+    <string-array name="shooting_location_options">
+        <item>None</item>
+        <item>Key</item>
+        <item>Near</item>
+        <item>Center</item>
+        <item>Far</item>
     </string-array>
 
 

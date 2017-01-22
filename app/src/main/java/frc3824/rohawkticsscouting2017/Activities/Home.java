@@ -20,20 +20,14 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Comms.MessageQueue;
 import frc3824.rohawkticsscouting2017.Comms.ConnectThread;
 import frc3824.rohawkticsscouting2017.Comms.SocketThread;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
-import frc3824.rohawkticsscouting2017.Statistics.Aggregate;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 
@@ -81,7 +75,7 @@ public class Home extends Activity implements View.OnClickListener{
         mSharedPreferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mUserType = mSharedPreferences.getString(Constants.Settings.USER_TYPE, "");
         mEventKey = mSharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
-        mServerName = mSharedPreferences.getString(Constants.Settings.SERVER, "");
+        mServerName = mSharedPreferences.getString(Constants.Settings.SERVER_TYPE, "");
 
         mEventTextView = (TextView)findViewById(R.id.event);
         mUserTypeTextView = (TextView)findViewById(R.id.user_type);
@@ -104,9 +98,6 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
             case Constants.User_Types.STRATEGY:
                 userTypeStrategySetup();
-                break;
-            case Constants.User_Types.SERVER:
-                userTypeServerSetup();
                 break;
             case Constants.User_Types.ADMIN:
                 userTypeAdminSetup();
@@ -259,8 +250,6 @@ public class Home extends Activity implements View.OnClickListener{
 
         setupImageButton(R.id.sync_button);
 
-        setupImageButton(R.id.aggregate_button);
-
         mEventTextView.setText("Event: " + mEventKey);
         mEventTextView.setVisibility(View.VISIBLE);
 
@@ -272,20 +261,6 @@ public class Home extends Activity implements View.OnClickListener{
 
         findViewById(R.id.pick_list_open_button).setOnClickListener(this);
         mPickListOpenButton = false;
-    }
-
-    /**
-     * Setup if this tablet is running as the server
-     */
-    private void userTypeServerSetup() {
-        setupImageButton(R.id.schedule_button);
-        setupImageButton(R.id.server_button);
-
-        mEventTextView.setText("Event: " + mEventKey);
-        mEventTextView.setVisibility(View.VISIBLE);
-
-        mUserTypeTextView.setText("User: Server");
-        mUserTypeTextView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -310,11 +285,8 @@ public class Home extends Activity implements View.OnClickListener{
 
         setupImageButton(R.id.match_planning_button);
 
-        setupImageButton(R.id.server_button);
-
         setupImageButton(R.id.cloud_storage_button);
 
-        setupImageButton(R.id.aggregate_button);
         setupImageButton(R.id.team_list_builder_button);
         setupImageButton(R.id.scouting_accuracy_button);
         setupButton(R.id.admin_open_button);
@@ -406,23 +378,12 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
             case R.id.match_planning_button:
                 intent = new Intent(this, StrategyList.class);
-                //intent = new Intent(this, IndividualStrategyPlanning.class);
-                startActivity(intent);
-                break;
-            case R.id.server_button:
-                intent = new Intent(this, Server.class);
+                //intent = new Intent(this, StrategyPlanning.class);
                 startActivity(intent);
                 break;
             case R.id.cloud_storage_button:
                 intent = new Intent(this, CloudStorage.class);
                 startActivity(intent);
-                break;
-            case R.id.aggregate_button:
-                for(int team_number: mDatabase.getTeamNumbers())
-                {
-                    Aggregate.aggregateForTeam(team_number);
-                }
-                Aggregate.aggregateForSuper();
                 break;
             case R.id.team_list_builder_button:
                 intent = new Intent(this, TeamListBuilder.class);
@@ -549,17 +510,6 @@ public class Home extends Activity implements View.OnClickListener{
                         {
                             publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
                         }
-
-                        if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_STRATEGY_HEADER, gson.toJson(mDatabase.getAllMatchStrategies()))))
-                        {
-                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
-                            while (!socketThread.messageReceived());
-                        }
-                        else
-                        {
-                            publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                        }
-
 
                         if(socketThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
                         {
@@ -728,17 +678,6 @@ public class Home extends Activity implements View.OnClickListener{
                     {
                         publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
                     }
-
-                    if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_STRATEGY_HEADER, gson.toJson(mDatabase.getAllMatchStrategies()))))
-                    {
-                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
-                        while (!connectThread.messageReceived());
-                    }
-                    else
-                    {
-                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
-                    }
-
 
                     if(connectThread.write(String.format("%c",Constants.Bluetooth.Message_Headers.SYNC_HEADER)))
                     {

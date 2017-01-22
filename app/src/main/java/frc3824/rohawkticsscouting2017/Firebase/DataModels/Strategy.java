@@ -35,6 +35,7 @@ public class Strategy {
 
     private final static String TAG = "Strategy";
 
+    public int last_modified;
     public String name;
     public String filepath;
     public String url;

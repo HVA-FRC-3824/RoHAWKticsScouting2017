@@ -8,6 +8,7 @@ public class ScoutedMatchAccuracy {
 
     private final static String TAG = "ScoutedMatchAccuracy";
 
+    public long last_modified;
     public int match_number;
     public String alliance_color;
     public int alliance_number;

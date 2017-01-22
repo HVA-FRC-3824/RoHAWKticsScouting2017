@@ -80,8 +80,7 @@ public class TeamList extends Activity{
 
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         startActivity(new Intent(this, Home.class));
     }
 }

@@ -19,10 +19,10 @@ public class TeamCalculatedData {
 
     public int team_number;
 
-    public LowLevelStats total_points;
+    public long last_modified;
+
 
     // Autonomous
-    public LowLevelStats auto_points;
     public LowLevelStats auto_baseline;
     public LowLevelStats auto_total_gears_placed;
     public LowLevelStats auto_near_gears_placed;
@@ -39,7 +39,6 @@ public class TeamCalculatedData {
     public LowLevelStats auto_hoppers;
 
     // Teleop
-    public LowLevelStats teleop_points;
     public LowLevelStats teleop_total_gears_placed;
     public LowLevelStats teleop_near_gears_placed;
     public LowLevelStats teleop_center_gears_placed;
@@ -56,7 +55,6 @@ public class TeamCalculatedData {
     public LowLevelStats teleop_picked_up_gears;
 
     // Endgame
-    public LowLevelStats endgame_points;
     public int endgame_climb_success;
     public int endgame_climb_fell;
     public int endgame_climb_failed;

@@ -6,11 +6,18 @@
     android:layout_height="match_parent"
     android:padding="@dimen/activity_vertical_margin">
 
+    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/auto_start_position"
+        app:key="auto_start_position"
+        app:label="Start position"/>
+
     <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/cross_base_line"
-        app:key="cross_base_line"
+        android:id="@+id/auto_baseline"
+        app:key="auto_baseline"
         app:label="Crossed Base Line" />
 
     <frc3824.rohawkticsscouting2017.Views.Steamworks.GearsInput
@@ -23,9 +30,17 @@
     <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/auto_shots"
-        app:key="auto_shots" />
-    <!-- ^ Label not needed -->
+        android:id="@+id/auto_high_goal"
+        app:key="auto_high_goal"
+        app:label="High Goal"/>
+
+    <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/auto_low_goal"
+        app:key="auto_low_goal"
+        app:label="Low Goal"/>
+
 
     <frc3824.rohawkticsscouting2017.Views.SavableCounter
         android:layout_width="match_parent"

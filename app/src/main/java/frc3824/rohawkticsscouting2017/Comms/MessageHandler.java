@@ -175,7 +175,7 @@ public class MessageHandler extends Handler {
                                 JSONObject s = jsonArray.getJSONObject(i);
                                 mDatabase.setStrategy(mGson.fromJson(s.toString(), Strategy.class));
                             }
-                            
+
                         } catch (JSONException e) {
                            displayText("Error is parsing the response", Constants.Server_Log_Colors.RED);
                         }

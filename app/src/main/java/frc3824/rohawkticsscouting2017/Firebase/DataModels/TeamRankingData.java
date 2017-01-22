@@ -14,6 +14,7 @@ public class TeamRankingData {
     private final static String TAG = "TeamRankingData";
 
     public int team_number;
+    public long last_modified;
 
     // Ranking Data
     public int rank;

@@ -17,6 +17,7 @@ public class Match {
     private final static String TAG = "Match";
 
     public int match_number;
+    public long last_modified;
 
     public ArrayList<Integer> teams;
 

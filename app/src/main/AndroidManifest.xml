@@ -48,8 +48,6 @@
         <activity android:name=".Activities.DriveTeamFeedback" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.EventView" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchList" android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.IndividualStrategyPlanning" android:screenOrientation="landscape"/>
-        <activity android:name=".Activities.MatchPlanning" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.StrategyPlanning" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchScouting" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchView" android:screenOrientation="landscape"/>
@@ -59,7 +57,6 @@
         <activity android:name=".Activities.RankingsView" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.Schedule"/>
         <activity android:name=".Activities.ScheduleBuilder"/>
-        <activity android:name=".Activities.Server" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.Settings" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.StrategyList" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.SuperScouting" android:screenOrientation="landscape"/>

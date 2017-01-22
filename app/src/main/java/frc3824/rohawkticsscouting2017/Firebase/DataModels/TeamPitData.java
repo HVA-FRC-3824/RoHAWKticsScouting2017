@@ -27,6 +27,7 @@ public class TeamPitData {
     */
     public int team_number;
     public String scout_name;
+    public long last_modified;
 
     // Robot Image
     public int robot_image_default;

@@ -77,7 +77,7 @@ public class MatchScouting extends Activity{
     private boolean mPractice = false;
 
     private Database mDatabase;
-    private String mServerName;
+    private String mServerType;
 
     private ListView mDrawerList;
     private LVA_MatchScoutDrawer mLVA;
@@ -103,7 +103,7 @@ public class MatchScouting extends Activity{
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mAllianceColor = shared_preferences.getString(Constants.Settings.ALLIANCE_COLOR, "");
         mAllianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
-        mServerName = shared_preferences.getString(Constants.Settings.SERVER, "");
+        mServerType = shared_preferences.getString(Constants.Settings.SERVER_TYPE, "");
         mAdmin = shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.ADMIN);
         mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_MATCH_SCOUT, "");
 
@@ -602,7 +602,7 @@ public class MatchScouting extends Activity{
             TeamMatchData teamMatchData = new TeamMatchData(map);
             mDatabase.setTeamMatchData(teamMatchData);
 
-            if(mServerName.equals(Constants.Socket.SERVER)){
+            if(mServerType.equals(Constants.Server_Type.SOCKET)){
                 return socketVersion(teamMatchData);
             } else {
                 return bluetoothVersion(teamMatchData);
@@ -684,7 +684,7 @@ public class MatchScouting extends Activity{
             {
                 String deviceName = device.getName();
                 Log.d(TAG, deviceName);
-                if(deviceName.equals(mServerName))
+                if(deviceName.equals(mServerType))
                 {
                     server = device;
                     break;

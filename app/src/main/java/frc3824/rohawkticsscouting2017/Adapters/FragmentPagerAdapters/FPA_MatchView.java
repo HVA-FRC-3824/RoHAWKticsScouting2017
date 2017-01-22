@@ -8,12 +8,9 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewAllianceFragment;
-import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewMatchPlanFragment;
 import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewPredictionFragment;
 import frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewStrategyFragment;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
-
-import static frc3824.rohawkticsscouting2017.R.id.match_number;
 
 /**
  * @author frc3824
@@ -34,11 +31,7 @@ public class FPA_MatchView extends FragmentPagerAdapter {
         super(fm);
         mMatchNumber = match_number;
         mTeams = Database.getInstance().getMatch(mMatchNumber).teams;
-        if(mTeams.contains(Constants.OUR_TEAM_NUMBER)){
-            mTabTitles = new String[]{"Blue", "Red", "Strategy", "Match Plan", "Prediction"};
-        } else {
-            mTabTitles = new String[]{"Blue", "Red", "Strategy", "Prediction"};
-        }
+        mTabTitles = new String[]{"Blue", "Red", "Strategy", "Prediction"};
         custom = false;
     }
 
@@ -78,16 +71,11 @@ public class FPA_MatchView extends FragmentPagerAdapter {
                 }
                 break;
             case 3:
-                if(mTabTitles.length == 4) {
-                    f = new MatchViewPredictionFragment();
-                    if (custom) {
-                        ((MatchViewPredictionFragment) f).setMatch(mTeams);
-                    } else {
-                        ((MatchViewPredictionFragment) f).setMatch(mMatchNumber);
-                    }
+                f = new MatchViewPredictionFragment();
+                if (custom) {
+                    ((MatchViewPredictionFragment) f).setMatch(mTeams);
                 } else {
-                    f = new MatchViewMatchPlanFragment();
-                    ((MatchViewMatchPlanFragment) f).setMatch(mMatchNumber);
+                    ((MatchViewPredictionFragment) f).setMatch(mMatchNumber);
                 }
                 break;
             case 4:

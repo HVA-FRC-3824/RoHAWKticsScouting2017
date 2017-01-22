@@ -52,7 +52,7 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_individual_plan);
+        setContentView(R.layout.activity_plan);
 
         mDrawingView = (StrategyDrawingView) findViewById(R.id.drawing);
 

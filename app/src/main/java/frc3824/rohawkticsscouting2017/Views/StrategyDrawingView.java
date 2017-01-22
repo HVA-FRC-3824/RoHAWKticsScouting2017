@@ -94,36 +94,6 @@ public class StrategyDrawingView extends View {
         mBackgroundBitmap = Bitmap.createScaledBitmap(mFieldBitmap, w, h, false);
         mCanvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         mDrawCanvas = new Canvas(mCanvasBitmap);
-
-        if(mTeamsMarked) {
-            mTeamsBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            mTeamsCanvas = new Canvas(mTeamsBitmap);
-
-            Paint[] teamPaints = {new Paint(), new Paint(), new Paint(), new Paint(), new Paint(), new Paint()};
-            teamPaints[0].setColor(Constants.StrategyPlanning.BLUE1_COLOR);
-            teamPaints[1].setColor(Constants.StrategyPlanning.BLUE2_COLOR);
-            teamPaints[2].setColor(Constants.StrategyPlanning.BLUE3_COLOR);
-            teamPaints[3].setColor(Constants.StrategyPlanning.RED1_COLOR);
-            teamPaints[4].setColor(Constants.StrategyPlanning.RED2_COLOR);
-            teamPaints[5].setColor(Constants.StrategyPlanning.RED3_COLOR);
-
-            Paint textPaint = new Paint();
-            textPaint.setColor(Color.BLACK);
-            textPaint.setTextSize(40);
-
-            mTeamButtonPositions[0].y = h / 6;
-            mTeamButtonPositions[1].y = h * 3 / 6;
-            mTeamButtonPositions[2].y = h * 5 / 6;
-            mTeamButtonPositions[3].y = h * 5 / 6;
-            mTeamButtonPositions[4].y = h * 3 / 6;
-            mTeamButtonPositions[5].y = h / 6;
-
-            for (int i = 0; i < 6; i++) {
-                mTeamsCanvas.drawCircle(mTeamButtonPositions[i].x, mTeamButtonPositions[i].y, mTeamButtonRadius + 10.0f, textPaint);
-                mTeamsCanvas.drawCircle(mTeamButtonPositions[i].x, mTeamButtonPositions[i].y, mTeamButtonRadius, teamPaints[i]);
-                mTeamsCanvas.drawText(String.valueOf(mTeamNumbers[i]), mTeamButtonPositions[i].x - 40.0f, mTeamButtonPositions[i].y + 10.0f, textPaint);
-            }
-        }
     }
 
     @Override
@@ -142,14 +112,6 @@ public class StrategyDrawingView extends View {
         float touchY = event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                for(int i = 0; i < 6; i++){
-                    if(mTeamButtonRadius >= Math.sqrt(Math.pow(touchX - mTeamButtonPositions[i].x,2) + Math.pow(touchY - mTeamButtonPositions[i].y, 2))){
-                        setColor(Constants.StrategyPlanning.COLORS[i]);
-                        mColorSelected = true;
-                        return true;
-                    }
-                }
-
                 mColorPath = new JSONObject();
                 try {
                     mColorPath.put("paint_color", mPaintColor);
@@ -245,37 +207,6 @@ public class StrategyDrawingView extends View {
         mCanvasBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_8888);
         mDrawCanvas = new Canvas(mCanvasBitmap);
         invalidate();
-    }
-
-    public void markTeams(Integer[] team_numbers, Point[] button_positions, float button_radius){
-
-        mTeamsMarked = true;
-
-        mTeamNumbers = team_numbers;
-        mTeamButtonPositions = button_positions;
-        mTeamButtonRadius = button_radius;
-
-        mTeamsBitmap = Bitmap.createBitmap(mFieldBitmap.getWidth(), mFieldBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        mTeamsCanvas = new Canvas(mTeamsBitmap);
-        assert mTeamNumbers.length == 6 && button_positions.length == 6;
-
-        Paint[] teamPaints = {new Paint(), new Paint(), new Paint(), new Paint(), new Paint(), new Paint()};
-        teamPaints[0].setColor(Color.rgb(0,191,255));
-        teamPaints[1].setColor(Color.rgb(30,144,255));
-        teamPaints[2].setColor(Color.rgb(0,0,255));
-        teamPaints[3].setColor(Color.rgb(220,20,60));
-        teamPaints[4].setColor(Color.rgb(255,0,0));
-        teamPaints[5].setColor(Color.rgb(139,0,0));
-
-        Paint textPaint = new Paint();
-        textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(20);
-
-        for(int i = 0; i < 6; i++) {
-            mTeamsCanvas.drawCircle(button_positions[i].x, button_positions[i].y, button_radius + 10.0f, textPaint);
-            mTeamsCanvas.drawCircle(button_positions[i].x, button_positions[i].y, button_radius, teamPaints[i]);
-            mTeamsCanvas.drawText(String.valueOf(mTeamNumbers[i]), button_positions[i].x, button_positions[i].y, textPaint);
-        }
     }
 
     public void load(Bitmap bitmap) {

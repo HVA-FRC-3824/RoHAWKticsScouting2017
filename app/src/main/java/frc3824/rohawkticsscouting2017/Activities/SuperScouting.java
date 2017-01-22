@@ -30,7 +30,9 @@ import android.widget.Toolbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +42,7 @@ import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDr
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.MatchNumberCheck;
 import frc3824.rohawkticsscouting2017.Comms.MessageQueue;
 import frc3824.rohawkticsscouting2017.Comms.ConnectThread;
+import frc3824.rohawkticsscouting2017.Comms.SocketThread;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
@@ -66,7 +69,7 @@ public class SuperScouting extends Activity{
     private Database mDatabase;
 
     private FPA_SuperScouting mFPA;
-    private String mServerName;
+    private String mServerType;
     private String mLastScoutName;
     private String mScoutName;
 
@@ -91,7 +94,7 @@ public class SuperScouting extends Activity{
         mMatchNumber = extras.getInt(Constants.Intent_Extras.MATCH_NUMBER);
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
-        mServerName = shared_preferences.getString(Constants.Settings.SERVER, "");
+        mServerType = shared_preferences.getString(Constants.Settings.SERVER_TYPE, "");
         mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_SUPER_SCOUT, "");
 
 
@@ -553,9 +556,70 @@ public class SuperScouting extends Activity{
             ScoutMap map = scoutMaps[0];
             map.put(Constants.Intent_Extras.MATCH_NUMBER, mMatchNumber);
             map.put(Constants.Super_Scouting.SCOUT_NAME, mScoutName);
+            map.put(Constants.Intent_Extras.LAST_MODIFIED, System.currentTimeMillis());
             SuperMatchData superMatchData = new SuperMatchData(map);
             mDatabase.setSuperMatchData(superMatchData);
 
+            if (mServerType.equals(Constants.Server_Type.SOCKET)) {
+                return socketVersion(superMatchData);
+            } else {
+                return bluetoothVersion(superMatchData);
+            }
+
+        }
+
+        private Void socketVersion(SuperMatchData superMatchData) {
+            try {
+                Socket socket = new Socket("localhost", Constants.Socket.PORT);
+
+                MessageQueue queue = MessageQueue.getInstance();
+                SocketThread socketThread = new SocketThread(socket);
+                socketThread.start();
+                Gson gson = new GsonBuilder().create();
+                if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(superMatchData))))
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                    List<String> queuedString = queue.getQueueList();
+                    queue.clear();
+                    boolean queueEmpty = true;
+                    for (String s: queuedString)
+                    {
+                        if(!socketThread.write(s))
+                        {
+                            queueEmpty = false;
+                            switch (s.charAt(0))
+                            {
+                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
+                                    break;
+                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                                    queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
+                                    break;
+                            }
+                        }
+                    }
+                    if(queueEmpty && queuedString.size() > 0)
+                    {
+                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                    }
+                }
+                else
+                {
+                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    queue.add(superMatchData);
+                }
+                socketThread.cancel();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private Void bluetoothVersion(SuperMatchData superMatchData) {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             MessageQueue queue = MessageQueue.getInstance();
 
@@ -578,7 +642,7 @@ public class SuperScouting extends Activity{
             for(BluetoothDevice device: devices)
             {
                 String deviceName = device.getName();
-                if(deviceName.equals(mServerName))
+                if(deviceName.equals(mServerType))
                 {
                     server = device;
                     break;

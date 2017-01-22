@@ -12,6 +12,7 @@ public class ScoutAccuracy {
     private final static String TAG = "ScoutAccuracy";
 
     public String name;
+    public long last_modified;
     public Map<Integer, ScoutedMatchAccuracy> scouted_matches;
     public int total_error;
     public int auto_error;

@@ -29,7 +29,7 @@ public interface Constants {
         String ALLIANCE_COLOR = "alliance_color";
         String ALLIANCE_NUMBER = "alliance_number";
         String PIT_GROUP_NUMBER = "pit_group_number";
-        String SERVER = "server";
+        String SERVER_TYPE = "server";
 
         // Not really settings, but are in shared preferences
         String LAST_MATCH_SCOUT = "last_match_scout";
@@ -43,8 +43,9 @@ public interface Constants {
         String SUPER_SCOUT = "Super Scout";
         String DRIVE_TEAM = "Drive Team";
         String STRATEGY = "Strategy";
-        String SERVER = "Server";
         String ADMIN = "Admin";
+
+        String[] LIST = {MATCH_SCOUT, PIT_SCOUT, SUPER_SCOUT, DRIVE_TEAM, STRATEGY, ADMIN};
     }
 
     interface Alliance_Colors {
@@ -67,6 +68,7 @@ public interface Constants {
     interface Intent_Extras {
         String TEAM_NUMBER = "team_number";
         String MATCH_NUMBER = "match_number";
+        String LAST_MODIFIED = "last_modified";
         String NEXT_PAGE = "next_page";
         String MATCH_SCOUTING = "match_scouting";
         String SUPER_SCOUTING = "super_scouting";
@@ -108,16 +110,37 @@ public interface Constants {
 
         interface Autonomous {
             // GAME SPECIFIC
+            String AUTO_START_POSITION = "auto_start_position";
             String AUTO_BASELINE = "auto_baseline";
             String AUTO_GEARS = "auto_gears";
-            String AUTO_SHOTS = "auto_shots";
+            String AUTO_HIGH_GOAL_MADE = "auto_high_goal_made";
+            String AUTO_HIGH_GOAL_MISSED = "auto_high_goal_missed";
+            String AUTO_HIGH_GOAL_CORRECTION = "auto_high_goal_correction";
+            String AUTO_LOW_GOAL_MADE = "auto_low_goal_made";
+            String AUTO_LOW_GOAL_MISSED = "auto_low_goal_missed";
+            String AUTO_LOW_GOAL_CORRECTION = "auto_low_goal_correction";
             String AUTO_HOPPERS = "auto_hoppers";
         }
 
         interface Teleop {
             // GAME SPECIFIC
+
+            String TELEOP_SHOOTING_LOCATION = "teleop_shooting_location";
+            interface Shooting_Location {
+                String NONE = "None";
+                String KEY = "Key";
+                String NEAR = "Near";
+                String CENTER = "Center";
+                String FAR = "Far";
+            }
+
             String TELEOP_GEARS = "teleop_gears";
-            String TELEOP_SHOTS = "teleop_shots";
+            String TELEOP_HIGH_GOAL_MADE = "teleop_high_goal_made";
+            String TELEOP_HIGH_GOAL_MISSED = "teleop_high_goal_missed";
+            String TELEOP_HIGH_GOAL_CORRECTION = "teleop_high_goal_correction";
+            String TELEOP_LOW_GOAL_MADE = "teleop_low_goal_made";
+            String TELEOP_LOW_GOAL_MISSED = "teleop_low_goal_missed";
+            String TELEOP_LOW_GOAL_CORRECTION = "teleop_low_goal_correction";
             String TELEOP_HOPPERS = "teleop_hoppers";
             String TELEOP_PICKED_UP_GEARS = "teleop_picked_up_gears";
         }
@@ -130,6 +153,17 @@ public interface Constants {
                 String DID_NOT_FINISH_IN_TIME = "Did not finish in time";
                 String ROBOT_FELL = "Robot fell";
                 String SUCCESSFUL = "Successful";
+            }
+
+            String ENDGAME_CLIMB_TIME = "endgame_climb_time";
+            interface CLIMB_TIME_OPTIONS {
+                String N_A = "N/A";
+                String LESS_THAN_5S = "< 5s";
+                String LESS_THAN_10S = "< 10s";
+                String LESS_THAN_15S = "< 15s";
+                String LESS_THAN_20S = "< 20s";
+                String LESS_THAN_25S = "< 25s";
+                String LESS_THAN_30S = "< 30s";
             }
         }
 
@@ -164,19 +198,11 @@ public interface Constants {
                 String NEAR = "near";
                 String[] LOCATIONS = {FAR, CENTER, NEAR};
             }
-
-            interface Shots{
-                String FAR = "far";
-                String CENTER = "center";
-                String NEAR = "near";
-                String[] LOCATIONS = {FAR, CENTER, NEAR};
-            }
         }
     }
 
     interface Pit_Scouting {
         String SCOUT_NAME = "scout_name";
-        String PIT_SCOUTED = "pit_scouted";
 
         String ROBOT_PICTURE_DEFAULT = "robot_picture_default";
         String ROBOT_PICTURE_FILEPATHS = "robot_picture_filepaths";
@@ -284,7 +310,7 @@ public interface Constants {
             String RED2 = "3824_Red2";
             String RED3 = "3824_Red3";
             String SUPER = "3824_Super_Scout";
-            String SERVER = "3824_Server";
+            String SPARE = "3824_Spare";
             String STRATEGY = "3824_Strategy";
             String DRIVETEAM = "3824_Drive_Team";
             String RED_PI = "raspberrypi";
@@ -307,6 +333,11 @@ public interface Constants {
         int DOWNLOAD_STRATEGIES = 4;
         int UPLOAD_ROBOT_PICTURES = 5;
         int DOWNLOAD_ROBOT_PICTURES = 6;
+    }
+
+    interface Server_Type {
+        String BLUETOOTH = "Bluetooth";
+        String SOCKET = "Socket";
     }
 
     interface Server_Log_Colors {
@@ -346,55 +377,5 @@ public interface Constants {
         }
 
         // GAME SPECIFIC
-    }
-
-    interface StrategyPlanning {
-        interface Auto_Endgame {
-            int BLUE_X = 125;
-            int RED_X = 1400;
-            int BLUE1Y = 200;
-            int BLUE2Y = 500;
-            int BLUE3Y = 800;
-            int RED1Y = 800;
-            int RED2Y = 500;
-            int RED3Y = 200;
-            Point BLUE1_POSITION = new Point(BLUE_X, BLUE1Y);
-            Point BLUE2_POSITION = new Point(BLUE_X, BLUE2Y);
-            Point BLUE3_POSITION = new Point(BLUE_X, BLUE3Y);
-            Point RED1_POSITION = new Point(RED_X, RED1Y);
-            Point RED2_POSITION = new Point(RED_X, RED2Y);
-            Point RED3_POSITION = new Point(RED_X, RED3Y);
-            Point[] POSITIONS = {BLUE1_POSITION, BLUE2_POSITION, BLUE3_POSITION, RED1_POSITION, RED2_POSITION, RED3_POSITION};
-
-            float RADIUS = 60.0f;
-        }
-
-        interface Teleop {
-            int BLUE_X = 125;
-            int RED_X = 1400;
-            int BLUE1Y = 200;
-            int BLUE2Y = 500;
-            int BLUE3Y = 800;
-            int RED1Y = 800;
-            int RED2Y = 500;
-            int RED3Y = 200;
-            Point BLUE1_POSITION = new Point(BLUE_X, BLUE1Y);
-            Point BLUE2_POSITION = new Point(BLUE_X, BLUE2Y);
-            Point BLUE3_POSITION = new Point(BLUE_X, BLUE3Y);
-            Point RED1_POSITION = new Point(RED_X, RED1Y);
-            Point RED2_POSITION = new Point(RED_X, RED2Y);
-            Point RED3_POSITION = new Point(RED_X, RED3Y);
-            Point[] POSITIONS = {BLUE1_POSITION, BLUE2_POSITION, BLUE3_POSITION, RED1_POSITION, RED2_POSITION, RED3_POSITION};
-
-            float RADIUS = 60.0f;
-        }
-
-        int BLUE1_COLOR = Color.rgb(0,191,255);
-        int BLUE2_COLOR = Color.rgb(30,144,255);
-        int BLUE3_COLOR = Color.rgb(0,0,255);
-        int RED1_COLOR = Color.rgb(220,20,60);
-        int RED2_COLOR = Color.rgb(255,0,0);
-        int RED3_COLOR = Color.rgb(139,0,0);
-        int[] COLORS = {BLUE1_COLOR, BLUE2_COLOR, BLUE3_COLOR, RED1_COLOR, RED2_COLOR, RED3_COLOR};
     }
 }

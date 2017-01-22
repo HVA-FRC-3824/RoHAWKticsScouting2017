@@ -102,23 +102,17 @@ public class Settings extends Activity implements OnClickListener{
 
         mServerSelector = (Spinner) findViewById(R.id.server_selector);
         final Spinner server_selector = mServerSelector;
-        String[] server_options = new String[]{Constants.Bluetooth.Device_Names.BLUE1, Constants.Bluetooth.Device_Names.BLUE2, Constants.Bluetooth.Device_Names.BLUE3,
-        Constants.Bluetooth.Device_Names.RED1, Constants.Bluetooth.Device_Names.RED2, Constants.Bluetooth.Device_Names.RED3,
-        Constants.Bluetooth.Device_Names.SUPER, Constants.Bluetooth.Device_Names.SERVER, Constants.Bluetooth.Device_Names.STRATEGY,
-        Constants.Bluetooth.Device_Names.DRIVETEAM, Constants.Bluetooth.Device_Names.RED_PI, Constants.Socket.SERVER};
+        String[] server_options = new String[]{Constants.Server_Type.BLUETOOTH, Constants.Server_Type.SOCKET};
         ArrayAdapter<String> server_adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, server_options);
         server_selector.setAdapter(server_adapter);
         server_selector.setSelection(Arrays.asList(server_options).indexOf(
-                mSharedPreferences.getString(Constants.Settings.SERVER, "")));
+                mSharedPreferences.getString(Constants.Settings.SERVER_TYPE, "")));
 
         mUserTypeSelector = (Spinner) findViewById(R.id.user_type_selector);
         Spinner user_type_selector = mUserTypeSelector;
-        String[] user_type_options = new String[]{Constants.User_Types.MATCH_SCOUT, Constants.User_Types.PIT_SCOUT,
-                Constants.User_Types.SUPER_SCOUT, Constants.User_Types.DRIVE_TEAM, Constants.User_Types.STRATEGY,
-                Constants.User_Types.SERVER, Constants.User_Types.ADMIN};
         ArrayAdapter<String> user_type_adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, user_type_options);
+                android.R.layout.simple_spinner_dropdown_item, Constants.User_Types.LIST);
         user_type_selector.setAdapter(user_type_adapter);
         user_type_selector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -142,12 +136,6 @@ public class Settings extends Activity implements OnClickListener{
                         findViewById(R.id.pit_group).setVisibility(View.VISIBLE);
                         findViewById(R.id.server).setVisibility(View.VISIBLE);
                         break;
-                    case Constants.User_Types.SERVER:
-                        findViewById(R.id.alliance_number).setVisibility(View.GONE);
-                        findViewById(R.id.alliance_color).setVisibility(View.GONE);
-                        findViewById(R.id.pit_group).setVisibility(View.GONE);
-                        findViewById(R.id.server).setVisibility(View.GONE);
-                        break;
                     default:
                         findViewById(R.id.alliance_number).setVisibility(View.GONE);
                         findViewById(R.id.alliance_color).setVisibility(View.GONE);
@@ -162,7 +150,7 @@ public class Settings extends Activity implements OnClickListener{
 
             }
         });
-        user_type_selector.setSelection(Arrays.asList(user_type_options).indexOf(
+        user_type_selector.setSelection(Arrays.asList(Constants.User_Types.LIST).indexOf(
                 mSharedPreferences.getString(Constants.Settings.USER_TYPE, "")));
 
         String event_key = mSharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
@@ -244,10 +232,8 @@ public class Settings extends Activity implements OnClickListener{
                         prefEditor.putInt(Constants.Settings.PIT_GROUP_NUMBER, pit_group);
                     }
 
-                    if(!user_type.equals(Constants.User_Types.SERVER)) {
-                        String server = String.valueOf(mServerSelector.getSelectedItem());
-                        prefEditor.putString(Constants.Settings.SERVER, server);
-                    }
+                    String server = String.valueOf(mServerSelector.getSelectedItem());
+                    prefEditor.putString(Constants.Settings.SERVER_TYPE, server);
 
                     prefEditor.commit();
                     findViewById(R.id.home_button).setVisibility(View.VISIBLE);

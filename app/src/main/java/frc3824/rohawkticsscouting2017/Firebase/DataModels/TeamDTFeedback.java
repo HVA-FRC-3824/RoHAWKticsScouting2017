@@ -12,6 +12,7 @@ public class TeamDTFeedback {
 
     private final static String TAG = "TeamDTFeedback";
 
+    public long last_modified;
     public int team_number;
     public Map<Integer, String> feedback;
 

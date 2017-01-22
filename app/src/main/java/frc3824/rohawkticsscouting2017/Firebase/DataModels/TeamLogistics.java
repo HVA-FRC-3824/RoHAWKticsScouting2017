@@ -18,6 +18,7 @@ public class TeamLogistics {
 
     public int team_number;
     public String nickname;
+    public long last_modified;
 
     public ArrayList<Integer> match_numbers;
 

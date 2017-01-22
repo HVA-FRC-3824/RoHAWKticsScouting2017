@@ -13,6 +13,8 @@ public class TeamPickAbility {
 
     private final static String TAG = "TeamPickAbility";
 
+    public long last_modified;
+
     public int team_number;
     public String nickname;
     public double pick_ability;
