@@ -18,7 +18,6 @@ import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchStrategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
@@ -54,7 +53,6 @@ public class Database {
     private DatabaseReference mTeamCalulatedDataRef;
     private DatabaseReference mTeamLogisticsRef;
     private DatabaseReference mIndividualStrategyRef;
-    private DatabaseReference mMatchStrategyRef;
     private DatabaseReference mCurrentTeamRankingDataRef;
     private DatabaseReference mPredictedTeamRankingDataRef;
     private DatabaseReference mFirstTeamPickAbilityRef;
@@ -80,7 +78,6 @@ public class Database {
     private Map<Integer, TeamPickAbility> mSecondTeamPickAbilityMap;
     private Map<Integer, TeamPickAbility> mThirdTeamPickAbilityMap;
     private Map<String, Strategy> mIndividualStrategyMap;
-    private Map<String, MatchStrategy> mMatchStrategyMap;
     private Map<String, ScoutAccuracy> mScoutAccuracyMap;
     //endregion
 
@@ -423,41 +420,6 @@ public class Database {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "strategies.individual.onCancelled");
-            }
-        });
-        //endregion
-
-        //region Match Strategy
-        mMatchStrategyRef = mEventRef.child("strategies").child("match");
-        mMatchStrategyMap = new HashMap<>();
-        mMatchStrategyRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "strategies.match.onChildAdded: " + dataSnapshot.getKey());
-                mMatchStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(MatchStrategy.class));
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "strategies.match.onChildChanged: " + dataSnapshot.getKey());
-                mMatchStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(MatchStrategy.class));
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.v(TAG, "strategies.match.onChildRemoved: " + dataSnapshot.getKey());
-                mMatchStrategyMap.remove(dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.v(TAG, "strategies.match.onChildMoved: " + dataSnapshot.getKey());
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.v(TAG, "strategies.match.onCancelled");
             }
         });
         //endregion
@@ -1009,20 +971,6 @@ public class Database {
 
     public ArrayList<Strategy> getAllStrategies() {
         return new ArrayList<>(mIndividualStrategyMap.values());
-    }
-    //endregion
-
-    //region Match Strategy
-    public void setMatchStrategy(MatchStrategy strategy) {
-        mMatchStrategyRef.child(String.valueOf(strategy.match_number)).setValue(strategy);
-    }
-
-    public MatchStrategy getMatchStrategy(int match_number) {
-        return mMatchStrategyMap.get(String.valueOf(match_number));
-    }
-
-    public ArrayList<MatchStrategy> getAllMatchStrategies(){
-        return new ArrayList<>(mMatchStrategyMap.values());
     }
     //endregion
 

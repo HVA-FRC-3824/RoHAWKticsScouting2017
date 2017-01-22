@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import frc3824.rohawkticsscouting2017.Activities.IndividualStrategyPlanning;
+import frc3824.rohawkticsscouting2017.Activities.StrategyPlanning;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
@@ -26,9 +26,9 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * Created: 11/5/16
  *
  */
-public class LVA_IndividualStrategy extends ArrayAdapter<Strategy> {
+public class LVA_StrategyUploadDownload extends ArrayAdapter<Strategy> {
 
-    private final static String TAG = "LVA_IndividualStrategy";
+    private final static String TAG = "LVA_StrategyUploadDownload";
 
     private ArrayList<Strategy> mStrategies;
     private Context mContext;
@@ -36,7 +36,7 @@ public class LVA_IndividualStrategy extends ArrayAdapter<Strategy> {
     private Database mDatabase;
 
 
-    public LVA_IndividualStrategy(Context context, ArrayList<Strategy> objects) {
+    public LVA_StrategyUploadDownload(Context context, ArrayList<Strategy> objects) {
         super(context, R.layout.list_item_cloud_image, objects);
         mStrategies = objects;
         mContext = context;
@@ -58,7 +58,7 @@ public class LVA_IndividualStrategy extends ArrayAdapter<Strategy> {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, IndividualStrategyPlanning.class);
+                    Intent intent = new Intent(mContext, StrategyPlanning.class);
                     mContext.startActivity(intent);
                 }
             });
@@ -79,7 +79,7 @@ public class LVA_IndividualStrategy extends ArrayAdapter<Strategy> {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, IndividualStrategyPlanning.class);
+                    Intent intent = new Intent(mContext, StrategyPlanning.class);
                     intent.putExtra(Constants.Intent_Extras.MATCH_PLAN_NAME, filename);
                     mContext.startActivity(intent);
                 }

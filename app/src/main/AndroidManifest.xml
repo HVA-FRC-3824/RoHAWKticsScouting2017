@@ -50,6 +50,7 @@
         <activity android:name=".Activities.MatchList" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.IndividualStrategyPlanning" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchPlanning" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities.StrategyPlanning" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchScouting" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.MatchView" android:screenOrientation="landscape"/>
         <activity android:name=".Activities.NotesViewActivity" android:screenOrientation="portrait" />

@@ -35,7 +35,7 @@ import frc3824.rohawkticsscouting2017.Views.StrategyDrawingView;
  *
  * Activity for drawing an individual plan
  */
-public class IndividualStrategyPlanning extends Activity implements View.OnClickListener{
+public class StrategyPlanning extends Activity implements View.OnClickListener{
 
     // Shortened due to TAG length limit for logging
     private final static String TAG = "IndividualStrategyPlan";
@@ -318,7 +318,7 @@ public class IndividualStrategyPlanning extends Activity implements View.OnClick
 
                 strategy.path_json = mDrawingView.toJson();
 
-                File saveFile = new File(IndividualStrategyPlanning.this.getFilesDir(), imageName);
+                File saveFile = new File(StrategyPlanning.this.getFilesDir(), imageName);
                 if(saveFile.exists()) {
                     strategy.filepath = saveFile.getAbsolutePath();
                     Database.getInstance().setStrategy(strategy);

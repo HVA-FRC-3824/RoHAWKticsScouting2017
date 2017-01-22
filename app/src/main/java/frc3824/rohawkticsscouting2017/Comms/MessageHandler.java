@@ -10,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchStrategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
@@ -176,12 +175,7 @@ public class MessageHandler extends Handler {
                                 JSONObject s = jsonArray.getJSONObject(i);
                                 mDatabase.setStrategy(mGson.fromJson(s.toString(), Strategy.class));
                             }
-
-                            jsonArray = response.getJSONArray("match_strategy");
-                            for(int i = 0; i < jsonArray.length(); i++){
-                                JSONObject ms = jsonArray.getJSONObject(i);
-                                mDatabase.setMatchStrategy(mGson.fromJson(ms.toString(), MatchStrategy.class));
-                            }
+                            
                         } catch (JSONException e) {
                            displayText("Error is parsing the response", Constants.Server_Log_Colors.RED);
                         }
