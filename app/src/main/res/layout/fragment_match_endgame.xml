@@ -20,6 +20,6 @@
         android:id="@+id/endgame_climb_time"
         app:key="endgame_climb_time"
         app:label="Climb Time"
-        app:spinner_values="@array/endgame_climb_time_options"/>
+        app:radio_values="@array/endgame_climb_time_options"/>
 
 </LinearLayout>

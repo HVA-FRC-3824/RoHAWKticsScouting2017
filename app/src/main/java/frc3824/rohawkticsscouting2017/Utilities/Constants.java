@@ -125,15 +125,6 @@ public interface Constants {
         interface Teleop {
             // GAME SPECIFIC
 
-            String TELEOP_SHOOTING_LOCATION = "teleop_shooting_location";
-            interface Shooting_Location {
-                String NONE = "None";
-                String KEY = "Key";
-                String NEAR = "Near";
-                String CENTER = "Center";
-                String FAR = "Far";
-            }
-
             String TELEOP_GEARS = "teleop_gears";
             String TELEOP_HIGH_GOAL_MADE = "teleop_high_goal_made";
             String TELEOP_HIGH_GOAL_MISSED = "teleop_high_goal_missed";

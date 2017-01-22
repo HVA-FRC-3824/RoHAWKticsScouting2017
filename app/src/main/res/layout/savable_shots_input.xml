@@ -59,7 +59,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="numberDecimal"
-            android:text="0" />
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
 
         <Button
             android:id="@+id/made_increment_1"
@@ -127,7 +129,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="numberDecimal"
-            android:text="0" />
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
 
         <Button
             android:id="@+id/missed_increment_1"

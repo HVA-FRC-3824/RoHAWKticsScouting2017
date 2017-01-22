@@ -1,52 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/activity_vertical_margin">
-
-    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+    android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_start_position"
-        app:key="auto_start_position"
-        app:label="Start position"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin">
 
-    <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/auto_baseline"
-        app:key="auto_baseline"
-        app:label="Crossed Base Line" />
+        <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+            android:id="@+id/auto_start_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="auto_start_position"
+            app:label="Start position"
+            app:spinner_values="@array/start_position_options" />
 
-    <frc3824.rohawkticsscouting2017.Views.Steamworks.GearsInput
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_gears"
-        app:key="auto_gears"
-        app:label="Gears" />
+        <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
+            android:id="@+id/auto_baseline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="auto_baseline"
+            app:label="Crossed Base Line" />
 
-    <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_high_goal"
-        app:key="auto_high_goal"
-        app:label="High Goal"/>
+        <frc3824.rohawkticsscouting2017.Views.Steamworks.GearsInput
+            android:id="@+id/auto_gears"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="auto_gears"
+            app:label="Gears" />
 
-    <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_low_goal"
-        app:key="auto_low_goal"
-        app:label="Low Goal"/>
+        <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
+            android:id="@+id/auto_high_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="auto_high_goal"
+            app:label="High Goal" />
+
+        <frc3824.rohawkticsscouting2017.Views.Steamworks.ShotInput
+            android:id="@+id/auto_low_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="auto_low_goal"
+            app:label="Low Goal" />
 
 
-    <frc3824.rohawkticsscouting2017.Views.SavableCounter
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_hoppers"
-        app:key="auto_hoppers"
-        app:label="Hoppers Actived" />
+        <frc3824.rohawkticsscouting2017.Views.SavableCounter
+            android:id="@+id/auto_hoppers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="auto_hoppers"
+            app:label="Hoppers Actived" />
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

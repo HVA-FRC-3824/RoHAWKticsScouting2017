@@ -42,7 +42,6 @@ public class TeamMatchData {
     public int auto_hoppers;
 
     // Teleop
-    public String teleop_shooting_location;
     public Gears teleop_gears;
     public int teleop_high_goal_made;
     public int teleop_high_goal_missed;
@@ -92,7 +91,6 @@ public class TeamMatchData {
             auto_low_goal_missed = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_LOW_GOAL_MISSED);
             auto_hoppers = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HOPPERS);
 
-            teleop_shooting_location = map.getString(Constants.Match_Scouting.Teleop.TELEOP_SHOOTING_LOCATION);
             teleop_gears = (Gears)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_GEARS);
             teleop_high_goal_made = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MADE);
             teleop_high_goal_missed = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MISSED);
@@ -140,7 +138,6 @@ public class TeamMatchData {
         map.put(Constants.Match_Scouting.Autonomous.AUTO_LOW_GOAL_CORRECTION, auto_low_goal_correction);
         map.put(Constants.Match_Scouting.Autonomous.AUTO_HOPPERS, auto_hoppers);
 
-        map.put(Constants.Match_Scouting.Teleop.TELEOP_SHOOTING_LOCATION, teleop_shooting_location);
         map.put(Constants.Match_Scouting.Teleop.TELEOP_GEARS, teleop_gears);
         map.put(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MADE, teleop_high_goal_made);
         map.put(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MISSED, teleop_high_goal_missed);

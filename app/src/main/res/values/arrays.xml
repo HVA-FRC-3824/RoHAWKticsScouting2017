@@ -22,9 +22,7 @@
         <item>Successful</item>
     </string-array>
 
-    <string-array name="shooting_location_options">
-        <item>None</item>
-        <item>Key</item>
+    <string-array name="start_position_options">
         <item>Near</item>
         <item>Center</item>
         <item>Far</item>
