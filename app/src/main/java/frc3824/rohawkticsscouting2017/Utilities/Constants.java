@@ -144,6 +144,7 @@ public interface Constants {
                 String DID_NOT_FINISH_IN_TIME = "Did not finish in time";
                 String ROBOT_FELL = "Robot fell";
                 String SUCCESSFUL = "Successful";
+                String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT};
             }
 
             String ENDGAME_CLIMB_TIME = "endgame_climb_time";
@@ -155,6 +156,8 @@ public interface Constants {
                 String LESS_THAN_20S = "< 20s";
                 String LESS_THAN_25S = "< 25s";
                 String LESS_THAN_30S = "< 30s";
+                String[] LIST = {N_A, LESS_THAN_5S, LESS_THAN_10S, LESS_THAN_15S, LESS_THAN_20S,
+                    LESS_THAN_25S, LESS_THAN_30S};
             }
         }
 
@@ -267,8 +270,7 @@ public interface Constants {
         int HEADER_MSB = 0x10;
         int HEADER_LSB = 0x55;
 
-        interface Message_Type
-        {
+        interface Message_Type {
             int DATA_SENT_OK = 0x00;
             int DATA_RECEIVED = 0x02;
             int SENDING_DATA = 0x04;
@@ -280,8 +282,7 @@ public interface Constants {
             int NEW_CONNECTION = 0x54;
         }
 
-        interface Message_Headers
-        {
+        interface Message_Headers {
             char MATCH_HEADER = 'M';
             char PIT_HEADER = 'P';
             char SUPER_HEADER = 'S';
@@ -292,8 +293,7 @@ public interface Constants {
             char MATCH_STRATEGY_HEADER = 'A';
         }
 
-        interface Device_Names
-        {
+        interface Device_Names {
             String BLUE1 = "3824_Blue1";
             String BLUE2 = "3824_Blue2";
             String BLUE3 = "3824_Blue3";
@@ -307,8 +307,7 @@ public interface Constants {
             String RED_PI = "raspberrypi";
         }
 
-        interface Data_Transfer_Status
-        {
+        interface Data_Transfer_Status {
             int NO_BLUETOOTH = 0;
             int SERVER_NOT_FOUND = 1;
             int SUCCESS = 2;
@@ -340,14 +339,39 @@ public interface Constants {
         String WHITE = "white";
     }
 
+    interface Team_View {
+        interface Gear_Options {
+            String NEAR_PLACED = "Near - Placed";
+            String NEAR_DROPPED = "Near - Dropped";
+            String CENTER_PLACED = "Center - Placed";
+            String CENTER_DROPPED = "Center - Dropped";
+            String FAR_PLACED = "Far - Placed";
+            String FAR_DROPPED = "Far - Dropped";
+            String[] LIST = {NEAR_PLACED, NEAR_DROPPED, CENTER_PLACED, CENTER_DROPPED, FAR_PLACED, FAR_DROPPED};
+        }
+    }
+
     interface Event_View {
         interface Main_Dropdown_Options {
+            String POINTS = "Points";
             String FOULS = "Fouls";
             String POST_MATCH = "Post Match";
 
             // GAME SPECIFIC
+            String GEARS = "Gears";
+            String SHOOTING = "Shooting";
+            String CLIMB = "Climb";
 
             String[] OPTIONS = {FOULS, POST_MATCH};
+        }
+
+        interface Points_Secondary_Options {
+            String TOTAL = "Total";
+            String AUTO = "Auto";
+            String TELEOP = "Teleop";
+            String ENDGAME = "Endgame";
+
+            String[] OPTIONS = {TOTAL, AUTO, TELEOP, ENDGAME};
         }
 
         interface Foul_Secondary_Options {
@@ -368,5 +392,85 @@ public interface Constants {
         }
 
         // GAME SPECIFIC
+        interface Gears_Secondary_Options {
+            
+            String BOTH = "Both ";
+            String AUTO = "Auto ";
+            String TELEOP = "Teleop ";
+            
+            String NEAR = "Near ";
+            String CENTER = "Center ";
+            String FAR = "Far ";
+            
+            String PLACED = "Placed";
+            String DROPPED = "Dropped";
+            
+            String BOTH_PLACED = BOTH + PLACED;
+            String AUTO_PLACED = AUTO + PLACED;
+            String TELEOP_PLACED = TELEOP + PLACED;
+            
+            String BOTH_DROPPED = BOTH + DROPPED;
+            String AUTO_DROPPED = AUTO + DROPPED;
+            String TELEOP_DROPPED = TELEOP + DROPPED;
+            
+            String BOTH_NEAR_PLACED = BOTH + NEAR + PLACED;
+            String AUTO_NEAR_PLACED = AUTO + NEAR + PLACED;
+            String TELEOP_NEAR_PLACED = TELEOP + NEAR + PLACED;
+            
+            String BOTH_CENTER_PLACED = BOTH + CENTER + PLACED;
+            String AUTO_CENTER_PLACED = AUTO + CENTER + PLACED;
+            String TELEOP_CENTER_PLACED = TELEOP + CENTER + PLACED;
+            
+            String BOTH_FAR_PLACED = BOTH + FAR + PLACED;
+            String AUTO_FAR_PLACED = AUTO + FAR + PLACED;
+            String TELEOP_FAR_PLACED = TELEOP + FAR + PLACED;
+            
+            String BOTH_NEAR_DROPPED = BOTH + NEAR + DROPPED;
+            String AUTO_NEAR_DROPPED = AUTO + NEAR + DROPPED;
+            String TELEOP_NEAR_DROPPED = TELEOP + NEAR + DROPPED;
+            
+            String BOTH_CENTER_DROPPED = BOTH + CENTER + DROPPED;
+            String AUTO_CENTER_DROPPED = AUTO + CENTER + DROPPED;
+            String TELEOP_CENTER_DROPPED = TELEOP + CENTER + DROPPED;
+            
+            String BOTH_FAR_DROPPED = BOTH + FAR + DROPPED;
+            String AUTO_FAR_DROPPED = AUTO + FAR + DROPPED;
+            String TELEOP_FAR_DROPPED = TELEOP + FAR + DROPPED;
+
+            String[] OPTIONS = {
+                                BOTH_PLACED, AUTO_PLACED, TELEOP_PLACED,
+                                BOTH_DROPPED, AUTO_DROPPED, TELEOP_DROPPED,
+                                BOTH_NEAR_PLACED, AUTO_NEAR_PLACED, TELEOP_NEAR_PLACED,
+                                BOTH_CENTER_PLACED, AUTO_CENTER_PLACED, TELEOP_CENTER_PLACED,
+                                BOTH_FAR_PLACED, AUTO_FAR_PLACED, TELEOP_FAR_PLACED,
+                                BOTH_NEAR_DROPPED, AUTO_NEAR_DROPPED, TELEOP_NEAR_DROPPED,
+                                BOTH_CENTER_DROPPED, AUTO_CENTER_DROPPED, TELEOP_CENTER_DROPPED,
+                                BOTH_FAR_DROPPED, AUTO_FAR_DROPPED, TELEOP_FAR_DROPPED
+                                };
+        }
+
+        interface Shooting_Secondary_Options {
+            String AUTO_HIGH_MADE = "Auto High Goal Made";
+            String AUTO_LOW_MADE = "Auto Low Goal Made";
+            String AUTO_HIGH_PERCENT = "Auto High Goal Percent";
+            String AUTO_LOW_PERCENT = "Auto Low Goal Percent";
+
+            String TELEOP_HIGH_MADE = "Teleop High Goal Made";
+            String TELEOP_LOW_MADE = "Teleop Low Goal Made";
+            String TELEOP_HIGH_PERCENT = "Teleop High Goal Percent";
+            String TELEOP_LOW_PERCENT = "Teleop Low Goal Percent";
+
+            String[] OPTIONS = {AUTO_HIGH_MADE, AUTO_HIGH_PERCENT,
+                                AUTO_LOW_MADE, AUTO_LOW_PERCENT,
+                                TELEOP_HIGH_MADE, TELEOP_HIGH_PERCENT,
+                                TELEOP_LOW_MADE, TELEOP_LOW_PERCENT};
+        }
+
+        interface Climb_Secondary_Options {
+            String SUCCESSFUL_ATTEMPTS = "Successful Attempts";
+            String TIME = "Time";
+
+            String[] OPTIONS = {SUCCESSFUL_ATTEMPTS, TIME};
+        }
     }
 }

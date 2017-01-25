@@ -90,7 +90,7 @@ public class DriveTeamFeedback extends Activity {
         mPartner1Note = (EditText)findViewById(R.id.partner_1_note);
         mPartner2Note = (EditText)findViewById(R.id.partner_2_note);
 
-        mTeamLogistics = mDatabase.getTID(Constants.OUR_TEAM_NUMBER);
+        mTeamLogistics = mDatabase.getTeamLogistics(Constants.OUR_TEAM_NUMBER);
     }
 
     /**

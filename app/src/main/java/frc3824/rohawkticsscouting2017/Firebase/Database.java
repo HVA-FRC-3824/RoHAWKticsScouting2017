@@ -634,6 +634,7 @@ public class Database {
 
     //region Schedule Data
     public void setMatch(Match match) {
+        match.last_modified = System.currentTimeMillis();
         mScheduleRef.child(String.format("%d", match.match_number)).setValue(match);
     }
 
@@ -659,6 +660,7 @@ public class Database {
 
     //region Match Scouting Data
     public void setTeamMatchData(TeamMatchData teamMatchData) {
+        teamMatchData.last_modified = System.currentTimeMillis();
         mPartialMatchRef.child(String.format("%d_%d", teamMatchData.match_number, teamMatchData.team_number)).setValue(teamMatchData);
     }
 
@@ -673,6 +675,7 @@ public class Database {
 
     //region Pit Scouting Data
     public void setTeamPitData(TeamPitData teamPitData) {
+        teamPitData.last_modified = System.currentTimeMillis();
         mTeamPitDataRef.child(String.format("%d", teamPitData.team_number)).setValue(teamPitData);
     }
 
@@ -688,6 +691,7 @@ public class Database {
 
     //region Super Scouting Data
     public void setSuperMatchData(SuperMatchData superMatchData) {
+        superMatchData.last_modified = System.currentTimeMillis();
         mSuperMatchDataRef.child(String.format("%d", superMatchData.match_number)).setValue(superMatchData);
     }
 
@@ -702,6 +706,7 @@ public class Database {
 
     //region Drive Team Feedback Data
     public void setTeamDTFeedback(TeamDTFeedback teamDTFeedback) {
+        teamDTFeedback.last_modified = System.currentTimeMillis();
         mTeamDTFeedbackRef.child(String.format("%d", teamDTFeedback.team_number)).setValue(teamDTFeedback);
     }
 
@@ -715,23 +720,23 @@ public class Database {
     //endregion
 
     //region Team Info
-    public void setTID(TeamLogistics teamLogistics)
-    {
+    public void setTeamLogistics(TeamLogistics teamLogistics) {
+        teamLogistics.last_modified = System.currentTimeMillis();
         mTeamLogisticsRef.child(String.format("%d", teamLogistics.team_number)).setValue(teamLogistics);
     }
 
-    public TeamLogistics getTID(int team_number)
-    {
+    public TeamLogistics getTeamLogistics(int team_number) {
         return mTeamLogisticsMap.get(team_number);
     }
 
-    public void removeTID(int team_number){
+    public void removeTeamLogistics(int team_number){
         mTeamLogisticsRef.child(String.format("%d", team_number)).removeValue();
     }
     //endregion
 
     //region Calculated data
     public void setTeamCalculatedData(TeamCalculatedData teamCalculatedData) {
+        teamCalculatedData.last_modified = System.currentTimeMillis();
         mTeamCalulatedDataRef.child(String.format("%d", teamCalculatedData.team_number)).setValue(teamCalculatedData);
     }
 
@@ -740,8 +745,8 @@ public class Database {
 
     //region Pick List Data
     //region First Pick
-    public void setFirstTPA(TeamPickAbility first)
-    {
+    public void setFirstTPA(TeamPickAbility first) {
+        first.last_modified = System.currentTimeMillis();
         mFirstTeamPickAbilityRef.child(String.valueOf(first.team_number)).setValue(first);
     }
 
@@ -752,39 +757,39 @@ public class Database {
     //endregion
 
     //region Second Pick
-    public void setSecondTPA(TeamPickAbility second)
-    {
+    public void setSecondTPA(TeamPickAbility second) {
+        second.last_modified = System.currentTimeMillis();
         mSecondTeamPickAbilityRef.child(String.valueOf(second.team_number)).setValue(second);
     }
 
-    public TeamPickAbility getSecondTPA(int team_number)
-    {
+    public TeamPickAbility getSecondTPA(int team_number) {
         return mSecondTeamPickAbilityMap.get(team_number);
     }
     //endregion
 
     //region Third Pick
-    public void setThirdTPA(TeamPickAbility third)
-    {
+    public void setThirdTPA(TeamPickAbility third) {
+        third.last_modified = System.currentTimeMillis();
         mThirdTeamPickAbilityRef.child(String.valueOf(third.team_number)).setValue(third);
     }
 
-    public TeamPickAbility getThirdTPA(int team_number)
-    {
+    public TeamPickAbility getThirdTPA(int team_number) {
         return mThirdTeamPickAbilityMap.get(team_number);
     }
     //endregion
 
     //region DNP
-    public void setDNP(int team_number, boolean dnp)
-    {
+    public void setDNP(int team_number, boolean dnp) {
+        long last_modified = System.currentTimeMillis();
         mFirstTeamPickAbilityRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mFirstTeamPickAbilityRef.child(String.valueOf(team_number)).child("last_modified").setValue(last_modified);
         mSecondTeamPickAbilityRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mSecondTeamPickAbilityRef.child(String.valueOf(team_number)).child("last_modified").setValue(last_modified);
         mThirdTeamPickAbilityRef.child(String.valueOf(team_number)).child("dnp").setValue(dnp);
+        mThirdTeamPickAbilityRef.child(String.valueOf(team_number)).child("last_modified").setValue(last_modified);
     }
 
-    public ArrayList<Integer> getDnpList()
-    {
+    public ArrayList<Integer> getDnpList() {
         ArrayList<Integer> teams = getTeamNumbers();
         // Remove all teams that are not set to do not pick
         for(int i = 0; i < teams.size(); i++)
@@ -799,23 +804,25 @@ public class Database {
     }
     //endregion
 
-    public void setPicked(int team_number, boolean picked)
-    {
+    public void setPicked(int team_number, boolean picked) {
+        long last_modified = System.currentTimeMillis();
         mFirstTeamPickAbilityRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mFirstTeamPickAbilityRef.child(String.valueOf(team_number)).child("last_modified").setValue(last_modified);
         mSecondTeamPickAbilityRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mSecondTeamPickAbilityRef.child(String.valueOf(team_number)).child("last_modified").setValue(last_modified);
         mThirdTeamPickAbilityRef.child(String.valueOf(team_number)).child("picked").setValue(picked);
+        mThirdTeamPickAbilityRef.child(String.valueOf(team_number)).child("last_modified").setValue(last_modified);
     }
     //endregion
 
     //region Rankings
     //region Current Rankings
-    public void setCurrentTRD(TeamRankingData teamRankingData)
-    {
+    public void setCurrentTRD(TeamRankingData teamRankingData) {
+        teamRankingData.last_modified = System.currentTimeMillis();
         mCurrentTeamRankingDataRef.child(String.format("%d", teamRankingData.team_number)).setValue(teamRankingData);
     }
 
-    public TeamRankingData getCurrentTRD(int team_number)
-    {
+    public TeamRankingData getCurrentTRD(int team_number) {
         return mCurrentTeamRankingDataMap.get(team_number);
     }
 
@@ -826,30 +833,27 @@ public class Database {
     //endregion
 
     //region Predicted Rankings
-    public void setPredictedTRD(TeamRankingData teamRankingData)
-    {
+    public void setPredictedTRD(TeamRankingData teamRankingData) {
+        teamRankingData.last_modified = System.currentTimeMillis();
         mPredictedTeamRankingDataRef.child(String.format("%d", teamRankingData.team_number)).setValue(teamRankingData);
     }
 
-    public TeamRankingData getPredictedTRD(int team_number)
-    {
+    public TeamRankingData getPredictedTRD(int team_number) {
         return mPredictedTeamRankngDataMap.get(team_number);
     }
 
-    public Map<Integer, TeamRankingData> getPredictedRankings()
-    {
+    public Map<Integer, TeamRankingData> getPredictedRankings() {
         return mPredictedTeamRankngDataMap;
     }
     //endregion
     //endregion
 
     //region All Team Data
-    public Team getTeam(int team_number)
-    {
+    public Team getTeam(int team_number) {
         Team team = new Team();
         team.team_number = team_number;
 
-        team.info = getTID(team_number);
+        team.info = getTeamLogistics(team_number);
         if(team.info == null)
         {
             team.info = new TeamLogistics();
@@ -926,10 +930,9 @@ public class Database {
         return team;
     }
 
-    public void setTeam(Team team)
-    {
+    public void setTeam(Team team) {
         setTeamCalculatedData(team.calc);
-        setTID(team.info);
+        setTeamLogistics(team.info);
         setTeamPitData(team.pit);
         setTeamDTFeedback(team.drive_team_feedback);
         for(TeamMatchData entry: team.completed_matches.values())
@@ -943,8 +946,7 @@ public class Database {
         setThirdTPA(team.third_pick);
     }
 
-    public List<TeamMatchData> getCompletedMatches(int team_number)
-    {
+    public List<TeamMatchData> getCompletedMatches(int team_number) {
         Team team = getTeam(team_number);
         List<TeamMatchData> completedMatches = new ArrayList<>();
         for(int match_number: team.info.match_numbers)
@@ -962,6 +964,7 @@ public class Database {
 
     //region Strategy
     public void setStrategy(Strategy strategy) {
+        strategy.last_modified = System.currentTimeMillis();
         mIndividualStrategyRef.child(strategy.name).setValue(strategy);
     }
 
@@ -975,8 +978,7 @@ public class Database {
     //endregion
 
     //region Notes
-    public ArrayList<NoteView> getAllNotes()
-    {
+    public ArrayList<NoteView> getAllNotes() {
         ArrayList<NoteView> notes = new ArrayList<>();
         for(TeamMatchData teamMatchData : mTeamMatchDataMap.values())
         {
@@ -1002,6 +1004,7 @@ public class Database {
 
     //region Scout Accuracy
     public void setScoutAccuracy(ScoutAccuracy scout){
+        scout.last_modified = System.currentTimeMillis();
         mScoutAccuracyRef.child(scout.name).setValue(scout);
     }
 
@@ -1015,15 +1018,13 @@ public class Database {
     //endregion
 
     //region Team Numbers
-    public ArrayList<Integer> getTeamNumbers()
-    {
+    public ArrayList<Integer> getTeamNumbers() {
         ArrayList<Integer> team_numbers = new ArrayList<>(mTeamLogisticsMap.keySet());
         Collections.sort(team_numbers);
         return team_numbers;
     }
 
-    public int getTeamNumberBefore(int team_number)
-    {
+    public int getTeamNumberBefore(int team_number) {
         ArrayList<Integer> teams = getTeamNumbers();
 
         for(int i = 0; i < teams.size(); i++)
@@ -1044,8 +1045,7 @@ public class Database {
         return 0;
     }
 
-    public int getTeamNumberAfter(int team_number)
-    {
+    public int getTeamNumberAfter(int team_number) {
         ArrayList<Integer> teams = getTeamNumbers();
 
         for(int i = 0; i < teams.size(); i++)

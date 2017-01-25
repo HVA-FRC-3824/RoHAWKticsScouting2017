@@ -74,7 +74,7 @@ public class LVA_TeamListBuilder extends ArrayAdapter<TeamLogistics> {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         teamLogistics.team_number = Integer.parseInt(teamNumberEdit.getText().toString());
                         teamLogistics.nickname = nicknameEdit.getText().toString();
-                        mDatabase.setTID(teamLogistics);
+                        mDatabase.setTeamLogistics(teamLogistics);
                         notifyDataSetChanged();
                     }
                 });
@@ -92,7 +92,7 @@ public class LVA_TeamListBuilder extends ArrayAdapter<TeamLogistics> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.removeTID(teamLogistics.team_number);
+                mDatabase.removeTeamLogistics(teamLogistics.team_number);
                 mTeams.remove(position);
                 notifyDataSetChanged();
             }

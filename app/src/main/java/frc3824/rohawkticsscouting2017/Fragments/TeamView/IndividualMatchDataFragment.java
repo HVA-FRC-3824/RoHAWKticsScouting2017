@@ -11,7 +11,9 @@ import android.widget.TextView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gear;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gears;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
@@ -25,25 +27,25 @@ public class IndividualMatchDataFragment extends Fragment{
 
     private final static String TAG = "IndividualMatchDataFragment";
 
-    private Team mTeam;
-    private int mMatchNumber;
+    private TeamMatchData mTmd;
+    private boolean mSurrogate;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_individual_match_data, container, false);
 
-        TeamMatchData tmd = mTeam.completed_matches.get(mMatchNumber);
 
-        if(mMatchNumber == mTeam.info.surrogate_match_number){
+        if(mSurrogate){
             view.findViewById(R.id.surrogate_text).setVisibility(View.VISIBLE);
         }
 
         // Points
-        LinearLayout points = (LinearLayout)view.findViewById(R.id.points_body);
+        View points = view.findViewById(R.id.points_body);
 
-        int auto_points = (tmd.auto_high_goal_made + tmd.auto_high_goal_correction) +
-                          (tmd.auto_low_goal_made + tmd.auto_low_goal_correction) / 3;
+
+        int auto_points = (mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction) +
+                          (mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction) / 3;
         int auto_gears = 0;
-        for(Gear gear: tmd.auto_gears)
+        for(Gear gear: mTmd.auto_gears)
         {
             if(gear.placed){
                 auto_gears += 1;
@@ -59,12 +61,12 @@ public class IndividualMatchDataFragment extends Fragment{
             rotors += 1;
         }
 
-        int teleop_points = (tmd.teleop_high_goal_made + tmd.teleop_high_goal_correction) / 3 +
-                            (tmd.teleop_low_goal_made + tmd.teleop_low_goal_correction) / 9;
+        int teleop_points = (mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction) / 3 +
+                            (mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction) / 9;
 
 
         int teleop_gears = 0;
-        for(Gear gear: tmd.teleop_gears)
+        for(Gear gear: mTmd.teleop_gears)
         {
             if(gear.placed){
                 teleop_gears += 1;
@@ -81,7 +83,7 @@ public class IndividualMatchDataFragment extends Fragment{
             teleop_points += 40 * (1 - rotors);
         }
 
-        int endgame_points = tmd.endgame_climb == Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.SUCCESSFUL? 50 : 0;
+        int endgame_points = mTmd.endgame_climb == Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.SUCCESSFUL? 50 : 0;
 
         int total_points = auto_points + teleop_points + endgame_points;
 
@@ -92,22 +94,92 @@ public class IndividualMatchDataFragment extends Fragment{
         ((TextView)points.findViewById(R.id.endgame)).setText(String.format("%d", endgame_points));
 
         // Auto (auto is a keyword so the underscore is used)
-        LinearLayout auto_ = (LinearLayout)view.findViewById(R.id.auto_body);
+        View auto_ = view.findViewById(R.id.auto_body);
 
+        ((TextView)auto_.findViewById(R.id.start_position)).setText(mTmd.auto_start_position);
+        ((TextView)auto_.findViewById(R.id.baseline)).setText(mTmd.auto_baseline ? "Yes" : "No");
+        String gears = "";
+        for(Gear gear : mTmd.auto_gears){
+            if(gear.placed){
+                switch (gear.location){
+                    case Constants.Match_Scouting.Custom.Gears.FAR:
+                        gears += "F";
+                        break;
+                    case Constants.Match_Scouting.Custom.Gears.CENTER:
+                        gears += "C";
+                        break;
+                    case Constants.Match_Scouting.Custom.Gears.NEAR:
+                        gears += "N";
+                        break;
+                }
+            } else {
+                gears += "D";
+            }
+        }
+        ((TextView)auto_.findViewById(R.id.gears)).setText(gears);
+
+        float percent = ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction)) /
+                ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction + mTmd.auto_high_goal_missed));
+        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+                mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction, mTmd.auto_high_goal_missed, percent));
+
+        percent = ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction)) /
+                ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction + mTmd.auto_low_goal_missed));
+        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+                mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction, mTmd.auto_low_goal_missed, percent));
+        
+        ((TextView)auto_.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.auto_hoppers));
 
         // Teleop
-        LinearLayout teleop = (LinearLayout)view.findViewById(R.id.teleop_body);
+        View teleop = view.findViewById(R.id.teleop_body);
 
+        gears = "";
+        for(Gear gear : mTmd.teleop_gears){
+            if(gear.placed){
+                switch (gear.location){
+                    case Constants.Match_Scouting.Custom.Gears.FAR:
+                        gears += "F";
+                        break;
+                    case Constants.Match_Scouting.Custom.Gears.CENTER:
+                        gears += "C";
+                        break;
+                    case Constants.Match_Scouting.Custom.Gears.NEAR:
+                        gears += "N";
+                        break;
+                }
+            } else {
+                gears += "D";
+            }
+        }
+        ((TextView)teleop.findViewById(R.id.gears)).setText(gears);
+
+        percent = ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction)) /
+                ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction + mTmd.teleop_high_goal_missed));
+        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+                mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction, mTmd.teleop_high_goal_missed, percent));
+
+        percent = ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction)) /
+                ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction + mTmd.teleop_low_goal_missed));
+        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+                mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction, mTmd.teleop_low_goal_missed, percent));
+
+        ((TextView)teleop.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.teleop_hoppers));
+        ((TextView)teleop.findViewById(R.id.gears_picked_up)).setText(String.valueOf(mTmd.teleop_picked_up_gears));
 
         // Endgame
-        LinearLayout endgame = (LinearLayout)view.findViewById(R.id.endgame_body);
+        View endgame = view.findViewById(R.id.endgame_body);
 
+        ((TextView)endgame.findViewById(R.id.climb)).setText(mTmd.endgame_climb);
+        ((TextView)endgame.findViewById(R.id.climb_time)).setText(mTmd.endgame_climb_time);
 
         return view;
     }
 
-    public void setTeamMatch(Team team, int position){
-        mTeam = team;
-        mMatchNumber = mTeam.info.match_numbers.get(position);
+    public void setTeamMatch(int team_number, int position){
+
+        TeamLogistics tl = Database.getInstance().getTeamLogistics(team_number);
+        int match_number = tl.match_numbers.get(position);
+        mTmd = Database.getInstance().getTeamMatchData(match_number,team_number);
+        mSurrogate = match_number == tl.surrogate_match_number;
     }
 }

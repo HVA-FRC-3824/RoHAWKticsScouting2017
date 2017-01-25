@@ -324,7 +324,7 @@ public class Settings extends Activity implements OnClickListener{
                     info.nickname = tbaTeam.nickname;
                     info.match_numbers = teamMatchNumbers.get(info.team_number);
                     Collections.sort(info.match_numbers);
-                    database.setTID(info);
+                    database.setTeamLogistics(info);
 
 //                    TeamPitData pit = new TeamPitData();
 //                    pit.team_number = tbaTeam.team_number;

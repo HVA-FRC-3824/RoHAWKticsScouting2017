@@ -28,6 +28,7 @@ public class TeamMatchData {
     public int alliance_number;
     public String scout_name;
     public long last_modified;
+    public int total_points;
 
     // Autonomous
     public String auto_start_position;
@@ -40,6 +41,7 @@ public class TeamMatchData {
     public int auto_low_goal_missed;
     public int auto_low_goal_correction;
     public int auto_hoppers;
+    public int auto_points;
 
     // Teleop
     public Gears teleop_gears;
@@ -51,10 +53,12 @@ public class TeamMatchData {
     public int teleop_low_goal_correction;
     public int teleop_hoppers;
     public int teleop_picked_up_gears;
+    public int teleop_points;
 
     // Endgame
     public String endgame_climb;
     public String endgame_climb_time;
+    public int endgame_points;
 
     //Post Match
     public boolean no_show;

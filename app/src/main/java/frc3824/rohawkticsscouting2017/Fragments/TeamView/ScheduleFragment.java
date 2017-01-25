@@ -36,7 +36,7 @@ public class ScheduleFragment extends Fragment {
         ListView schedule = (ListView)view.findViewById(R.id.schedule);
 
         Database database = Database.getInstance();
-        TeamLogistics info = database.getTID(mTeamNumber);
+        TeamLogistics info = database.getTeamLogistics(mTeamNumber);
 
         LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), info.match_numbers, mTeamNumber);
 

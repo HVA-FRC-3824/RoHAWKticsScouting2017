@@ -78,7 +78,7 @@ public class TeamListBuilder extends Activity implements View.OnClickListener{
                 teamLogistics.team_number = team_number;
                 teamLogistics.nickname = nickname;
                 teamLogistics.match_numbers = match_numbers;
-                mDatabase.setTID(teamLogistics);
+                mDatabase.setTeamLogistics(teamLogistics);
                 mLVA.notifyDataSetChanged();
             }
         });

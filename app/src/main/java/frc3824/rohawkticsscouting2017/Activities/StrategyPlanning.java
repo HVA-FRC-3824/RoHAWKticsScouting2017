@@ -303,7 +303,7 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
                 try {
                     fos = openFileOutput(imageName, Context.MODE_WORLD_WRITEABLE);
                     saveImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    strategy.updated = new Date().getTime();
+                    strategy.last_modified = System.currentTimeMillis();
                 } catch (FileNotFoundException e) {
                     Log.d(TAG, e.getMessage());
                 }

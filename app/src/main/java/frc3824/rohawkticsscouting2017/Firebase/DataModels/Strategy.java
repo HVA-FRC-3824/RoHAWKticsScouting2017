@@ -35,13 +35,12 @@ public class Strategy {
 
     private final static String TAG = "Strategy";
 
-    public int last_modified;
+    public long last_modified;
     public String name;
     public String filepath;
     public String url;
     public String notes;
     public String path_json; // For easy transfer during competition
-    public long updated;
 
     public Strategy() {
         name = "";
@@ -49,12 +48,12 @@ public class Strategy {
         url = "";
         notes = "";
         path_json = "";
-        updated = 0;
+        last_modified = 0;
     }
 
     public void create(Context context){
         File file = new File(filepath);
-        if(!file.exists() || file.lastModified() < updated){
+        if(!file.exists() || file.lastModified() < last_modified){
             Bitmap backgroundBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_top_down);
             Bitmap canvasBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_top_down);
             Canvas drawCanvas = new Canvas(canvasBitmap);

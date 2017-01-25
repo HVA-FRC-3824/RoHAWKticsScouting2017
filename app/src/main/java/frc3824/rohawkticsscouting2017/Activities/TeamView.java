@@ -35,8 +35,7 @@ public class TeamView extends Activity {
     private Database mDatabase;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_view);
 
