@@ -53,7 +53,19 @@ public class SuperMatchData {
     //Notes
     public String notes;
 
-    public SuperMatchData() {}
+    public SuperMatchData() {
+        blue_speed = new ArrayList<>();
+        red_speed = new ArrayList<>();
+
+        blue_intake_ability = new ArrayList<>();
+        red_intake_ability = new ArrayList<>();
+
+        blue_control = new ArrayList<>();
+        red_control = new ArrayList<>();
+
+        blue_defense = new ArrayList<>();
+        red_defense = new ArrayList<>();
+    }
 
     public SuperMatchData(ScoutMap map) {
         try {
