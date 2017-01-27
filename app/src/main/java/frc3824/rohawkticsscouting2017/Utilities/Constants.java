@@ -248,10 +248,10 @@ public interface Constants {
             String RED3_PILOT_RATING = "red3_pilot_rating";
 
             interface PILOT_RATING_OPTIONS {
-                String FIVE = "5 - Busting ass";
-                String FOUR = "4 - ";
-                String THREE = "3 - ";
-                String TWO = "2 - ";
+                String FIVE = "5 - Hauling ass"; // or "Could go pro in this"
+                String FOUR = "4 - Pretty good"; // TODO: better description
+                String THREE = "3 - Competent";
+                String TWO = "2 - Wouldn't pick them as pilot for us";
                 String ONE = "1 - Not paying attention/Slow/Clumsy";
                 String ZERO = "0 - Not a pilot in this match";
             }
