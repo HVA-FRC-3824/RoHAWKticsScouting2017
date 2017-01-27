@@ -28,6 +28,15 @@
         <item>Far</item>
     </string-array>
 
+    <string-array name="super_pilot_ratings">
+        <item>5 - Busting ass</item>
+        <item>4 - </item>
+        <item>3 - </item>
+        <item>2 - </item>
+        <item>1 - Not paying attention/Slow/Clumsy</item>
+        <item>0 - Not a pilot in this match</item>
+    </string-array>
+
 
     <!-- AutoComplete Values -->
     <string-array name="programming_language_options">

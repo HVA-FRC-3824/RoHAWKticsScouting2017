@@ -31,8 +31,8 @@ public class SuperMatchData {
     public ArrayList<Integer> red_speed;
 
     // Torque (Pushing Power)
-    public ArrayList<Integer> blue_torque;
-    public ArrayList<Integer> red_torque;
+    public ArrayList<Integer> blue_intake_ability;
+    public ArrayList<Integer> red_intake_ability;
 
     // Control
     public ArrayList<Integer> blue_control;
@@ -53,12 +53,12 @@ public class SuperMatchData {
             scout_name = map.getString(Constants.Super_Scouting.SCOUT_NAME);
 
             blue_speed = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_SPEED);
-            blue_torque = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_TORQUE);
+            blue_intake_ability = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_INTAKE_ABILITY);
             blue_control = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_CONTROL);
             blue_defense = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_DEFENSE);
 
             red_speed = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_SPEED);
-            red_torque = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_TORQUE);
+            red_intake_ability = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_INTAKE_ABILITY);
             red_control = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_CONTROL);
             red_defense = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_DEFENSE);
 
@@ -77,12 +77,12 @@ public class SuperMatchData {
         map.put(Constants.Super_Scouting.SCOUT_NAME, scout_name);
 
         map.put(Constants.Super_Scouting.Qualitative.BLUE_SPEED, blue_speed);
-        map.put(Constants.Super_Scouting.Qualitative.BLUE_TORQUE, blue_torque);
+        map.put(Constants.Super_Scouting.Qualitative.BLUE_INTAKE_ABILITY, blue_intake_ability);
         map.put(Constants.Super_Scouting.Qualitative.BLUE_CONTROL, blue_control);
         map.put(Constants.Super_Scouting.Qualitative.BLUE_DEFENSE, blue_defense);
 
         map.put(Constants.Super_Scouting.Qualitative.RED_SPEED, red_speed);
-        map.put(Constants.Super_Scouting.Qualitative.RED_TORQUE, red_torque);
+        map.put(Constants.Super_Scouting.Qualitative.RED_INTAKE_ABILITY, red_intake_ability);
         map.put(Constants.Super_Scouting.Qualitative.RED_CONTROL, red_control);
         map.put(Constants.Super_Scouting.Qualitative.RED_DEFENSE, red_defense);
 

@@ -229,14 +229,32 @@ public interface Constants {
             String BLUE_SPEED = "blue_speed";
             String RED_SPEED = "red_speed";
 
-            String BLUE_TORQUE = "blue_torque";
-            String RED_TORQUE = "red_torque";
+            String BLUE_INTAKE_ABILITY = "blue_intake_ability";
+            String RED_INTAKE_ABILITY = "red_intake_ability";
 
             String BLUE_CONTROL = "blue_control";
             String RED_CONTROL = "red_control";
 
             String BLUE_DEFENSE = "blue_defense";
             String RED_DEFENSE = "red_defense";
+        }
+
+        interface Miscellaneous {
+            String BLUE1_PILOT_RATING = "blue1_pilot_rating";
+            String BLUE2_PILOT_RATING = "blue2_pilot_rating";
+            String BLUE3_PILOT_RATING = "blue3_pilot_rating";
+            String RED1_PILOT_RATING = "red1_pilot_rating";
+            String RED2_PILOT_RATING = "red2_pilot_rating";
+            String RED3_PILOT_RATING = "red3_pilot_rating";
+
+            interface PILOT_RATING_OPTIONS {
+                String FIVE = "5 - Busting ass";
+                String FOUR = "4 - ";
+                String THREE = "3 - ";
+                String TWO = "2 - ";
+                String ONE = "1 - Not paying attention/Slow/Clumsy";
+                String ZERO = "0 - Not a pilot in this match";
+            }
         }
 
         String NOTES = "super_notes";
