@@ -211,7 +211,35 @@ public interface Constants {
 
         interface Miscellaneous {
             String PROGRAMMING_LANGUAGE = "programming_language";
+            interface Programming_Languages {
+                String CPP = "C++";
+                String JAVA = "Java";
+                String LABVIEW = "Labview";
+                String PYTHON = "Python";
+                String CSHARP = "C#";
 
+                String[] PROGRAMMING_LANGUAGES = {CPP, JAVA, LABVIEW, PYTHON, CSHARP};
+            }
+            String DRIVE_TRAIN = "drive_train";
+            interface Drive_Trains {
+                String TANK = "Tank";
+                String MECANUM = "Mecanum";
+                String SWERVE = "Swerve";
+                String ARCADE = "Arcade";
+                String RHINO = "Rhino";
+                String WEST_COAST = "West-Coast";
+                String[] DRIVE_TRAINS = {TANK, MECANUM, SWERVE, ARCADE, RHINO, WEST_COAST};
+            }
+            String CIMS = "cims";
+
+
+            String MAX_HOPPER_LOAD = "max_hopper_load";
+            String CHOSEN_VOLUME = "chosen_volume";
+            interface Volumes {
+                String SHORT = "Short (40in x 36in x 24in)";
+                String TALL = "Tall (30in x 32in x 36in)";
+                String[] VOLUMES = {SHORT, TALL};
+            }
             // GAME SPECIFIC
         }
 

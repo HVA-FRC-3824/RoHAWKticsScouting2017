@@ -43,6 +43,11 @@ public class TeamPitData {
     // Miscellaneous
 
     public String programming_language;
+    public String drive_train;
+    public String cims;
+    public String max_hopper_load;
+    public String chosen_volume;
+
 
     // Notes
     public String notes;
@@ -72,6 +77,10 @@ public class TeamPitData {
             weight = map.getDouble(Constants.Pit_Scouting.Dimensions.WEIGHT);
 
             programming_language = map.getString(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE);
+            cims = map.getString(Constants.Pit_Scouting.Miscellaneous.CIMS);
+            drive_train = map.getString(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN);
+            max_hopper_load = map.getString(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD);
+            chosen_volume = map.getString(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME);
 
             notes = map.getString(Constants.Pit_Scouting.NOTES);
 

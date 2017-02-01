@@ -13,5 +13,24 @@
         app:autocomplete_values="@array/programming_language_options"
         app:key="programming_language"
         app:label="Programming Language" />
+    <frc3824.rohawkticsscouting2017.Views.SavableAutoCompleteTextView
+        android:id="@+id/drive_train"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:autocomplete_values="@array/drive_train_options"
+        app:key="drive_train"
+        app:label="Drive Train" />
+    <frc3824.rohawkticsscouting2017.Views.SavableCounter
+        android:id="@+id/cims"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="cims"
+        app:label="CIMS" />
+    <frc3824.rohawkticsscouting2017.Views.SavableNumeric
+        android:id="@+id/max_hopper_load"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:key="max_hopper_load"
+        app:label="Maximum Hopper Load" />
 
 </LinearLayout>
