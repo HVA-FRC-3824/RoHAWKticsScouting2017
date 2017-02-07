@@ -19,6 +19,7 @@ import java.util.Set;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.StrategySuggestion;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
@@ -52,7 +53,8 @@ public class Database {
     private DatabaseReference mPartialMatchRef;
     private DatabaseReference mTeamCalulatedDataRef;
     private DatabaseReference mTeamLogisticsRef;
-    private DatabaseReference mIndividualStrategyRef;
+    private DatabaseReference mStrategyRef;
+    private DatabaseReference mStrategySuggestionRef;
     private DatabaseReference mCurrentTeamRankingDataRef;
     private DatabaseReference mPredictedTeamRankingDataRef;
     private DatabaseReference mFirstTeamPickAbilityRef;
@@ -77,7 +79,8 @@ public class Database {
     private Map<Integer, TeamPickAbility> mFirstTeamPickAbilityMap;
     private Map<Integer, TeamPickAbility> mSecondTeamPickAbilityMap;
     private Map<Integer, TeamPickAbility> mThirdTeamPickAbilityMap;
-    private Map<String, Strategy> mIndividualStrategyMap;
+    private Map<String, Strategy> mStrategyMap;
+    private Map<String, StrategySuggestion> mStrategySuggestionMap;
     private Map<String, ScoutAccuracy> mScoutAccuracyMap;
     //endregion
 
@@ -391,25 +394,25 @@ public class Database {
         //endregion
 
         //region Strategy
-        mIndividualStrategyRef = mEventRef.child("strategies").child("individual");
-        mIndividualStrategyMap = new HashMap<>();
-        mIndividualStrategyRef.addChildEventListener(new ChildEventListener() {
+        mStrategyRef = mEventRef.child("strategies").child("individual");
+        mStrategyMap = new HashMap<>();
+        mStrategyRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "strategies.individual.onChildAdded: " + dataSnapshot.getKey());
-                mIndividualStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
+                mStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "strategies.individual.onChildChanged: " + dataSnapshot.getKey());
-                mIndividualStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
+                mStrategyMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Strategy.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "strategies.individual.onChildRemoved: " + dataSnapshot.getKey());
-                mIndividualStrategyMap.remove(dataSnapshot.getKey());
+                mStrategyMap.remove(dataSnapshot.getKey());
             }
 
             @Override
@@ -420,6 +423,40 @@ public class Database {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "strategies.individual.onCancelled");
+            }
+        });
+        //endregion
+
+        //region Strategy Suggestion
+        mStrategySuggestionRef = mEventRef.child("strategies").child("suggestion");
+        mStrategySuggestionMap = new HashMap<>();
+        mStrategySuggestionRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.suggestion.onChildAdded:" + dataSnapshot.getKey());
+                mStrategySuggestionMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(StrategySuggestion.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.suggestion.onChildChanged: " + dataSnapshot.getKey());
+                mStrategySuggestionMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(StrategySuggestion.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "strategies.suggestion.onChildRemoved: " + dataSnapshot.getKey());
+                mStrategySuggestionMap.remove(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.v(TAG, "strategies.suggestion.onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v(TAG, "strategies.suggestion.onCancelled");
             }
         });
         //endregion
@@ -965,15 +1002,30 @@ public class Database {
     //region Strategy
     public void setStrategy(Strategy strategy) {
         strategy.last_modified = System.currentTimeMillis();
-        mIndividualStrategyRef.child(strategy.name).setValue(strategy);
+        mStrategyRef.child(strategy.name).setValue(strategy);
     }
 
     public Strategy getStrategy(String strategy_name) {
-        return mIndividualStrategyMap.get(strategy_name);
+        return mStrategyMap.get(strategy_name);
     }
 
     public ArrayList<Strategy> getAllStrategies() {
-        return new ArrayList<>(mIndividualStrategyMap.values());
+        return new ArrayList<>(mStrategyMap.values());
+    }
+    //endregion
+
+    //region StrategySuggestion
+    public void setStrategySuggestion(StrategySuggestion strategySuggestion){
+        strategySuggestion.last_modified = System.currentTimeMillis();
+        mStrategySuggestionRef.child(strategySuggestion.key).setValue(strategySuggestion);
+    }
+
+    public StrategySuggestion getStrategySuggestion(String key){
+        return mStrategySuggestionMap.get(key);
+    }
+
+    public ArrayList<StrategySuggestion> getAllStrategySuggestions(){
+        return new ArrayList<>(mStrategySuggestionMap.values());
     }
     //endregion
 

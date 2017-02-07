@@ -38,7 +38,7 @@ public class ConnectionStatusThread extends Thread {
                 if(!ct.isConnected()) {
                     Message message = new Message();
                     message.obj = ct.getRemoveDeviceName();
-                    message.what = Constants.Bluetooth.Message_Type.CONNECTION_LOST;
+                    message.what = Constants.Comms.Message_Type.CONNECTION_LOST;
                     mHandler.sendMessage(message);
                     ct.cancel();
                     mConnections.remove(i);

@@ -36,26 +36,22 @@ public class Strategy {
     private final static String TAG = "Strategy";
 
     public long last_modified;
+    public int width;
+    public int height;
     public String name;
     public String filepath;
     public String url;
     public String notes;
     public String path_json; // For easy transfer during competition
 
-    public Strategy() {
-        name = "";
-        filepath = "";
-        url = "";
-        notes = "";
-        path_json = "";
-        last_modified = 0;
-    }
+    public Strategy() {}
 
     public void create(Context context){
         File file = new File(filepath);
         if(!file.exists() || file.lastModified() < last_modified){
-            Bitmap backgroundBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_top_down);
-            Bitmap canvasBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_top_down);
+            Bitmap fieldBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_top_down);
+            Bitmap backgroundBitmap = Bitmap.createScaledBitmap(fieldBitmap, width, height, false);
+            Bitmap canvasBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas drawCanvas = new Canvas(canvasBitmap);
             Paint drawPaint = new Paint();
             drawPaint.setAntiAlias(true);
@@ -78,9 +74,9 @@ public class Strategy {
                         drawPaint.setXfermode(null);
                     }
                     JSONArray path = colorPath.getJSONArray("path");
-                    for(int j = 0; j < path.length(); i++)
+                    for(int j = 0; j < path.length(); j++)
                     {
-                        JSONObject point = path.getJSONObject(i);
+                        JSONObject point = path.getJSONObject(j);
                         float x = (float)point.getDouble("x");
                         float y = (float)point.getDouble("y");
                         drawPath.moveTo(x, y);
@@ -106,7 +102,6 @@ public class Strategy {
                 if (fos != null) {
                     try {
                         fos.close();
-
                     } catch (IOException e) {
                         Log.d(TAG, e.getMessage());
                     }

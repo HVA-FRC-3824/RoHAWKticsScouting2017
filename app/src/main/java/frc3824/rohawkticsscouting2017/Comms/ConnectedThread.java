@@ -51,7 +51,7 @@ public class ConnectedThread extends Thread {
         mMessageReceived = false;
         mInputStream = tmpIn;
         mOutputStream = tmpOut;
-        mState = Constants.Bluetooth.RECEIVING;
+        mState = Constants.Comms.RECEIVING;
     }
 
     public void run() {
@@ -59,7 +59,7 @@ public class ConnectedThread extends Thread {
         running = true;
         try {
             while (running) {
-                if (mInputStream.available() > 0 && mState == Constants.Bluetooth.RECEIVING) {
+                if (mInputStream.available() > 0 && mState == Constants.Comms.RECEIVING) {
                     boolean waitingForHeader = true;
                     ByteArrayOutputStream dataOutputStream = new ByteArrayOutputStream();
                     byte[] headerBytes = new byte[22];
@@ -74,7 +74,7 @@ public class ConnectedThread extends Thread {
                             headerBytes[headerIndex++] = header;
 
                             if(headerIndex == 22) {
-                                if ((headerBytes[0] == Constants.Bluetooth.HEADER_MSB) && (headerBytes[1] == Constants.Bluetooth.HEADER_LSB)) {
+                                if ((headerBytes[0] == Constants.Comms.HEADER_MSB) && (headerBytes[1] == Constants.Comms.HEADER_LSB)) {
                                     Log.v(TAG, "Header Received.  Now obtaining length");
                                     byte[] dataSizeBuffer = Arrays.copyOfRange(headerBytes, 2, 6);
                                     totalSize = byteArrayToInt(dataSizeBuffer);
@@ -85,13 +85,13 @@ public class ConnectedThread extends Thread {
                                 } else {
                                     Log.e(TAG, "Did not receive correct header.  Closing socket");
                                     mSocket.close();
-                                    mHandler.sendEmptyMessage(Constants.Bluetooth.Message_Type.INVALID_HEADER);
+                                    mHandler.sendEmptyMessage(Constants.Comms.Message_Type.INVALID_HEADER);
                                     break;
                                 }
                             }
                         } else {
                             // Read the data from the stream in chunks
-                            byte[] buffer = new byte[Constants.Bluetooth.CHUNK_SIZE];
+                            byte[] buffer = new byte[Constants.Comms.CHUNK_SIZE];
                             Log.v(TAG, String.format("Waiting for data.  Expecting %d more bytes.", remainingSize));
                             int bytesRead = mInputStream.read(buffer);
                             Log.v(TAG, "Read " + bytesRead + " bytes into buffer");
@@ -111,7 +111,7 @@ public class ConnectedThread extends Thread {
                         Log.v(TAG, "Digest matches OK.");
                         Message message = new Message();
                         message.obj = data;
-                        message.what = Constants.Bluetooth.Message_Type.DATA_RECEIVED;
+                        message.what = Constants.Comms.Message_Type.DATA_RECEIVED;
                         mHandler.sendMessage(message);
 
                         // Send the digest back to the client as a confirmation
@@ -120,12 +120,12 @@ public class ConnectedThread extends Thread {
                         mMessageReceived = true;
                     } else {
                         Log.e(TAG, "Digest did not match.  Corrupt transfer?");
-                        mHandler.sendEmptyMessage(Constants.Bluetooth.Message_Type.DIGEST_DID_NOT_MATCH);
+                        mHandler.sendEmptyMessage(Constants.Comms.Message_Type.DIGEST_DID_NOT_MATCH);
                         mOutputStream.write(digest);
                     }
 
                 }
-                while (mInputStream.available() == 0 && mState != Constants.Bluetooth.RECEIVING && running);
+                while (mInputStream.available() == 0 && mState != Constants.Comms.RECEIVING && running);
             }
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -150,13 +150,13 @@ public class ConnectedThread extends Thread {
         } else {
             Log.d(TAG, String.format("Sending: %s",tempBuffer));
         }
-        mState = Constants.Bluetooth.SENDING;
+        mState = Constants.Comms.SENDING;
         try {
-            mHandler.sendEmptyMessage(Constants.Bluetooth.Message_Type.SENDING_DATA);
+            mHandler.sendEmptyMessage(Constants.Comms.Message_Type.SENDING_DATA);
 
             // Send the header control first
-            mOutputStream.write(Constants.Bluetooth.HEADER_MSB);
-            mOutputStream.write(Constants.Bluetooth.HEADER_LSB);
+            mOutputStream.write(Constants.Comms.HEADER_MSB);
+            mOutputStream.write(Constants.Comms.HEADER_LSB);
 
             // write size
             mOutputStream.write(intToByteArray(buffer.length));
@@ -180,13 +180,13 @@ public class ConnectedThread extends Thread {
                 if (incomingIndex == 16) {
                     if (digestMatch(buffer, incomingDigest)) {
                         Log.v(TAG, "Digest matched OK.  Data was received OK.");
-                        mHandler.sendEmptyMessage(Constants.Bluetooth.Message_Type.DATA_SENT_OK);
-                        mState = Constants.Bluetooth.RECEIVING;
+                        mHandler.sendEmptyMessage(Constants.Comms.Message_Type.DATA_SENT_OK);
+                        mState = Constants.Comms.RECEIVING;
                         return true;
                     } else {
                         Log.e(TAG, "Digest did not match.  Might want to resend.");
-                        mHandler.sendEmptyMessage(Constants.Bluetooth.Message_Type.DIGEST_DID_NOT_MATCH);
-                        mState = Constants.Bluetooth.RECEIVING;
+                        mHandler.sendEmptyMessage(Constants.Comms.Message_Type.DIGEST_DID_NOT_MATCH);
+                        mState = Constants.Comms.RECEIVING;
                         return false;
                     }
                 }
@@ -195,7 +195,7 @@ public class ConnectedThread extends Thread {
             Log.e(TAG, ex.toString());
             cancel();
         }
-        mState = Constants.Bluetooth.RECEIVING;
+        mState = Constants.Comms.RECEIVING;
         return false;
     }
 
