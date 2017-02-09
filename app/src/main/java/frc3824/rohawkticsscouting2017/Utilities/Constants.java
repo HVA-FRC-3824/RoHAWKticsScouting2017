@@ -222,13 +222,14 @@ public interface Constants {
             }
             String DRIVE_TRAIN = "drive_train";
             interface Drive_Trains {
-                String TANK = "Tank";
+                String TANK_4_WHEEL = "Tank (4 wheel)";
+                String TANK_6_WHEEL = "Tank (6 wheel)";
+                String TANK_8_WHEEL = "Tank (8 wheel)";
+                String TANK_TREAD = "Tank (tread)";
                 String MECANUM = "Mecanum";
                 String SWERVE = "Swerve";
-                String ARCADE = "Arcade";
-                String RHINO = "Rhino";
-                String WEST_COAST = "West-Coast";
-                String[] DRIVE_TRAINS = {TANK, MECANUM, SWERVE, ARCADE, RHINO, WEST_COAST};
+
+                String[] DRIVE_TRAINS = {TANK_4_WHEEL, TANK_6_WHEEL, TANK_8_WHEEL, TANK_TREAD, MECANUM, SWERVE};
             }
             String CIMS = "cims";
 

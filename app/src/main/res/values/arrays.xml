@@ -45,12 +45,12 @@
     </string-array>
 
     <string-array name="drive_train_options">
-        <item>Tank</item>
+        <item>Tank (4 wheel)</item>
+        <item>Tank (6 wheel)</item>
+        <item>Tank (8 wheel)</item>
+        <item>Tank (tread)</item>
         <item>Mecanum</item>
         <item>Swerve</item>
-        <item>Arcade</item>
-        <item>Rhino</item>
-        <item>West-Coast</item>
     </string-array>
 
     <!-- Tags Values -->
