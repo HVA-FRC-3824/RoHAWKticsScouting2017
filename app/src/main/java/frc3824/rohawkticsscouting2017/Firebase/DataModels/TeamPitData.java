@@ -43,6 +43,11 @@ public class TeamPitData {
     // Miscellaneous
 
     public String programming_language;
+    public String drive_train;
+    public int cims;
+    public double max_hopper_load;
+    public String chosen_volume;
+
 
     // Notes
     public String notes;
@@ -50,6 +55,7 @@ public class TeamPitData {
     public TeamPitData(){
         robot_image_filepaths = new ArrayList<>();
         robot_image_urls = new ArrayList<>();
+        robot_image_default = -1;
     }
 
     public TeamPitData(ScoutMap map) {
@@ -59,6 +65,8 @@ public class TeamPitData {
 
             if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT)){
                 robot_image_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
+            } else {
+                robot_image_default = -1;
             }
 
             robot_image_filepaths = (ArrayList)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
@@ -72,6 +80,10 @@ public class TeamPitData {
             weight = map.getDouble(Constants.Pit_Scouting.Dimensions.WEIGHT);
 
             programming_language = map.getString(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE);
+            cims = map.getInt(Constants.Pit_Scouting.Miscellaneous.CIMS);
+            drive_train = map.getString(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN);
+            max_hopper_load = map.getDouble(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD);
+            chosen_volume = map.getString(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME);
 
             notes = map.getString(Constants.Pit_Scouting.NOTES);
 
@@ -98,6 +110,10 @@ public class TeamPitData {
         map.put(Constants.Pit_Scouting.Dimensions.WEIGHT, weight);
 
         map.put(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE, programming_language);
+        map.put(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN, drive_train);
+        map.put(Constants.Pit_Scouting.Miscellaneous.CIMS, cims);
+        map.put(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD, max_hopper_load);
+        map.put(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME, chosen_volume);
 
         map.put(Constants.Pit_Scouting.NOTES, notes);
 

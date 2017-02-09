@@ -121,7 +121,7 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
                         mDefaultPhoto = -1;
                     }
                     mCurrentPhoto = mDefaultPhoto;
-                    if (mCurrentPhoto > -1) {
+                    if (mCurrentPhoto > -1 && mPhotoPaths.size() > 0) {
                         if(new File(mPhotoPaths.get(mDefaultPhoto)).exists()) {
                             displayPicture();
                             mSetDefaultButton.setVisibility(View.VISIBLE);

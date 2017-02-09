@@ -13,6 +13,11 @@
         <item></item>
     </string-array>
 
+    <string-array name="volume_options">
+        <item>Short (40in x 36in x 24in)</item>
+        <item>Tall (30in x 32in x 36in)</item>
+    </string-array>
+
 
     <!-- Spinner Values -->
     <string-array name="endgame_climb_options">
@@ -37,6 +42,15 @@
         <!-- The above should really be the only options -->
         <item>Python</item>
         <item>C#</item>
+    </string-array>
+
+    <string-array name="drive_train_options">
+        <item>Tank (4 wheel)</item>
+        <item>Tank (6 wheel)</item>
+        <item>Tank (8 wheel)</item>
+        <item>Tank (tread)</item>
+        <item>Mecanum</item>
+        <item>Swerve</item>
     </string-array>
 
     <!-- Tags Values -->
