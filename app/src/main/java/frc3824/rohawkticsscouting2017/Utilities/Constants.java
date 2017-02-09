@@ -290,7 +290,7 @@ public interface Constants {
             char FEEDBACK_HEADER = 'F';
             char SYNC_HEADER = 'R';
             char STRATEGY_HEADER = 'T';
-            char STRATEGY_SUGGESTION_HEADER = "U";
+            char STRATEGY_SUGGESTION_HEADER = 'U';
         }
 
         interface Device_Names {
@@ -326,7 +326,7 @@ public interface Constants {
     }
 
     interface Server_Type {
-        String BLUETOOTH = "Comms";
+        String BLUETOOTH = "Bluetooth";
         String SOCKET = "Socket";
     }
 
