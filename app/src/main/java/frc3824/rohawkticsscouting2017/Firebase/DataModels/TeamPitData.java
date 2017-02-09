@@ -112,6 +112,7 @@ public class TeamPitData {
         map.put(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE, programming_language);
         map.put(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN, drive_train);
         map.put(Constants.Pit_Scouting.Miscellaneous.CIMS, cims);
+        map.put(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD, max_hopper_load);
         map.put(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME, chosen_volume);
 
         map.put(Constants.Pit_Scouting.NOTES, notes);
