@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.StrategySuggestion;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamDTFeedback;
@@ -174,6 +175,12 @@ public class MessageHandler extends Handler {
                             for(int i = 0; i < jsonArray.length(); i++){
                                 JSONObject s = jsonArray.getJSONObject(i);
                                 mDatabase.setStrategy(mGson.fromJson(s.toString(), Strategy.class));
+                            }
+
+                            jsonArray = response.getJSONArray("strategy_suggestions");
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject s = jsonArray.getJSONObject(i);
+                                mDatabase.setStrategySuggestion(mGson.fromJson(s.toString(), StrategySuggestion.class));
                             }
 
                         } catch (JSONException e) {

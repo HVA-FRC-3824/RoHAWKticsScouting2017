@@ -394,7 +394,7 @@ public class Database {
         //endregion
 
         //region Strategy
-        mStrategyRef = mEventRef.child("strategies").child("individual");
+        mStrategyRef = mEventRef.child("strategy").child("drawings");
         mStrategyMap = new HashMap<>();
         mStrategyRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -428,7 +428,7 @@ public class Database {
         //endregion
 
         //region Strategy Suggestion
-        mStrategySuggestionRef = mEventRef.child("strategies").child("suggestion");
+        mStrategySuggestionRef = mEventRef.child("strategy").child("suggestions");
         mStrategySuggestionMap = new HashMap<>();
         mStrategySuggestionRef.addChildEventListener(new ChildEventListener() {
             @Override
