@@ -29,7 +29,7 @@ public class AllMatchDataFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_all_match_data, container, false);
 
-// Points
+        // Points
         View points = view.findViewById(R.id.points_body);
 
 

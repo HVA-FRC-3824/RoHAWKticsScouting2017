@@ -39,12 +39,12 @@ public class ConnectThread extends Thread {
         try {
             if (secure) {
                 if(MY_UUID == null) {
-                    MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_SECURE);
+                    MY_UUID = UUID.fromString(Constants.Comms.UUID_SECURE);
                 }
                 tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
             } else {
                 if(MY_UUID == null) {
-                    MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_INSECURE);
+                    MY_UUID = UUID.fromString(Constants.Comms.UUID_INSECURE);
                 }
                 tmp = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
             }

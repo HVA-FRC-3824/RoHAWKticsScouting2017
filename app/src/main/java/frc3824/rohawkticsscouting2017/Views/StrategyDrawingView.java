@@ -39,10 +39,8 @@ public class StrategyDrawingView extends View {
     private Paint mDrawPaint, mCanvasPaint;
     private int mPaintColor = 0xFF000000;
     private Canvas mDrawCanvas;
-    private Canvas mTeamsCanvas;
     private Bitmap mBackgroundBitmap;
     private Bitmap mCanvasBitmap;
-    private Bitmap mTeamsBitmap;
     static private Bitmap mFieldBitmap;
     private float mBrushSize, mLastBrushSize;
 
@@ -51,11 +49,6 @@ public class StrategyDrawingView extends View {
     private JSONArray mPaths;
     private JSONObject mColorPath;
     private JSONArray mPath;
-
-    private boolean mTeamsMarked;
-    private Integer[] mTeamNumbers;
-    private Point[] mTeamButtonPositions;
-    private float mTeamButtonRadius;
 
     private boolean mColorSelected;
     //endregion
@@ -80,7 +73,6 @@ public class StrategyDrawingView extends View {
         mErase = false;
         mPaths = new JSONArray();
 
-        mTeamsMarked = false;
         mColorSelected = false;
     }
 
@@ -100,9 +92,6 @@ public class StrategyDrawingView extends View {
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(mBackgroundBitmap, 0, 0, mCanvasPaint);
         canvas.drawBitmap(mCanvasBitmap, 0, 0, mCanvasPaint);
-        if(mTeamsMarked) {
-            canvas.drawBitmap(mTeamsBitmap, 0, 0, mCanvasPaint);
-        }
         canvas.drawPath(mDrawPath, mDrawPaint);
     }
 
@@ -116,7 +105,7 @@ public class StrategyDrawingView extends View {
                 try {
                     mColorPath.put("paint_color", mPaintColor);
                     mColorPath.put("brush_size", mBrushSize);
-                    mColorPath.put("mErase", mErase);
+                    mColorPath.put("erase", mErase);
                     mPath = new JSONArray();
                     JSONObject point = new JSONObject();
                     point.put("x", touchX);
@@ -149,12 +138,22 @@ public class StrategyDrawingView extends View {
                     return true;
                 }
 
+                /*
                 try {
-                    mColorPath.put("mPath", mPath);
+                    JSONArray tempPath = mPath;
+                    mPath = new JSONArray();
+                    for(int i = 0; i < tempPath.length(); i++){
+                        if(i % 5 == 0){
+                            JSONObject point = tempPath.getJSONObject(i);
+                            mPath.put(point);
+                        }
+                    }
+                    mColorPath.put("path", mPath);
                     mPaths.put(mColorPath);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                */
                 mDrawCanvas.drawPath(mDrawPath, mDrawPaint);
                 mDrawPath.reset();
                 break;
@@ -215,7 +214,7 @@ public class StrategyDrawingView extends View {
         invalidate();
     }
 
-    public void load(String json){
+    public void load(int width, int height, String json){
         startNew();
         if(json.isEmpty()){
             mPaths = new JSONArray();
@@ -227,14 +226,15 @@ public class StrategyDrawingView extends View {
                 mColorPath = mPaths.getJSONObject(i);
                 mBrushSize = (float) mColorPath.getDouble("brush_size");
                 mDrawPaint.setStrokeWidth(mBrushSize);
+                setErase(mColorPath.getBoolean("erase"));
                 mPaintColor = mColorPath.getInt("paint_color");
                 mDrawPaint.setColor(mPaintColor);
-                mPath = mColorPath.getJSONArray("mPath");
+                mPath = mColorPath.getJSONArray("path");
                 for(int j = 0; j < mPath.length(); j++)
                 {
                     JSONObject point = mPath.getJSONObject(j);
-                    float x = (float)point.getDouble("x");
-                    float y = (float)point.getDouble("y");
+                    float x = (float)point.getDouble("x") * mCanvasBitmap.getWidth() / width;
+                    float y = (float)point.getDouble("y") * mCanvasBitmap.getHeight() / height;
                     if(j == 0) {
                         mDrawPath.moveTo(x, y);
                     } else {
@@ -247,6 +247,7 @@ public class StrategyDrawingView extends View {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        invalidate();
     }
 
     public String toJson()

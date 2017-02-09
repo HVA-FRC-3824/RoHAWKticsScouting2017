@@ -256,7 +256,7 @@ public interface Constants {
         int PORT = 38240;
     }
 
-    interface Bluetooth {
+    interface Comms {
         String NAME_SECURE = "SyncSecure";
         String UUID_SECURE = "fa87c0d0-afac-11de-8a39-0800200c9a66";
 
@@ -290,7 +290,7 @@ public interface Constants {
             char FEEDBACK_HEADER = 'F';
             char SYNC_HEADER = 'R';
             char STRATEGY_HEADER = 'T';
-            char MATCH_STRATEGY_HEADER = 'A';
+            char STRATEGY_SUGGESTION_HEADER = 'U';
         }
 
         interface Device_Names {

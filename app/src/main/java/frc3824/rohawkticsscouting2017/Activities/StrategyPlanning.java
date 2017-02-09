@@ -72,21 +72,6 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
         findViewById(R.id.open_btn).setOnClickListener(this);
 
         mDrawingView.setBrushSize(mExtraSmallBrush);
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null && extras.containsKey(Constants.Intent_Extras.MATCH_PLAN_NAME)){
-            mCurrentStrategyName = extras.getString(Constants.Intent_Extras.MATCH_PLAN_NAME);
-            String imageName = mCurrentStrategyName + ".png";
-            Log.d(TAG, mCurrentStrategyName);
-            Log.d(TAG, imageName);
-            try {
-                Bitmap loadImage = BitmapFactory.decodeStream(openFileInput(imageName));
-                mDrawingView.load(loadImage.copy(Bitmap.Config.ARGB_8888, true));
-                mDrawingView.invalidate();
-            } catch (FileNotFoundException ex) {
-                Log.d(TAG, ex.getMessage());
-            }
-        }
     }
 
     /**
@@ -299,6 +284,8 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
                 }
                 strategy.name = imageName;
                 imageName += ".png";
+                strategy.width = saveImage.getWidth();
+                strategy.height = saveImage.getHeight();
                 FileOutputStream fos = null;
                 try {
                     fos = openFileOutput(imageName, Context.MODE_WORLD_WRITEABLE);
@@ -346,14 +333,15 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
         openDialog.setAdapter(lva, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                String imageName = mStrategies.get(i).name + ".png";
-                mCurrentStrategyName = mStrategies.get(i).name;
+                Strategy strategy = mStrategies.get(i);
+                String imageName = strategy.name + ".png";
+                mCurrentStrategyName = strategy.name;
                 Log.d(TAG, imageName);
                 try {
                     Bitmap loadImage = BitmapFactory.decodeStream(openFileInput(imageName));
                     mDrawingView.load(loadImage.copy(Bitmap.Config.ARGB_8888, true));
                 } catch (FileNotFoundException ex) {
-                    Log.d(TAG, ex.getMessage());
+                    mDrawingView.load(strategy.width, strategy.height, strategy.path_json);
                 }
                 dialog.cancel();
             }

@@ -46,10 +46,8 @@ public class LVA_Strategies extends ArrayAdapter<Strategy> {
         String strategyName = strategy.filepath.substring(strategy.filepath.lastIndexOf('/') + 1);
         strategyName = strategyName.substring(0, strategyName.lastIndexOf('.'));
 
-        if(!new File(strategy.filepath).exists())
-        {
-            return null;
-        }
+        // Create checks if file exists and if it is older than the last_modified variable
+        strategy.create(mContext);
 
         strategyNameTextView.setText(strategyName);
         displayPicture(image, strategy.filepath);

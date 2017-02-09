@@ -42,14 +42,14 @@ public class AcceptThread extends Thread {
         try {
             if(secure) {
                 if(MY_UUID == null) {
-                    MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_SECURE);
+                    MY_UUID = UUID.fromString(Constants.Comms.UUID_SECURE);
                 }
-                tmp = adapter.listenUsingRfcommWithServiceRecord(Constants.Bluetooth.NAME_SECURE, MY_UUID);
+                tmp = adapter.listenUsingRfcommWithServiceRecord(Constants.Comms.NAME_SECURE, MY_UUID);
             } else {
                 if(MY_UUID == null) {
-                    MY_UUID = UUID.fromString(Constants.Bluetooth.UUID_INSECURE);
+                    MY_UUID = UUID.fromString(Constants.Comms.UUID_INSECURE);
                 }
-                tmp = adapter.listenUsingRfcommWithServiceRecord(Constants.Bluetooth.NAME_INSECURE, MY_UUID);
+                tmp = adapter.listenUsingRfcommWithServiceRecord(Constants.Comms.NAME_INSECURE, MY_UUID);
             }
         } catch (IOException e) {
             Log.e(TAG, "Socket listen() failed", e);
@@ -77,7 +77,7 @@ public class AcceptThread extends Thread {
             if(socket != null) {
                 Message message = new Message();
                 message.obj = socket.getRemoteDevice().getName();
-                message.what = Constants.Bluetooth.Message_Type.NEW_CONNECTION;
+                message.what = Constants.Comms.Message_Type.NEW_CONNECTION;
                 mHandler.sendMessage(message);
                 ConnectedThread ct = new ConnectedThread(socket, mHandler);
                 mConnectionStatusThread.addCT(ct);
