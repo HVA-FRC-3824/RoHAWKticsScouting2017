@@ -47,6 +47,7 @@ public class Strategy {
     public Strategy() {}
 
     public void create(Context context){
+        /*
         File file = new File(filepath);
         if(!file.exists() || file.lastModified() < last_modified){
             Bitmap fieldBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.field_top_down);
@@ -58,8 +59,8 @@ public class Strategy {
             drawPaint.setStyle(Paint.Style.STROKE);
             drawPaint.setStrokeJoin(Paint.Join.ROUND);
             drawPaint.setStrokeCap(Paint.Cap.ROUND);
-            Path drawPath = new Path();
             try {
+                Path drawPath = new Path();
                 JSONArray paths = new JSONArray(path_json);
                 for(int i = 0; i < paths.length(); i++){
                     JSONObject colorPath = paths.getJSONObject(i);
@@ -79,7 +80,11 @@ public class Strategy {
                         JSONObject point = path.getJSONObject(j);
                         float x = (float)point.getDouble("x");
                         float y = (float)point.getDouble("y");
-                        drawPath.moveTo(x, y);
+                        if(j == 0) {
+                            drawPath.moveTo(x, y);
+                        } else {
+                            drawPath.lineTo(x, y);
+                        }
                     }
                     drawPaint.setColor(paintColor);
                     drawCanvas.drawPath(drawPath, drawPaint);
@@ -111,5 +116,6 @@ public class Strategy {
                 e.printStackTrace();
             }
         }
+        */
     }
 }

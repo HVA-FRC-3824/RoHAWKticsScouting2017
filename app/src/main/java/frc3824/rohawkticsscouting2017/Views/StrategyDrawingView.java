@@ -138,6 +138,7 @@ public class StrategyDrawingView extends View {
                     return true;
                 }
 
+                /*
                 try {
                     JSONArray tempPath = mPath;
                     mPath = new JSONArray();
@@ -152,6 +153,7 @@ public class StrategyDrawingView extends View {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                */
                 mDrawCanvas.drawPath(mDrawPath, mDrawPaint);
                 mDrawPath.reset();
                 break;
