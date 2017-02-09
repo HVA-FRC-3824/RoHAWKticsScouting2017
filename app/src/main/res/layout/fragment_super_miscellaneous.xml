@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/blue1_pilot_rating"
+        app:key="blue1_pilot_rating"
+        app:label="template 1"
+        app:spinner_values="@array/super_pilot_ratings"/>
+
+    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/blue2_pilot_rating"
+        app:key="blue2_pilot_rating"
+        app:label="template 2"
+        app:spinner_values="@array/super_pilot_ratings"/>
+
+    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/blue3_pilot_rating"
+        app:key="blue3_pilot_rating"
+        app:label="template 3"
+        app:spinner_values="@array/super_pilot_ratings"/>
+
+    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/red1_pilot_rating"
+        app:key="red1_pilot_rating"
+        app:label="template 1"
+        app:spinner_values="@array/super_pilot_ratings"/>
+
+    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/red2_pilot_rating"
+        app:key="red2_pilot_rating"
+        app:label="template 2"
+        app:spinner_values="@array/super_pilot_ratings"/>
+
+    <frc3824.rohawkticsscouting2017.Views.SavableSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/red3_pilot_rating"
+        app:key="red3_pilot_rating"
+        app:label="template 3"
+        app:spinner_values="@array/super_pilot_ratings"/>
+
+</LinearLayout>

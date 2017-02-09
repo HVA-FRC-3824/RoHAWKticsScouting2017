@@ -82,14 +82,16 @@ public class TeamCalculatedData {
     public double zscore_speed;
     public int rank_speed;
 
-    public double zscore_torque;
-    public int rank_torque;
+    public double zscore_intake_ability;
+    public int rank_intake_ability;
 
     public double zscore_control;
     public int rank_control;
 
     public double zscore_defense;
     public int rank_defense;
+
+    public LowLevelStats pilot_ratings;
 
     public TeamCalculatedData() {}
 }

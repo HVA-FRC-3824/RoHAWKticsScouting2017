@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_Qualitative;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Qualitative;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
@@ -29,7 +30,7 @@ public class SavableQualitative extends SavableView implements DragSortListView.
     private LVA_Qualitative mLva;
     private String mKey;
     private Context mContext;
-    private ArrayList<Integer> mTeams;
+    private ArrayList<Qualitative> mTeams;
 
     public SavableQualitative(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,14 +52,21 @@ public class SavableQualitative extends SavableView implements DragSortListView.
     }
 
     public void setTeams(ArrayList<Integer> teams) {
-        mTeams = teams;
-        mLva = new LVA_Qualitative(mContext, teams);
+        mTeams = new ArrayList<>();
+        for(int i = 1; i < 4; i++){
+            Qualitative q = new Qualitative();
+            q.team_number = teams.get(i - 1);
+            q.rank = i;
+            mTeams.add(q);
+        }
+        mLva = new LVA_Qualitative(mContext, mTeams);
         mListView.setAdapter(mLva);
     }
 
     @Override
     public void drop(int from, int to) {
-        int team_number = mTeams.get(from);
+        Qualitative team_number = mTeams.get(from);
+        team_number.rank = to + 1;
         mTeams.remove(from);
         mTeams.add(to, team_number);
         mLva.notifyDataSetChanged();
@@ -74,7 +82,7 @@ public class SavableQualitative extends SavableView implements DragSortListView.
     public String restoreFromMap(ScoutMap map) {
         if(map.contains(mKey)) {
             try {
-                mTeams = (ArrayList<Integer>)map.getObject(mKey);
+                mTeams = (ArrayList<Qualitative>)map.getObject(mKey);
             } catch (ScoutValue.TypeException e) {
                 Log.e(TAG, e.getMessage());
                 return e.getMessage();

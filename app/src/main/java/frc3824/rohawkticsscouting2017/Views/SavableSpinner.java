@@ -26,6 +26,7 @@ public class SavableSpinner extends SavableView {
     private final static String TAG = "CustomSpinner";
 
     private String[] mResourceStrings;
+    private TextView mLabel;
     private String mKey;
     private Spinner mSpinner;
 
@@ -37,9 +38,9 @@ public class SavableSpinner extends SavableView {
         inflater.inflate(R.layout.savable_spinner, this);
 
         // Setup label and get key
-        TextView label = (TextView) this.findViewById(R.id.label);
+        mLabel = (TextView) this.findViewById(R.id.label);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SavableView);
-        label.setText(typedArray.getString(R.styleable.SavableView_label));
+        mLabel.setText(typedArray.getString(R.styleable.SavableView_label));
         mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
 
@@ -51,6 +52,10 @@ public class SavableSpinner extends SavableView {
         mSpinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, mResourceStrings);
         mSpinner.setAdapter(adapter);
+    }
+
+    public void setLabel(String text){
+        mLabel.setText(text);
     }
 
     @Override
