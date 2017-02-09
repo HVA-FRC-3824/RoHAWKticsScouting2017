@@ -162,19 +162,19 @@ public interface Constants {
         }
 
         interface Fouls {
-            String FOUL = "foul_standard";
-            String TECH_FOUL = "foul_tech";
-            String YELLOW_CARD = "foul_yellow_card";
-            String RED_CARD = "foul_red_card";
+            String FOUL = "fouls";
+            String TECH_FOUL = "tech_fouls";
+            String YELLOW_CARD = "yellow_card";
+            String RED_CARD = "red_card";
         }
 
         interface PostMatch {
-            String DQ = "post_dq";
-            String STOPPED_MOVING = "post_stopped";
-            String NO_SHOW = "post_no_show";
-            String NOTES = "post_notes";
+            String DQ = "dq";
+            String STOPPED_MOVING = "stopped_moving";
+            String NO_SHOW = "no_show";
+            String NOTES = "notes";
             // TAGS
-            String TAGS = "post_tags";
+            String TAGS = "tags";
             interface Tags{
                 String BLOCK_SHOTS = "_blocked_shots";
                 String PINNED_ROBOT = "_pinned_robot";

@@ -66,6 +66,13 @@ public class TeamMatchData {
     public boolean dq;
     public String notes;
 
+    public boolean tags_blocked_shots;
+    public boolean tags_pinned_robot;
+    public boolean tags_defended_loading_station;
+    public boolean tags_defended_airship;
+    public boolean tags_broke;
+    public boolean tags_dumped_all_hoppers;
+
     // Fouls
     public int fouls;
     public int tech_fouls;
@@ -105,6 +112,14 @@ public class TeamMatchData {
 
             endgame_climb = map.getString(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB);
             endgame_climb_time = map.getString(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB_TIME);
+
+            tags_blocked_shots = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS);
+            tags_pinned_robot = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT);
+            tags_defended_loading_station = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION);
+            tags_defended_airship = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP);
+            tags_broke = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE);
+            tags_dumped_all_hoppers = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS);
+
             ////////////////
 
             fouls = map.getInt(Constants.Match_Scouting.Fouls.FOUL);
@@ -154,6 +169,15 @@ public class TeamMatchData {
 
         map.put(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB, endgame_climb);
         map.put(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB_TIME, endgame_climb_time);
+
+
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS, tags_blocked_shots);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT, tags_pinned_robot);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION, tags_defended_loading_station);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP, tags_defended_airship);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE, tags_broke);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS, tags_dumped_all_hoppers);
+
         ////////////////
 
         map.put(Constants.Match_Scouting.Fouls.FOUL, fouls);

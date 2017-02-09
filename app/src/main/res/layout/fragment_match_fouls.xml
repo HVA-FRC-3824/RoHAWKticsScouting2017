@@ -10,28 +10,28 @@
         android:id="@+id/foul_standard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="foul_standard"
+        app:key="fouls"
         app:label="Foul:" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableCounter
         android:id="@+id/foul_tech"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="foul_tech"
+        app:key="tech_fouls"
         app:label="Tech Foul:" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/foul_yellow_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="foul_yellow_card"
+        app:key="yellow_card"
         app:label="Yellow card:" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/foul_red_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="foul_red_card"
+        app:key="red_card"
         app:label="Red Card:" />
 
 </LinearLayout>
