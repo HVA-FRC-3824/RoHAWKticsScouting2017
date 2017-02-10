@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
@@ -33,7 +33,7 @@ public class TeamMatchData {
     // Autonomous
     public String auto_start_position;
     public boolean auto_baseline;
-    public Gears auto_gears;
+    public ArrayList<Gear> auto_gears;
     public int auto_high_goal_made;
     public int auto_high_goal_missed;
     public int auto_high_goal_correction;
@@ -44,7 +44,7 @@ public class TeamMatchData {
     public int auto_points;
 
     // Teleop
-    public Gears teleop_gears;
+    public ArrayList<Gear> teleop_gears;
     public int teleop_high_goal_made;
     public int teleop_high_goal_missed;
     public int teleop_high_goal_correction;
@@ -95,14 +95,14 @@ public class TeamMatchData {
             // GAME SPECIFIC
             auto_start_position = map.getString(Constants.Match_Scouting.Autonomous.AUTO_START_POSITION);
             auto_baseline = map.getBoolean(Constants.Match_Scouting.Autonomous.AUTO_BASELINE);
-            auto_gears = (Gears)map.getObject(Constants.Match_Scouting.Autonomous.AUTO_GEARS);
+            auto_gears = (ArrayList<Gear>)map.getObject(Constants.Match_Scouting.Autonomous.AUTO_GEARS);
             auto_high_goal_made = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HIGH_GOAL_MADE);
             auto_high_goal_missed = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HIGH_GOAL_MISSED);
             auto_low_goal_made = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_LOW_GOAL_MADE);
             auto_low_goal_missed = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_LOW_GOAL_MISSED);
             auto_hoppers = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HOPPERS);
 
-            teleop_gears = (Gears)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_GEARS);
+            teleop_gears = (ArrayList<Gear>)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_GEARS);
             teleop_high_goal_made = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MADE);
             teleop_high_goal_missed = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MISSED);
             teleop_low_goal_made = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_LOW_GOAL_MADE);
