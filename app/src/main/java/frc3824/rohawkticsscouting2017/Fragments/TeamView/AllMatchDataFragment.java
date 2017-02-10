@@ -24,13 +24,27 @@ public class AllMatchDataFragment extends Fragment {
 
     private final static String TAG = "AllMatchDataFragment";
 
+    private View mView;
     private TeamCalculatedData mTcd;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_team_view_all_match_data, container, false);
+    public AllMatchDataFragment(){
+        mView = null;
+        mTcd = null;
+    }
 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_team_view_all_match_data, container, false);
+
+        if(mTcd != null){
+            setup();
+        }
+
+        return mView;
+    }
+
+    public void setup(){
         // Points
-        View points = view.findViewById(R.id.points_body);
+        View points = mView.findViewById(R.id.points_body);
 
 
         double auto_points = mTcd.auto_high_goal_made.average + mTcd.auto_low_goal_made.average / 3;
@@ -70,7 +84,7 @@ public class AllMatchDataFragment extends Fragment {
         ((TextView)points.findViewById(R.id.endgame)).setText(String.format("%0.2f", endgame_points));
 
         // Auto (auto is a keyword so the underscore is used)
-        View auto_ = view.findViewById(R.id.auto_body);
+        View auto_ = mView.findViewById(R.id.auto_body);
 
         ((TextView)auto_.findViewById(R.id.start_position)).setText(String.format("%d / %d / %d",
                 mTcd.auto_start_position_near,
@@ -96,9 +110,9 @@ public class AllMatchDataFragment extends Fragment {
         ((TextView)auto_.findViewById(R.id.hoppers)).setText(String.valueOf(mTcd.auto_hoppers.average));
 
         // Teleop
-        View teleop = view.findViewById(R.id.teleop_body);
+        View teleop = mView.findViewById(R.id.teleop_body);
 
-        
+
         ((TextView)teleop.findViewById(R.id.gears)).setText(String.format("%0.1f (%0.1f) / %0.1f (%0.1f) / %0.1f (%0.1f) / %0.1f (0.1f)",
                 mTcd.teleop_near_gears_placed.average, mTcd.teleop_near_gears_dropped.average,
                 mTcd.teleop_center_gears_placed.average, mTcd.teleop_center_gears_dropped.average,
@@ -119,15 +133,18 @@ public class AllMatchDataFragment extends Fragment {
         ((TextView)teleop.findViewById(R.id.gears_picked_up)).setText(String.valueOf(mTcd.teleop_picked_up_gears.average));
 
         // Endgame
-        View endgame = view.findViewById(R.id.endgame_body);
+        View endgame = mView.findViewById(R.id.endgame_body);
 
         ((TextView)endgame.findViewById(R.id.climb)).setText(String.format("%0.2f%%", mTcd.endgame_climb_success));
         ((TextView)endgame.findViewById(R.id.climb_time)).setText(String.format("%0.1fs", mTcd.endgame_climb_time.average));
 
-        return view;
     }
 
     public void setTeam(int team_number){
         mTcd = Database.getInstance().getTeamCalculatedData(team_number);
+
+        if(mView != null){
+            setup();
+        }
     }
 }

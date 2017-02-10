@@ -2,6 +2,7 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -34,5 +35,16 @@ public class Team {
     public TeamPickAbility second_pick;
     public TeamPickAbility third_pick;
 
-    public Team() {}
+    public Team() {
+        completed_matches = new HashMap<>();
+        info = new TeamLogistics();
+        pit = new TeamPitData();
+        drive_team_feedback = new TeamDTFeedback();
+        calc = new TeamCalculatedData();
+        current_ranking = new TeamRankingData();
+        predicted_ranking = new TeamRankingData();
+        first_pick = new TeamPickAbility();
+        second_pick = new TeamPickAbility();
+        third_pick = new TeamPickAbility();
+    }
 }

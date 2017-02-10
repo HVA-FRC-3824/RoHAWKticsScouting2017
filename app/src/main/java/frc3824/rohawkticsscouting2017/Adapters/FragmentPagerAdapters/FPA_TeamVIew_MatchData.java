@@ -27,6 +27,7 @@ public class FPA_TeamView_MatchData extends FragmentPagerAdapter {
         super(fm);
         mDatabase = Database.getInstance();
         mTeamNumber = team_number;
+        mTeam = mDatabase.getTeam(mTeamNumber);
     }
 
     @Override
