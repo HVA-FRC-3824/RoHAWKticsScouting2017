@@ -46,7 +46,7 @@ public class SavableNumeric extends SavableView {
         if(String.valueOf(mNumeric.getText()).equals(""))
             map.put(mKey, 0.0);
         else
-            map.put(mKey, Double.valueOf(String.valueOf(mNumeric.getText())));
+            map.put(mKey, Double.valueOf(String.valueOf(mNumeric.getText())).doubleValue());
         return "";
     }
 

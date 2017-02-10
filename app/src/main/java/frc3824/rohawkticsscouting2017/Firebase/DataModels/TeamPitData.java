@@ -69,10 +69,12 @@ public class TeamPitData {
                 robot_image_default = -1;
             }
 
+
             robot_image_filepaths = (ArrayList)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
             if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_URLS)) {
                 robot_image_urls = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_URLS);
             }
+
 
             width = map.getDouble(Constants.Pit_Scouting.Dimensions.WIDTH);
             length = map.getDouble(Constants.Pit_Scouting.Dimensions.LENGTH);
