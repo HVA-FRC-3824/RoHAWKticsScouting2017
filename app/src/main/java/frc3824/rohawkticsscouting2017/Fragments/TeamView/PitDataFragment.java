@@ -63,6 +63,9 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
             ((TextView) view.findViewById(R.id.weight)).setText(String.format("%03.2f (in)", team.weight));
 
             ((TextView) view.findViewById(R.id.programming_language)).setText(team.programming_language);
+            ((TextView) view.findViewById(R.id.drive_train)).setText(team.drive_train);
+            ((TextView) view.findViewById(R.id.cims)).setText(team.cims);
+            ((TextView) view.findViewById(R.id.max_hopper_load)).setText(team.max_hopper_load);
 
             ((TextView) view.findViewById(R.id.notes)).setText(team.notes);
         }

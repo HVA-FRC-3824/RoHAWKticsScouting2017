@@ -44,9 +44,14 @@ public class TeamPitData {
 
     public String programming_language;
     public String drive_train;
+<<<<<<< Updated upstream
     public int cims;
     public double max_hopper_load;
     public String chosen_volume;
+=======
+    public String cims;
+    public String max_hopper_load;
+>>>>>>> Stashed changes
 
 
     // Notes
