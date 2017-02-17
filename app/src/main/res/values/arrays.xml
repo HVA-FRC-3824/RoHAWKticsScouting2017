@@ -25,6 +25,7 @@
         <item>Did not finish in time</item>
         <item>Robot fell</item>
         <item>Successful</item>
+        <item>Creditted through foul</item>
     </string-array>
 
     <string-array name="start_position_options">

@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gear;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gears;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -179,7 +176,7 @@ public class IndividualMatchDataFragment extends Fragment{
 
         TeamLogistics tl = Database.getInstance().getTeamLogistics(team_number);
         int match_number = tl.match_numbers.get(position);
-        mTmd = Database.getInstance().getTeamMatchData(match_number,team_number);
+        mTmd = Database.getInstance().getTeamMatchData(match_number, team_number);
         mSurrogate = match_number == tl.surrogate_match_number;
     }
 }

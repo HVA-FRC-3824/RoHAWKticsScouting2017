@@ -61,9 +61,11 @@ public class TeamCalculatedData {
     public LowLevelStats teleop_points;
 
     // Endgame
-    public int endgame_climb_success;
-    public int endgame_climb_fell;
-    public int endgame_climb_failed;
+    public LowLevelStats endgame_climb_successful;
+    public LowLevelStats endgame_climb_robot_fell;
+    public LowLevelStats endgame_climb_did_not_finnish_in_time;
+    public LowLevelStats endgame_climb_no_attempt;
+    public LowLevelStats endgame_climb_creditted_through_foul;
     public LowLevelStats endgame_climb_time;
     public LowLevelStats endgame_points;
 

@@ -5,6 +5,18 @@
     android:orientation="horizontal">
 
     <fragment
+        android:id="@+id/headers"
+        class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_height="match_parent"
+        android:layout_width="2dp"
+        android:background="@color/black"/>
+
+    <fragment
         android:id="@+id/team1"
         class="frc3824.rohawkticsscouting2017.Fragments.MatchView.MatchViewTeamFragment"
         android:layout_width="0dp"
