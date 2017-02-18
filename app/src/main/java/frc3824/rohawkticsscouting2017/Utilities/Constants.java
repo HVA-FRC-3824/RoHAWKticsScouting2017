@@ -1,9 +1,5 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
-import android.graphics.Color;
-import android.graphics.Point;
-import android.util.Pair;
-
 /**
  * @author frc3824
  * Created: 8/10/16
@@ -144,8 +140,8 @@ public interface Constants {
                 String DID_NOT_FINISH_IN_TIME = "Did not finish in time";
                 String ROBOT_FELL = "Robot fell";
                 String SUCCESSFUL = "Successful";
-                String CREDITTED_THROUGH_FOUL = "Creditted through foul";
-                String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT, CREDITTED_THROUGH_FOUL};
+                String CREDITED_THROUGH_FOUL = "Credited through foul";
+                String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT, CREDITED_THROUGH_FOUL};
             }
 
             String ENDGAME_CLIMB_TIME = "endgame_climb_time";

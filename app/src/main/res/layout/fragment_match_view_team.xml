@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="# Of Matches"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -34,6 +35,7 @@
             android:layout_marginTop="8dp"
             android:text="Gears"
             android:textColor="@color/white"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
@@ -42,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Climbing"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -50,8 +53,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Fuel"
+            android:text="Fuel\n"
             android:textColor="@color/white"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
@@ -61,6 +65,7 @@
             android:layout_marginTop="8dp"
             android:text="Pilot"
             android:textColor="@color/white"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
@@ -70,6 +75,7 @@
             android:layout_marginTop="8dp"
             android:text="Defense"
             android:textColor="@color/white"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
@@ -78,7 +84,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Driver Control"
+            android:textAlignment="center"
             android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/torque"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Torque"
+            android:textColor="@color/white"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
@@ -88,12 +105,14 @@
             android:layout_marginTop="8dp"
             android:text="Speed"
             android:textColor="@color/white"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Details"
-            android:id="@+id/details"/>
+            android:id="@+id/details"
+            android:visibility="invisible"/>
     </LinearLayout>
 </ScrollView>

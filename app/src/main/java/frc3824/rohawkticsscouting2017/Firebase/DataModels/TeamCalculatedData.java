@@ -63,9 +63,9 @@ public class TeamCalculatedData {
     // Endgame
     public LowLevelStats endgame_climb_successful;
     public LowLevelStats endgame_climb_robot_fell;
-    public LowLevelStats endgame_climb_did_not_finnish_in_time;
+    public LowLevelStats endgame_climb_did_not_finish_in_time;
     public LowLevelStats endgame_climb_no_attempt;
-    public LowLevelStats endgame_climb_creditted_through_foul;
+    public LowLevelStats endgame_climb_credited_through_foul;
     public LowLevelStats endgame_climb_time;
     public LowLevelStats endgame_points;
 
@@ -128,6 +128,11 @@ public class TeamCalculatedData {
         teleop_picked_up_gears = new LowLevelStats();
         teleop_points = new LowLevelStats();
 
+        endgame_climb_successful = new LowLevelStats();
+        endgame_climb_robot_fell = new LowLevelStats();
+        endgame_climb_credited_through_foul = new LowLevelStats();
+        endgame_climb_did_not_finish_in_time = new LowLevelStats();
+        endgame_climb_no_attempt = new LowLevelStats();
         endgame_climb_time = new LowLevelStats();
         endgame_points = new LowLevelStats();
 
