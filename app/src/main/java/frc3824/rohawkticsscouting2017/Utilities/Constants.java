@@ -259,8 +259,8 @@ public interface Constants {
             String BLUE_SPEED = "blue_speed";
             String RED_SPEED = "red_speed";
 
-            String BLUE_INTAKE_ABILITY = "blue_intake_ability";
-            String RED_INTAKE_ABILITY = "red_intake_ability";
+            String BLUE_TORQUE = "blue_torque";
+            String RED_TORQUE = "red_torque";
 
             String BLUE_CONTROL = "blue_control";
             String RED_CONTROL = "red_control";

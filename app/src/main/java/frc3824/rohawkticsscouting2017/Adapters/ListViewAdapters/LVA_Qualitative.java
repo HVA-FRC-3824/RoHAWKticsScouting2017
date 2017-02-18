@@ -60,6 +60,7 @@ public class LVA_Qualitative extends ArrayAdapter<Qualitative>{
         Button tie = (Button)convertView.findViewById(R.id.tie);
 
         if(position == 0){
+
             tie.setVisibility(View.GONE);
         } else {
             tie.setVisibility(View.VISIBLE);
