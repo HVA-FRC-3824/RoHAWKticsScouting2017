@@ -112,9 +112,12 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
         Pattern pattern = Pattern.compile("PA: \\d+\\.\\d+ (\\.+)");
         Matcher matcher = pattern.matcher(mUs.top_line);
 
-        String top_line_without_pa = matcher.group();
-
-        ((TextView)ourTeam.findViewById(R.id.top_line)).setText(top_line_without_pa);
+        if(matcher.matches()) {
+            String top_line_without_pa = matcher.group();
+            ((TextView) ourTeam.findViewById(R.id.top_line)).setText(top_line_without_pa);
+        } else {
+            ((TextView) ourTeam.findViewById(R.id.top_line)).setText(mUs.top_line);
+        }
         ((TextView)ourTeam.findViewById(R.id.second_line)).setText(mUs.second_line);
         ((TextView)ourTeam.findViewById(R.id.third_line)).setText(mUs.third_line);
 
@@ -167,7 +170,6 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
     public void save() {}
 
 
-    // Save button or always save?
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
