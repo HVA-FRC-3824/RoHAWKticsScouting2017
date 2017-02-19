@@ -55,6 +55,8 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
     private ImageTextButton mAdvancedSearchTeamNumberCriteriaAdd;
     private LinearLayout mAdvancedSearchContentCriteria;
     private ImageTextButton mAdvancedSearchContentCriteriaAdd;
+    private LinearLayout mAdvancedSearchTagsCriteria;
+    private ImageTextButton mAdvancedSearchTagsCriteriaAdd;
     private CheckBox mMatchNotesCheckbox;
     private CheckBox mSuperNotesCheckbox;
     private CheckBox mDriveTeamNotesCheckbox;
@@ -98,6 +100,9 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
         mAdvancedSearchContentCriteria = (LinearLayout)mAdvancedSearch.findViewById(R.id.advanced_content_criteria);
         mAdvancedSearchContentCriteriaAdd = (ImageTextButton)mAdvancedSearchContentCriteria.findViewById(R.id.advanced_content_criteria_add);
         mAdvancedSearchContentCriteriaAdd.setOnClickListener(this);
+        mAdvancedSearchTagsCriteria = (LinearLayout)mAdvancedSearch.findViewById(R.id.advanced_tags_criteria);
+        mAdvancedSearchTagsCriteriaAdd = (ImageTextButton)mAdvancedSearchTagsCriteria.findViewById(R.id.advanced_tags_criteria_add);
+        mAdvancedSearchTagsCriteriaAdd.setOnClickListener(this);
         mMatchNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.match_notes_checkbox);
         mSuperNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.super_notes_checkbox);
         mDriveTeamNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.drive_team_notes_checkbox);
@@ -177,6 +182,9 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
             case R.id.advanced_content_criteria_add:
                 mAdvancedSearchContentCriteria.addView(new NoteCriteriaContent(this), 0);
                 break;
+            case R.id.advanced_tags_criteria_add:
+                mAdvancedSearchTagsCriteria.addView(new NoteCriteriaContent(this), 0);
+                break;
             case R.id.advanced_search_button:
                 advancedSearch();
                 break;
@@ -250,6 +258,13 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                         continue;
                     }
                     break;
+                case 3:
+                    if(!nv.tags.contains(content)){
+                        mFilteredNotes.remove(i);
+                        i--;
+                        continue;
+                    }
+                    break;
             }
         }
         mAdapter = new LVA_NotesView(this, mFilteredNotes);
@@ -266,6 +281,18 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
         ArrayList<String> dnContains = new ArrayList<>();
         for(int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++) {
             NoteCriteriaContent ncc = ((NoteCriteriaContent)mAdvancedSearchContentCriteria.getChildAt(i));
+            if(ncc.getType() == 0) {
+                contains.add(ncc.getContent());
+            } else {
+                dnContains.add(ncc.getContent());
+            }
+        }
+
+        ArrayList<String> hasTag = new ArrayList<>();
+        ArrayList<String> dnHaveTag = new ArrayList<>();
+
+        for(int i = 0; i < mAdvancedSearchTagsCriteria.getChildCount() - 1; i++) {
+            NoteCriteriaTags ncc = ((NoteCriteriaTags)mAdvancedSearchTagsCriteria.getChildAt(i));
             if(ncc.getType() == 0) {
                 contains.add(ncc.getContent());
             } else {
@@ -291,6 +318,12 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
             }
 
             if((contains.size()  > 0 || dnContains.size() > 0) && filterContents(nv, contains, dnContains)) {
+                mFilteredNotes.remove(i);
+                i--;
+                continue;
+            }
+
+            if((contains.size()  > 0 || dnContains.size() > 0) && filterTags(nv, hasTag, dnHaveTag)) {
                 mFilteredNotes.remove(i);
                 i--;
                 continue;
@@ -346,6 +379,14 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
             if(mAdvancedSearchContentCriteria.getChildAt(i).getVisibility() == View.GONE)
             {
                 mAdvancedSearchContentCriteria.removeViewAt(i);
+                i--;
+            }
+        }
+        for(int i = 0; i < mAdvancedSearchTagsCriteria.getChildCount(); i++)
+        {
+            if(mAdvancedSearchTagsCriteria.getChildAt(i).getVisibility() == View.GONE)
+            {
+                mAdvancedSearchTagsCriteria.removeViewAt(i);
                 i--;
             }
         }
@@ -452,6 +493,28 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
         }
         for(int j = 0; j < dnContains.size(); j++) {
             if(nv.note.contains(dnContains.get(j))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Function that determines if note should be filtered based on tags
+     *
+     * @param nv
+     * @param hasTag
+     * @param dnHaveTag
+     * @return
+     */
+    private boolean filterTags(NoteView nv, ArrayList<String> hasTag, ArrayList<String> dnHaveTag) {
+        for(int j = 0; j < hasTag.size(); j++) {
+            if(!nv.tags.contains(hasTag.get(j))) {
+                return true;
+            }
+        }
+        for(int j = 0; j < dnHaveTag.size(); j++) {
+            if(nv.tags.contains(dnHaveTag.get(j))) {
                 return true;
             }
         }
