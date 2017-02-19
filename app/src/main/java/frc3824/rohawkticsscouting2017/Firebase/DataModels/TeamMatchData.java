@@ -6,10 +6,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
-<<<<<<< Updated upstream
-=======
 import java.util.HashMap;
->>>>>>> Stashed changes
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;

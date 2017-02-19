@@ -891,13 +891,13 @@ public class Database {
         team.team_number = team_number;
 
         team.info = getTeamLogistics(team_number);
-        if(team.info == null)
-        {
+        if(team.info == null) {
             team.info = new TeamLogistics();
             team.info.team_number = team_number;
             team.info.match_numbers = new ArrayList<>();
+        } else {
+            Collections.sort(team.info.match_numbers);
         }
-        Collections.sort(team.info.match_numbers);
 
         team.pit = getTeamPitData(team_number);
         if(team.pit == null)

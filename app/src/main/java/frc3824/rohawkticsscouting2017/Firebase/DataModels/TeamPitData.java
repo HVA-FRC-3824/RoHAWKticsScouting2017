@@ -44,14 +44,9 @@ public class TeamPitData {
 
     public String programming_language;
     public String drive_train;
-<<<<<<< Updated upstream
     public int cims;
-    public double max_hopper_load;
+    public int max_hopper_load;
     public String chosen_volume;
-=======
-    public String cims;
-    public String max_hopper_load;
->>>>>>> Stashed changes
 
 
     // Notes
@@ -89,7 +84,7 @@ public class TeamPitData {
             programming_language = map.getString(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE);
             cims = map.getInt(Constants.Pit_Scouting.Miscellaneous.CIMS);
             drive_train = map.getString(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN);
-            max_hopper_load = map.getDouble(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD);
+            max_hopper_load = map.getInt(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD);
             chosen_volume = map.getString(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME);
 
             notes = map.getString(Constants.Pit_Scouting.NOTES);
