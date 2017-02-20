@@ -42,10 +42,30 @@ public class SuperMatchData {
     public ArrayList<Integer> blue_defense;
     public ArrayList<Integer> red_defense;
 
+    // Pilot
+    public String blue1_pilot_rating;
+    public String blue2_pilot_rating;
+    public String blue3_pilot_rating;
+    public String red1_pilot_rating;
+    public String red2_pilot_rating;
+    public String red3_pilot_rating;
+
     //Notes
     public String notes;
 
-    public SuperMatchData() {}
+    public SuperMatchData() {
+        blue_speed = new ArrayList<>();
+        red_speed = new ArrayList<>();
+
+        blue_torque = new ArrayList<>();
+        red_torque = new ArrayList<>();
+
+        blue_control = new ArrayList<>();
+        red_control = new ArrayList<>();
+
+        blue_defense = new ArrayList<>();
+        red_defense = new ArrayList<>();
+    }
 
     public SuperMatchData(ScoutMap map) {
         try {
@@ -61,6 +81,14 @@ public class SuperMatchData {
             red_torque = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_TORQUE);
             red_control = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_CONTROL);
             red_defense = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_DEFENSE);
+
+            blue1_pilot_rating = map.getString(Constants.Super_Scouting.Miscellaneous.BLUE1_PILOT_RATING);
+            blue2_pilot_rating = map.getString(Constants.Super_Scouting.Miscellaneous.BLUE2_PILOT_RATING);
+            blue3_pilot_rating = map.getString(Constants.Super_Scouting.Miscellaneous.BLUE3_PILOT_RATING);
+            red1_pilot_rating = map.getString(Constants.Super_Scouting.Miscellaneous.RED1_PILOT_RATING);
+            red2_pilot_rating = map.getString(Constants.Super_Scouting.Miscellaneous.RED2_PILOT_RATING);
+            red3_pilot_rating = map.getString(Constants.Super_Scouting.Miscellaneous.RED3_PILOT_RATING);
+
 
             notes = map.getString(Constants.Super_Scouting.NOTES);
 
@@ -85,6 +113,13 @@ public class SuperMatchData {
         map.put(Constants.Super_Scouting.Qualitative.RED_TORQUE, red_torque);
         map.put(Constants.Super_Scouting.Qualitative.RED_CONTROL, red_control);
         map.put(Constants.Super_Scouting.Qualitative.RED_DEFENSE, red_defense);
+
+        map.put(Constants.Super_Scouting.Miscellaneous.BLUE1_PILOT_RATING, blue1_pilot_rating);
+        map.put(Constants.Super_Scouting.Miscellaneous.BLUE2_PILOT_RATING, blue2_pilot_rating);
+        map.put(Constants.Super_Scouting.Miscellaneous.BLUE3_PILOT_RATING, blue3_pilot_rating);
+        map.put(Constants.Super_Scouting.Miscellaneous.RED1_PILOT_RATING, red1_pilot_rating);
+        map.put(Constants.Super_Scouting.Miscellaneous.RED2_PILOT_RATING, red2_pilot_rating);
+        map.put(Constants.Super_Scouting.Miscellaneous.RED3_PILOT_RATING, red3_pilot_rating);
 
         map.put(Constants.Super_Scouting.NOTES, notes);
         

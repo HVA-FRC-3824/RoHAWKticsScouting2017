@@ -17,7 +17,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Utilities;
  */
 public class MiscellaneousFragment extends ScoutFragment {
 
-    private final static String TAG = "MiscellaneousFragment";
+    private final static String TAG = "SuperMiscellaneousFragment";
 
     public MiscellaneousFragment() {}
 

@@ -22,6 +22,7 @@ public class TeamPickAbility {
     public String top_line;
     public String second_line;
     public String third_line;
+    public String fourth_line;
     public String robot_picture_filepath;
     public boolean yellow_card;
     public boolean red_card;

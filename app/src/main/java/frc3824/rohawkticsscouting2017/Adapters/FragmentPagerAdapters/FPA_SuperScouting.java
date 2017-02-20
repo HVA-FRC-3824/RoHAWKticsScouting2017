@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import frc3824.rohawkticsscouting2017.Fragments.SuperScouting.SuperMiscellaneousFragment;
 import frc3824.rohawkticsscouting2017.Fragments.SuperScouting.QualitativeFragment;
 import frc3824.rohawkticsscouting2017.Fragments.SuperScouting.SuperNotesFragment;
 import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
@@ -24,7 +25,7 @@ public class FPA_SuperScouting extends FragmentPagerAdapter {
 
     private final static String TAG = "FPA_SuperScouting";
 
-    private String mTabTitles[] = new String[]{"Qualitative", "Notes"};
+    private String mTabTitles[] = new String[]{"Qualitative", "Miscellaneous", "Notes"};
 
     private Map<Integer, ScoutFragment> mFragments = new HashMap<>();
 
@@ -51,6 +52,10 @@ public class FPA_SuperScouting extends FragmentPagerAdapter {
                     ((QualitativeFragment)sf).setMatchNumber(mMatchNumber);
                     break;
                 case 1:
+                    sf = new SuperMiscellaneousFragment();
+                    ((SuperMiscellaneousFragment)sf).setMatchNumber(mMatchNumber);
+                    break;
+                case 2:
                     sf = new SuperNotesFragment();
                     break;
 
@@ -103,8 +108,7 @@ public class FPA_SuperScouting extends FragmentPagerAdapter {
      *  Gets a list of all the scout fragments
      * @return list of all the scout fragments
      */
-    public List<ScoutFragment> getAllFragments()
-    {
+    public List<ScoutFragment> getAllFragments() {
         List<ScoutFragment> list = new ArrayList<>();
         for(Map.Entry<Integer, ScoutFragment> entry: mFragments.entrySet())
         {

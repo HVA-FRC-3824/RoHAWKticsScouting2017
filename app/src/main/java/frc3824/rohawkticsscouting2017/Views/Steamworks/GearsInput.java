@@ -14,11 +14,11 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gear;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gears;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
@@ -38,7 +38,7 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
     private CheckBox mDropped;
     private Button add, edit, delete;
     private String mKey;
-    private Gears mGears;
+    private ArrayList<Gear> mGears;
     private Context mContext;
     private List<String> mLocationList;
 
@@ -62,7 +62,7 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
         mLocation.setAdapter(arrayAdapter);
         mLocationList = Arrays.asList(Constants.Match_Scouting.Custom.Gears.LOCATIONS);
 
-        mGears = new Gears();
+        mGears = new ArrayList<>();
 
         numGears = (RadioGroup)findViewById(R.id.radio_group);
         mPlaced = (CheckBox)findViewById(R.id.placed);
@@ -98,7 +98,7 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
     public String restoreFromMap(ScoutMap map) {
         if(map.contains(mKey)) {
             try {
-                mGears = (Gears)map.getObject(mKey);
+                mGears = (ArrayList<Gear>) map.getObject(mKey);
                 if(mGears.size() > 0){
                     Gear gear = mGears.get(0);
 

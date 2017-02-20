@@ -28,11 +28,11 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -83,6 +83,9 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
     private LineChart mClimbTime;
     private YAxis mClimbTimeY;
     private LineDataSet mClimbTimeData;
+
+    private PieChart mPilot;
+    private PieDataSet mPilotData;
 
     private ValueFormatter intVF;
     private ValueFormatter floatVF;
@@ -216,6 +219,14 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         mClimbTime.setPinchZoom(false);
         setupClimbTimeData(team);
         mClimbTime.setData(new LineData(mMatches, mClimbTimeData));
+        //endregion
+
+        //region Pilot Rating
+        mPilot = (PieChart)view.findViewById(R.id.pilot);
+        mPilot.setUsePercentValues(true);
+        mPilot.setDescription("");
+        setupPilotRatingData(team);
+        mPilot.setData(new PieData(Constants.Team_View.Pilot_Rating_Options.LIST, mPilotData));
         //endregion
 
         ((RadioGroup)view.findViewById(R.id.gears_radio)).setOnCheckedChangeListener(this);
@@ -416,6 +427,52 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
             i++;
         }
         mClimbTimeData = new LineDataSet(entries, "Climb Time");
+    }
+
+    private void setupPilotRatingData(Team team){
+        ArrayList<Entry> entries = new ArrayList<>();
+        int i = 0;
+        List pilot_rating_options = Arrays.asList(Constants.Team_View.Pilot_Rating_Options.LIST);
+        for(TeamMatchData tmd: team.completed_matches.values()){
+            SuperMatchData smd = Database.getInstance().getSuperMatchData(tmd.match_number);
+            if(smd == null){
+                continue;
+            }
+            if(tmd.alliance_color == Constants.Alliance_Colors.BLUE){
+                switch (tmd.alliance_number) {
+                    case 1:
+                        entries.add(new Entry(pilot_rating_options.indexOf(smd.blue1_pilot_rating), i));
+                        break;
+                    case 2:
+                        entries.add(new Entry(pilot_rating_options.indexOf(smd.blue2_pilot_rating), i));
+                        break;
+                    case 3:
+                        entries.add(new Entry(pilot_rating_options.indexOf(smd.blue3_pilot_rating), i));
+                        break;
+                    default:
+                        assert(false);
+                }
+            } else {
+                switch (tmd.alliance_number) {
+                    case 1:
+                        entries.add(new Entry(pilot_rating_options.indexOf(smd.red1_pilot_rating), i));
+                        break;
+                    case 2:
+                        entries.add(new Entry(pilot_rating_options.indexOf(smd.red2_pilot_rating), i));
+                        break;
+                    case 3:
+                        entries.add(new Entry(pilot_rating_options.indexOf(smd.red3_pilot_rating), i));
+                        break;
+                    default:
+                        assert(false);
+                }
+            }
+
+
+
+            i++;
+        }
+        mPilotData = new PieDataSet(entries, "Pilot Rating");
     }
 
     @Override

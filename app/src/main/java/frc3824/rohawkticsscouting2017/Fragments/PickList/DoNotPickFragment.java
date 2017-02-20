@@ -15,6 +15,7 @@ import java.util.Collections;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_DoNotPick;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author Andrew Messing
@@ -41,6 +42,7 @@ public class DoNotPickFragment extends ScoutPickFragment implements View.OnClick
 
         mDatabase = Database.getInstance();
         mTeamNumbers = mDatabase.getTeamNumbers();
+        mTeamNumbers.remove(new Integer(Constants.OUR_TEAM_NUMBER));
         mDnpTeams = mDatabase.getDnpList();
 
         mTeamNumbers.removeAll(mDnpTeams);

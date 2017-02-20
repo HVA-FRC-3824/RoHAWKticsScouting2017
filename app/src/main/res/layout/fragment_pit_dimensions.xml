@@ -34,4 +34,12 @@
         app:key="weight"
         app:label="Weight (lbs)" />
 
+    <frc3824.rohawkticsscouting2017.Views.SavableRadioButtons
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chosen_volume"
+        app:key="chosen_volume"
+        app:label="Chosen Volume"
+        app:radio_values="@array/volume_options"/>
+
 </LinearLayout>

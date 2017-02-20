@@ -1,9 +1,5 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
-import android.graphics.Color;
-import android.graphics.Point;
-import android.util.Pair;
-
 /**
  * @author frc3824
  * Created: 8/10/16
@@ -20,7 +16,7 @@ public interface Constants {
         - middle number is changed after events
         - left most number is changed after the season
     */
-    String VERSION = "2.0.1";
+    String VERSION = "2.0.3";
     int OUR_TEAM_NUMBER = 3824;
 
     interface Settings {
@@ -144,7 +140,8 @@ public interface Constants {
                 String DID_NOT_FINISH_IN_TIME = "Did not finish in time";
                 String ROBOT_FELL = "Robot fell";
                 String SUCCESSFUL = "Successful";
-                String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT};
+                String CREDITED_THROUGH_FOUL = "Credited through foul";
+                String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT, CREDITED_THROUGH_FOUL};
             }
 
             String ENDGAME_CLIMB_TIME = "endgame_climb_time";
@@ -162,19 +159,19 @@ public interface Constants {
         }
 
         interface Fouls {
-            String FOUL = "foul_standard";
-            String TECH_FOUL = "foul_tech";
-            String YELLOW_CARD = "foul_yellow_card";
-            String RED_CARD = "foul_red_card";
+            String FOUL = "fouls";
+            String TECH_FOUL = "tech_fouls";
+            String YELLOW_CARD = "yellow_card";
+            String RED_CARD = "red_card";
         }
 
         interface PostMatch {
-            String DQ = "post_dq";
-            String STOPPED_MOVING = "post_stopped";
-            String NO_SHOW = "post_no_show";
-            String NOTES = "post_notes";
+            String DQ = "dq";
+            String STOPPED_MOVING = "stopped_moving";
+            String NO_SHOW = "no_show";
+            String NOTES = "notes";
             // TAGS
-            String TAGS = "post_tags";
+            String TAGS = "tags";
             interface Tags{
                 String BLOCK_SHOTS = "_blocked_shots";
                 String PINNED_ROBOT = "_pinned_robot";
@@ -211,7 +208,36 @@ public interface Constants {
 
         interface Miscellaneous {
             String PROGRAMMING_LANGUAGE = "programming_language";
+            interface Programming_Languages {
+                String CPP = "C++";
+                String JAVA = "Java";
+                String LABVIEW = "Labview";
+                String PYTHON = "Python";
+                String CSHARP = "C#";
 
+                String[] PROGRAMMING_LANGUAGES = {CPP, JAVA, LABVIEW, PYTHON, CSHARP};
+            }
+            String DRIVE_TRAIN = "drive_train";
+            interface Drive_Trains {
+                String TANK_4_WHEEL = "Tank (4 wheel)";
+                String TANK_6_WHEEL = "Tank (6 wheel)";
+                String TANK_8_WHEEL = "Tank (8 wheel)";
+                String TANK_TREAD = "Tank (tread)";
+                String MECANUM = "Mecanum";
+                String SWERVE = "Swerve";
+
+                String[] DRIVE_TRAINS = {TANK_4_WHEEL, TANK_6_WHEEL, TANK_8_WHEEL, TANK_TREAD, MECANUM, SWERVE};
+            }
+            String CIMS = "cims";
+
+
+            String MAX_HOPPER_LOAD = "max_hopper_load";
+            String CHOSEN_VOLUME = "chosen_volume";
+            interface Volumes {
+                String SHORT = "Short (40in x 36in x 24in)";
+                String TALL = "Tall (30in x 32in x 36in)";
+                String[] VOLUMES = {SHORT, TALL};
+            }
             // GAME SPECIFIC
         }
 
@@ -239,6 +265,24 @@ public interface Constants {
             String RED_DEFENSE = "red_defense";
         }
 
+        interface Miscellaneous {
+            String BLUE1_PILOT_RATING = "blue1_pilot_rating";
+            String BLUE2_PILOT_RATING = "blue2_pilot_rating";
+            String BLUE3_PILOT_RATING = "blue3_pilot_rating";
+            String RED1_PILOT_RATING = "red1_pilot_rating";
+            String RED2_PILOT_RATING = "red2_pilot_rating";
+            String RED3_PILOT_RATING = "red3_pilot_rating";
+
+            interface PILOT_RATING_OPTIONS {
+                String FIVE = "5 - Hauling ass";
+                String FOUR = "4 - Pretty good";
+                String THREE = "3 - Competent";
+                String TWO = "2 - Wouldn't pick them as pilot for us";
+                String ONE = "1 - Not paying attention/Slow/Clumsy";
+                String ZERO = "0 - Not a pilot in this match";
+            }
+        }
+
         String NOTES = "super_notes";
     }
 
@@ -256,7 +300,7 @@ public interface Constants {
         int PORT = 38240;
     }
 
-    interface Bluetooth {
+    interface Comms {
         String NAME_SECURE = "SyncSecure";
         String UUID_SECURE = "fa87c0d0-afac-11de-8a39-0800200c9a66";
 
@@ -290,21 +334,7 @@ public interface Constants {
             char FEEDBACK_HEADER = 'F';
             char SYNC_HEADER = 'R';
             char STRATEGY_HEADER = 'T';
-            char MATCH_STRATEGY_HEADER = 'A';
-        }
-
-        interface Device_Names {
-            String BLUE1 = "3824_Blue1";
-            String BLUE2 = "3824_Blue2";
-            String BLUE3 = "3824_Blue3";
-            String RED1 = "3824_Red1";
-            String RED2 = "3824_Red2";
-            String RED3 = "3824_Red3";
-            String SUPER = "3824_Super_Scout";
-            String SPARE = "3824_Spare";
-            String STRATEGY = "3824_Strategy";
-            String DRIVETEAM = "3824_Drive_Team";
-            String RED_PI = "raspberrypi";
+            char STRATEGY_SUGGESTION_HEADER = 'U';
         }
 
         interface Data_Transfer_Status {
@@ -348,6 +378,16 @@ public interface Constants {
             String FAR_PLACED = "Far - Placed";
             String FAR_DROPPED = "Far - Dropped";
             String[] LIST = {NEAR_PLACED, NEAR_DROPPED, CENTER_PLACED, CENTER_DROPPED, FAR_PLACED, FAR_DROPPED};
+        }
+
+        interface Pilot_Rating_Options {
+            String FIVE = "5 - Hauling ass";
+            String FOUR = "4 - Pretty good";
+            String THREE = "3 - Competent";
+            String TWO = "2 - Wouldn't pick them as pilot for us";
+            String ONE = "1 - Not paying attention/Slow/Clumsy";
+            String ZERO = "0 - Not a pilot in this match";
+            String[] LIST = {FIVE, FOUR, THREE, TWO, ONE, ZERO};
         }
     }
 

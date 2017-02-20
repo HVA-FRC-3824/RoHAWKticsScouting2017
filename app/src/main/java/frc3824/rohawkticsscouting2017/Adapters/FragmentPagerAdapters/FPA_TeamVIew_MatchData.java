@@ -27,6 +27,7 @@ public class FPA_TeamView_MatchData extends FragmentPagerAdapter {
         super(fm);
         mDatabase = Database.getInstance();
         mTeamNumber = team_number;
+        mTeam = mDatabase.getTeam(mTeamNumber);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class FPA_TeamView_MatchData extends FragmentPagerAdapter {
             ((AllMatchDataFragment)f).setTeam(mTeamNumber);
         } else {
             f = new IndividualMatchDataFragment();
-            ((IndividualMatchDataFragment)f).setTeamMatch(mTeamNumber, position);
+            ((IndividualMatchDataFragment)f).setTeamMatch(mTeamNumber, position - 1);
         }
         return f;
     }

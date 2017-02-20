@@ -5,11 +5,14 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_Qualitative;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Qualitative;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutValue;
@@ -21,20 +24,18 @@ import frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView;
  *
  *
  */
-public class SavableQualitative extends SavableView implements DragSortListView.DropListener {
+public class SavableQualitative extends SavableView {
 
     private final static String TAG = "SavableQualitative";
 
-    private DragSortListView mListView;
-    private LVA_Qualitative mLva;
     private String mKey;
-    private Context mContext;
-    private ArrayList<Integer> mTeams;
+
+    private ArrayList<TextView> mTeamLabels;
+    private ArrayList<Spinner> mSpinners;
 
     public SavableQualitative(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mContext = context;
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.savable_qualitative, this);
 
@@ -45,28 +46,36 @@ public class SavableQualitative extends SavableView implements DragSortListView.
         mKey = typedArray.getString(R.styleable.SavableView_key);
         typedArray.recycle();
 
-        mListView = (DragSortListView)findViewById(R.id.listview);
-        mListView.setDropListener(this);
-        //mListView.setFloatViewManager(new SimpleFloatViewManager(mListView));
+        mTeamLabels = new ArrayList<>();
+        mTeamLabels.add((TextView)findViewById(R.id.team1_label));
+        mTeamLabels.add((TextView)findViewById(R.id.team2_label));
+        mTeamLabels.add((TextView)findViewById(R.id.team3_label));
+
+        mSpinners = new ArrayList<>();
+        mSpinners.add((Spinner)findViewById(R.id.team1));
+        mSpinners.add((Spinner)findViewById(R.id.team2));
+        mSpinners.add((Spinner)findViewById(R.id.team3));
+
+        String values[] = new String[]{"1", "2", "3"};
+
+        for(Spinner s: mSpinners){
+            s.setAdapter(new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, values));
+        }
     }
 
     public void setTeams(ArrayList<Integer> teams) {
-        mTeams = teams;
-        mLva = new LVA_Qualitative(mContext, teams);
-        mListView.setAdapter(mLva);
-    }
-
-    @Override
-    public void drop(int from, int to) {
-        int team_number = mTeams.get(from);
-        mTeams.remove(from);
-        mTeams.add(to, team_number);
-        mLva.notifyDataSetChanged();
+        for(int i = 0; i < teams.size(); i++){
+            mTeamLabels.get(i).setText(String.valueOf(teams.get(i)));
+        }
     }
 
     @Override
     public String writeToMap(ScoutMap map) {
-        map.put(mKey, mTeams);
+        ArrayList<Integer> values = new ArrayList<>();
+        for(Spinner s: mSpinners){
+            values.add(s.getSelectedItemPosition() + 1);
+        }
+        map.put(mKey, values);
         return "";
     }
 
@@ -74,7 +83,10 @@ public class SavableQualitative extends SavableView implements DragSortListView.
     public String restoreFromMap(ScoutMap map) {
         if(map.contains(mKey)) {
             try {
-                mTeams = (ArrayList<Integer>)map.getObject(mKey);
+                ArrayList<Integer> values = (ArrayList<Integer>)map.getObject(mKey);
+                for(int i = 0; i < mSpinners.size(); i++){
+                    mSpinners.get(i).setSelection(values.get(i) - 1);
+                }
             } catch (ScoutValue.TypeException e) {
                 Log.e(TAG, e.getMessage());
                 return e.getMessage();

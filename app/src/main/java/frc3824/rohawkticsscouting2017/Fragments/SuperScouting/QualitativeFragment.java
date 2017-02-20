@@ -32,8 +32,7 @@ public class QualitativeFragment extends ScoutFragment {
         mMatchNumber = match_number;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_super_qualitative, container, false);
 
         Database database = Database.getInstance();
@@ -52,8 +51,8 @@ public class QualitativeFragment extends ScoutFragment {
         SavableQualitative blue_speed = (SavableQualitative)view.findViewById(R.id.blue_speed);
         blue_speed.setTeams(blue);
 
-        SavableQualitative blue_torque = (SavableQualitative)view.findViewById(R.id.blue_torque);
-        blue_torque.setTeams(blue);
+        SavableQualitative blue_intake_ability = (SavableQualitative)view.findViewById(R.id.blue_torque);
+        blue_intake_ability.setTeams(blue);
         SavableQualitative blue_control = (SavableQualitative)view.findViewById(R.id.blue_control);
         blue_control.setTeams(blue);
         SavableQualitative blue_defense = (SavableQualitative)view.findViewById(R.id.blue_defense);
@@ -61,8 +60,8 @@ public class QualitativeFragment extends ScoutFragment {
 
         SavableQualitative red_speed = (SavableQualitative)view.findViewById(R.id.red_speed);
         red_speed.setTeams(red);
-        SavableQualitative red_torque = (SavableQualitative)view.findViewById(R.id.red_torque);
-        red_torque.setTeams(red);
+        SavableQualitative red_intake_ability = (SavableQualitative)view.findViewById(R.id.red_torque);
+        red_intake_ability.setTeams(red);
         SavableQualitative red_control = (SavableQualitative)view.findViewById(R.id.red_control);
         red_control.setTeams(red);
         SavableQualitative red_defense = (SavableQualitative)view.findViewById(R.id.red_defense);

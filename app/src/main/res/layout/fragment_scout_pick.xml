@@ -13,6 +13,11 @@
         android:textColor="#000000"
         android:id="@+id/reset"/>
 
+
+    <include
+        layout="@layout/list_item_pick"
+        android:id="@+id/our_team"/>
+
     <frc3824.rohawkticsscouting2017.Views.DragSortListView.DragSortListView
         xmlns:dslv="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"

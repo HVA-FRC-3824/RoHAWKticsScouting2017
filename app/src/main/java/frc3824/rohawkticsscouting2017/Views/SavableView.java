@@ -1,10 +1,13 @@
 package frc3824.rohawkticsscouting2017.Views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
 
 /**

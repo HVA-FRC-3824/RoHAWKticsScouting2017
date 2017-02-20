@@ -61,9 +61,11 @@ public class TeamCalculatedData {
     public LowLevelStats teleop_points;
 
     // Endgame
-    public int endgame_climb_success;
-    public int endgame_climb_fell;
-    public int endgame_climb_failed;
+    public LowLevelStats endgame_climb_successful;
+    public LowLevelStats endgame_climb_robot_fell;
+    public LowLevelStats endgame_climb_did_not_finish_in_time;
+    public LowLevelStats endgame_climb_no_attempt;
+    public LowLevelStats endgame_climb_credited_through_foul;
     public LowLevelStats endgame_climb_time;
     public LowLevelStats endgame_points;
 
@@ -91,5 +93,58 @@ public class TeamCalculatedData {
     public double zscore_defense;
     public int rank_defense;
 
-    public TeamCalculatedData() {}
+    public LowLevelStats pilot_ratings;
+
+    public TeamCalculatedData() {
+        auto_baseline = new LowLevelStats();
+        auto_total_gears_placed = new LowLevelStats();
+        auto_total_gears_dropped = new LowLevelStats();
+        auto_near_gears_placed = new LowLevelStats();
+        auto_near_gears_dropped = new LowLevelStats();
+        auto_center_gears_placed = new LowLevelStats();
+        auto_center_gears_dropped = new LowLevelStats();
+        auto_far_gears_placed = new LowLevelStats();
+        auto_far_gears_dropped = new LowLevelStats();
+        auto_high_goal_made = new LowLevelStats();
+        auto_high_goal_missed = new LowLevelStats();
+        auto_low_goal_made = new LowLevelStats();
+        auto_low_goal_missed = new LowLevelStats();
+        auto_hoppers = new LowLevelStats();
+        auto_points = new LowLevelStats();
+
+        teleop_total_gears_placed = new LowLevelStats();
+        teleop_total_gears_dropped = new LowLevelStats();
+        teleop_near_gears_placed = new LowLevelStats();
+        teleop_near_gears_dropped = new LowLevelStats();
+        teleop_center_gears_placed = new LowLevelStats();
+        teleop_center_gears_dropped = new LowLevelStats();
+        teleop_far_gears_placed = new LowLevelStats();
+        teleop_far_gears_dropped = new LowLevelStats();
+        teleop_high_goal_made = new LowLevelStats();
+        teleop_high_goal_missed = new LowLevelStats();
+        teleop_low_goal_made = new LowLevelStats();
+        teleop_low_goal_missed = new LowLevelStats();
+        teleop_hoppers = new LowLevelStats();
+        teleop_picked_up_gears = new LowLevelStats();
+        teleop_points = new LowLevelStats();
+
+        endgame_climb_successful = new LowLevelStats();
+        endgame_climb_robot_fell = new LowLevelStats();
+        endgame_climb_credited_through_foul = new LowLevelStats();
+        endgame_climb_did_not_finish_in_time = new LowLevelStats();
+        endgame_climb_no_attempt = new LowLevelStats();
+        endgame_climb_time = new LowLevelStats();
+        endgame_points = new LowLevelStats();
+
+        no_show = new LowLevelStats();
+        stopped_moving = new LowLevelStats();
+        dq = new LowLevelStats();
+
+        fouls = new LowLevelStats();
+        tech_fouls = new LowLevelStats();
+        yellow_cards = new LowLevelStats();
+        red_cards = new LowLevelStats();
+
+        pilot_ratings = new LowLevelStats();
+    }
 }

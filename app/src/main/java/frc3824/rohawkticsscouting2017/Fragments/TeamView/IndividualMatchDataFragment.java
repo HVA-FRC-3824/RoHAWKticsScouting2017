@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gear;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gears;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -120,12 +117,22 @@ public class IndividualMatchDataFragment extends Fragment{
 
         float percent = ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction)) /
                 ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction + mTmd.auto_high_goal_missed));
-        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+
+        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction, mTmd.auto_high_goal_missed, percent));
 
         percent = ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction)) /
                 ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction + mTmd.auto_low_goal_missed));
-        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+
+        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction, mTmd.auto_low_goal_missed, percent));
         
         ((TextView)auto_.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.auto_hoppers));
@@ -155,12 +162,18 @@ public class IndividualMatchDataFragment extends Fragment{
 
         percent = ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction)) /
                 ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction + mTmd.teleop_high_goal_missed));
-        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction, mTmd.teleop_high_goal_missed, percent));
 
         percent = ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction)) /
                 ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction + mTmd.teleop_low_goal_missed));
-        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+        ((TextView)teleop.findViewById(R.id.low_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction, mTmd.teleop_low_goal_missed, percent));
 
         ((TextView)teleop.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.teleop_hoppers));
@@ -179,7 +192,7 @@ public class IndividualMatchDataFragment extends Fragment{
 
         TeamLogistics tl = Database.getInstance().getTeamLogistics(team_number);
         int match_number = tl.match_numbers.get(position);
-        mTmd = Database.getInstance().getTeamMatchData(match_number,team_number);
+        mTmd = Database.getInstance().getTeamMatchData(match_number, team_number);
         mSurrogate = match_number == tl.surrogate_match_number;
     }
 }

@@ -4,7 +4,6 @@ import org.apache.commons.math3.distribution.TDistribution;
 
 import java.util.ArrayList;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Alliance;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 
@@ -18,17 +17,16 @@ public class AllianceCalculations {
 
     private final static String TAG = "AllianceCalculations";
     private Database mDatabase;
-    private Alliance mAlliance;
+    private ArrayList<Team> mAlliance;
     private ArrayList<TeamCalculations> mTeams;
 
-    public AllianceCalculations(Alliance a)
-    {
+    public AllianceCalculations(ArrayList<Team> a) {
         mAlliance = a;
         mDatabase = Database.getInstance();
         mTeams = new ArrayList<>();
-        for(int i = 0; i < mAlliance.teams.size(); i++)
+        for(int i = 0; i < mAlliance.size(); i++)
         {
-            mTeams.add(new TeamCalculations(mAlliance.teams.get(i)));
+            mTeams.add(new TeamCalculations(mAlliance.get(i)));
         }
     }
 
@@ -45,9 +43,49 @@ public class AllianceCalculations {
     public double predictedScore(boolean elimination) {
         double pScore = 0.0;
 
-        for(int i = 0; i < mAlliance.teams.size(); i++)
+        double auto_gears = 0.0;
+        double teleop_gears = 0.0;
+        double fuel_points = 0.0;
+
+        for(Team t: mAlliance)
         {
-            pScore += mTeams.get(i).autoAbility();
+            pScore += t.calc.auto_baseline.average * 5;
+
+            double num_low_balls = (t.calc.auto_high_goal_made.average * 9 + t.calc.auto_low_goal_made.average * 3 +
+                    t.calc.teleop_high_goal_made.average * 3 + t.calc.teleop_low_goal_made.average) / 9;
+            fuel_points += num_low_balls;
+            pScore += (int)num_low_balls;
+
+            pScore += t.calc.endgame_climb_successful.average * 50;
+
+            auto_gears += t.calc.auto_total_gears_placed.average;
+            teleop_gears += t.calc.teleop_total_gears_placed.average;
+        }
+
+        if(fuel_points >= 40){
+            pScore += 20;
+        }
+
+        int rotors = 0;
+        if(auto_gears >= 3){
+            pScore += 120;
+            rotors += 2;
+        } else if(auto_gears >= 1) {
+            pScore += 60;
+            rotors ++;
+        }
+
+        if(auto_gears + teleop_gears >= 12) {
+            pScore += (4 - rotors) * 40;
+            if(elimination){
+                pScore += 100;
+            }
+        } else if(auto_gears + teleop_gears >= 6) {
+            pScore += (3-rotors) * 40;
+        } else if(auto_gears + teleop_gears >= 2) {
+            pScore += (2 - rotors) * 40;
+        } else {
+            pScore += (1 - rotors) * 40;
         }
 
         return pScore;
@@ -55,8 +93,6 @@ public class AllianceCalculations {
 
     /**
         Standard Deviation of Predicted Score
-
-        std_pScore = sqrt(∑_(T in A) std_autoAbility(T)^2)
      */
     public double std_predictedScore() {
         return std_predictedScore(false);
@@ -65,10 +101,56 @@ public class AllianceCalculations {
     public double std_predictedScore(boolean elimination) {
         double std_pScore = 0.0;
 
-        for(int i = 0; i < mAlliance.teams.size(); i++)
-        {
-            std_pScore += Math.pow(mTeams.get(i).std_autoAbility(), 2);
+        double auto_points = 0;
+        double teleop_points = 0;
+
+        double auto_fuel_points = 0;
+        double teleop_fuel_points = 0;
+
+        double auto_gear_points = 0;
+        double teleop_gear_points = 0;
+
+        double auto_gear = 0;
+        double teleop_gear = 0;
+
+        double climb_points = 0;
+
+        for(Team t: mAlliance) {
+            auto_fuel_points += (int)(t.calc.auto_high_goal_made.average + t.calc.auto_low_goal_made.average / 3);
+            teleop_fuel_points += (int)(t.calc.teleop_high_goal_made.average / 3 + t.calc.teleop_low_goal_made.average / 9);
+
+            auto_gear += t.calc.auto_total_gears_placed.average;
+            teleop_gear += t.calc.teleop_total_gears_placed.average;
+
+            auto_points += t.calc.auto_baseline.average;
+
+            climb_points += t.calc.endgame_climb_successful.average * 50;
         }
+
+        int rotor = 0;
+        if(auto_gear >= 3){
+            auto_gear_points = 120;
+            rotor = 2;
+        } else if(auto_gear >= 1){
+            auto_gear_points = 60;
+            rotor = 1;
+        }
+
+        if(auto_gear + teleop_gear >= 12){
+            teleop_gear_points = (4 - rotor) * 40;
+        } else if(auto_gear + teleop_gear >= 6){
+            teleop_gear_points = (3 - rotor) * 40;
+        } else if(auto_gear + teleop_gear >= 2){
+            teleop_gear_points = (2 - rotor) * 40;
+        } else {
+            teleop_gear_points = (1 - rotor) * 40;
+        }
+
+
+        auto_points = auto_fuel_points + auto_gear_points;
+        teleop_points = teleop_fuel_points + teleop_gear_points;
+
+        std_pScore += Math.pow(auto_points, 2) + Math.pow(teleop_points, 2) + Math.pow(climb_points, 2);
 
         std_pScore = Math.sqrt(std_pScore);
 
@@ -107,8 +189,7 @@ public class AllianceCalculations {
 
        where v_1 = N_1 - 1 (the degrees of freedom for the first variance) and v_2 = N_2 -1
     */
-    public double winProbabilityOver(Alliance O)
-    {
+    public double winProbabilityOver(ArrayList<Team> O) {
         AllianceCalculations oCalc = new AllianceCalculations(O);
         return winProbabilityOver(oCalc);
     }
@@ -127,16 +208,54 @@ public class AllianceCalculations {
         return tDistribution.cumulativeProbability(t);
     }
 
-    public double sampleSize()
-    {
+    public double sampleSize() {
         double average = 0.0;
-        for(int i = 0; i < mAlliance.teams.size(); i++)
+        for(int i = 0; i < mAlliance.size(); i++)
         {
             average += mTeams.get(i).numberOfCompletedMatches();
         }
 
-        average /= mAlliance.teams.size();
+        average /= mAlliance.size();
 
         return average;
+    }
+
+    public double pressureChance(){
+        double x = 40 * 9; // kPa in terms of low goal teleop
+        double auto_high = 0;
+        double auto_low = 0;
+        double teleop_high = 0;
+        double teleop_low = 0;
+        double auto_high_squared = 0;
+        double auto_low_squared = 0;
+        double teleop_high_squared = 0;
+        double teleop_low_squared = 0;
+        for(Team t: mAlliance){
+            auto_high += t.calc.auto_high_goal_made.average * 9;
+            auto_low += t.calc.auto_low_goal_made.average * 3;
+            teleop_high += t.calc.teleop_high_goal_made.average * 3;
+            teleop_low += t.calc.teleop_low_goal_made.average;
+
+            auto_high_squared += Math.pow(t.calc.auto_high_goal_made.average * 9, 2);
+            auto_low_squared += Math.pow(t.calc.auto_low_goal_made.average * 3, 2);
+            teleop_high_squared += Math.pow(t.calc.teleop_high_goal_made.average * 3, 2);
+            teleop_low_squared += Math.pow(t.calc.teleop_low_goal_made.average, 2);
+        }
+        double mu = auto_high + auto_low + teleop_high + teleop_low;
+        double sigma = Math.sqrt(auto_high_squared + auto_low_squared + teleop_high_squared + teleop_low_squared);
+
+        return Statistics.probabilityDensity(x, mu, sigma);
+    }
+
+    public double rotorChance(){
+        double x = 12; // gears
+        double mu = 0;
+        double sigma = 0;
+        for(Team t: mAlliance){
+            mu += t.calc.auto_total_gears_placed.average + t.calc.teleop_total_gears_placed.average;
+            sigma += Math.pow(t.calc.auto_total_gears_placed.average, 2) + Math.pow(t.calc.teleop_total_gears_placed.average, 2);
+        }
+        sigma = Math.sqrt(sigma);
+        return Statistics.probabilityDensity(x, mu, sigma);
     }
 }
