@@ -435,6 +435,9 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         List pilot_rating_options = Arrays.asList(Constants.Team_View.Pilot_Rating_Options.LIST);
         for(TeamMatchData tmd: team.completed_matches.values()){
             SuperMatchData smd = Database.getInstance().getSuperMatchData(tmd.match_number);
+            if(smd == null){
+                continue;
+            }
             if(tmd.alliance_color == Constants.Alliance_Colors.BLUE){
                 switch (tmd.alliance_number) {
                     case 1:
