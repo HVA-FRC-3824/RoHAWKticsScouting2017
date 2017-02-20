@@ -117,11 +117,21 @@ public class IndividualMatchDataFragment extends Fragment{
 
         float percent = ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction)) /
                 ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction + mTmd.auto_high_goal_missed));
+
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+
         ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction, mTmd.auto_high_goal_missed, percent));
 
         percent = ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction)) /
                 ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction + mTmd.auto_low_goal_missed));
+
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+
         ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction, mTmd.auto_low_goal_missed, percent));
         
@@ -152,12 +162,18 @@ public class IndividualMatchDataFragment extends Fragment{
 
         percent = ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction)) /
                 ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction + mTmd.teleop_high_goal_missed));
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
         ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction, mTmd.teleop_high_goal_missed, percent));
 
         percent = ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction)) /
                 ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction + mTmd.teleop_low_goal_missed));
-        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+        ((TextView)teleop.findViewById(R.id.low_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction, mTmd.teleop_low_goal_missed, percent));
 
         ((TextView)teleop.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.teleop_hoppers));
