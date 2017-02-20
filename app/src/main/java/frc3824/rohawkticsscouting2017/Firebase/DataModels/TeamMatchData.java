@@ -81,8 +81,8 @@ public class TeamMatchData {
     public boolean red_card;
 
     public TeamMatchData() {
-        auto_gears = new Gears();
-        teleop_gears = new Gears();
+        auto_gears = new ArrayList<>();
+        teleop_gears = new ArrayList<>();
     }
 
     public TeamMatchData(ScoutMap map) {

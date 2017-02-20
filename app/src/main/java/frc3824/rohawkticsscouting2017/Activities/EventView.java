@@ -1,7 +1,6 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,13 +15,11 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_EventViewDrawer;
@@ -1222,7 +1219,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
     private void climbSecondary1_bar(ArrayList<BarEntry> entries, int i, TeamCalculatedData teamCalculatedData, int position){
         switch (Constants.Event_View.Climb_Secondary_Options.OPTIONS[position]){
             case Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS:
-                entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.endgame_climb_success));
+                entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.endgame_climb_successful.total));
                 break;
         }
     }
@@ -1239,7 +1236,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         switch (Constants.Event_View.Climb_Secondary_Options.OPTIONS[position]){
             case Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, (double)teamCalculatedData.endgame_climb_success);
+                sort_values.put(teamCalculatedData.team_number, (double)teamCalculatedData.endgame_climb_successful.total);
                 break;
             case Constants.Event_View.Climb_Secondary_Options.TIME:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);

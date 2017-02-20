@@ -51,7 +51,7 @@ public class QualitativeFragment extends ScoutFragment {
         SavableQualitative blue_speed = (SavableQualitative)view.findViewById(R.id.blue_speed);
         blue_speed.setTeams(blue);
 
-        SavableQualitative blue_intake_ability = (SavableQualitative)view.findViewById(R.id.blue_intake_ability);
+        SavableQualitative blue_intake_ability = (SavableQualitative)view.findViewById(R.id.blue_torque);
         blue_intake_ability.setTeams(blue);
         SavableQualitative blue_control = (SavableQualitative)view.findViewById(R.id.blue_control);
         blue_control.setTeams(blue);
@@ -60,7 +60,7 @@ public class QualitativeFragment extends ScoutFragment {
 
         SavableQualitative red_speed = (SavableQualitative)view.findViewById(R.id.red_speed);
         red_speed.setTeams(red);
-        SavableQualitative red_intake_ability = (SavableQualitative)view.findViewById(R.id.red_intake_ability);
+        SavableQualitative red_intake_ability = (SavableQualitative)view.findViewById(R.id.red_torque);
         red_intake_ability.setTeams(red);
         SavableQualitative red_control = (SavableQualitative)view.findViewById(R.id.red_control);
         red_control.setTeams(red);

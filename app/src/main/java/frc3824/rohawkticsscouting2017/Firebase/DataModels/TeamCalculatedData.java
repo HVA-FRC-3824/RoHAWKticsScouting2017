@@ -61,9 +61,11 @@ public class TeamCalculatedData {
     public LowLevelStats teleop_points;
 
     // Endgame
-    public int endgame_climb_success;
-    public int endgame_climb_fell;
-    public int endgame_climb_failed;
+    public LowLevelStats endgame_climb_successful;
+    public LowLevelStats endgame_climb_robot_fell;
+    public LowLevelStats endgame_climb_did_not_finish_in_time;
+    public LowLevelStats endgame_climb_no_attempt;
+    public LowLevelStats endgame_climb_credited_through_foul;
     public LowLevelStats endgame_climb_time;
     public LowLevelStats endgame_points;
 
@@ -82,8 +84,8 @@ public class TeamCalculatedData {
     public double zscore_speed;
     public int rank_speed;
 
-    public double zscore_intake_ability;
-    public int rank_intake_ability;
+    public double zscore_torque;
+    public int rank_torque;
 
     public double zscore_control;
     public int rank_control;
@@ -126,6 +128,11 @@ public class TeamCalculatedData {
         teleop_picked_up_gears = new LowLevelStats();
         teleop_points = new LowLevelStats();
 
+        endgame_climb_successful = new LowLevelStats();
+        endgame_climb_robot_fell = new LowLevelStats();
+        endgame_climb_credited_through_foul = new LowLevelStats();
+        endgame_climb_did_not_finish_in_time = new LowLevelStats();
+        endgame_climb_no_attempt = new LowLevelStats();
         endgame_climb_time = new LowLevelStats();
         endgame_points = new LowLevelStats();
 

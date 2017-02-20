@@ -1,9 +1,5 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
-import android.graphics.Color;
-import android.graphics.Point;
-import android.util.Pair;
-
 /**
  * @author frc3824
  * Created: 8/10/16
@@ -20,7 +16,7 @@ public interface Constants {
         - middle number is changed after events
         - left most number is changed after the season
     */
-    String VERSION = "2.0.1";
+    String VERSION = "2.0.3";
     int OUR_TEAM_NUMBER = 3824;
 
     interface Settings {
@@ -144,7 +140,8 @@ public interface Constants {
                 String DID_NOT_FINISH_IN_TIME = "Did not finish in time";
                 String ROBOT_FELL = "Robot fell";
                 String SUCCESSFUL = "Successful";
-                String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT};
+                String CREDITED_THROUGH_FOUL = "Credited through foul";
+                String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT, CREDITED_THROUGH_FOUL};
             }
 
             String ENDGAME_CLIMB_TIME = "endgame_climb_time";
@@ -258,8 +255,8 @@ public interface Constants {
             String BLUE_SPEED = "blue_speed";
             String RED_SPEED = "red_speed";
 
-            String BLUE_INTAKE_ABILITY = "blue_intake_ability";
-            String RED_INTAKE_ABILITY = "red_intake_ability";
+            String BLUE_TORQUE = "blue_torque";
+            String RED_TORQUE = "red_torque";
 
             String BLUE_CONTROL = "blue_control";
             String RED_CONTROL = "red_control";
@@ -277,8 +274,8 @@ public interface Constants {
             String RED3_PILOT_RATING = "red3_pilot_rating";
 
             interface PILOT_RATING_OPTIONS {
-                String FIVE = "5 - Hauling ass"; // or "Could go pro in this"
-                String FOUR = "4 - Pretty good"; // TODO: better description
+                String FIVE = "5 - Hauling ass";
+                String FOUR = "4 - Pretty good";
                 String THREE = "3 - Competent";
                 String TWO = "2 - Wouldn't pick them as pilot for us";
                 String ONE = "1 - Not paying attention/Slow/Clumsy";
@@ -340,20 +337,6 @@ public interface Constants {
             char STRATEGY_SUGGESTION_HEADER = 'U';
         }
 
-        interface Device_Names {
-            String BLUE1 = "3824_Blue1";
-            String BLUE2 = "3824_Blue2";
-            String BLUE3 = "3824_Blue3";
-            String RED1 = "3824_Red1";
-            String RED2 = "3824_Red2";
-            String RED3 = "3824_Red3";
-            String SUPER = "3824_Super_Scout";
-            String SPARE = "3824_Spare";
-            String STRATEGY = "3824_Strategy";
-            String DRIVETEAM = "3824_Drive_Team";
-            String RED_PI = "raspberrypi";
-        }
-
         interface Data_Transfer_Status {
             int NO_BLUETOOTH = 0;
             int SERVER_NOT_FOUND = 1;
@@ -395,6 +378,16 @@ public interface Constants {
             String FAR_PLACED = "Far - Placed";
             String FAR_DROPPED = "Far - Dropped";
             String[] LIST = {NEAR_PLACED, NEAR_DROPPED, CENTER_PLACED, CENTER_DROPPED, FAR_PLACED, FAR_DROPPED};
+        }
+
+        interface Pilot_Rating_Options {
+            String FIVE = "5 - Hauling ass";
+            String FOUR = "4 - Pretty good";
+            String THREE = "3 - Competent";
+            String TWO = "2 - Wouldn't pick them as pilot for us";
+            String ONE = "1 - Not paying attention/Slow/Clumsy";
+            String ZERO = "0 - Not a pilot in this match";
+            String[] LIST = {FIVE, FOUR, THREE, TWO, ONE, ZERO};
         }
     }
 
