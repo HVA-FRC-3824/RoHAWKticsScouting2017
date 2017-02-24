@@ -105,15 +105,15 @@ public class AllMatchDataFragment extends Fragment {
                 teleop_points += 40 * (1 - rotors);
             }
 
-            int endgame_points = (int)mTcd.endgame_climb_successful.average * 50;
+            double endgame_points = mTcd.endgame_climb_successful.average * 50;
 
             double total_points = auto_points + teleop_points + endgame_points;
 
-            ((TextView)points.findViewById(R.id.total)).setText(String.format("%0.2f", total_points));
-            ((TextView)points.findViewById(R.id.auto)).setText(String.format("%0.2f", auto_points));
-            ((TextView)points.findViewById(R.id.teleop)).setText(String.format("%0.2f", teleop_points));
+            ((TextView)points.findViewById(R.id.total)).setText(String.format("%02.2f", total_points));
+            ((TextView)points.findViewById(R.id.auto)).setText(String.format("%02.2f", auto_points));
+            ((TextView)points.findViewById(R.id.teleop)).setText(String.format("%02.2f", teleop_points));
 
-            ((TextView)points.findViewById(R.id.endgame)).setText(String.format("%0.2f", endgame_points));
+            ((TextView)points.findViewById(R.id.endgame)).setText(String.format("%02.2f", endgame_points));
 
             // Auto (auto is a keyword so the underscore is used)
             View auto_ = mView.findViewById(R.id.auto_body);
@@ -122,8 +122,8 @@ public class AllMatchDataFragment extends Fragment {
                     mTcd.auto_start_position_near,
                     mTcd.auto_start_position_center,
                     mTcd.auto_start_position_far));
-            ((TextView)auto_.findViewById(R.id.baseline)).setText(String.format("%0.2%%", mTcd.auto_baseline.average * 100.0));
-            ((TextView)auto_.findViewById(R.id.gears)).setText(String.format("%0.1f (%0.1f) / %0.1f (%0.1f) / %0.1f (%0.1f) / %0.1f (0.1f)",
+            ((TextView)auto_.findViewById(R.id.baseline)).setText(String.format("%02.2f%%", mTcd.auto_baseline.average * 100.0));
+            ((TextView)auto_.findViewById(R.id.gears)).setText(String.format("%02.1f (%02.1f) / %02.1f (%02.1f) / %02.1f (%02.1f) / %02.1f (%02.1f)",
                     mTcd.auto_near_gears_placed.average, mTcd.auto_near_gears_dropped.average,
                     mTcd.auto_center_gears_placed.average, mTcd.auto_center_gears_dropped.average,
                     mTcd.auto_far_gears_placed.average, mTcd.auto_far_gears_dropped.average,
@@ -131,12 +131,18 @@ public class AllMatchDataFragment extends Fragment {
 
             double percent = mTcd.auto_high_goal_made.average /
                     (mTcd.auto_high_goal_made.average + mTcd.auto_high_goal_missed.average);
-            ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+            if(Double.isNaN(percent)){
+                percent = 0;
+            }
+            ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%02.2f / %02.2f (%02.2f%%)",
                     mTcd.auto_high_goal_made.average, mTcd.auto_high_goal_missed.average, percent));
 
             percent = (mTcd.auto_low_goal_made.average) /
                     (mTcd.auto_low_goal_made.average + mTcd.auto_low_goal_missed.average);
-            ((TextView)auto_.findViewById(R.id.low_goal)).setText(String.format("%d / %d (%0.2f%%)",
+            if(Double.isNaN(percent)){
+                percent = 0;
+            }
+            ((TextView)auto_.findViewById(R.id.low_goal)).setText(String.format("%02.2f / %02.2f (%02.2f%%)",
                     mTcd.auto_low_goal_made.average, mTcd.auto_low_goal_missed.average, percent));
 
             ((TextView)auto_.findViewById(R.id.hoppers)).setText(String.valueOf(mTcd.auto_hoppers.average));
@@ -145,7 +151,7 @@ public class AllMatchDataFragment extends Fragment {
             View teleop = mView.findViewById(R.id.teleop_body);
 
 
-            ((TextView)teleop.findViewById(R.id.gears)).setText(String.format("%0.1f (%0.1f) / %0.1f (%0.1f) / %0.1f (%0.1f) / %0.1f (0.1f)",
+            ((TextView)teleop.findViewById(R.id.gears)).setText(String.format("%02.1f (%02.1f) / %02.1f (%02.1f) / %02.1f (%02.1f) / %02.1f (%02.1f)",
                     mTcd.teleop_near_gears_placed.average, mTcd.teleop_near_gears_dropped.average,
                     mTcd.teleop_center_gears_placed.average, mTcd.teleop_center_gears_dropped.average,
                     mTcd.teleop_far_gears_placed.average, mTcd.teleop_far_gears_dropped.average,
@@ -153,13 +159,19 @@ public class AllMatchDataFragment extends Fragment {
 
             percent = mTcd.teleop_high_goal_made.average /
                     (mTcd.teleop_high_goal_made.average + mTcd.teleop_high_goal_missed.average);
-            ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+            if(Double.isNaN(percent)){
+                percent = 0;
+            }
+            ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%02.2f / %02.2f (%02.2f%%)",
                     mTcd.teleop_high_goal_made.average, mTcd.teleop_high_goal_missed.average, percent));
 
             percent = mTcd.teleop_low_goal_made.average /
                     (mTcd.teleop_low_goal_made.average + mTcd.teleop_low_goal_missed.average);
-            ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
-                    mTcd.teleop_low_goal_made, mTcd.teleop_low_goal_missed, percent));
+            if(Double.isNaN(percent)){
+                percent = 0;
+            }
+            ((TextView)teleop.findViewById(R.id.low_goal)).setText(String.format("%02.2f / %02.2f (%02.2f%%)",
+                    mTcd.teleop_low_goal_made.average, mTcd.teleop_low_goal_missed.average, percent));
 
             ((TextView)teleop.findViewById(R.id.hoppers)).setText(String.valueOf(mTcd.teleop_hoppers.average));
             ((TextView)teleop.findViewById(R.id.gears_picked_up)).setText(String.valueOf(mTcd.teleop_picked_up_gears.average));
@@ -167,8 +179,8 @@ public class AllMatchDataFragment extends Fragment {
             // Endgame
             View endgame = mView.findViewById(R.id.endgame_body);
 
-            ((TextView)endgame.findViewById(R.id.climb)).setText(String.format("%0.2f%%", mTcd.endgame_climb_successful));
-            ((TextView)endgame.findViewById(R.id.climb_time)).setText(String.format("%0.1fs", mTcd.endgame_climb_time.average));
+            ((TextView)endgame.findViewById(R.id.climb)).setText(String.format("%02.2f%%", mTcd.endgame_climb_successful.average));
+            ((TextView)endgame.findViewById(R.id.climb_time)).setText(String.format("%02.1fs", mTcd.endgame_climb_time.average));
         }
 
         return mView;

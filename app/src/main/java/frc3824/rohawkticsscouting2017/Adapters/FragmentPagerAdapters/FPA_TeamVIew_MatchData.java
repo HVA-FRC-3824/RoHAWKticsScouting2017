@@ -59,7 +59,7 @@ public class FPA_TeamView_MatchData extends FragmentPagerAdapter {
         if(position == 0){
             return "All";
         } else {
-            return String.valueOf(mTeam.info.match_numbers.get(position));
+            return String.valueOf(mTeam.info.match_numbers.get(position - 1));
         }
     }
 }
