@@ -57,8 +57,8 @@ public class MatchViewPredictionFragment extends Fragment {
         AllianceCalculations red_alliance_calculations = new AllianceCalculations(red_alliance);
         double red_predicted_score = red_alliance_calculations.predictedScore();
 
-        double blue_win_probability = blue_alliance_calculations.winProbabilityOver(red_alliance);
-        double red_win_probability = red_alliance_calculations.winProbabilityOver(blue_alliance);
+        double blue_win_probability = 100.0 * blue_alliance_calculations.winProbabilityOver(red_alliance_calculations);
+        double red_win_probability = 100 * red_alliance_calculations.winProbabilityOver(blue_alliance_calculations);
 
         double blue_pressure_chance = blue_alliance_calculations.pressureChance();
         double red_pressure_chance = red_alliance_calculations.pressureChance();
