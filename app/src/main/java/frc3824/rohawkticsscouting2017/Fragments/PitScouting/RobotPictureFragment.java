@@ -43,7 +43,6 @@ import frc3824.rohawkticsscouting2017.Utilities.Utilities;
  *
  * https://developer.android.com/training/camera/photobasics.html
  */
-//TODO: setup taking a picture and firebase storage
 public class RobotPictureFragment extends ScoutFragment implements View.OnClickListener
 {
 

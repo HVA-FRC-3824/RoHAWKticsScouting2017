@@ -51,7 +51,7 @@ public class Database {
     private DatabaseReference mSuperMatchDataRef;
     private DatabaseReference mTeamDTFeedbackRef;
     private DatabaseReference mPartialMatchRef;
-    private DatabaseReference mTeamCalulatedDataRef;
+    private DatabaseReference mTeamCalculatedDataRef;
     private DatabaseReference mTeamLogisticsRef;
     private DatabaseReference mStrategyRef;
     private DatabaseReference mStrategySuggestionRef;
@@ -75,7 +75,7 @@ public class Database {
     private Map<Integer, TeamLogistics> mTeamLogisticsMap;
     private Map<Integer, TeamCalculatedData> mTeamCalculatedDataMap;
     private Map<Integer, TeamRankingData> mCurrentTeamRankingDataMap;
-    private Map<Integer, TeamRankingData> mPredictedTeamRankngDataMap;
+    private Map<Integer, TeamRankingData> mPredictedTeamRankingDataMap;
     private Map<Integer, TeamPickAbility> mFirstTeamPickAbilityMap;
     private Map<Integer, TeamPickAbility> mSecondTeamPickAbilityMap;
     private Map<Integer, TeamPickAbility> mThirdTeamPickAbilityMap;
@@ -360,9 +360,9 @@ public class Database {
         //endregion
 
         //region Calculated
-        mTeamCalulatedDataRef = mEventRef.child("calculated");
+        mTeamCalculatedDataRef = mEventRef.child("calculated");
         mTeamCalculatedDataMap = new HashMap<>();
-        mTeamCalulatedDataRef.addChildEventListener(new ChildEventListener() {
+        mTeamCalculatedDataRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "calc.onChildAdded: " + dataSnapshot.getKey());
@@ -497,24 +497,24 @@ public class Database {
 
         //region Predicted Ranking
         mPredictedTeamRankingDataRef = mEventRef.child("rankings").child("predicted");
-        mPredictedTeamRankngDataMap = new HashMap<>();
+        mPredictedTeamRankingDataMap = new HashMap<>();
         mPredictedTeamRankingDataRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "predicted_ranking.onChildAdded: " + dataSnapshot.getKey());
-                mPredictedTeamRankngDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
+                mPredictedTeamRankingDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.v(TAG, "predicted_ranking.onChildChanged: " + dataSnapshot.getKey());
-                mPredictedTeamRankngDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
+                mPredictedTeamRankingDataMap.put(Integer.parseInt(dataSnapshot.getKey()), dataSnapshot.getValue(TeamRankingData.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.v(TAG, "predicted_ranking.onChildRemoved: " + dataSnapshot.getKey());
-                mPredictedTeamRankngDataMap.remove(Integer.parseInt(dataSnapshot.getKey()));
+                mPredictedTeamRankingDataMap.remove(Integer.parseInt(dataSnapshot.getKey()));
             }
 
             @Override
@@ -774,7 +774,7 @@ public class Database {
     //region Calculated data
     public void setTeamCalculatedData(TeamCalculatedData teamCalculatedData) {
         teamCalculatedData.last_modified = System.currentTimeMillis();
-        mTeamCalulatedDataRef.child(String.format("%d", teamCalculatedData.team_number)).setValue(teamCalculatedData);
+        mTeamCalculatedDataRef.child(String.format("%d", teamCalculatedData.team_number)).setValue(teamCalculatedData);
     }
 
     public TeamCalculatedData getTeamCalculatedData(int team_number){ return mTeamCalculatedDataMap.get(team_number); }
@@ -876,11 +876,11 @@ public class Database {
     }
 
     public TeamRankingData getPredictedTRD(int team_number) {
-        return mPredictedTeamRankngDataMap.get(team_number);
+        return mPredictedTeamRankingDataMap.get(team_number);
     }
 
     public Map<Integer, TeamRankingData> getPredictedRankings() {
-        return mPredictedTeamRankngDataMap;
+        return mPredictedTeamRankingDataMap;
     }
     //endregion
     //endregion
@@ -891,13 +891,13 @@ public class Database {
         team.team_number = team_number;
 
         team.info = getTeamLogistics(team_number);
-        if(team.info == null)
-        {
+        if(team.info == null) {
             team.info = new TeamLogistics();
             team.info.team_number = team_number;
             team.info.match_numbers = new ArrayList<>();
+        } else {
+            Collections.sort(team.info.match_numbers);
         }
-        Collections.sort(team.info.match_numbers);
 
         team.pit = getTeamPitData(team_number);
         if(team.pit == null)

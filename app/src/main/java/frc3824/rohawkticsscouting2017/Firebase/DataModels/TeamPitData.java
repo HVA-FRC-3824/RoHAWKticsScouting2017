@@ -45,7 +45,7 @@ public class TeamPitData {
     public String programming_language;
     public String drive_train;
     public int cims;
-    public double max_hopper_load;
+    public int max_hopper_load;
     public String chosen_volume;
 
 
@@ -84,7 +84,7 @@ public class TeamPitData {
             programming_language = map.getString(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE);
             cims = map.getInt(Constants.Pit_Scouting.Miscellaneous.CIMS);
             drive_train = map.getString(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN);
-            max_hopper_load = map.getDouble(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD);
+            max_hopper_load = (int)map.getDouble(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD);
             chosen_volume = map.getString(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME);
 
             notes = map.getString(Constants.Pit_Scouting.NOTES);
@@ -114,7 +114,7 @@ public class TeamPitData {
         map.put(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE, programming_language);
         map.put(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN, drive_train);
         map.put(Constants.Pit_Scouting.Miscellaneous.CIMS, cims);
-        map.put(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD, max_hopper_load);
+        map.put(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD, (double)max_hopper_load);
         map.put(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME, chosen_volume);
 
         map.put(Constants.Pit_Scouting.NOTES, notes);
