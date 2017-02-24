@@ -49,11 +49,11 @@ public class ViewNotesFragment extends Fragment{
         String superNotesText = "";
         for(int matchNumber : team.info.match_numbers) {
             TeamMatchData tm = database.getTeamMatchData(matchNumber, mTeamNumber);
-            if(tm != null && tm.notes != null && tm.notes.equals("")) {
+            if(tm != null && tm.notes != null && !tm.notes.equals("")) {
                 matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tm.notes);
             }
             SuperMatchData sm = database.getSuperMatchData(matchNumber);
-            if(sm != null && sm.notes != null && sm.notes.equals("")) {
+            if(sm != null && sm.notes != null && !sm.notes.equals("")) {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }
         }
