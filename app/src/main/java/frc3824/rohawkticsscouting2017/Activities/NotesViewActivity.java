@@ -25,6 +25,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaContent;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
+import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaTags;
 
 /**
  * @author frc3824
@@ -115,6 +116,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
         ((TextView)(findViewById(R.id.header).findViewById(R.id.match_number))).setText("Match Number");
         ((TextView)(findViewById(R.id.header).findViewById(R.id.team_number))).setText("Team Number");
         ((TextView)(findViewById(R.id.header).findViewById(R.id.note))).setText("Note");
+        ((TextView)(findViewById(R.id.header).findViewById(R.id.tags))).setText("Tags");
         //endregion
 
         mLayoutInflator = getLayoutInflater();
@@ -153,6 +155,9 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                     }
                     for (int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++) {
                         mAdvancedSearchContentCriteria.removeViewAt(0);
+                    }
+                    for (int i = 0; i < mAdvancedSearchTagsCriteria.getChildCount() - 1; i++) {
+                        mAdvancedSearchTagsCriteria.removeViewAt(0);
                     }
                     //endregion
                     mSearchBasic = true;
@@ -259,7 +264,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                     }
                     break;
                 case 3:
-                    if(!nv.tags.contains(content)){
+                    if(!nv.tags.get(content)){
                         mFilteredNotes.remove(i);
                         i--;
                         continue;
@@ -323,7 +328,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                 continue;
             }
 
-            if((contains.size()  > 0 || dnContains.size() > 0) && filterTags(nv, hasTag, dnHaveTag)) {
+            if((hasTag.size()  > 0 || dnHaveTag.size() > 0) && filterTags(nv, hasTag, dnHaveTag)) {
                 mFilteredNotes.remove(i);
                 i--;
                 continue;
@@ -509,12 +514,12 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
      */
     private boolean filterTags(NoteView nv, ArrayList<String> hasTag, ArrayList<String> dnHaveTag) {
         for(int j = 0; j < hasTag.size(); j++) {
-            if(!nv.tags.contains(hasTag.get(j))) {
+            if(!nv.tags.get(hasTag.get(j))) {
                 return true;
             }
         }
         for(int j = 0; j < dnHaveTag.size(); j++) {
-            if(nv.tags.contains(dnHaveTag.get(j))) {
+            if(nv.tags.get(dnHaveTag.get(j))) {
                 return true;
             }
         }

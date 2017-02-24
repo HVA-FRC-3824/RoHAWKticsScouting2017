@@ -37,7 +37,7 @@ public class NoteCriteriaTags extends RelativeLayout implements View.OnClickList
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, mTypes);
         mCriteriaType.setAdapter(adapter);
 
-        mTag = (EditText)findViewById(R.id.tag);
+        mTag = (EditText)findViewById(R.id.tags);
 
         mRemove = (Button)findViewById(R.id.remove);
         mRemove.setOnClickListener(this);

@@ -50,6 +50,9 @@ public class LVA_NotesView extends ArrayAdapter<NoteView> {
         TextView note = (TextView) convertView.findViewById(R.id.note);
         note.setText(nv.note);
 
+        TextView tags = (TextView) convertView.findViewById(R.id.tags);
+        tags.setText((CharSequence) nv.tags);
+
         return convertView;
     }
 }

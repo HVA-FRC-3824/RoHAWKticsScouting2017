@@ -30,6 +30,7 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author frc3824
@@ -1039,6 +1040,14 @@ public class Database {
             note.match_number = teamMatchData.match_number;
             note.team_number = teamMatchData.team_number;
             note.note = teamMatchData.notes;
+            note.tags = new HashMap();
+            note.tags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS, teamMatchData.tags_blocked_shots);
+            note.tags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT, teamMatchData.tags_pinned_robot);
+            note.tags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION, teamMatchData.tags_defended_loading_station);
+            note.tags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP, teamMatchData.tags_defended_airship);
+            note.tags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE, teamMatchData.tags_broke);
+            note.tags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS, teamMatchData.tags_dumped_all_hoppers);
+
             notes.add(note);
         }
         for(SuperMatchData superMatchData : mSuperMatchDataMap.values())
