@@ -30,6 +30,8 @@ public class IndividualMatchDataFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_individual_match_data, container, false);
 
+        //Remove Asterisk from start position header
+        ((TextView)view.findViewById(R.id.auto_header).findViewById(R.id.start_position)).setText("Start Position");
 
         if(mSurrogate){
             view.findViewById(R.id.surrogate_text).setVisibility(View.VISIBLE);
@@ -132,7 +134,7 @@ public class IndividualMatchDataFragment extends Fragment{
             percent = 0;
         }
 
-        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
+        ((TextView)auto_.findViewById(R.id.low_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction, mTmd.auto_low_goal_missed, percent));
         
         ((TextView)auto_.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.auto_hoppers));

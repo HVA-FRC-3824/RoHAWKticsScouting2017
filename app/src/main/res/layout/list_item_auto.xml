@@ -12,7 +12,7 @@
         android:layout_margin="4dp"
         android:layout_weight="1"
         android:background="@color/white"
-        android:text="Start Pos"
+        android:text="Start Pos***"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp" />
@@ -36,7 +36,7 @@
         android:layout_margin="4dp"
         android:layout_weight="1"
         android:background="@color/white"
-        android:text="Gears"
+        android:text="Gears*"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp" />
@@ -48,7 +48,7 @@
         android:layout_margin="4dp"
         android:layout_weight="1"
         android:background="@color/white"
-        android:text="High Goal"
+        android:text="High Goal**"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp" />
@@ -60,7 +60,7 @@
         android:layout_margin="4dp"
         android:layout_weight="1"
         android:background="@color/white"
-        android:text="Low Goal"
+        android:text="Low Goal**"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp" />

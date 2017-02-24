@@ -84,6 +84,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     private PieChart mClimb;
     private PieDataSet mClimbData;
+    private ArrayList<String> mClimbLabels;
 
     private LineChart mClimbTime;
     private YAxis mClimbTimeY;
@@ -91,6 +92,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     private PieChart mPilot;
     private PieDataSet mPilotData;
+    private ArrayList<String> mPilotLabels;
 
     private ValueFormatter intVF;
     private ValueFormatter floatVF;
@@ -110,14 +112,14 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         floatVF = new ValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return String.format("%0.2f", value);
+                return String.format("%02.2f", value);
             }
         };
 
         percentVF = new ValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                return String.format("%.1f%%",value);
+                return String.format("%01.1f%%",value);
             }
         };
 
@@ -131,18 +133,20 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         floatYVF = new YAxisValueFormatter(){
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
-                return String.format("%0.2f", value);
+                return String.format("%01.1f", value);
             }
         };
 
         percentYVF = new YAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
-                return String.valueOf((int)value)+"%";
+                return String.format("%01.1f%%",value);
             }
         };
 
         mMatches = new ArrayList<>();
+        mPilotLabels = new ArrayList<>();
+        mClimbLabels = new ArrayList<>();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -214,7 +218,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         mClimb.setRotationEnabled(false);
         mClimb.setHighlightPerTapEnabled(true);
         setupClimbData(team);
-        mClimb.setData(new PieData(Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.LIST, mClimbData));
+        mClimb.setData(new PieData(mClimbLabels, mClimbData));
         //endregion
 
         //region Climb Time
@@ -240,7 +244,10 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         mPilot.setUsePercentValues(true);
         mPilot.setDescription("");
         setupPilotRatingData(team);
-        mPilot.setData(new PieData(Constants.Team_View.Pilot_Rating_Options.LIST, mPilotData));
+        mPilot.setDrawHoleEnabled(false);
+        mPilot.setRotationEnabled(false);
+        mPilot.setHighlightPerTapEnabled(true);
+        mPilot.setData(new PieData(mPilotLabels, mPilotData));
         //endregion
 
         ((RadioGroup)view.findViewById(R.id.gears_radio)).check(R.id.auto_gears_total);
@@ -447,7 +454,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
      */
     private void setupClimbData(Team team){
         ArrayList<Entry> entries = new ArrayList<>();
-        List climb_options = Arrays.asList(Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.LIST);
+        List climb_options = Arrays.asList(Constants.Team_View.Climb_Options.LIST);
         List<TeamMatchData> completed_matches = new ArrayList(team.completed_matches.values());
         Collections.sort(completed_matches, new Comparator<TeamMatchData>() {
             @Override
@@ -462,14 +469,17 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
             climb_options_frequency[climb_options.indexOf(tmd.endgame_climb)] ++;
         }
 
+        ArrayList<Integer> colors = new ArrayList<>();
+
         for(int i = 0; i < climb_options.size(); i++)
         {
-            entries.add(new Entry(climb_options_frequency[i], i));
+            if(climb_options_frequency[i] > 0) {
+                entries.add(new Entry(climb_options_frequency[i], i));
+                mClimbLabels.add(Constants.Team_View.Climb_Options.LIST[i]);
+                colors.add(Constants.Team_View.Climb_Options.COLOR_LIST[i]);
+            }
         }
 
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
         mClimbData = new PieDataSet(entries, "Climb");
         mClimbData.setColors(colors);
     }
@@ -494,6 +504,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
             i++;
         }
         mClimbTimeData = new LineDataSet(entries, "Climb Time");
+        mClimbTimeData.setColor(Color.RED);
     }
 
     private void setupPilotRatingData(Team team){
@@ -509,8 +520,10 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         int[] pilot_rating_options_frequency = new int[pilot_rating_options.size()];
 
+        Database database = Database.getInstance();
+
         for(TeamMatchData tmd: completed_matches){
-            SuperMatchData smd = Database.getInstance().getSuperMatchData(tmd.match_number);
+            SuperMatchData smd = database.getSuperMatchData(tmd.match_number);
             if(smd == null){
                 continue;
             }
@@ -544,17 +557,15 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 }
             }
         }
+        ArrayList<Integer> colors = new ArrayList<>();
+
         for(int i = 0; i < pilot_rating_options.size(); i++){
-            entries.add(new Entry(pilot_rating_options_frequency[i], i));
+            if(pilot_rating_options_frequency[i] > 0) {
+                entries.add(new Entry(pilot_rating_options_frequency[i], i));
+                mPilotLabels.add(Constants.Team_View.Pilot_Rating_Options.LIST[i]);
+                colors.add(Constants.Team_View.Pilot_Rating_Options.COLOR_LIST[i]);
+            }
         }
-
-
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-        colors.add(Color.GREEN); // Successful
-        colors.add(Color.RED); // Fell
-        colors.add(Color.BLUE); // Didn't Finish
-        colors.add(Color.YELLOW); // No Attempt
-        colors.add(Color.MAGENTA); // Credit through foul
 
         mPilotData = new PieDataSet(entries, "Pilot Rating");
         mPilotData.setColors(colors);
@@ -676,19 +687,34 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mShooting.invalidate();
                 break;
             case R.id.auto_hoppers:
+                mHoppers.clear();
                 mHoppers.setData(new BarData(mMatches, mAutoHoppers));
                 mHoppersY.setAxisMinValue(0);
-                mHoppersY.setAxisMaxValue((int)mAutoHoppers.getYMax() + 1);
+                mHoppersY.setAxisMaxValue(5);
+                mHoppersY.setLabelCount(6, true);
+                mHoppersY.setValueFormatter(intYVF);
+                mHoppers.notifyDataSetChanged();
+                mHoppers.invalidate();
                 break;
             case R.id.teleop_hoppers:
+                mHoppers.clear();
                 mHoppers.setData(new BarData(mMatches, mTeleopHoppers));
                 mHoppersY.setAxisMinValue(0);
-                mHoppersY.setAxisMaxValue((int)mTeleopHoppers.getYMax() + 1);
+                mHoppersY.setAxisMaxValue(5);
+                mHoppersY.setLabelCount(6, true);
+                mHoppersY.setValueFormatter(intYVF);
+                mHoppers.notifyDataSetChanged();
+                mHoppers.invalidate();
                 break;
             case R.id.both_hoppers:
+                mHoppers.clear();
                 mHoppers.setData(new BarData(mMatches, mBothHoppers));
                 mHoppersY.setAxisMinValue(0);
-                mHoppersY.setAxisMaxValue((int)mBothHoppers.getYMax() + 1);
+                mHoppersY.setAxisMaxValue(5);
+                mHoppersY.setLabelCount(6, true);
+                mHoppersY.setValueFormatter(intYVF);
+                mHoppers.notifyDataSetChanged();
+                mHoppers.invalidate();
                 break;
         }
     }

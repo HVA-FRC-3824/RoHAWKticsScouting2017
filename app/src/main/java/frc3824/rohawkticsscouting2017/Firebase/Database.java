@@ -733,7 +733,7 @@ public class Database {
     }
 
     public SuperMatchData getSuperMatchData(int match_number) {
-        return mSuperMatchDataMap.get(String.format("%d",match_number));
+        return mSuperMatchDataMap.get(match_number);
     }
 
     public ArrayList<SuperMatchData> getAllSuperMatchData() {

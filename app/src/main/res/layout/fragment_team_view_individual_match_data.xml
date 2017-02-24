@@ -64,6 +64,20 @@
             layout="@layout/list_item_teleop" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* F - Far | C - Center | N - Near | D - Dropped"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="** Made / Missed ( Percent )"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Endgame"

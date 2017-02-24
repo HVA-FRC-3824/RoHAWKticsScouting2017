@@ -1,5 +1,7 @@
 package frc3824.rohawkticsscouting2017.Utilities;
 
+import android.graphics.Color;
+
 /**
  * @author frc3824
  * Created: 8/10/16
@@ -380,6 +382,17 @@ public interface Constants {
             String[] LIST = {NEAR_PLACED, NEAR_DROPPED, CENTER_PLACED, CENTER_DROPPED, FAR_PLACED, FAR_DROPPED};
         }
 
+        interface Climb_Options {
+            String NO_ATTEMPT = "No attempt";
+            String DID_NOT_FINISH_IN_TIME = "Did not finish in time";
+            String ROBOT_FELL = "Robot fell";
+            String SUCCESSFUL = "Successful";
+            String CREDITED_THROUGH_FOUL = "Credited through foul";
+            String[] LIST = {SUCCESSFUL, ROBOT_FELL, DID_NOT_FINISH_IN_TIME, NO_ATTEMPT, CREDITED_THROUGH_FOUL};
+
+            int[] COLOR_LIST = {Color.GREEN, Color.RED, Color.YELLOW, Color.WHITE, Color.BLUE};
+        }
+
         interface Pilot_Rating_Options {
             String FIVE = "5 - Hauling ass";
             String FOUR = "4 - Pretty good";
@@ -388,6 +401,8 @@ public interface Constants {
             String ONE = "1 - Not paying attention/Slow/Clumsy";
             String ZERO = "0 - Not a pilot in this match";
             String[] LIST = {FIVE, FOUR, THREE, TWO, ONE, ZERO};
+
+            int[] COLOR_LIST = {Color.GREEN, Color.rgb(125, 255, 0), Color.YELLOW, Color.rgb(255, 128, 0), Color.RED, Color.WHITE};
         }
     }
 
