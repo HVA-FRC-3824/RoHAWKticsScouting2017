@@ -57,8 +57,10 @@ public class LVA_NotesView extends ArrayAdapter<NoteView> {
         TextView matchNumber = (TextView) convertView.findViewById(R.id.match_number);
         matchNumber.setText(String.valueOf(nv.match_number));
 
-        TextView teamNumber = (TextView) convertView.findViewById(R.id.team_number);
-        teamNumber.setText(String.valueOf(nv.team_number));
+        if(nv.note_type == MATCH) {
+            TextView teamNumber = (TextView) convertView.findViewById(R.id.team_number);
+            teamNumber.setText(String.valueOf(nv.team_number));
+        }
 
         TextView note = (TextView) convertView.findViewById(R.id.note);
         note.setText(nv.note);
