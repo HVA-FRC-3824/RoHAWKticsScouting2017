@@ -1,7 +1,6 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,10 +27,8 @@ import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaContent;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
-import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaTags;
 
 import static frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView.NoteType.MATCH;
-import static frc3824.rohawkticsscouting2017.Utilities.Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS;
 
 /**
  * @author frc3824
@@ -258,13 +255,6 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                         continue;
                     }
                     break;
-                case 3:
-                    if(!nv.tags.get(content)){
-                        mFilteredNotes.remove(i);
-                        i--;
-                        continue;
-                    }
-                    break;
             }
         }
         mAdapter = new LVA_NotesView(this, mFilteredNotes);
@@ -287,6 +277,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                 dnContains.add(ncc.getContent());
             }
         }
+        
 
         Map<String, Boolean> tagsFilter = new HashMap<>();
 
@@ -324,7 +315,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
 
             boolean filter = false;
 
-
+            // Only filter based on tags for match notes
             if(nv.note_type == MATCH) {
                 for (Map.Entry<String, Boolean> entry : tagsFilter.entrySet()) {
                     if (entry.getValue() && !nv.tags.get(entry.getKey())) {
@@ -496,28 +487,6 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
         }
         for(int j = 0; j < dnContains.size(); j++) {
             if(nv.note.contains(dnContains.get(j))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Function that determines if note should be filtered based on tags
-     *
-     * @param nv
-     * @param hasTag
-     * @param dnHaveTag
-     * @return
-     */
-    private boolean filterTags(NoteView nv, ArrayList<String> hasTag, ArrayList<String> dnHaveTag) {
-        for(int j = 0; j < hasTag.size(); j++) {
-            if(!nv.tags.get(hasTag.get(j))) {
-                return true;
-            }
-        }
-        for(int j = 0; j < dnHaveTag.size(); j++) {
-            if(nv.tags.get(dnHaveTag.get(j))) {
                 return true;
             }
         }
