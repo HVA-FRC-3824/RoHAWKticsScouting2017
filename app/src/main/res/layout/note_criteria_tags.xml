@@ -1,24 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <Spinner
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/criteria_type"/>
-    <frc3824.rohawkticsscouting2017.Views.SavableTags
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tags"
-        app:key="tags"
-        app:keys="@array/tags_keys"
-        app:labels="@array/tags_labels"/>
-    <Button
+        android:id="@+id/tags_block_shots"
+        android:text="Blocked Shots"
+        />
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/bright_red"
-        android:text="Remove"
-        android:id="@+id/remove"/>
-</LinearLayout>
+        android:layout_below="@+id/tags_block_shots"
+        android:id="@+id/tags_pinned_robot"
+        android:text="Pinned Robot"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tags_pinned_robot"
+        android:id="@+id/tags_defended_loading_station"
+        android:text="Defended Loading Station"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tags_defended_loading_station"
+        android:id="@+id/tags_defended_airship"
+        android:text="Defended Airship"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tags_defended_airship"
+        android:id="@+id/tags_broke"
+        android:text="Broke"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tags_broke"
+        android:id="@+id/tags_dumped_all_hoppers"
+        android:text="Dumped all hoppers"
+        />
+</RelativeLayout>

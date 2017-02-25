@@ -16,16 +16,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_NotesView;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaContent;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaTags;
+
+import static frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView.NoteType.MATCH;
+import static frc3824.rohawkticsscouting2017.Utilities.Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS;
 
 /**
  * @author frc3824
@@ -56,8 +62,6 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
     private ImageTextButton mAdvancedSearchTeamNumberCriteriaAdd;
     private LinearLayout mAdvancedSearchContentCriteria;
     private ImageTextButton mAdvancedSearchContentCriteriaAdd;
-    private LinearLayout mAdvancedSearchTagsCriteria;
-    private ImageTextButton mAdvancedSearchTagsCriteriaAdd;
     private CheckBox mMatchNotesCheckbox;
     private CheckBox mSuperNotesCheckbox;
     private CheckBox mDriveTeamNotesCheckbox;
@@ -101,9 +105,6 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
         mAdvancedSearchContentCriteria = (LinearLayout)mAdvancedSearch.findViewById(R.id.advanced_content_criteria);
         mAdvancedSearchContentCriteriaAdd = (ImageTextButton)mAdvancedSearchContentCriteria.findViewById(R.id.advanced_content_criteria_add);
         mAdvancedSearchContentCriteriaAdd.setOnClickListener(this);
-        mAdvancedSearchTagsCriteria = (LinearLayout)mAdvancedSearch.findViewById(R.id.advanced_tags_criteria);
-        mAdvancedSearchTagsCriteriaAdd = (ImageTextButton)mAdvancedSearchTagsCriteria.findViewById(R.id.advanced_tags_criteria_add);
-        mAdvancedSearchTagsCriteriaAdd.setOnClickListener(this);
         mMatchNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.match_notes_checkbox);
         mSuperNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.super_notes_checkbox);
         mDriveTeamNotesCheckbox = (CheckBox)mAdvancedSearch.findViewById(R.id.drive_team_notes_checkbox);
@@ -156,9 +157,6 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                     for (int i = 0; i < mAdvancedSearchContentCriteria.getChildCount() - 1; i++) {
                         mAdvancedSearchContentCriteria.removeViewAt(0);
                     }
-                    for (int i = 0; i < mAdvancedSearchTagsCriteria.getChildCount() - 1; i++) {
-                        mAdvancedSearchTagsCriteria.removeViewAt(0);
-                    }
                     //endregion
                     mSearchBasic = true;
                 }
@@ -186,9 +184,6 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                 break;
             case R.id.advanced_content_criteria_add:
                 mAdvancedSearchContentCriteria.addView(new NoteCriteriaContent(this), 0);
-                break;
-            case R.id.advanced_tags_criteria_add:
-                mAdvancedSearchTagsCriteria.addView(new NoteCriteriaContent(this), 0);
                 break;
             case R.id.advanced_search_button:
                 advancedSearch();
@@ -293,17 +288,16 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
             }
         }
 
-        ArrayList<String> hasTag = new ArrayList<>();
-        ArrayList<String> dnHaveTag = new ArrayList<>();
+        Map<String, Boolean> tagsFilter = new HashMap<>();
 
-        for(int i = 0; i < mAdvancedSearchTagsCriteria.getChildCount() - 1; i++) {
-            NoteCriteriaTags ncc = ((NoteCriteriaTags)mAdvancedSearchTagsCriteria.getChildAt(i));
-            if(ncc.getType() == 0) {
-                contains.add(ncc.getContent());
-            } else {
-                dnContains.add(ncc.getContent());
-            }
-        }
+        View tagsView = findViewById(R.id.tags);
+
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS, ((CheckBox)tagsView.findViewById(R.id.tags_block_shots)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT, ((CheckBox)tagsView.findViewById(R.id.tags_pinned_robot)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION, ((CheckBox)tagsView.findViewById(R.id.tags_defended_loading_station)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP, ((CheckBox)tagsView.findViewById(R.id.tags_defended_airship)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE, ((CheckBox)tagsView.findViewById(R.id.tags_broke)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS, ((CheckBox)tagsView.findViewById(R.id.tags_dumped_all_hoppers)).isChecked());
 
         mFilteredNotes = new ArrayList<>(mAllNotes);
         for(int i = 0; i < mFilteredNotes.size(); i++) {
@@ -328,9 +322,21 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                 continue;
             }
 
-            if((hasTag.size()  > 0 || dnHaveTag.size() > 0) && filterTags(nv, hasTag, dnHaveTag)) {
-                mFilteredNotes.remove(i);
-                i--;
+            boolean filter = false;
+
+
+            if(nv.note_type == MATCH) {
+                for (Map.Entry<String, Boolean> entry : tagsFilter.entrySet()) {
+                    if (entry.getValue() && !nv.tags.get(entry.getKey())) {
+                        mFilteredNotes.remove(i);
+                        i--;
+                        filter = true;
+                        break;
+                    }
+                }
+            }
+
+            if (filter) {
                 continue;
             }
 
@@ -384,14 +390,6 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
             if(mAdvancedSearchContentCriteria.getChildAt(i).getVisibility() == View.GONE)
             {
                 mAdvancedSearchContentCriteria.removeViewAt(i);
-                i--;
-            }
-        }
-        for(int i = 0; i < mAdvancedSearchTagsCriteria.getChildCount(); i++)
-        {
-            if(mAdvancedSearchTagsCriteria.getChildAt(i).getVisibility() == View.GONE)
-            {
-                mAdvancedSearchTagsCriteria.removeViewAt(i);
                 i--;
             }
         }

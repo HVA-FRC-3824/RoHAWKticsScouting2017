@@ -180,23 +180,9 @@
                 android:text="Tag"
                 android:textColor="@color/black" />
 
-            <LinearLayout
-                android:id="@+id/advanced_tags_criteria"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-                    android:id="@+id/advanced_tags_criteria_add"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/navy_blue"
-                    app:src="@drawable/plus_math_color"
-                    app:text="Add Criteria"
-                    app:textColor="@color/white"
-                    app:textSize="8sp" />
-
-            </LinearLayout>
+            <include
+                layout="@layout/note_criteria_tags"
+                android:id="@+id/tags"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
