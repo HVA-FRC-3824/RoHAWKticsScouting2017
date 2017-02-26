@@ -195,12 +195,14 @@ public class AllianceCalculations {
     }
 
     public double winProbabilityOver(AllianceCalculations oCalc){
+        double m_1 = predictedScore();
+        double m_2 = oCalc.predictedScore();
         double s_1 = std_predictedScore();
         double s_2 = oCalc.std_predictedScore();
         double N_1 = sampleSize();
         double N_2 = oCalc.sampleSize();
 
-        double t = Statistics.welchsTest(predictedScore(), s_1, N_1, oCalc.predictedScore(), s_2, N_2);
+        double t = Statistics.welchsTest(m_1, s_1, N_1, m_2, s_2, N_2);
 
         double v = Statistics.dof(s_1, N_1, s_2, N_2);
 

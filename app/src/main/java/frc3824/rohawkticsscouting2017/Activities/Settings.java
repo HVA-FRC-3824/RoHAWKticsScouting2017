@@ -351,7 +351,7 @@ public class Settings extends Activity implements OnClickListener{
                     ranking.RPs = tbaRanking.RPs;
                     ranking.wins = tbaRanking.wins;
                     ranking.ties = tbaRanking.ties;
-                    ranking.loses = tbaRanking.loses;
+                    ranking.losses = tbaRanking.loses;
                     ranking.played = tbaRanking.played;
                     ranking.auto = tbaRanking.auto;
                     ranking.scale_challenge = tbaRanking.scale_challenge;

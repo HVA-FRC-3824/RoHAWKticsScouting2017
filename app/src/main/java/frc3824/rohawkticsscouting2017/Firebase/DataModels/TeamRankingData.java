@@ -21,7 +21,7 @@ public class TeamRankingData {
     public int RPs;
     public int wins;
     public int ties;
-    public int loses;
+    public int losses;
     public int played;
 
     // Game Specific

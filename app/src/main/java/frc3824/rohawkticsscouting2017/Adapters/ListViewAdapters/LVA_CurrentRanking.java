@@ -54,7 +54,7 @@ public class LVA_CurrentRanking extends ArrayAdapter<TeamRankingData> {
         ((TextView)convertView.findViewById(R.id.scale_challenge)).setText(String.valueOf(ranking.scale_challenge));
         ((TextView)convertView.findViewById(R.id.goals)).setText(String.valueOf(ranking.goals));
         ((TextView)convertView.findViewById(R.id.defense)).setText(String.valueOf(ranking.defenses));
-        ((TextView)convertView.findViewById(R.id.record)).setText(String.format("%d-%d-%d", ranking.wins, ranking.ties, ranking.loses));
+        ((TextView)convertView.findViewById(R.id.record)).setText(String.format("%d-%d-%d", ranking.wins, ranking.ties, ranking.losses));
         ((TextView)convertView.findViewById(R.id.played)).setText(String.valueOf(ranking.played));
 
         return convertView;

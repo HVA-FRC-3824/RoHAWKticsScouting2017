@@ -51,7 +51,7 @@ public class LVA_PredictedRanking extends ArrayAdapter<TeamRankingData> {
         ((TextView)convertView.findViewById(R.id.rps)).setText(String.valueOf(ranking.RPs));
         ((TextView)convertView.findViewById(R.id.auto)).setText(String.valueOf(ranking.auto));
         ((TextView)convertView.findViewById(R.id.scale_challenge)).setText(String.valueOf(ranking.scale_challenge));
-        ((TextView)convertView.findViewById(R.id.record)).setText(String.format("%d-%d-%d", ranking.wins, ranking.ties, ranking.loses));
+        ((TextView)convertView.findViewById(R.id.record)).setText(String.format("%d-%d-%d", ranking.wins, ranking.ties, ranking.losses));
         ((TextView)convertView.findViewById(R.id.played)).setText(String.valueOf(ranking.played));
 
 
