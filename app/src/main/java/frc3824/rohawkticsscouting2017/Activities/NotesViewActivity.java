@@ -1,7 +1,6 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,15 +15,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_NotesView;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaContent;
 import frc3824.rohawkticsscouting2017.Views.NoteCriteria.NoteCriteriaNumber;
+
+import static frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView.NoteType.MATCH;
 
 /**
  * @author frc3824
@@ -110,6 +114,7 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
         ((TextView)(findViewById(R.id.header).findViewById(R.id.match_number))).setText("Match Number");
         ((TextView)(findViewById(R.id.header).findViewById(R.id.team_number))).setText("Team Number");
         ((TextView)(findViewById(R.id.header).findViewById(R.id.note))).setText("Note");
+        ((TextView)(findViewById(R.id.header).findViewById(R.id.tags))).setText("Tags");
         //endregion
 
         mLayoutInflator = getLayoutInflater();
@@ -272,6 +277,18 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
                 dnContains.add(ncc.getContent());
             }
         }
+        
+
+        Map<String, Boolean> tagsFilter = new HashMap<>();
+
+        View tagsView = findViewById(R.id.tags);
+
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS, ((CheckBox)tagsView.findViewById(R.id.tags_block_shots)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT, ((CheckBox)tagsView.findViewById(R.id.tags_pinned_robot)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION, ((CheckBox)tagsView.findViewById(R.id.tags_defended_loading_station)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP, ((CheckBox)tagsView.findViewById(R.id.tags_defended_airship)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE, ((CheckBox)tagsView.findViewById(R.id.tags_broke)).isChecked());
+        tagsFilter.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS, ((CheckBox)tagsView.findViewById(R.id.tags_dumped_all_hoppers)).isChecked());
 
         mFilteredNotes = new ArrayList<>(mAllNotes);
         for(int i = 0; i < mFilteredNotes.size(); i++) {
@@ -293,6 +310,24 @@ public class NotesViewActivity extends Activity implements View.OnClickListener,
             if((contains.size()  > 0 || dnContains.size() > 0) && filterContents(nv, contains, dnContains)) {
                 mFilteredNotes.remove(i);
                 i--;
+                continue;
+            }
+
+            boolean filter = false;
+
+            // Only filter based on tags for match notes
+            if(nv.note_type == MATCH) {
+                for (Map.Entry<String, Boolean> entry : tagsFilter.entrySet()) {
+                    if (entry.getValue() && !nv.tags.get(entry.getKey())) {
+                        mFilteredNotes.remove(i);
+                        i--;
+                        filter = true;
+                        break;
+                    }
+                }
+            }
+
+            if (filter) {
                 continue;
             }
 

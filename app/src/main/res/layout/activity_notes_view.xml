@@ -173,6 +173,17 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/advanced_tags_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tag"
+                android:textColor="@color/black" />
+
+            <include
+                layout="@layout/note_criteria_tags"
+                android:id="@+id/tags"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
