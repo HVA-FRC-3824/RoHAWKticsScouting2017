@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <include
-        layout="@layout/list_item_current_ranking"
+        layout="@layout/list_item_ranking"
         android:id="@+id/header"
         />
 

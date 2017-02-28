@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Andrew Messing
- *         Created: 1/2/17
+ * @author frc3824
+ * Created: 1/2/17
  */
 public class ScoutAccuracy {
 
@@ -13,7 +13,7 @@ public class ScoutAccuracy {
 
     public String name;
     public long last_modified;
-    public Map<Integer, ScoutedMatchAccuracy> scouted_matches;
+    public Map<String, ScoutedMatchAccuracy> scouted_matches;
     public int total_error;
     public int auto_error;
     public int teleop_error;

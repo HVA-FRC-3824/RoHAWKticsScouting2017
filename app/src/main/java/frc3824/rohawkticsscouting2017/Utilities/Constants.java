@@ -30,9 +30,45 @@ public interface Constants {
         String SERVER_TYPE = "server";
 
         // Not really settings, but are in shared preferences
-        String LAST_MATCH_SCOUT = "last_match_scout";
-        String LAST_PIT_SCOUT = "last_pit_scout";
-        String LAST_SUPER_SCOUT = "last_super_scout";
+        String[] MATCH_SCOUTS_LIST = {
+            "Jack Anderson",
+            "Ethan Bailie",
+            "Alex Bindham",
+            "Knox Crichton",
+            "Austin Curlee",
+            "James Dyer",
+            "Forrest Fomby",
+            "Chrisopher Howard",
+            "Max Howell",
+            "Seth Maxwell",
+            "Neil Patel",
+            "Justin Pehrson",
+            "Liam Schenk",
+            "Charles Schlicker",
+            "Josh Seay",
+            "Julianna Smith",
+            "Michael Williamson",
+            "Jovi Yoshioka"
+        };
+        String[] SUPER_SCOUTS_LIST = {
+            "Steven Busby",
+            "Philip Hicks",
+            "Abigail Bradfield"
+        };
+        String[] PIT_SCOUTS_LIST = {
+            "Steven Busby",
+            "Philip Hicks",
+            "Abigail Bradfield",
+            "Alex Bingham",
+            "Knox Crichton",
+            "Austin Curlee",
+            "Seth Maxwell",
+            "Neil Patel",
+            "Liam Schenk",
+            "Charles Schlicker",
+            "Michael Williamson",
+            "Jovi Yoshioka"
+        };
     }
 
     interface User_Types {
@@ -83,23 +119,6 @@ public interface Constants {
         String RED1 = "red1";
         String RED2 = "red2";
         String RED3 = "red3";
-    }
-
-    interface The_Blue_Alliance {
-        String TBA_Header_NAME = "X-TBA-App-Id";
-        String TBA_Header_VALUE = "frc3824:scouting-system:" + VERSION;
-
-        interface Ranking_Indices {
-            int RANK = 0;
-            int TEAM_NUMBER = 1;
-            int RPs = 2;
-            int AUTO = 3;
-            int SCALE_CHALLENGE = 4;
-            int GOALS = 5;
-            int DEFENSE = 6;
-            int RECORD = 7;
-            int PLAYED = 8;
-        }
     }
 
     interface Match_Scouting {
@@ -417,7 +436,7 @@ public interface Constants {
             String SHOOTING = "Shooting";
             String CLIMB = "Climb";
 
-            String[] OPTIONS = {FOULS, POST_MATCH};
+            String[] OPTIONS = {/*POINTS,*/ GEARS, SHOOTING, CLIMB, FOULS, POST_MATCH};
         }
 
         interface Points_Secondary_Options {

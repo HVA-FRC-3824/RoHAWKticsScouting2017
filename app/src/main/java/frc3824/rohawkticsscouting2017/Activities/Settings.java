@@ -4,37 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPickAbility;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel.TBA_Match;
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel.TBA_Ranking;
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.DataModel.TBA_Team;
-import frc3824.rohawkticsscouting2017.TheBlueAlliance.TheBlueAlliance;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.Utilities;
 
@@ -51,7 +36,6 @@ public class Settings extends Activity implements OnClickListener{
 
     private boolean mBackAllowed = false;
     private SharedPreferences mSharedPreferences;
-    private ProgressBar mProgressBar;
 
     private Spinner mAllianceColorSelector;
     private Spinner mAllianceNumberSelector;
@@ -168,15 +152,11 @@ public class Settings extends Activity implements OnClickListener{
         if(!event_key.equals(""))
         {
             findViewById(R.id.home_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.pull_event_button).setVisibility(View.VISIBLE);
             mBackAllowed = true;
         }
 
-        mProgressBar = (ProgressBar)findViewById(R.id.progress_bar);
-
         findViewById(R.id.home_button).setOnClickListener(this);
         findViewById(R.id.save_button).setOnClickListener(this);
-        findViewById(R.id.pull_event_button).setOnClickListener(this);
     }
 
     /**
@@ -203,10 +183,6 @@ public class Settings extends Activity implements OnClickListener{
             case R.id.home_button:
                 Intent intent = new Intent(this, Home.class);
                 startActivity(intent);
-                break;
-            case R.id.pull_event_button:
-                mProgressBar.setVisibility(View.VISIBLE);
-                new PullEvent().execute(mSharedPreferences.getString(Constants.Settings.EVENT_KEY, ""));
                 break;
             case R.id.save_button:
                 SharedPreferences.Editor prefEditor = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
@@ -237,151 +213,17 @@ public class Settings extends Activity implements OnClickListener{
 
                     prefEditor.commit();
                     findViewById(R.id.home_button).setVisibility(View.VISIBLE);
-                    findViewById(R.id.pull_event_button).setVisibility(View.VISIBLE);
                     mBackAllowed = true;
 
                     Toast toast = Toast.makeText(this, "Saved", Toast.LENGTH_SHORT);
                     toast.show();
 
                 } else {
-                    findViewById(R.id.pull_event_button).setVisibility(View.GONE);
                     mBackAllowed = false;
                     findViewById(R.id.home_button).setVisibility(View.INVISIBLE);
                     Toast.makeText(this, "Event Key must be entered", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
-    }
-
-    /**
-     * Asynchronous task to pull data from the blue alliance
-     * (May not be needed if using the python server)
-     */
-    private class PullEvent extends AsyncTask<String, Integer, Void> {
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            String eventKey = strings[0];
-
-            TheBlueAlliance theBlueAlliance = TheBlueAlliance.getInstance();
-            try {
-                Database database = Database.getInstance();
-
-                ArrayList<TBA_Team> teams = theBlueAlliance.getEventTeams(eventKey);
-                int numberOfTeams = teams.size();
-                ArrayList<TBA_Match> matches = theBlueAlliance.getEventMatches(eventKey);
-                int numberOfMatches = matches.size();
-                ArrayList<TBA_Ranking> rankings = theBlueAlliance.getEventRankings(eventKey);
-
-                int total = 2 * numberOfTeams + numberOfMatches;
-                int currentIndex = 0;
-                Map<Integer, ArrayList<Integer>> teamMatchNumbers = new HashMap<>();
-                publishProgress(currentIndex, total);
-                for(TBA_Match tbaMatch: matches)
-                {
-                    if(!tbaMatch.comp_level.equals("qm")) {
-                        currentIndex++;
-                        publishProgress(currentIndex, total);
-                        continue;
-                    }
-
-                    Match match = new Match();
-                    match.match_number = tbaMatch.match_number;
-                    match.teams = new ArrayList<>();
-                    match.scores = new ArrayList<>();
-
-                    match.teams.add(Integer.parseInt(tbaMatch.alliances.blue.teams[0].substring(3)));
-                    match.teams.add(Integer.parseInt(tbaMatch.alliances.blue.teams[1].substring(3)));
-                    match.teams.add(Integer.parseInt(tbaMatch.alliances.blue.teams[2].substring(3)));
-
-                    match.scores.add(tbaMatch.alliances.blue.score);
-
-                    match.teams.add(Integer.parseInt(tbaMatch.alliances.red.teams[0].substring(3)));
-                    match.teams.add(Integer.parseInt(tbaMatch.alliances.red.teams[1].substring(3)));
-                    match.teams.add(Integer.parseInt(tbaMatch.alliances.red.teams[2].substring(3)));
-
-                    match.scores.add(tbaMatch.alliances.red.score);
-
-                    for(int i = 0; i < match.teams.size(); i++)
-                    {
-                        if(!teamMatchNumbers.containsKey(match.teams.get(i)))
-                        {
-                            teamMatchNumbers.put(match.teams.get(i), new ArrayList<Integer>());
-                        }
-                        teamMatchNumbers.get(match.teams.get(i)).add(match.match_number);
-                    }
-
-                    database.setMatch(match);
-                    currentIndex++;
-                    publishProgress(currentIndex, total);
-                }
-
-                publishProgress(currentIndex, total);
-                for(TBA_Team tbaTeam: teams)
-                {
-                    TeamLogistics info = new TeamLogistics();
-                    info.team_number = tbaTeam.team_number;
-                    info.nickname = tbaTeam.nickname;
-                    info.match_numbers = teamMatchNumbers.get(info.team_number);
-                    Collections.sort(info.match_numbers);
-                    database.setTeamLogistics(info);
-
-//                    TeamPitData pit = new TeamPitData();
-//                    pit.team_number = tbaTeam.team_number;
-//                    pit.pit_scouted = false;
-//                    database.setTeamPitData(pit);
-
-                    TeamPickAbility pick = new TeamPickAbility();
-                    pick.team_number = tbaTeam.team_number;
-                    pick.nickname = tbaTeam.nickname;
-                    pick.manual_ranking = -1;
-                    database.setFirstTPA(pick);
-                    database.setSecondTPA(pick);
-                    database.setThirdTPA(pick);
-
-                    currentIndex++;
-                    publishProgress(currentIndex, total);
-                }
-                publishProgress(currentIndex, total);
-                for(TBA_Ranking tbaRanking: rankings)
-                {
-                    TeamRankingData ranking = new TeamRankingData();
-                    ranking.team_number = tbaRanking.team_number;
-                    ranking.rank = tbaRanking.rank;
-                    ranking.RPs = tbaRanking.RPs;
-                    ranking.wins = tbaRanking.wins;
-                    ranking.ties = tbaRanking.ties;
-                    ranking.losses = tbaRanking.loses;
-                    ranking.played = tbaRanking.played;
-                    ranking.auto = tbaRanking.auto;
-                    ranking.scale_challenge = tbaRanking.scale_challenge;
-                    ranking.goals = tbaRanking.goals;
-                    ranking.defenses = tbaRanking.defenses;
-                    database.setCurrentTRD(ranking);
-                    currentIndex++;
-                    publishProgress(currentIndex, total);
-                }
-
-            } catch (IOException e) {
-                Log.e(TAG, "Error: pulling event from The Blue Alliance");
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            int numCompleted = values[0];
-            int numTotal = values[0];
-            mProgressBar.setMax(numTotal);
-            mProgressBar.setProgress(numCompleted);
-        }
-
-        @Override
-        protected void onPostExecute(Void v)
-        {
-            mProgressBar.setVisibility(View.GONE);
-        }
-
     }
 }

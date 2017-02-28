@@ -36,6 +36,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
@@ -70,7 +71,6 @@ public class MatchScouting extends Activity{
 
     private String mAllianceColor;
     private int mAllianceNumber;
-    private String mLastScoutName;
     private String mScoutName;
     private boolean mAdmin;
 
@@ -105,8 +105,6 @@ public class MatchScouting extends Activity{
         mAllianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
         mServerType = shared_preferences.getString(Constants.Settings.SERVER_TYPE, "");
         mAdmin = shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.ADMIN);
-        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_MATCH_SCOUT, "");
-
 
         mDatabase = Database.getInstance();
 
@@ -166,7 +164,7 @@ public class MatchScouting extends Activity{
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_match_logistics, null);
         ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Match Number: %d", mMatchNumber));
-
+        ((TextView)mLogisticsView.findViewById(R.id.team_number)).setText(String.format("Team Number: %d", mTeamNumber));
         mLogisticsAlliance = (TextView)mLogisticsView.findViewById(R.id.alliance);
         mLogisticsAlliance.setText(String.format("%s %d", mAllianceColor.equals(Constants.Alliance_Colors.BLUE) ? "Blue" : "Red", mAllianceNumber));
         if(mAllianceColor.equals(Constants.Alliance_Colors.BLUE)){
@@ -175,11 +173,8 @@ public class MatchScouting extends Activity{
             mLogisticsAlliance.setTextColor(Color.RED);
         }
         mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
-        if(!mLastScoutName.equals("")){
-            String[] arr = {mLastScoutName};
-            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-            mScoutNameTextView.setAdapter(aa);
-        }
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.MATCH_SCOUTS_LIST);
+        mScoutNameTextView.setAdapter(aa);
         builder.setView(mLogisticsView);
 
         mLogisticsIncorrect = (TextView)mLogisticsView.findViewById(R.id.incorrect);
@@ -197,20 +192,21 @@ public class MatchScouting extends Activity{
                     @Override
                     public void onClick(View view) {
                         mScoutName = mScoutNameTextView.getText().toString();
-                        if(mScoutName.equals("")){
+                        mScoutName = mScoutName.trim();
+                        mScoutName = mScoutName.replace("\n", "");
+                        Pattern p = Pattern.compile("[^a-zA-Z -]");
+                        boolean hasSpecialChar = p.matcher(mScoutName).find();
+                        if(mScoutName.isEmpty() || hasSpecialChar){
                             mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
                             mLogisticsIncorrect.setVisibility(View.VISIBLE);
                         } else {
-                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                            edit.putString(Constants.Settings.LAST_MATCH_SCOUT, mScoutName);
-                            edit.commit();
                             mLogisticsDialog.dismiss();
                         }
                     }
                 });
             }
         });
-        if(mScoutName == null || mScoutName.equals("")) {
+        if(mScoutName == null || mScoutName.isEmpty()) {
             mLogisticsDialog.show();
         }
 

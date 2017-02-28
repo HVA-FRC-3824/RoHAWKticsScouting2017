@@ -7,8 +7,8 @@ import com.github.mikephil.charting.charts.BarLineChartBase;
 
 
 /**
- * @author Andrew Messing
- *         Created: 8/23/16
+ * @author frc3824
+ * Created: 8/23/16
  */
 public class LLD_Chart extends BarLineChartBase<LLD_Data> implements LLD_DataProvider {
 
@@ -28,8 +28,7 @@ public class LLD_Chart extends BarLineChartBase<LLD_Data> implements LLD_DataPro
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         super.init();
         mRenderer = new LLD_Renderer(this, mAnimator, mViewPortHandler);
         mXAxis.mAxisMinimum = -0.5f;

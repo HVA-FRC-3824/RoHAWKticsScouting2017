@@ -36,6 +36,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_SuperScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
@@ -70,7 +71,6 @@ public class SuperScouting extends Activity{
 
     private FPA_SuperScouting mFPA;
     private String mServerType;
-    private String mLastScoutName;
     private String mScoutName;
 
     private ListView mDrawerList;
@@ -95,8 +95,6 @@ public class SuperScouting extends Activity{
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mServerType = shared_preferences.getString(Constants.Settings.SERVER_TYPE, "");
-        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_SUPER_SCOUT, "");
-
 
         mDatabase = Database.getInstance();
 
@@ -137,7 +135,6 @@ public class SuperScouting extends Activity{
         // Set the off screen page limit to more than the number of fragments
         viewPager.setOffscreenPageLimit(mFPA.getCount());
 
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
@@ -147,13 +144,11 @@ public class SuperScouting extends Activity{
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
         ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Match Number: %d", mMatchNumber));
+        mLogisticsView.findViewById(R.id.team_number).setVisibility(View.GONE);
 
         mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
-        if(!mLastScoutName.equals("")){
-            String[] arr = {mLastScoutName};
-            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-            mScoutNameTextView.setAdapter(aa);
-        }
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.SUPER_SCOUTS_LIST);
+        mScoutNameTextView.setAdapter(aa);
         builder.setView(mLogisticsView);
 
         mLogisticsIncorrect = (TextView)mLogisticsView.findViewById(R.id.incorrect);
@@ -171,13 +166,14 @@ public class SuperScouting extends Activity{
                     @Override
                     public void onClick(View view) {
                         mScoutName = mScoutNameTextView.getText().toString();
-                        if(mScoutName.equals("")){
+                        mScoutName = mScoutName.trim();
+                        mScoutName = mScoutName.replace("\n", "");
+                        Pattern p = Pattern.compile("[^a-zA-Z -]");
+                        boolean hasSpecialChar = p.matcher(mScoutName).find();
+                        if(mScoutName.isEmpty() || hasSpecialChar){
                             mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
                             mLogisticsIncorrect.setVisibility(View.VISIBLE);
                         } else {
-                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                            edit.putString(Constants.Settings.LAST_SUPER_SCOUT, mScoutName);
-                            edit.commit();
                             mLogisticsDialog.dismiss();
                         }
                     }

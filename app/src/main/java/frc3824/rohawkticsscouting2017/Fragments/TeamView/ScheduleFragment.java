@@ -37,9 +37,10 @@ public class ScheduleFragment extends Fragment {
 
         TeamLogistics info = Database.getInstance().getTeamLogistics(mTeamNumber);
 
-        LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), info.match_numbers, mTeamNumber);
-
-        schedule.setAdapter(lva);
+        if(info != null) {
+            LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), info.match_numbers, mTeamNumber);
+            schedule.setAdapter(lva);
+        }
 
         return view;
     }

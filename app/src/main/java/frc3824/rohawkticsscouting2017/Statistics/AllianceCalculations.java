@@ -62,7 +62,7 @@ public class AllianceCalculations {
             teleop_gears += t.calc.teleop_total_gears_placed.average;
         }
 
-        if(fuel_points >= 40){
+        if(elimination && fuel_points >= 40){
             pScore += 20;
         }
 
@@ -146,11 +146,8 @@ public class AllianceCalculations {
             teleop_gear_points = (1 - rotor) * 40;
         }
 
-
-        auto_points = auto_fuel_points + auto_gear_points;
-        teleop_points = teleop_fuel_points + teleop_gear_points;
-
-        std_pScore += Math.pow(auto_points, 2) + Math.pow(teleop_points, 2) + Math.pow(climb_points, 2);
+        std_pScore += Math.pow(auto_fuel_points, 2) + Math.pow(auto_gear_points, 2) + Math.pow(auto_points, 2) +
+                Math.pow(teleop_fuel_points, 2) + Math.pow(teleop_gear_points, 2) + Math.pow(climb_points, 2);
 
         std_pScore = Math.sqrt(std_pScore);
 

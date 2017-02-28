@@ -24,11 +24,8 @@ public class TeamRankingData {
     public int losses;
     public int played;
 
-    // Game Specific
-    public int auto;
-    public int scale_challenge;
-    public int goals;
-    public int defenses;
+    public int first_tie_breaker;
+    public int second_tie_breaker;
 
     public TeamRankingData(){}
 

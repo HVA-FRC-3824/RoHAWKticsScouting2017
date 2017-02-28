@@ -10,7 +10,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Map;
 
-import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CurrentRanking;
+import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_Ranking;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamRankingData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
@@ -35,7 +35,7 @@ public class CurrentRankingsFragment extends Fragment {
         Map<Integer, TeamRankingData> rankings = database.getCurrentRankings();
 
         ArrayList<TeamRankingData> rankingsList = new ArrayList<>(rankings.values());
-        LVA_CurrentRanking lva = new LVA_CurrentRanking(getContext(), rankingsList);
+        LVA_Ranking lva = new LVA_Ranking(getContext(), rankingsList);
 
         ListView lv = (ListView)view.findViewById(R.id.list);
         lv.setAdapter(lva);

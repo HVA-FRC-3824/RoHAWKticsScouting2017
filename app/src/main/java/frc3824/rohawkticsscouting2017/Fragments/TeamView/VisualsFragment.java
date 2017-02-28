@@ -500,8 +500,13 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         });
         for(TeamMatchData tmd: completed_matches){
-            entries.add(new Entry(climb_time_options.indexOf(tmd.endgame_climb_time) * 5, i));
-            i++;
+            if(tmd.endgame_climb == "successful") {
+                entries.add(new Entry(climb_time_options.indexOf(tmd.endgame_climb_time) * 5, i));
+                i++;
+            } else {
+                entries.add(new Entry(0, i));
+                i++;
+            }
         }
         mClimbTimeData = new LineDataSet(entries, "Climb Time");
         mClimbTimeData.setColor(Color.RED);
@@ -586,26 +591,26 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
             case R.id.auto_gears_average:
                 mGears.setData(new RadarData(Constants.Team_View.Gear_Options.LIST, mAutoGearsAverage));
                 mGearsY.setAxisMinValue(0);
-                mGearsY.setAxisMaxValue((int) mAutoGearsTotal.getYMax() + 1);
-                mGearsY.setLabelCount((int) mAutoGearsTotal.getYMax() + 2, true);
+                mGearsY.setAxisMaxValue((int) mAutoGearsAverage.getYMax() + 1);
+                mGearsY.setLabelCount((int) mAutoGearsAverage.getYMax() + 2, true);
                 mGearsY.setValueFormatter(floatYVF);
                 mGears.notifyDataSetChanged();
                 mGears.invalidate();
                 break;
             case R.id.teleop_gears_total:
-                mGears.setData(new RadarData(Constants.Team_View.Gear_Options.LIST, mAutoGearsTotal));
+                mGears.setData(new RadarData(Constants.Team_View.Gear_Options.LIST, mTeleopGearsTotal));
                 mGearsY.setAxisMinValue(0);
-                mGearsY.setAxisMaxValue((int) mAutoGearsTotal.getYMax() + 1);
-                mGearsY.setLabelCount((int) mAutoGearsTotal.getYMax() + 2, true);
+                mGearsY.setAxisMaxValue((int) mTeleopGearsTotal.getYMax() + 1);
+                mGearsY.setLabelCount((int) mTeleopGearsTotal.getYMax() + 2, true);
                 mGearsY.setValueFormatter(intYVF);
                 mGears.notifyDataSetChanged();
                 mGears.invalidate();
                 break;
             case R.id.teleop_gears_average:
-                mGears.setData(new RadarData(Constants.Team_View.Gear_Options.LIST, mAutoGearsTotal));
+                mGears.setData(new RadarData(Constants.Team_View.Gear_Options.LIST, mTeleopGearsAverage));
                 mGearsY.setAxisMinValue(0);
-                mGearsY.setAxisMaxValue((int) mAutoGearsTotal.getYMax() + 1);
-                mGearsY.setLabelCount((int) mAutoGearsTotal.getYMax() + 2, true);
+                mGearsY.setAxisMaxValue((int) mTeleopGearsAverage.getYMax() + 1);
+                mGearsY.setLabelCount((int) mTeleopGearsAverage.getYMax() + 2, true);
                 mGearsY.setValueFormatter(floatYVF);
                 mGears.notifyDataSetChanged();
                 mGears.invalidate();

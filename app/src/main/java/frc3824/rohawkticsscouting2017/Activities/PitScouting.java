@@ -33,6 +33,7 @@ import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PitScoutDrawer;
@@ -59,7 +60,6 @@ public class PitScouting extends Activity {
     private int mTeamNumber;
     private Database mDatabase;
     private String mEventKey;
-    private String mLastScoutName;
     private String mScoutName;
     private FPA_PitScouting mFPA;
 
@@ -92,7 +92,6 @@ public class PitScouting extends Activity {
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mEventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
-        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_PIT_SCOUT, "");
 
         ArrayList<Integer> teams = mDatabase.getTeamNumbers();
         if (shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.PIT_SCOUT)) {
@@ -141,14 +140,12 @@ public class PitScouting extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
-        ((TextView) mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
+        mLogisticsView.findViewById(R.id.match_number).setVisibility(View.GONE);
+        ((TextView) mLogisticsView.findViewById(R.id.team_number)).setText(String.format("Team Number: %d", mTeamNumber));
 
         mScoutNameTextView = (AutoCompleteTextView) mLogisticsView.findViewById(R.id.scout_name);
-        if (!mLastScoutName.equals("")) {
-            String[] arr = {mLastScoutName};
-            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-            mScoutNameTextView.setAdapter(aa);
-        }
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.PIT_SCOUTS_LIST);
+        mScoutNameTextView.setAdapter(aa);
         builder.setView(mLogisticsView);
 
         mLogisticsIncorrect = (TextView) mLogisticsView.findViewById(R.id.incorrect);
@@ -166,13 +163,14 @@ public class PitScouting extends Activity {
                     @Override
                     public void onClick(View view) {
                         mScoutName = mScoutNameTextView.getText().toString();
-                        if (mScoutName.equals("")) {
+                        mScoutName = mScoutName.trim();
+                        mScoutName = mScoutName.replace("\n", "");
+                        Pattern p = Pattern.compile("[^a-zA-Z -]");
+                        boolean hasSpecialChar = p.matcher(mScoutName).find();
+                        if(mScoutName.isEmpty() || hasSpecialChar){
                             mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
                             mLogisticsIncorrect.setVisibility(View.VISIBLE);
                         } else {
-                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                            edit.putString(Constants.Settings.LAST_PIT_SCOUT, mScoutName);
-                            edit.commit();
                             mLogisticsDialog.dismiss();
                         }
                     }

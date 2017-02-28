@@ -240,6 +240,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         BarData data;
         entries = new ArrayList<>();
         mCurrentTeamNumbers = new ArrayList<>();
+        int x = 0;
         for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
@@ -249,16 +250,17 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_position]){
                     case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                        shootingSecondary1_bar(entries, i, teamCalculatedData, secondary_position);
+                        shootingSecondary1_bar(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.POST_MATCH:
-                        postMatchSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        postMatchSecondary1(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.CLIMB:
-                        climbSecondary1_bar(entries, i, teamCalculatedData, secondary_position);
+                        climbSecondary1_bar(entries, x, teamCalculatedData, secondary_position);
                         break;
                 }
             }
+            x++;
         }
         dataset = new BarDataSet(entries, "");
         dataset.setDrawValues(false);
@@ -295,17 +297,9 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         Collections.sort(mSortedTeamNumbers, new Comparator<Integer>() {
             @Override
             public int compare(Integer i1, Integer i2) {
-                return Double.compare(sort_values.get(i1), sort_values.get(i2));
+                return -Double.compare(sort_values.get(i1), sort_values.get(i2));
             }
         });
-
-
-        switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_position]){
-            case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                break;
-            case Constants.Event_View.Main_Dropdown_Options.POST_MATCH:
-                break;
-        }
     }
 
     private void lldChartSetup(int main_position, int secondary_position){
@@ -317,6 +311,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         LLD_Data data;
         entries = new ArrayList<>();
         mCurrentTeamNumbers = new ArrayList<>();
+        int x = 0;
         for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
@@ -326,22 +321,23 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_position]){
                     case Constants.Event_View.Main_Dropdown_Options.POINTS:
-                        pointsSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        pointsSecondary1(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.GEARS:
-                        gearsSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        gearsSecondary1(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                        shootingSecondary1_lld(entries, i, teamCalculatedData, secondary_position);
+                        shootingSecondary1_lld(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.CLIMB:
-                        climbSecondary1_lld(entries, i, teamCalculatedData, secondary_position);
+                        climbSecondary1_lld(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.FOULS:
-                        foulSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        foulSecondary1(entries, x, teamCalculatedData, secondary_position);
                         break;
                 }
             }
+            x++;
         }
         dataset = new LLD_DataSet(entries, "");
         data = new LLD_Data(mCurrentTeamNumbers, dataset);
@@ -382,9 +378,11 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         Collections.sort(mSortedTeamNumbers, new Comparator<Integer>() {
             @Override
             public int compare(Integer i1, Integer i2) {
-                return Double.compare(sort_values.get(i1), sort_values.get(i2));
+                return -Double.compare(sort_values.get(i1), sort_values.get(i2));
             }
         });
+
+        int breakpoint = 0;
     }
 
     //region Points
@@ -526,19 +524,19 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region DQ
             case Constants.Event_View.Post_Match_Secondary_Options.DQ:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.dq.total);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.dq.total);
                 break;
             //endregion
             //region No Show
             case Constants.Event_View.Post_Match_Secondary_Options.NO_SHOW:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.no_show.total);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.no_show.total);
                 break;
             //endregion
             //region Stopped Moving
             case Constants.Event_View.Post_Match_Secondary_Options.STOPPED_MOVING:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.stopped_moving.total);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.stopped_moving.total);
                 break;
             //endregion
         }
@@ -1236,11 +1234,11 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         switch (Constants.Event_View.Climb_Secondary_Options.OPTIONS[position]){
             case Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, (double)teamCalculatedData.endgame_climb_successful.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.endgame_climb_successful.total);
                 break;
             case Constants.Event_View.Climb_Secondary_Options.TIME:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.endgame_climb_time.average);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.endgame_climb_time.average);
                 break;
         }
     }
