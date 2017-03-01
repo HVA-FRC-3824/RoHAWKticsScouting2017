@@ -500,7 +500,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         });
         for(TeamMatchData tmd: completed_matches){
-            if(tmd.endgame_climb == "successful") {
+            if(tmd.endgame_climb == Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.SUCCESSFUL) {
                 entries.add(new Entry(climb_time_options.indexOf(tmd.endgame_climb_time) * 5, i));
                 i++;
             } else {
