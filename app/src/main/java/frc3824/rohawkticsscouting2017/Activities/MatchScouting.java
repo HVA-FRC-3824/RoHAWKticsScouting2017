@@ -2,6 +2,8 @@ package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -88,6 +90,12 @@ public class MatchScouting extends Activity{
     private AutoCompleteTextView mScoutNameTextView;
     private View mLogisticsScoutNameBackground;
     private TextView mLogisticsIncorrect;
+
+    private NotificationManager mNotificationManager;
+    protected Notification.Builder mDataTransferSuccessNotificationBuilder;
+    protected int mDataTransferSuccessNotificationId;
+    protected Notification.Builder mDataTransferFailureNotificationBuilder;
+    protected int mDataTransferFailureNotificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,7 +217,17 @@ public class MatchScouting extends Activity{
         if(mScoutName == null || mScoutName.isEmpty()) {
             mLogisticsDialog.show();
         }
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mDataTransferFailureNotificationBuilder = new Notification.Builder(this);
+        mDataTransferFailureNotificationId = Constants.Notifications.DATA_TRANSFER_FAILURE;
+        mDataTransferFailureNotificationBuilder.setSmallIcon(R.drawable.error_color);
+        mDataTransferFailureNotificationBuilder.setContentTitle("Data Transfer Failure!!!");
+        mDataTransferFailureNotificationBuilder.setContentText("Added to Queue");
 
+        mDataTransferSuccessNotificationBuilder = new Notification.Builder(this);
+        mDataTransferSuccessNotificationId = Constants.Notifications.DATA_TRANSFER_SUCCESS;
+        mDataTransferSuccessNotificationBuilder.setSmallIcon(R.drawable.ok_color);
+        mDataTransferFailureNotificationBuilder.setContentTitle("Data Transfer Success");
     }
 
     // TODO: Create option for admin to switch which alliance color and/or number
@@ -756,10 +774,12 @@ public class MatchScouting extends Activity{
                 case Constants.Comms.Data_Transfer_Status.SUCCESS:
                     builder.setTitle("Data transfer successful");
                     builder.setIcon(getDrawable(R.drawable.ok_color));
+                    mNotificationManager.notify(mDataTransferSuccessNotificationId, mDataTransferSuccessNotificationBuilder.build());
                     break;
                 case Constants.Comms.Data_Transfer_Status.FAILURE:
                     builder.setTitle("Data transfer failure (Added to Queue)");
                     builder.setIcon(getDrawable(R.drawable.error_color));
+                    mNotificationManager.notify(mDataTransferFailureNotificationId, mDataTransferFailureNotificationBuilder.build());
                     break;
             }
             builder.show();

@@ -10,8 +10,6 @@ import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.C
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
-import static frc3824.rohawkticsscouting2017.Utilities.Constants.Notifications.DOWNLOAD_ROBOT_PICTURES;
-
 /**
  * @author frc3824
  * Created: 8/15/16
@@ -64,7 +62,7 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
 
     protected void setupNotifications(){
         mUploadNotificationId = Constants.Notifications.UPLOAD_ROBOT_PICTURES;
-        mDownloadNotificationId = DOWNLOAD_ROBOT_PICTURES;
+        mDownloadNotificationId = Constants.Notifications.DOWNLOAD_ROBOT_PICTURES;
 
         mUploadNotificationBuilder.setContentTitle("Uploading Robot Pictures");
         mDownloadNotificationBuilder.setContentTitle("Downloading Robot Pictures");

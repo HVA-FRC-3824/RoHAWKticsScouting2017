@@ -33,7 +33,7 @@ public interface Constants {
         String[] MATCH_SCOUTS_LIST = {
             "Jack Anderson",
             "Ethan Bailie",
-            "Alex Bindham",
+            "Alex Bingham",
             "Knox Crichton",
             "Austin Curlee",
             "James Dyer",
@@ -48,7 +48,10 @@ public interface Constants {
             "Josh Seay",
             "Julianna Smith",
             "Michael Williamson",
-            "Jovi Yoshioka"
+            "Jovi Yoshioka",
+            "Steven Busby",
+            "Philip Hicks",
+            "Abigail Bradfield"
         };
         String[] SUPER_SCOUTS_LIST = {
             "Steven Busby",
@@ -374,6 +377,8 @@ public interface Constants {
         int DOWNLOAD_STRATEGIES = 4;
         int UPLOAD_ROBOT_PICTURES = 5;
         int DOWNLOAD_ROBOT_PICTURES = 6;
+        int DATA_TRANSFER_SUCCESS = 7;
+        int DATA_TRANSFER_FAILURE = 8;
     }
 
     interface Server_Type {
