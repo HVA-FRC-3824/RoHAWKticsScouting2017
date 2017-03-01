@@ -389,7 +389,7 @@ public class Home extends Activity implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.scouting_accuracy_button:
-                intent = new Intent(this, DisplayScoutAccuracy.class);
+                intent = new Intent(this, ScoutAccuracy.class);
                 startActivity(intent);
                 break;
             case R.id.scouting_open_button:

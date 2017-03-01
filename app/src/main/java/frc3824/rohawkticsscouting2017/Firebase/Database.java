@@ -1076,6 +1076,10 @@ public class Database {
     public ArrayList<ScoutAccuracy> getScoutAccuracies(){
         return new ArrayList<>(mScoutAccuracyMap.values());
     }
+
+    public ArrayList<String> getScoutNames(){
+        return new ArrayList<>(mScoutAccuracyMap.keySet());
+    }
     //endregion
 
     //region Team Numbers
