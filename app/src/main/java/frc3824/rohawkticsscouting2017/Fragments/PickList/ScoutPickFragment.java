@@ -55,11 +55,12 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
 
         // Remove dnp pick teams and us (Can't pick ourselves)
         for(int i = 0; i < mTeams.size(); i++) {
-            if(mTeams.get(i).dnp) {
+            if(mTeams.get(i).team_number == Constants.OUR_TEAM_NUMBER){
+                mUs = mTeams.get(i);
                 mTeams.remove(i);
                 i--;
-            } else if(mTeams.get(i).team_number == Constants.OUR_TEAM_NUMBER){
-                mUs = mTeams.get(i);
+            }
+            else if(mTeams.get(i).dnp) {
                 mTeams.remove(i);
                 i--;
             }
@@ -101,6 +102,11 @@ public class ScoutPickFragment extends Fragment implements View.OnClickListener,
      */
     public void setupUs(View view){
         View ourTeam = view.findViewById(R.id.our_team);
+
+        if(mUs == null){
+            ourTeam.setVisibility(View.GONE);
+            return;
+        }
 
         ((TextView)ourTeam.findViewById(R.id.team_number)).setText(String.valueOf(mUs.team_number));
         ((TextView)ourTeam.findViewById(R.id.nickname)).setText(String.valueOf(mUs.nickname));

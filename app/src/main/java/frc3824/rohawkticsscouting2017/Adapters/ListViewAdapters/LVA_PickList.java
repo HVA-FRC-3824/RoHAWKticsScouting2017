@@ -74,7 +74,7 @@ public class LVA_PickList extends ArrayAdapter<TeamPickAbility>{
         ((TextView)convertView.findViewById(R.id.top_line)).setText(team.top_line);
         ((TextView)convertView.findViewById(R.id.second_line)).setText(team.second_line);
         ((TextView)convertView.findViewById(R.id.third_line)).setText(team.third_line);
-        if(team.fourth_line.equals("")){
+        if(team.fourth_line == null || team.fourth_line.isEmpty()){
             convertView.findViewById(R.id.fourth_line).setVisibility(View.GONE);
         } else {
             ((TextView)convertView.findViewById(R.id.fourth_line)).setText(team.fourth_line);

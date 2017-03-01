@@ -23,15 +23,15 @@ public class FPA_PickList extends FragmentPagerAdapter {
 
     private final static String TAG = "FPA_PickList";
 
-    private String mTabTitles[] = new String[]{"First Pick", "Second Pick", "Third Pick", "DNP"};
+    private String mTabTitles[] = new String[]{"First Pick", "Second Pick"/*, "Third Pick"*/, "DNP"};
     private Map<Integer, ScoutPickFragment> mFragments = new HashMap<>();
 
     public FPA_PickList(FragmentManager fm) {
         super(fm);
         mFragments.put(0, new FirstPickFragment());
         mFragments.put(1, new SecondPickFragment());
-        mFragments.put(2, new ThirdPickFragment());
-        mFragments.put(3, new DoNotPickFragment());
+        //mFragments.put(2, new ThirdPickFragment());
+        mFragments.put(2, new DoNotPickFragment());
     }
 
     @Override
