@@ -28,7 +28,7 @@ public class CurrentRankingsFragment extends Fragment {
     public CurrentRankingsFragment() {}
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_current_rankings, container, false);
+        View view = inflater.inflate(R.layout.fragment_rankings, container, false);
 
         Database database = Database.getInstance();
 

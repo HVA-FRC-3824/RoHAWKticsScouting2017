@@ -28,7 +28,7 @@ public class PredictedRankingsFragment extends Fragment{
     public PredictedRankingsFragment() {}
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_predicted_rankings, container, false);
+        View view = inflater.inflate(R.layout.fragment_rankings, container, false);
 
         Database database = Database.getInstance();
 
