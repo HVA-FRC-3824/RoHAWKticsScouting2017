@@ -21,12 +21,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -53,11 +56,11 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
     private Button mDeleteButton;
     private ImageButton mLeftButton;
     private ImageButton mRightButton;
+    private TextView mNeedToDownload;
 
-    private int mDefaultPhoto;
-    private int mCurrentPhoto;
-    private ArrayList<String> mPhotoPaths;
-    private ArrayList<String> mPhotoUrls;
+    private String mDefaultPicture;
+    private int mCurrentPicture;
+    private Map<String, String> mPictures;
     private Context mContext;
     private ImageView mImageView;
 
@@ -65,8 +68,7 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
     private final static int REQUEST_TAKE_PHOTO = 1;
 
     public RobotPictureFragment() {
-        mPhotoPaths = new ArrayList<>();
-        mPhotoUrls = new ArrayList<>();
+        mPictures = new HashMap<>();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,6 +96,8 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
         mRightButton.setOnClickListener(this);
         mRightButton.setEnabled(false);
 
+        mNeedToDownload = (TextView)view.findViewById(R.id.need_to_download);
+
 
         if(ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
         {
@@ -108,30 +112,39 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
         // get photo filename from the database and display image
         if (mValueMap != null) {
             // Set up the image if one already exists
-            if (mValueMap.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS)) {
-                mLeftButton.setEnabled(true);
-                mRightButton.setEnabled(true);
+            if (mValueMap.contains(Constants.Pit_Scouting.ROBOT_PICTURES)) {
                 try {
-                    mPhotoPaths = (ArrayList<String>)mValueMap.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-                    mPhotoUrls = (ArrayList<String>)mValueMap.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_URLS);
-                    if(mValueMap.contains(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT)) {
-                        mDefaultPhoto = mValueMap.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
-                    } else {
-                        mDefaultPhoto = -1;
+                    mPictures = (Map<String, String>)mValueMap.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
+
+                    mDefaultPicture = mValueMap.getString(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
+
+                    // If default picture not in map clear it
+                    if(!mPictures.containsKey(mDefaultPicture)){
+                        mDefaultPicture = "";
                     }
-                    mCurrentPhoto = mDefaultPhoto;
-                    if (mCurrentPhoto > -1 && mPhotoPaths.size() > 0) {
-                        if(new File(mPhotoPaths.get(mDefaultPhoto)).exists()) {
-                            displayPicture();
-                            mSetDefaultButton.setVisibility(View.VISIBLE);
-                            mDeleteButton.setVisibility(View.VISIBLE);
+
+                    if(mPictures.size() > 0){
+                        if(!mDefaultPicture.isEmpty()) {
+                            mCurrentPicture = new ArrayList<>(mPictures.keySet()).indexOf(mDefaultPicture);
+                            if (new File(mDefaultPicture).exists()) {
+                                displayPicture();
+                            } else {
+                                mNeedToDownload.setVisibility(View.VISIBLE);
+                            }
                         } else {
-                            view.findViewById(R.id.need_to_download).setVisibility(View.VISIBLE);
+                            // If no default picture start with the first one
+                            mDefaultPicture = mPictures.get(mPictures.keySet().toArray()[0]);
+                            if (new File(mDefaultPicture).exists()) {
+                                displayPicture();
+                            } else {
+                                mNeedToDownload.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 } catch (ScoutValue.TypeException e) {
-                    Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
                 }
+
             }
         }
 
@@ -146,41 +159,40 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
                 dispatchTakePictureIntent();
                 break;
             case R.id.delete_picture:
-                File file = new File(mPhotoPaths.get(mCurrentPhoto));
+                File file = new File(mPictures.get(mCurrentPicture));
                 file.delete();
-                mPhotoPaths.remove(mCurrentPhoto);
-                mPhotoUrls.remove(mCurrentPhoto);
-                if(mPhotoPaths.size() == 0){
-                    mDefaultPhoto = -1;
-                    mCurrentPhoto = -1;
+                mPictures.remove(mCurrentPicture);
+                if(mPictures.size() == 0){
+                    mDefaultPicture = "";
+                    mCurrentPicture = -1;
                     mImageView.setImageDrawable(null);
                     mSetDefaultButton.setVisibility(View.GONE);
                     mDeleteButton.setVisibility(View.GONE);
                     mLeftButton.setEnabled(false);
                     mRightButton.setEnabled(false);
                 } else {
-                    if(mDefaultPhoto == mCurrentPhoto){
-                        mDefaultPhoto = 0;
+                    if(new ArrayList<>(mPictures.keySet()).indexOf(mDefaultPicture) == mCurrentPicture){
+                        mDefaultPicture = "";
                     }
-                    if(mCurrentPhoto == mPhotoPaths.size()){
-                        mCurrentPhoto--;
+                    if(mCurrentPicture == mPictures.size()){
+                        mCurrentPicture--;
                     }
                     displayPicture();
                 }
                 break;
             case R.id.set_default:
-                mDefaultPhoto = mCurrentPhoto;
+                mDefaultPicture = new ArrayList<>(mPictures.keySet()).get(mCurrentPicture);
                 break;
             case R.id.left:
-                mCurrentPhoto --;
-                if(mCurrentPhoto < 0)
-                    mCurrentPhoto += mPhotoPaths.size();
+                mCurrentPicture--;
+                if(mCurrentPicture < 0)
+                    mCurrentPicture += mPictures.size();
                 displayPicture();
                 break;
             case R.id.right:
-                mCurrentPhoto ++;
-                if(mCurrentPhoto >= mPhotoPaths.size())
-                    mCurrentPhoto -= mPhotoPaths.size();
+                mCurrentPicture++;
+                if(mCurrentPicture >= mPictures.size())
+                    mCurrentPicture -= mPictures.size();
                 displayPicture();
                 break;
         }
@@ -202,8 +214,7 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mPhotoPaths.add(image.getAbsolutePath());
-        mPhotoUrls.add("");
+        mPictures.put(image.getAbsolutePath(), "");
 
         return image;
     }
@@ -245,9 +256,9 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
         Log.d(TAG, "Request: " + requestCode + " Result: " + resultCode);
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if(resultCode == Activity.RESULT_OK) {
-                mCurrentPhoto = mPhotoPaths.size() - 1;
-                if(mDefaultPhoto == -1){
-                    mDefaultPhoto = mCurrentPhoto;
+                mCurrentPicture = mPictures.size() - 1;
+                if(mDefaultPicture.isEmpty()){
+                    mDefaultPicture = new ArrayList<>(mPictures.keySet()).get(mCurrentPicture);
                 }
                 mLeftButton.setEnabled(true);
                 mRightButton.setEnabled(true);
@@ -256,8 +267,7 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
                 mSetDefaultButton.setVisibility(View.VISIBLE);
 
             } else {
-                mPhotoPaths.remove(mPhotoPaths.size() - 1);
-                mPhotoUrls.remove(mPhotoUrls.size() - 1);
+                mPictures.remove(new ArrayList<>(mPictures.keySet()).get(mPictures.size() - 1));
             }
         }
     }
@@ -272,24 +282,31 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
         int targetW = 400;
         int targetH = 600;
 
-        File f = new File(mPhotoPaths.get(mCurrentPhoto));
+        File f = new File(mPictures.get(new ArrayList<>(mPictures.keySet()).get(mCurrentPicture)));
 
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
+        if(f.exists()) {
+            mNeedToDownload.setVisibility(View.GONE);
 
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
 
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mPhotoPaths.get(mCurrentPhoto), bmOptions);
-        mImageView.setImageBitmap(bitmap);
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(mPictures.get(mCurrentPicture), bmOptions);
+            mImageView.setImageBitmap(bitmap);
+        } else {
+            mImageView.setImageBitmap(null);
+            mNeedToDownload.setVisibility(View.VISIBLE);
+        }
     }
 
     public void cameraHasPermission() {
@@ -304,9 +321,8 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
      */
     @Override
     public String writeContentsToMap(ScoutMap map) {
-            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, mPhotoPaths);
-            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URLS, mPhotoUrls);
-            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT, mDefaultPhoto);
+            map.put(Constants.Pit_Scouting.ROBOT_PICTURES, mPictures);
+            map.put(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT, mDefaultPicture);
         return "";
     }
 

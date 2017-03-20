@@ -648,7 +648,7 @@ public class Home extends Activity implements View.OnClickListener{
             for(BluetoothDevice device: devices)
             {
                 String deviceName = device.getName();
-                if(deviceName.equals(mServerName))
+                if(deviceName.equals(Constants.Comms.BLUETOOTH_SERVER))
                 {
                     server = device;
                     break;

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gear;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchPilotData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchTeamPilotData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -186,6 +188,33 @@ public class IndividualMatchDataFragment extends Fragment{
 
         ((TextView)endgame.findViewById(R.id.climb)).setText(mTmd.endgame_climb);
         ((TextView)endgame.findViewById(R.id.climb_time)).setText(mTmd.endgame_climb_time);
+
+        //Pilot
+        View pilot = view.findViewById(R.id.pilot_body);
+
+        MatchPilotData mpd = Database.getInstance().getMatchPilotData(mTmd.match_number);
+        if(mpd != null) {
+            for (MatchTeamPilotData mtpd : mpd.teams) {
+                if (mtpd.team_number == mTmd.team_number) {
+                    ((TextView) pilot.findViewById(R.id.rating)).setText(String.valueOf(mtpd.rating.charAt(0)));
+                    ((TextView) pilot.findViewById(R.id.lifts)).setText(String.valueOf(mtpd.lifts));
+                    ((TextView) pilot.findViewById(R.id.drops)).setText(String.valueOf(mtpd.drops));
+
+                    float percentage = (float) mtpd.lifts / (float) (mtpd.lifts + mtpd.drops);
+                    if (Float.isNaN(percentage)) {
+                        percentage = 0.0f;
+                    }
+
+                    ((TextView) pilot.findViewById(R.id.lift_percentage)).setText(String.format("%02.2f%%", percentage));
+                    break;
+                }
+            }
+        } else {
+            ((TextView) pilot.findViewById(R.id.rating)).setText("N/A");
+            ((TextView) pilot.findViewById(R.id.lifts)).setText("N/A");
+            ((TextView) pilot.findViewById(R.id.drops)).setText("N/A");
+            ((TextView) pilot.findViewById(R.id.lift_percentage)).setText("N/A");
+        }
 
         return view;
     }

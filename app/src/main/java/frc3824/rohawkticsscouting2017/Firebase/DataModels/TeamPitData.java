@@ -6,6 +6,8 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
@@ -30,9 +32,8 @@ public class TeamPitData {
     public long last_modified;
 
     // Robot Image
-    public int robot_image_default;
-    public ArrayList<String> robot_image_filepaths;
-    public ArrayList<String> robot_image_urls;
+    public String robot_picture_default;
+    public Map<String, String> robot_pictures;
 
     // Dimensions
     public double weight;
@@ -53,9 +54,7 @@ public class TeamPitData {
     public String notes;
 
     public TeamPitData(){
-        robot_image_filepaths = new ArrayList<>();
-        robot_image_urls = new ArrayList<>();
-        robot_image_default = -1;
+        robot_pictures = new HashMap<>();
     }
 
     public TeamPitData(ScoutMap map) {
@@ -63,18 +62,8 @@ public class TeamPitData {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);
             scout_name = map.getString(Constants.Pit_Scouting.SCOUT_NAME);
 
-            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT)){
-                robot_image_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
-            } else {
-                robot_image_default = -1;
-            }
-
-
-            robot_image_filepaths = (ArrayList)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_URLS)) {
-                robot_image_urls = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_URLS);
-            }
-
+            robot_picture_default = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
+            robot_pictures = (Map<String, String>)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
 
             width = map.getDouble(Constants.Pit_Scouting.Dimensions.WIDTH);
             length = map.getDouble(Constants.Pit_Scouting.Dimensions.LENGTH);
@@ -102,9 +91,8 @@ public class TeamPitData {
         map.put(Constants.Intent_Extras.TEAM_NUMBER, team_number);
         map.put(Constants.Pit_Scouting.SCOUT_NAME, scout_name);
 
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT, robot_image_default);
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, robot_image_filepaths);
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URLS, robot_image_urls);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT, robot_picture_default);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURES, robot_pictures);
 
         map.put(Constants.Pit_Scouting.Dimensions.WIDTH, width);
         map.put(Constants.Pit_Scouting.Dimensions.LENGTH, length);

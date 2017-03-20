@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -21,7 +22,7 @@ import frc3824.rohawkticsscouting2017.R;
  * @author Andrew Messing
  * Created: 8/17/16
  *
- * Fragment for the team view that displays all the pit information and most importantly the robot's
+ * Fragment for the team_number view that displays all the pit information and most importantly the robot's
  * pictures
  */
 public class PitDataFragment extends Fragment implements View.OnClickListener{
@@ -29,7 +30,7 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
     private final static String TAG = "PitDataFragment";
 
     private int mTeamNumber;
-    private ArrayList<String> mPicturePaths;
+    private Map<String, String> mPictures;
     private int mCurrentPicture;
     private ImageView mImageView;
 
@@ -40,8 +41,7 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
         mTeamNumber = teamNumber;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_pit_data, container, false);
 
         TeamPitData team = Database.getInstance().getTeamPitData(mTeamNumber);
@@ -50,11 +50,15 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
             view.findViewById(R.id.left).setOnClickListener(this);
             view.findViewById(R.id.right).setOnClickListener(this);
 
-            if (team.robot_image_filepaths != null && team.robot_image_filepaths.size() != 0) {
+            if (team.robot_pictures != null && team.robot_pictures.size() != 0) {
                 mImageView = (ImageView) view.findViewById(R.id.robot_picture);
-                displayPicture(team.robot_image_filepaths.get(team.robot_image_default), mImageView);
-                mPicturePaths = team.robot_image_filepaths;
-                mCurrentPicture = team.robot_image_default;
+                displayPicture(team.robot_pictures.get(team.robot_picture_default), mImageView);
+                mPictures = team.robot_pictures;
+                mCurrentPicture = new ArrayList<>(mPictures.keySet()).indexOf(team.robot_picture_default);
+                if(mCurrentPicture < 0 || mCurrentPicture >= team.robot_pictures.size())
+                {
+                    mCurrentPicture = 0;
+                }
             }
 
             ((TextView) view.findViewById(R.id.width)).setText(String.format("%03.2f (in)", team.width));
@@ -113,16 +117,16 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
             case R.id.left:
                 mCurrentPicture --;
                 if(mCurrentPicture < 0) {
-                    mCurrentPicture += mPicturePaths.size();
+                    mCurrentPicture += mPictures.size();
                 }
-                displayPicture(mPicturePaths.get(mCurrentPicture), mImageView);
+                displayPicture(mPictures.get(new ArrayList<>(mPictures.keySet()).get(mCurrentPicture)), mImageView);
                 break;
             case R.id.right:
                 mCurrentPicture ++;
-                if(mCurrentPicture >= mPicturePaths.size()) {
-                    mCurrentPicture -= mPicturePaths.size();
+                if(mCurrentPicture >= mPictures.size()) {
+                    mCurrentPicture -= mPictures.size();
                 }
-                displayPicture(mPicturePaths.get(mCurrentPicture), mImageView);
+                displayPicture(mPictures.get(new ArrayList<>(mPictures.keySet()).get(mCurrentPicture)), mImageView);
                 break;
         }
     }

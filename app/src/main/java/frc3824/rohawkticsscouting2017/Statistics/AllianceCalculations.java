@@ -51,15 +51,15 @@ public class AllianceCalculations {
         {
             pScore += t.calc.auto_baseline.average * 5;
 
-            double num_low_balls = (t.calc.auto_high_goal_made.average * 9 + t.calc.auto_low_goal_made.average * 3 +
-                    t.calc.teleop_high_goal_made.average * 3 + t.calc.teleop_low_goal_made.average) / 9;
+            double num_low_balls = (t.calc.auto_shooting.high.made.average * 9 + t.calc.auto_shooting.low.made.average * 3 +
+                    t.calc.teleop_shooting.high.made.average * 3 + t.calc.teleop_shooting.low.made.average) / 9;
             fuel_points += num_low_balls;
             pScore += (int)num_low_balls;
 
-            pScore += t.calc.endgame_climb_successful.average * 50;
+            pScore += t.calc.climb.success_percentage * 50;
 
-            auto_gears += t.calc.auto_total_gears_placed.average;
-            teleop_gears += t.calc.teleop_total_gears_placed.average;
+            auto_gears += t.calc.auto_gears.total.placed.average;
+            teleop_gears += t.calc.teleop_gears.total.placed.average;
         }
 
         if(elimination && fuel_points >= 40){
@@ -116,15 +116,15 @@ public class AllianceCalculations {
         double climb_points = 0;
 
         for(Team t: mAlliance) {
-            auto_fuel_points += (int)(t.calc.auto_high_goal_made.average + t.calc.auto_low_goal_made.average / 3);
-            teleop_fuel_points += (int)(t.calc.teleop_high_goal_made.average / 3 + t.calc.teleop_low_goal_made.average / 9);
+            auto_fuel_points += (int)(t.calc.auto_shooting.high.made.average + t.calc.auto_shooting.low.made.average / 3);
+            teleop_fuel_points += (int)(t.calc.teleop_shooting.high.made.average / 3 + t.calc.teleop_shooting.low.made.average / 9);
 
-            auto_gear += t.calc.auto_total_gears_placed.average;
-            teleop_gear += t.calc.teleop_total_gears_placed.average;
+            auto_gear += t.calc.auto_gears.total.placed.average;
+            teleop_gear += t.calc.teleop_gears.total.placed.average;
 
             auto_points += t.calc.auto_baseline.average;
 
-            climb_points += t.calc.endgame_climb_successful.average * 50;
+            climb_points += t.calc.climb.success_percentage * 50;
         }
 
         int rotor = 0;
@@ -230,15 +230,15 @@ public class AllianceCalculations {
         double teleop_high_squared = 0;
         double teleop_low_squared = 0;
         for(Team t: mAlliance){
-            auto_high += t.calc.auto_high_goal_made.average * 9;
-            auto_low += t.calc.auto_low_goal_made.average * 3;
-            teleop_high += t.calc.teleop_high_goal_made.average * 3;
-            teleop_low += t.calc.teleop_low_goal_made.average;
+            auto_high += t.calc.auto_shooting.high.made.average * 9;
+            auto_low += t.calc.auto_shooting.low.made.average * 3;
+            teleop_high += t.calc.teleop_shooting.high.made.average * 3;
+            teleop_low += t.calc.teleop_shooting.low.made.average;
 
-            auto_high_squared += Math.pow(t.calc.auto_high_goal_made.average * 9, 2);
-            auto_low_squared += Math.pow(t.calc.auto_low_goal_made.average * 3, 2);
-            teleop_high_squared += Math.pow(t.calc.teleop_high_goal_made.average * 3, 2);
-            teleop_low_squared += Math.pow(t.calc.teleop_low_goal_made.average, 2);
+            auto_high_squared += Math.pow(t.calc.auto_shooting.high.made.average * 9, 2);
+            auto_low_squared += Math.pow(t.calc.auto_shooting.low.made.average * 3, 2);
+            teleop_high_squared += Math.pow(t.calc.teleop_shooting.high.made.average * 3, 2);
+            teleop_low_squared += Math.pow(t.calc.teleop_shooting.low.made.average, 2);
         }
         double mu = auto_high + auto_low + teleop_high + teleop_low;
         double sigma = Math.sqrt(auto_high_squared + auto_low_squared + teleop_high_squared + teleop_low_squared);
@@ -251,8 +251,8 @@ public class AllianceCalculations {
         double mu = 0;
         double sigma = 0;
         for(Team t: mAlliance){
-            mu += t.calc.auto_total_gears_placed.average + t.calc.teleop_total_gears_placed.average;
-            sigma += Math.pow(t.calc.auto_total_gears_placed.average, 2) + Math.pow(t.calc.teleop_total_gears_placed.average, 2);
+            mu += t.calc.auto_gears.total.placed.average + t.calc.teleop_gears.total.placed.average;
+            sigma += Math.pow(t.calc.auto_gears.total.placed.average, 2) + Math.pow(t.calc.teleop_gears.total.placed.average, 2);
         }
         sigma = Math.sqrt(sigma);
         return Statistics.probabilityDensity(x, mu, sigma);

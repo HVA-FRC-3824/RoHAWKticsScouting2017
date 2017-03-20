@@ -9,7 +9,7 @@ import java.util.Map;
  * @author frc3824
  * Created: 8/13/16
  *
- * Class to hold all information about a specific team
+ * Class to hold all information about a specific team_number
  */
 @IgnoreExtraProperties
 public class Team {
@@ -25,6 +25,8 @@ public class Team {
     public TeamDTFeedback drive_team_feedback;
 
     public TeamCalculatedData calc;
+    public TeamPilotData pilot;
+    public TeamQualitativeData qualitative;
 
     // Rankings
     public TeamRankingData current_ranking;
@@ -41,6 +43,8 @@ public class Team {
         pit = new TeamPitData();
         drive_team_feedback = new TeamDTFeedback();
         calc = new TeamCalculatedData();
+        pilot = new TeamPilotData();
+        qualitative = new TeamQualitativeData();
         current_ranking = new TeamRankingData();
         predicted_ranking = new TeamRankingData();
         first_pick = new TeamPickAbility();

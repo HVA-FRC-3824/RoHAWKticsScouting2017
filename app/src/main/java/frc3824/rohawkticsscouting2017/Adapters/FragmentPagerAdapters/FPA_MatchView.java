@@ -30,7 +30,7 @@ public class FPA_MatchView extends FragmentPagerAdapter {
     public FPA_MatchView(FragmentManager fm, int match_number) {
         super(fm);
         mMatchNumber = match_number;
-        mTeams = Database.getInstance().getMatch(mMatchNumber).teams;
+        mTeams = Database.getInstance().getMatch(mMatchNumber).team_numbers;
         mTabTitles = new String[]{"Blue", "Red", "Strategy", "Prediction"};
         custom = false;
     }

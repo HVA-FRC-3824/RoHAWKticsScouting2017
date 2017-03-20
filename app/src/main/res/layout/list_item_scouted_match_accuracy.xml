@@ -23,15 +23,6 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/total_error"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    <TextView
         android:id="@+id/auto_mobility_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,7 +32,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/auto_rotor_error"
+        android:id="@+id/auto_gear_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -50,7 +41,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/teleop_rotor_error"
+        android:id="@+id/teleop_gear_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -59,7 +50,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/endgame_error"
+        android:id="@+id/climb_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

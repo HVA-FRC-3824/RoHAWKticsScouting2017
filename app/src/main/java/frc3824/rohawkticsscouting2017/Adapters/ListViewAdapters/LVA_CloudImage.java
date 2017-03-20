@@ -135,8 +135,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                                 switch (mImageType) {
                                     case Constants.Cloud.ROBOT_PICTURE:
                                         TeamPitData t = mDatabase.getTeamPitData(Integer.parseInt(ci.extra));
-                                        int index = t.robot_image_filepaths.indexOf(ci.filepath);
-                                        t.robot_image_urls.add(index, ci.url);
+                                        t.robot_pictures.put(ci.filepath, ci.url);
                                         mDatabase.setTeamPitData(t);
                                         break;
                                     case Constants.Cloud.STRATEGY:

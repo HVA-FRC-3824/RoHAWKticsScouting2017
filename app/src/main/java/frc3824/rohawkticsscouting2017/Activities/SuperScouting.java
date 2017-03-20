@@ -152,7 +152,7 @@ public class SuperScouting extends Activity{
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
         ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Match Number: %d", mMatchNumber));
-        mLogisticsView.findViewById(R.id.team_number).setVisibility(View.GONE);
+        //mLogisticsView.findViewById(R.id.match_number).setVisibility(View.GONE);
 
         mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
         ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.SUPER_SCOUTS_LIST);
@@ -202,7 +202,7 @@ public class SuperScouting extends Activity{
         mDataTransferSuccessNotificationBuilder = new Notification.Builder(this);
         mDataTransferSuccessNotificationId = Constants.Notifications.DATA_TRANSFER_SUCCESS;
         mDataTransferSuccessNotificationBuilder.setSmallIcon(R.drawable.ok_color);
-        mDataTransferFailureNotificationBuilder.setContentTitle("Data Transfer Success");
+        mDataTransferSuccessNotificationBuilder.setContentTitle("Data Transfer Success");
     }
 
     /**
@@ -576,12 +576,13 @@ public class SuperScouting extends Activity{
             SuperMatchData superMatchData = new SuperMatchData(map);
             mDatabase.setSuperMatchData(superMatchData);
 
-            if (mServerType.equals(Constants.Server_Type.SOCKET)) {
+            if (mServerType.equals(Constants.Settings.SERVER_USB)) {
                 return socketVersion(superMatchData);
-            } else {
+            } else if(mServerType.equals(Constants.Settings.SERVER_BLUETOOTH)){
                 return bluetoothVersion(superMatchData);
             }
 
+            return null;
         }
 
         private Void socketVersion(SuperMatchData superMatchData) {
@@ -658,7 +659,7 @@ public class SuperScouting extends Activity{
             for(BluetoothDevice device: devices)
             {
                 String deviceName = device.getName();
-                if(deviceName.equals(mServerType))
+                if(deviceName.equals(Constants.Comms.BLUETOOTH_SERVER))
                 {
                     server = device;
                     break;

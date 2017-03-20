@@ -11,6 +11,7 @@
         android:background="@color/bright_blue"
         android:orientation="vertical">
 
+        <!--
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +28,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp" />
-
+        -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -92,6 +93,7 @@
         android:background="@color/bright_red"
         android:orientation="vertical">
 
+        <!--
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,7 +110,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp" />
-
+        -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

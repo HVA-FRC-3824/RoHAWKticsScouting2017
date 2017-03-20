@@ -64,6 +64,9 @@ public class MatchViewStrategyFragment extends Fragment implements View.OnClickL
         mDefenseTextview = (TextView)mView.findViewById(R.id.defense_textview);
         mDefenseEdittext = (EditText)mView.findViewById(R.id.defense_edittext);
 
+        mOffenseTextview.setText(mStrategySuggestion.offense_text);
+        mDefenseTextview.setText(mStrategySuggestion.defense_text);
+
         Utilities.setupUi(getActivity(), mView);
 
         return mView;
@@ -126,7 +129,7 @@ public class MatchViewStrategyFragment extends Fragment implements View.OnClickL
                 mOffenseTextview.setText(mOffenseEdittext.getText());
                 mOffenseTextview.setVisibility(View.VISIBLE);
 
-                mStrategySuggestion.offense_text = mDefenseTextview.getText().toString();
+                mStrategySuggestion.offense_text = mOffenseTextview.getText().toString();
 
                 mDefenseEdittext.setVisibility(View.GONE);
                 mDefenseTextview.setText(mDefenseEdittext.getText());

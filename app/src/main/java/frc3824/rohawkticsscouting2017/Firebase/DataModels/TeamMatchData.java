@@ -28,7 +28,6 @@ public class TeamMatchData {
     public String alliance_color;
     public int alliance_number;
     public String scout_name;
-    public long last_modified;
     public int total_points;
 
     // Autonomous

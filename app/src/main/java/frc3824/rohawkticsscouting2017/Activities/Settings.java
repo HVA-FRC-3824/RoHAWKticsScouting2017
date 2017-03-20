@@ -60,37 +60,33 @@ public class Settings extends Activity implements OnClickListener{
 
         mAllianceColorSelector = (Spinner) findViewById(R.id.alliance_color_selector);
         final Spinner alliance_color_selector = mAllianceColorSelector;
-        String[] alliance_colors_options = new String[]{Constants.Alliance_Colors.BLUE, Constants.Alliance_Colors.RED};
-        ArrayAdapter<String> alliance_color_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, alliance_colors_options);
+        ArrayAdapter<String> alliance_color_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Constants.Settings.ALLIANCE_COLOR_OPTIONS);
         alliance_color_selector.setAdapter(alliance_color_adapter);
-        alliance_color_selector.setSelection(Arrays.asList(alliance_colors_options).indexOf(
+        alliance_color_selector.setSelection(Arrays.asList(Constants.Settings.ALLIANCE_COLOR_OPTIONS).indexOf(
                 mSharedPreferences.getString(Constants.Settings.ALLIANCE_COLOR, Constants.Alliance_Colors.BLUE)));
 
         mAllianceNumberSelector = (Spinner) findViewById(R.id.alliance_number_selector);
         final Spinner alliance_number_selector = mAllianceNumberSelector;
-        String[] alliance_number_options = new String[]{"1", "2", "3"};
         ArrayAdapter<String> alliance_number_adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, alliance_number_options);
+                android.R.layout.simple_spinner_dropdown_item, Constants.Settings.ALLIANCE_NUMBER_OPTIONS);
         alliance_number_selector.setAdapter(alliance_number_adapter);
-        alliance_number_selector.setSelection(Arrays.asList(alliance_number_options).indexOf(
+        alliance_number_selector.setSelection(Arrays.asList(Constants.Settings.ALLIANCE_NUMBER_OPTIONS).indexOf(
                 Integer.toString(mSharedPreferences.getInt(Constants.Settings.ALLIANCE_NUMBER, 1))));
 
         mPitGroupSelector = (Spinner) findViewById(R.id.pit_group_selector);
         final Spinner pit_group_selector = mPitGroupSelector;
-        String[] pit_group_options = new String[]{"1", "2", "3", "4", "5", "6"};
         ArrayAdapter<String> pit_group_adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, pit_group_options);
+                android.R.layout.simple_spinner_dropdown_item, Constants.Settings.PIT_GROUP_NUMBER_OPTIONS);
         pit_group_selector.setAdapter(pit_group_adapter);
-        pit_group_selector.setSelection(Arrays.asList(pit_group_options).indexOf(
+        pit_group_selector.setSelection(Arrays.asList(Constants.Settings.PIT_GROUP_NUMBER_OPTIONS).indexOf(
                 Integer.toString(mSharedPreferences.getInt(Constants.Settings.PIT_GROUP_NUMBER, 1))));
 
         mServerSelector = (Spinner) findViewById(R.id.server_selector);
         final Spinner server_selector = mServerSelector;
-        String[] server_options = new String[]{Constants.Server_Type.BLUETOOTH, Constants.Server_Type.SOCKET};
         ArrayAdapter<String> server_adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, server_options);
+                android.R.layout.simple_spinner_dropdown_item, Constants.Settings.SERVER_OPTIONS);
         server_selector.setAdapter(server_adapter);
-        server_selector.setSelection(Arrays.asList(server_options).indexOf(
+        server_selector.setSelection(Arrays.asList(Constants.Settings.SERVER_OPTIONS).indexOf(
                 mSharedPreferences.getString(Constants.Settings.SERVER_TYPE, "")));
 
         mUserTypeSelector = (Spinner) findViewById(R.id.user_type_selector);
@@ -140,16 +136,13 @@ public class Settings extends Activity implements OnClickListener{
         String event_key = mSharedPreferences.getString(Constants.Settings.EVENT_KEY, "");
 
         mEventKeyTextView = (AutoCompleteTextView) findViewById(R.id.event_key);
-        AutoCompleteTextView event_key_textview = mEventKeyTextView;
-        ArrayList<String> events = new ArrayList<>();
+        ArrayList<String> events = new ArrayList<>(Database.getEvents());
         Database.getInstance(event_key);
-        Set<String> event_list = Database.getEvents();
-        events.addAll(event_list);
         ArrayAdapter<String> events_adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, events);
-        event_key_textview.setAdapter(events_adapter);
-        event_key_textview.setText(event_key);
+        mEventKeyTextView.setAdapter(events_adapter);
+        mEventKeyTextView.setText(event_key);
 
-        if(!event_key.equals(""))
+        if(!event_key.isEmpty())
         {
             findViewById(R.id.home_button).setVisibility(View.VISIBLE);
             mBackAllowed = true;
@@ -181,8 +174,7 @@ public class Settings extends Activity implements OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_button:
-                Intent intent = new Intent(this, Home.class);
-                startActivity(intent);
+                onBackPressed();
                 break;
             case R.id.save_button:
                 SharedPreferences.Editor prefEditor = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();

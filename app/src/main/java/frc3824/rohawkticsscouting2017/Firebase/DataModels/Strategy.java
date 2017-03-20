@@ -35,7 +35,6 @@ public class Strategy {
 
     private final static String TAG = "Strategy";
 
-    public long last_modified;
     public int width;
     public int height;
     public String name;

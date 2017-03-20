@@ -18,16 +18,42 @@ public interface Constants {
         - middle number is changed after events
         - left most number is changed after the season
     */
-    String VERSION = "2.0.3";
+    String VERSION = "2.1.0";
     int OUR_TEAM_NUMBER = 3824;
 
     interface Settings {
         String EVENT_KEY = "event_key";
         String USER_TYPE = "user_type";
         String ALLIANCE_COLOR = "alliance_color";
+        String[] ALLIANCE_COLOR_OPTIONS = {
+                Constants.Alliance_Colors.BLUE,
+                Constants.Alliance_Colors.RED
+        };
+
         String ALLIANCE_NUMBER = "alliance_number";
+        String[] ALLIANCE_NUMBER_OPTIONS = {
+                "1",
+                "2",
+                "3"
+        };
         String PIT_GROUP_NUMBER = "pit_group_number";
+        String[] PIT_GROUP_NUMBER_OPTIONS = {
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+        };
         String SERVER_TYPE = "server";
+        String SERVER_BLUETOOTH = "Bluetooth";
+        String SERVER_USB = "USB";
+        String SERVER_NEITHER = "Neither";
+        String[] SERVER_OPTIONS = {
+                SERVER_BLUETOOTH,
+                SERVER_USB,
+                SERVER_NEITHER
+        };
 
         // Not really settings, but are in shared preferences
         String[] MATCH_SCOUTS_LIST = {
@@ -38,7 +64,7 @@ public interface Constants {
             "Austin Curlee",
             "James Dyer",
             "Forrest Fomby",
-            "Chrisopher Howard",
+            "Christopher Howard",
             "Max Howell",
             "Seth Maxwell",
             "Neil Patel",
@@ -49,6 +75,7 @@ public interface Constants {
             "Julianna Smith",
             "Michael Williamson",
             "Jovi Yoshioka",
+            "Jacob Cresci",
             "Steven Busby",
             "Philip Hicks",
             "Abigail Bradfield"
@@ -122,6 +149,76 @@ public interface Constants {
         String RED1 = "red1";
         String RED2 = "red2";
         String RED3 = "red3";
+    }
+
+    interface Database_Lists{
+
+        interface indices {
+            int ROOT = 0;
+            int EVENT = 1;
+            int SCHEDULE = 2;
+            int PIT = 3;
+            int SUPER = 4;
+            int DT = 5;
+            int MATCH = 6;
+            int MATCH_PILOT = 7;
+            int TEAM_PILOT = 8;
+            int CALC = 9;
+            int LOGISTICS = 10;
+            int STRATEGY = 11;
+            int SUGGESTION = 12;
+            int CURRENT_RANKING = 13;
+            int PREDICTED_RANKING = 14;
+            int FIRST_PICK = 15;
+            int SECOND_PICK = 16;
+            int THIRD_PICK = 17;
+            int SCOUT_ACCURACY = 18;
+            int TOTAL_REFERENCES = 19;
+        }
+
+        interface children {
+            String SCHEDULE = "schedule";
+            String PIT = "pit";
+            String SUPER = "super";
+            String DT = "feedback";
+            String MATCH = "partial_match";
+            String MATCH_PILOT = "pilot/match";
+            String TEAM_PILOT = "pilot/team";
+            String CALC = "calculated";
+            String LOGISTICS = "logistics";
+            String STRATEGY = "strategy/drawings";
+            String SUGGESTION = "strategy/suggestions";
+            String CURRENT_RANKING = "ranking/current";
+            String PREDICTED_RANKING = "ranking/predicted";
+            String FIRST_PICK = "pick/first";
+            String SECOND_PICK = "pick/second";
+            String THIRD_PICK = "pick/third";
+            String SCOUT_ACCURACY = "scout";
+
+            String[] LIST = {
+                    "root",
+                    "event",
+                    SCHEDULE,
+                    PIT,
+                    SUPER,
+                    DT,
+                    MATCH,
+                    MATCH_PILOT,
+                    TEAM_PILOT,
+                    CALC,
+                    LOGISTICS,
+                    STRATEGY,
+                    SUGGESTION,
+                    CURRENT_RANKING,
+                    PREDICTED_RANKING,
+                    FIRST_PICK,
+                    SECOND_PICK,
+                    THIRD_PICK,
+                    SCOUT_ACCURACY
+            };
+        }
+
+
     }
 
     interface Match_Scouting {
@@ -220,8 +317,7 @@ public interface Constants {
         String SCOUT_NAME = "scout_name";
 
         String ROBOT_PICTURE_DEFAULT = "robot_picture_default";
-        String ROBOT_PICTURE_FILEPATHS = "robot_picture_filepaths";
-        String ROBOT_PICTURE_URLS = "robot_picture_urls";
+        String ROBOT_PICTURES = "robot_pictures";
 
         interface Dimensions {
             String WIDTH = "width";
@@ -273,8 +369,6 @@ public interface Constants {
         String SCOUT_NAME = "scout_name";
 
         // GAME SPECIFIC
-
-
         interface Qualitative {
             String BLUE_SPEED = "blue_speed";
             String RED_SPEED = "red_speed";
@@ -287,24 +381,6 @@ public interface Constants {
 
             String BLUE_DEFENSE = "blue_defense";
             String RED_DEFENSE = "red_defense";
-        }
-
-        interface Miscellaneous {
-            String BLUE1_PILOT_RATING = "blue1_pilot_rating";
-            String BLUE2_PILOT_RATING = "blue2_pilot_rating";
-            String BLUE3_PILOT_RATING = "blue3_pilot_rating";
-            String RED1_PILOT_RATING = "red1_pilot_rating";
-            String RED2_PILOT_RATING = "red2_pilot_rating";
-            String RED3_PILOT_RATING = "red3_pilot_rating";
-
-            interface PILOT_RATING_OPTIONS {
-                String FIVE = "5 - Hauling ass";
-                String FOUR = "4 - Pretty good";
-                String THREE = "3 - Competent";
-                String TWO = "2 - Wouldn't pick them as pilot for us";
-                String ONE = "1 - Not paying attention/Slow/Clumsy";
-                String ZERO = "0 - Not a pilot in this match";
-            }
         }
 
         String NOTES = "super_notes";
@@ -337,6 +413,8 @@ public interface Constants {
         int CHUNK_SIZE = 4192;
         int HEADER_MSB = 0x10;
         int HEADER_LSB = 0x55;
+
+        String BLUETOOTH_SERVER = "pit3824";
 
         interface Message_Type {
             int DATA_SENT_OK = 0x00;
@@ -379,11 +457,6 @@ public interface Constants {
         int DOWNLOAD_ROBOT_PICTURES = 6;
         int DATA_TRANSFER_SUCCESS = 7;
         int DATA_TRANSFER_FAILURE = 8;
-    }
-
-    interface Server_Type {
-        String BLUETOOTH = "Bluetooth";
-        String SOCKET = "Socket";
     }
 
     interface Server_Log_Colors {
@@ -440,8 +513,9 @@ public interface Constants {
             String GEARS = "Gears";
             String SHOOTING = "Shooting";
             String CLIMB = "Climb";
+            String PILOT = "Pilot";
 
-            String[] OPTIONS = {/*POINTS,*/ GEARS, SHOOTING, CLIMB, FOULS, POST_MATCH};
+            String[] OPTIONS = {/*POINTS,*/ GEARS, SHOOTING, CLIMB, PILOT, FOULS, POST_MATCH};
         }
 
         interface Points_Secondary_Options {
@@ -550,6 +624,15 @@ public interface Constants {
             String TIME = "Time";
 
             String[] OPTIONS = {SUCCESSFUL_ATTEMPTS, TIME};
+        }
+
+        interface Pilot_Secondary_Options {
+            String RATING = "Rating";
+            String LIFTS = "Lifts";
+            String DROPS = "Drops";
+            String LIFT_PERCENTAGE = "Lift Percentage";
+
+            String[] OPTIONS = {RATING, LIFTS, DROPS, LIFT_PERCENTAGE};
         }
     }
 }

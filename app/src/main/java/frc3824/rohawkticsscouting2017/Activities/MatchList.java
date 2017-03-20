@@ -76,6 +76,7 @@ public class MatchList extends Activity{
                 break;
             case Constants.Intent_Extras.MATCH_VIEWING:
                 mlt = LVA_MatchList.MatchListType.MATCH_VIEW;
+                match_numbers.add(-1);
                 for(int i = 1; i <= numberOfMatches; i++) {
                     match_numbers.add(i);
                 }

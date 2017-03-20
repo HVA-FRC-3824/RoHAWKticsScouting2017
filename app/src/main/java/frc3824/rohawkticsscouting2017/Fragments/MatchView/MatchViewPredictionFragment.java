@@ -31,7 +31,7 @@ public class MatchViewPredictionFragment extends Fragment {
     public void setMatch(int match_number){
         Database database = Database.getInstance();
         Match match = database.getMatch(match_number);
-        setMatch(match.teams);
+        setMatch(match.team_numbers);
     }
 
     public void setMatch(ArrayList<Integer> teams){
@@ -57,8 +57,8 @@ public class MatchViewPredictionFragment extends Fragment {
         AllianceCalculations red_alliance_calculations = new AllianceCalculations(red_alliance);
         double red_predicted_score = red_alliance_calculations.predictedScore();
 
-        double blue_win_probability = 100.0 * blue_alliance_calculations.winProbabilityOver(red_alliance_calculations);
-        double red_win_probability = 100 * red_alliance_calculations.winProbabilityOver(blue_alliance_calculations);
+//        double blue_win_probability = 100.0 * blue_alliance_calculations.winProbabilityOver(red_alliance_calculations);
+//        double red_win_probability = 100 * red_alliance_calculations.winProbabilityOver(blue_alliance_calculations);
 
         double blue_pressure_chance = blue_alliance_calculations.pressureChance();
         double red_pressure_chance = red_alliance_calculations.pressureChance();
@@ -68,8 +68,8 @@ public class MatchViewPredictionFragment extends Fragment {
 
         ((TextView)mView.findViewById(R.id.blue_alliance_score)).setText(String.format("%03.2f", blue_predicted_score));
         ((TextView)mView.findViewById(R.id.red_alliance_score)).setText(String.format("%03.2f", red_predicted_score));
-        ((TextView)mView.findViewById(R.id.blue_win_probability)).setText(String.format("%03.2f", blue_win_probability));
-        ((TextView)mView.findViewById(R.id.red_win_probability)).setText(String.format("%03.2f", red_win_probability));
+//        ((TextView)mView.findViewById(R.id.blue_win_probability)).setText(String.format("%03.2f", blue_win_probability));
+//        ((TextView)mView.findViewById(R.id.red_win_probability)).setText(String.format("%03.2f", red_win_probability));
         ((TextView)mView.findViewById(R.id.blue_pressure_probability)).setText(String.format("%03.2f", blue_pressure_chance));
         ((TextView)mView.findViewById(R.id.red_pressure_probability)).setText(String.format("%03.2f", red_pressure_chance));
         ((TextView)mView.findViewById(R.id.blue_rotor_probability)).setText(String.format("%03.2f", blue_rotor_chance));

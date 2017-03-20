@@ -118,9 +118,9 @@ public class MatchScouting extends Activity{
 
         if (mMatchNumber > 0) {
             if (mAllianceColor.equals(Constants.Alliance_Colors.BLUE)) {
-                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(mAllianceNumber - 1);
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).team_numbers.get(mAllianceNumber - 1);
             } else {
-                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(mAllianceNumber + 2);
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).team_numbers.get(mAllianceNumber + 2);
             }
 
             setTitle(String.format("Match Number: %d Team Number: %d", mMatchNumber, mTeamNumber));
@@ -128,7 +128,7 @@ public class MatchScouting extends Activity{
             mDrawerList = (ListView)findViewById(R.id.drawer_list);
             ArrayList<MatchNumberCheck> mncs = new ArrayList<>();
             for(int i = 1; i <= mDatabase.getNumberOfMatches(); i++){
-                if(mDatabase.getTeamMatchData(i,  mDatabase.getMatch(i).teams.get(mAllianceNumber - 1)) != null){
+                if(mDatabase.getTeamMatchData(i,  mDatabase.getMatch(i).team_numbers.get(mAllianceNumber - 1)) != null){
                     mncs.add(new MatchNumberCheck(i, true));
                 } else {
                     mncs.add(new MatchNumberCheck(i));
@@ -616,11 +616,13 @@ public class MatchScouting extends Activity{
             TeamMatchData teamMatchData = new TeamMatchData(map);
             mDatabase.setTeamMatchData(teamMatchData);
 
-            if(mServerType.equals(Constants.Server_Type.SOCKET)){
+            if(mServerType.equals(Constants.Settings.SERVER_USB)){
                 return socketVersion(teamMatchData);
-            } else {
+            } else if(mServerType.equals(Constants.Settings.SERVER_BLUETOOTH)){
                 return bluetoothVersion(teamMatchData);
             }
+
+            return null;
         }
 
         private Void socketVersion(TeamMatchData teamMatchData){
@@ -698,7 +700,7 @@ public class MatchScouting extends Activity{
             {
                 String deviceName = device.getName();
                 Log.d(TAG, deviceName);
-                if(deviceName.equals(mServerType))
+                if(deviceName.equals(Constants.Comms.BLUETOOTH_SERVER))
                 {
                     server = device;
                     break;

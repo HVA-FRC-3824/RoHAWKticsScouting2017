@@ -56,23 +56,23 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
         match.match_number = position + 1;
 
         final TextView blue1 = (TextView)convertView.findViewById(R.id.blue1);
-        blue1.setText(String.valueOf(match.teams.get(Constants.Match_Indices.BLUE1)));
+        blue1.setText(String.valueOf(match.team_numbers.get(Constants.Match_Indices.BLUE1)));
 
         final TextView blue2 = (TextView)convertView.findViewById(R.id.blue2);
-        blue2.setText(String.valueOf(match.teams.get(Constants.Match_Indices.BLUE2)));
+        blue2.setText(String.valueOf(match.team_numbers.get(Constants.Match_Indices.BLUE2)));
 
         final TextView blue3 = (TextView)convertView.findViewById(R.id.blue3);
-        blue3.setText(String.valueOf(match.teams.get(Constants.Match_Indices.BLUE3)));
+        blue3.setText(String.valueOf(match.team_numbers.get(Constants.Match_Indices.BLUE3)));
 
 
         final TextView red1 = (TextView)convertView.findViewById(R.id.red1);
-        red1.setText(String.valueOf(match.teams.get(Constants.Match_Indices.RED1)));
+        red1.setText(String.valueOf(match.team_numbers.get(Constants.Match_Indices.RED1)));
 
         final TextView red2 = (TextView)convertView.findViewById(R.id.red2);
-        red2.setText(String.valueOf(match.teams.get(Constants.Match_Indices.RED2)));
+        red2.setText(String.valueOf(match.team_numbers.get(Constants.Match_Indices.RED2)));
 
         final TextView red3 = (TextView)convertView.findViewById(R.id.red3);
-        red3.setText(String.valueOf(match.teams.get(Constants.Match_Indices.RED3)));
+        red3.setText(String.valueOf(match.team_numbers.get(Constants.Match_Indices.RED3)));
 
         final ImageButton edit = (ImageButton)convertView.findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,7 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
 
                 for(int i = 0; i < 6; i++)
                 {
-                    edits.get(i).setText(String.valueOf(match.teams.get(i)));
+                    edits.get(i).setText(String.valueOf(match.team_numbers.get(i)));
                 }
 
 
@@ -104,7 +104,7 @@ public class LVA_ScheduleBuilder extends ArrayAdapter<Match> {
                         {
                             teams.add(Integer.parseInt(edits.get(j).getText().toString()));
                         }
-                        match.teams = teams;
+                        match.team_numbers = teams;
                         mDatabase.setMatch(match);
                         notifyDataSetChanged();
                     }

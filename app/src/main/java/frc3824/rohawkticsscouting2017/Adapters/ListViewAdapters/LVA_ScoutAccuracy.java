@@ -1,7 +1,6 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
 import frc3824.rohawkticsscouting2017.R;
-import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
  * @author frc3824
@@ -40,20 +38,18 @@ public class LVA_ScoutAccuracy extends ArrayAdapter<ScoutAccuracy>{
 
         if(position == 0){
             ((TextView) convertView.findViewById(R.id.name)).setText("Scout Name");
-            ((TextView) convertView.findViewById(R.id.total_error)).setText("Total Error");
             ((TextView) convertView.findViewById(R.id.auto_mobility_error)).setText("Auto Mobility Error");
-            ((TextView) convertView.findViewById(R.id.auto_rotor_error)).setText("Auto Rotor Error");
-            ((TextView) convertView.findViewById(R.id.teleop_rotor_error)).setText("Teleop Rotor Error");
-            ((TextView) convertView.findViewById(R.id.endgame_error)).setText(String.valueOf("Endgame Error"));
+            ((TextView) convertView.findViewById(R.id.auto_gear_error)).setText("Auto Gear Error");
+            ((TextView) convertView.findViewById(R.id.teleop_gear_error)).setText("Teleop Gear Error");
+            ((TextView) convertView.findViewById(R.id.climb_error)).setText(String.valueOf("CLimb Error"));
         } else {
             ScoutAccuracy sa = mScoutAccuracies.get(position);
 
             ((TextView) convertView.findViewById(R.id.name)).setText(sa.name);
-            ((TextView) convertView.findViewById(R.id.total_error)).setText(String.valueOf(sa.total_error));
             ((TextView) convertView.findViewById(R.id.auto_mobility_error)).setText(String.valueOf(sa.auto_mobility_error));
-            ((TextView) convertView.findViewById(R.id.auto_rotor_error)).setText(String.valueOf(sa.auto_rotor_error));
-            ((TextView) convertView.findViewById(R.id.teleop_rotor_error)).setText(String.valueOf(sa.teleop_rotor_error));
-            ((TextView) convertView.findViewById(R.id.endgame_error)).setText(String.valueOf(sa.endgame_error));
+            ((TextView) convertView.findViewById(R.id.auto_gear_error)).setText(String.valueOf(sa.auto_gear_error));
+            ((TextView) convertView.findViewById(R.id.teleop_gear_error)).setText(String.valueOf(sa.teleop_gear_error));
+            ((TextView) convertView.findViewById(R.id.climb_error)).setText(String.valueOf(sa.climb_error));
         }
         return  convertView;
     }

@@ -4,6 +4,7 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CloudImage;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
@@ -34,26 +35,22 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
             TeamPitData teamPitData = mDatabase.getTeamPitData(team_number);
             if(teamPitData == null)
                 continue;
-            for(int i = 0; i < teamPitData.robot_image_filepaths.size(); i++) {
+            for(Map.Entry<String, String> entry: teamPitData.robot_pictures.entrySet()) {
                 CloudImage ci = new CloudImage();
 
                 ci.extra = String.valueOf(team_number);
                 ci.internet = internet;
 
-                if (teamPitData.robot_image_filepaths != null && teamPitData.robot_image_filepaths.size() != 0) {
-
-                    if (new File(teamPitData.robot_image_filepaths.get(i)).exists()) {
-                        ci.local = true;
-                    }
-                    ci.filepath = teamPitData.robot_image_filepaths.get(i);
+                if (new File(entry.getKey()).exists()) {
+                    ci.local = true;
                 }
+                ci.filepath = entry.getKey();
 
-                if (teamPitData.robot_image_urls != null && teamPitData.robot_image_urls.size() != 0) {
-                    if(!teamPitData.robot_image_urls.get(i).equals("")) {
-                        ci.remote = true;
-                    }
-                    ci.url = teamPitData.robot_image_urls.get(i);
+                if(!entry.getValue().isEmpty()) {
+                    ci.remote = true;
                 }
+                ci.url = entry.getValue();
+
 
                 mCIs.add(ci);
             }

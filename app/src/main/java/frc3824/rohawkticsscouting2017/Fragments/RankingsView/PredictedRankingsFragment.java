@@ -32,10 +32,9 @@ public class PredictedRankingsFragment extends Fragment{
 
         Database database = Database.getInstance();
 
-        Map<Integer, TeamRankingData> rankings = database.getPredictedRankings();
+        ArrayList<TeamRankingData>  rankings = database.getAllTeamRankingData(Database.RankingType.PREDICTED);
 
-        ArrayList<TeamRankingData> rankingsList = new ArrayList<>(rankings.values());
-        LVA_Ranking lva = new LVA_Ranking(getContext(), rankingsList);
+        LVA_Ranking lva = new LVA_Ranking(getContext(), rankings);
 
         ListView lv = (ListView)view.findViewById(R.id.list);
         lv.setAdapter(lva);

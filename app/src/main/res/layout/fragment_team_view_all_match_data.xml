@@ -89,5 +89,20 @@
             android:id="@+id/endgame_body"
             layout="@layout/list_item_endgame" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pilot"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <include
+            android:id="@+id/pilot_header"
+            layout="@layout/list_item_pilot" />
+
+        <include
+            android:id="@+id/pilot_body"
+            layout="@layout/list_item_pilot" />
+
     </LinearLayout>
 </ScrollView>

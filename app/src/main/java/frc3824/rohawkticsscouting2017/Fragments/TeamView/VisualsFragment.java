@@ -26,17 +26,16 @@ import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.SuperMatchData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchPilotData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchTeamPilotData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -47,7 +46,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * @author frc3824
  * Created: 8/17/16
  *
- * Fragment that holds all the charts and graphics for an individual team's stats
+ * Fragment that holds all the charts and graphics for an individual team_number's stats
  */
 public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
@@ -93,6 +92,11 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
     private PieChart mPilot;
     private PieDataSet mPilotData;
     private ArrayList<String> mPilotLabels;
+    private LineChart mPilotLine;
+    private LineDataSet mPilotLifts;
+    private LineDataSet mPilotDrops;
+    private LineDataSet mPilotLiftPercentage;
+    private YAxis mPilotLineY;
 
     private ValueFormatter intVF;
     private ValueFormatter floatVF;
@@ -250,12 +254,33 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         mPilot.setData(new PieData(mPilotLabels, mPilotData));
         //endregion
 
+        //region Pilot Line
+        mPilotLine = (LineChart)view.findViewById(R.id.pilot_line);
+        mPilotLine.getLegend().setEnabled(false);
+        mPilotLine.setDescription("");
+        setupPilotLineData(team);
+        xAxis = mPilotLine.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setAvoidFirstLastClipping(true);
+        mPilotLineY = mPilotLine.getAxisLeft();
+        mPilotLineY.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        mPilotLineY.setAxisMinValue(0);
+        mPilotLineY.setAxisMaxValue(mPilotLifts.getYMax() + 1);
+        mPilotLine.getAxisRight().setEnabled(false);
+        mPilotLine.setDoubleTapToZoomEnabled(false);
+        mPilotLine.setPinchZoom(false);
+        mPilotLine.setData(new LineData(mMatches, mPilotLifts));
+        //endregion
+
         ((RadioGroup)view.findViewById(R.id.gears_radio)).check(R.id.auto_gears_total);
         ((RadioGroup)view.findViewById(R.id.gears_radio)).setOnCheckedChangeListener(this);
         ((RadioGroup)view.findViewById(R.id.shooting_radio)).check(R.id.auto_high_made);
         ((RadioGroup)view.findViewById(R.id.shooting_radio)).setOnCheckedChangeListener(this);
         ((RadioGroup)view.findViewById(R.id.hoppers_radio)).check(R.id.both_hoppers);
         ((RadioGroup)view.findViewById(R.id.hoppers_radio)).setOnCheckedChangeListener(this);
+        ((RadioGroup)view.findViewById(R.id.pilot_radio)).check(R.id.pilot_lifts);
+        ((RadioGroup)view.findViewById(R.id.pilot_radio)).setOnCheckedChangeListener(this);
+
         return view;
     }
 
@@ -269,45 +294,45 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
      */
     private void setupGearsData(Team team){
         ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry((float)team.calc.auto_near_gears_placed.total, 0));
-        entries.add(new Entry((float)team.calc.auto_near_gears_dropped.total, 1));
-        entries.add(new Entry((float)team.calc.auto_center_gears_placed.total, 2));
-        entries.add(new Entry((float)team.calc.auto_center_gears_dropped.total, 3));
-        entries.add(new Entry((float)team.calc.auto_far_gears_placed.total, 4));
-        entries.add(new Entry((float)team.calc.auto_far_gears_dropped.total, 5));
+        entries.add(new Entry((float)team.calc.auto_gears.near.placed.total, 0));
+        entries.add(new Entry((float)team.calc.auto_gears.near.dropped.total, 1));
+        entries.add(new Entry((float)team.calc.auto_gears.center.placed.total, 2));
+        entries.add(new Entry((float)team.calc.auto_gears.center.dropped.total, 3));
+        entries.add(new Entry((float)team.calc.auto_gears.far.placed.total, 4));
+        entries.add(new Entry((float)team.calc.auto_gears.far.dropped.total, 5));
         mAutoGearsTotal = new RadarDataSet(entries, "Auto Total");
         mAutoGearsTotal.setColor(Color.RED);
         mAutoGearsTotal.setValueFormatter(intVF);
 
         entries = new ArrayList<>();
-        entries.add(new Entry((float)team.calc.auto_near_gears_placed.average, 0));
-        entries.add(new Entry((float)team.calc.auto_near_gears_dropped.average, 1));
-        entries.add(new Entry((float)team.calc.auto_center_gears_placed.average, 2));
-        entries.add(new Entry((float)team.calc.auto_center_gears_dropped.average, 3));
-        entries.add(new Entry((float)team.calc.auto_far_gears_placed.average, 4));
-        entries.add(new Entry((float)team.calc.auto_far_gears_dropped.average, 5));
+        entries.add(new Entry((float)team.calc.auto_gears.near.placed.average, 0));
+        entries.add(new Entry((float)team.calc.auto_gears.near.dropped.average, 1));
+        entries.add(new Entry((float)team.calc.auto_gears.center.placed.average, 2));
+        entries.add(new Entry((float)team.calc.auto_gears.center.dropped.average, 3));
+        entries.add(new Entry((float)team.calc.auto_gears.far.placed.average, 4));
+        entries.add(new Entry((float)team.calc.auto_gears.far.dropped.average, 5));
         mAutoGearsAverage = new RadarDataSet(entries, "Auto Avg");
         mAutoGearsAverage.setColor(Color.RED);
         mAutoGearsAverage.setValueFormatter(intVF);
 
         entries = new ArrayList<>();
-        entries.add(new Entry((float)team.calc.teleop_near_gears_placed.total, 0));
-        entries.add(new Entry((float)team.calc.teleop_near_gears_dropped.total, 1));
-        entries.add(new Entry((float)team.calc.teleop_center_gears_placed.total, 2));
-        entries.add(new Entry((float)team.calc.teleop_center_gears_dropped.total, 3));
-        entries.add(new Entry((float)team.calc.teleop_far_gears_placed.total, 4));
-        entries.add(new Entry((float)team.calc.teleop_far_gears_dropped.total, 5));
+        entries.add(new Entry((float)team.calc.teleop_gears.near.placed.total, 0));
+        entries.add(new Entry((float)team.calc.teleop_gears.near.dropped.total, 1));
+        entries.add(new Entry((float)team.calc.teleop_gears.center.placed.total, 2));
+        entries.add(new Entry((float)team.calc.teleop_gears.center.dropped.total, 3));
+        entries.add(new Entry((float)team.calc.teleop_gears.far.placed.total, 4));
+        entries.add(new Entry((float)team.calc.teleop_gears.far.dropped.total, 5));
         mTeleopGearsTotal = new RadarDataSet(entries, "Teleop Total");
         mTeleopGearsTotal.setColor(Color.RED);
         mTeleopGearsTotal.setValueFormatter(intVF);
 
         entries = new ArrayList<>();
-        entries.add(new Entry((float)team.calc.teleop_near_gears_placed.average, 0));
-        entries.add(new Entry((float)team.calc.teleop_near_gears_dropped.average, 1));
-        entries.add(new Entry((float)team.calc.teleop_center_gears_placed.average, 2));
-        entries.add(new Entry((float)team.calc.teleop_center_gears_dropped.average, 3));
-        entries.add(new Entry((float)team.calc.teleop_far_gears_placed.average, 4));
-        entries.add(new Entry((float)team.calc.teleop_far_gears_dropped.average, 5));
+        entries.add(new Entry((float)team.calc.teleop_gears.near.placed.average, 0));
+        entries.add(new Entry((float)team.calc.teleop_gears.near.dropped.average, 1));
+        entries.add(new Entry((float)team.calc.teleop_gears.center.placed.average, 2));
+        entries.add(new Entry((float)team.calc.teleop_gears.center.dropped.average, 3));
+        entries.add(new Entry((float)team.calc.teleop_gears.far.placed.average, 4));
+        entries.add(new Entry((float)team.calc.teleop_gears.far.dropped.average, 5));
         mTeleopGearsAverage = new RadarDataSet(entries, "Teleop Avg");
         mTeleopGearsAverage.setColor(Color.RED);
         mTeleopGearsAverage.setValueFormatter(intVF);
@@ -501,7 +526,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         });
         for(TeamMatchData tmd: completed_matches){
             if(tmd.endgame_climb == Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.SUCCESSFUL) {
-                entries.add(new Entry(climb_time_options.indexOf(tmd.endgame_climb_time) * 5, i));
+                entries.add(new Entry((climb_time_options.indexOf(tmd.endgame_climb_time) + 1) * 5, i));
                 i++;
             } else {
                 entries.add(new Entry(0, i));
@@ -515,50 +540,20 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
     private void setupPilotRatingData(Team team){
         ArrayList<Entry> entries = new ArrayList<>();
         List pilot_rating_options = Arrays.asList(Constants.Team_View.Pilot_Rating_Options.LIST);
-        List<TeamMatchData> completed_matches = new ArrayList(team.completed_matches.values());
-        Collections.sort(completed_matches, new Comparator<TeamMatchData>() {
-            @Override
-            public int compare(TeamMatchData o1, TeamMatchData o2) {
-                return Integer.compare(o1.match_number, o2.match_number);
-            }
-        });
 
         int[] pilot_rating_options_frequency = new int[pilot_rating_options.size()];
 
         Database database = Database.getInstance();
 
-        for(TeamMatchData tmd: completed_matches){
-            SuperMatchData smd = database.getSuperMatchData(tmd.match_number);
-            if(smd == null){
+        for(int match_number: team.info.match_numbers){
+            MatchPilotData mpd = database.getMatchPilotData(match_number);
+            if(mpd == null){
                 continue;
             }
-            if(tmd.alliance_color == Constants.Alliance_Colors.BLUE){
-                switch (tmd.alliance_number) {
-                    case 1:
-                        pilot_rating_options_frequency[pilot_rating_options.indexOf(smd.blue1_pilot_rating)] ++;
-                        break;
-                    case 2:
-                        pilot_rating_options_frequency[pilot_rating_options.indexOf(smd.blue2_pilot_rating)] ++;
-                        break;
-                    case 3:
-                        pilot_rating_options_frequency[pilot_rating_options.indexOf(smd.blue3_pilot_rating)] ++;
-                        break;
-                    default:
-                        assert(false);
-                }
-            } else {
-                switch (tmd.alliance_number) {
-                    case 1:
-                        pilot_rating_options_frequency[pilot_rating_options.indexOf(smd.red1_pilot_rating)] ++;
-                        break;
-                    case 2:
-                        pilot_rating_options_frequency[pilot_rating_options.indexOf(smd.red2_pilot_rating)] ++;
-                        break;
-                    case 3:
-                        pilot_rating_options_frequency[pilot_rating_options.indexOf(smd.red3_pilot_rating)] ++;
-                        break;
-                    default:
-                        assert(false);
+            for(MatchTeamPilotData mtpd: mpd.teams){
+                if(mtpd.team_number == team.team_number) {
+                    pilot_rating_options_frequency[pilot_rating_options.indexOf(mtpd.rating)] ++;
+                    break;
                 }
             }
         }
@@ -574,6 +569,50 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         mPilotData = new PieDataSet(entries, "Pilot Rating");
         mPilotData.setColors(colors);
+    }
+
+    private void setupPilotLineData(Team team){
+        ArrayList<Entry> lift_entries = new ArrayList<>();
+        ArrayList<Entry> drop_entries = new ArrayList<>();
+        ArrayList<Entry> lift_percentage_entries = new ArrayList<>();
+
+        Database database = Database.getInstance();
+
+        for(int i = 0; i < team.info.match_numbers.size(); i++){
+            MatchPilotData mpd = database.getMatchPilotData(team.info.match_numbers.get(i));
+            if(mpd == null){
+                continue;
+            }
+            for(MatchTeamPilotData mtpd: mpd.teams){
+                if(mtpd.team_number == team.team_number) {
+                    lift_entries.add(new Entry(mtpd.lifts, i));
+                    drop_entries.add(new Entry(mtpd.drops, i));
+
+                    float percentage = (float)mtpd.lifts / (float)(mtpd.lifts + mtpd.drops);
+                    if(Float.isNaN(percentage)){
+                        percentage = 0.0f;
+                    }
+
+                    lift_percentage_entries.add(new Entry(percentage, i));
+                    break;
+                }
+            }
+        }
+
+        mPilotLifts = new LineDataSet(lift_entries, "Lifts");
+        mPilotLifts.setColor(Color.RED);
+        mPilotLifts.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mPilotLifts.setValueFormatter(intVF);
+
+        mPilotDrops = new LineDataSet(drop_entries, "Drops");
+        mPilotDrops.setColor(Color.RED);
+        mPilotDrops.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mPilotDrops.setValueFormatter(intVF);
+
+        mPilotLiftPercentage = new LineDataSet(lift_percentage_entries, "Lift Percentage");
+        mPilotLiftPercentage.setColor(Color.RED);
+        mPilotLiftPercentage.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mPilotLiftPercentage.setValueFormatter(percentVF);
     }
 
     @Override
@@ -720,6 +759,35 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mHoppersY.setValueFormatter(intYVF);
                 mHoppers.notifyDataSetChanged();
                 mHoppers.invalidate();
+                break;
+            case R.id.pilot_lifts:
+                mPilotLine.clear();
+                mPilotLine.setData(new LineData(mMatches, mPilotLifts));
+                mPilotLineY.setAxisMinValue(0);
+                mPilotLineY.setAxisMaxValue((int) mPilotLifts.getYMax() + 1);
+                mPilotLineY.setLabelCount((int) mPilotLifts.getYMax() + 2, true);
+                mPilotLineY.setValueFormatter(intYVF);
+                mPilotLine.notifyDataSetChanged();
+                mPilotLine.invalidate();
+                break;
+            case R.id.pilot_drops:
+                mPilotLine.clear();
+                mPilotLine.setData(new LineData(mMatches, mPilotDrops));
+                mPilotLineY.setAxisMinValue(0);
+                mPilotLineY.setAxisMaxValue(100);
+                mPilotLineY.setValueFormatter(percentYVF);
+                mPilotLine.notifyDataSetChanged();
+                mPilotLine.invalidate();
+                break;
+            case R.id.pilot_lift_percentage:
+                mPilotLine.clear();
+                mPilotLine.setData(new LineData(mMatches, mPilotLiftPercentage));
+                mPilotLineY.setAxisMinValue(0);
+                mPilotLineY.setAxisMaxValue((int) mPilotLifts.getYMax() + 1);
+                mPilotLineY.setLabelCount((int) mPilotLifts.getYMax() + 2, true);
+                mPilotLineY.setValueFormatter(intYVF);
+                mPilotLine.notifyDataSetChanged();
+                mPilotLine.invalidate();
                 break;
         }
     }

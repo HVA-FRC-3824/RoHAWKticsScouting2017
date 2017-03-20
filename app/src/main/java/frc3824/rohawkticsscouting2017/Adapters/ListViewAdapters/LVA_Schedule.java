@@ -91,8 +91,8 @@ public class LVA_Schedule extends ArrayAdapter<Integer> {
             teamTextViews[Constants.Match_Indices.RED2] = (TextView) convertView.findViewById(R.id.red2);
             teamTextViews[Constants.Match_Indices.RED3] = (TextView) convertView.findViewById(R.id.red3);
 
-            for (int i = 0; i < match.teams.size(); i++) {
-                int team_number = match.teams.get(i);
+            for (int i = 0; i < match.team_numbers.size(); i++) {
+                int team_number = match.team_numbers.get(i);
                 teamTextViews[i].setText(String.valueOf(team_number));
                 if (team_number == Constants.OUR_TEAM_NUMBER) {
                     teamTextViews[i].setBackgroundColor(Color.YELLOW);

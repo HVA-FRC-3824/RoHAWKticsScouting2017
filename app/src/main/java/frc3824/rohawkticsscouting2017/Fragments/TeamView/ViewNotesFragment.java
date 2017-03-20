@@ -20,7 +20,7 @@ import frc3824.rohawkticsscouting2017.R;
  * @author frc3824
  * Created: 8/17/16
  *
- * The fragment that displays all the notes (except pit notes) for a specific team
+ * The fragment that displays all the notes (except pit notes) for a specific team_number
  */
 public class ViewNotesFragment extends Fragment{
 

@@ -11,7 +11,6 @@ public class StrategySuggestion {
     public String key;
     public String offense_text;
     public String defense_text;
-    public long last_modified;
 
     public StrategySuggestion(){}
 }

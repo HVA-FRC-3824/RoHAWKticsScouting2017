@@ -44,6 +44,7 @@ public class MessageHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         String message;
+        /*
         switch (msg.what) {
             case Constants.Comms.Message_Type.COULD_NOT_CONNECT:
                 displayText("Could not connect", Constants.Server_Log_Colors.RED);
@@ -191,6 +192,7 @@ public class MessageHandler extends Handler {
                 }
                 break;
         }
+        */
     }
 
     public void displayText(String message){

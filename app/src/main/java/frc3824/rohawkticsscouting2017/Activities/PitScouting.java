@@ -32,7 +32,9 @@ import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
@@ -140,8 +142,8 @@ public class PitScouting extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
-        mLogisticsView.findViewById(R.id.match_number).setVisibility(View.GONE);
-        ((TextView) mLogisticsView.findViewById(R.id.team_number)).setText(String.format("Team Number: %d", mTeamNumber));
+        //mLogisticsView.findViewById(R.id.match_number).setVisibility(View.GONE);
+        ((TextView) mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
 
         mScoutNameTextView = (AutoCompleteTextView) mLogisticsView.findViewById(R.id.scout_name);
         ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.PIT_SCOUTS_LIST);
@@ -522,13 +524,14 @@ public class PitScouting extends Activity {
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
             map.put(Constants.Pit_Scouting.SCOUT_NAME, mScoutName);
             // Change picture filename to use event id and team number
-            if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS)) {
+            if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURES)) {
                 try {
-                    ArrayList<String> picture_filepaths = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-                    ArrayList<String> new_picture_filepaths = new ArrayList<>();
+                    Map<String, String> pictures = (Map<String, String>) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
+                    Map<String, String> new_picture_filepaths = new HashMap<>();
+                    ArrayList<String> picture_filepaths = new ArrayList<>(pictures.keySet());
                     for (int i = 0; i < picture_filepaths.size(); i++) {
                         String picture_filename = picture_filepaths.get(i);
-                        if (!picture_filename.equals("")) {
+                        if (!picture_filename.isEmpty()) {
                             File picture = new File(picture_filename);
                             if (picture.exists() && picture.length() > 0) {
                                 String newPathName = String.format("%s/robot_pictures/", mEventKey);
@@ -540,14 +543,12 @@ public class PitScouting extends Activity {
                                 newPicture.delete();
                                 copy(picture, newPicture);
                                 picture.delete();
-                                new_picture_filepaths.add(newPicture.getAbsolutePath());
-                            } else {
-                                map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
+                                new_picture_filepaths.put(newPicture.getAbsolutePath(), pictures.get(picture_filename));
                             }
                         }
                     }
-                    map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-                    map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, new_picture_filepaths);
+                    map.remove(Constants.Pit_Scouting.ROBOT_PICTURES);
+                    map.put(Constants.Pit_Scouting.ROBOT_PICTURES, new_picture_filepaths);
                 } catch (ScoutValue.TypeException | IOException e) {
                     Log.e(TAG, e.getMessage());
                 }

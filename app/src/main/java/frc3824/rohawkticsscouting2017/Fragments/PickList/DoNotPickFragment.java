@@ -21,7 +21,7 @@ import frc3824.rohawkticsscouting2017.Utilities.Constants;
  * @author frc3824
  * Created: 8/23/16
  *
- * Fragment for putting teams on the do not pick list. These team will not
+ * Fragment for putting teams on the do not pick list. These team_number will not
  * show up on the pick lists.
  */
 public class DoNotPickFragment extends ScoutPickFragment implements View.OnClickListener {
