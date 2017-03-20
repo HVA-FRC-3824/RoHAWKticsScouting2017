@@ -164,16 +164,17 @@ public interface Constants {
             int MATCH_PILOT = 7;
             int TEAM_PILOT = 8;
             int CALC = 9;
-            int LOGISTICS = 10;
-            int STRATEGY = 11;
-            int SUGGESTION = 12;
-            int CURRENT_RANKING = 13;
-            int PREDICTED_RANKING = 14;
-            int FIRST_PICK = 15;
-            int SECOND_PICK = 16;
-            int THIRD_PICK = 17;
-            int SCOUT_ACCURACY = 18;
-            int TOTAL_REFERENCES = 19;
+            int QUALITATIVE = 10;
+            int LOGISTICS = 11;
+            int STRATEGY = 12;
+            int SUGGESTION = 13;
+            int CURRENT_RANKING = 14;
+            int PREDICTED_RANKING = 15;
+            int FIRST_PICK = 16;
+            int SECOND_PICK = 17;
+            int THIRD_PICK = 18;
+            int SCOUT_ACCURACY = 19;
+            int TOTAL_REFERENCES = 20;
         }
 
         interface children {
@@ -185,6 +186,7 @@ public interface Constants {
             String MATCH_PILOT = "pilot/match";
             String TEAM_PILOT = "pilot/team";
             String CALC = "calculated";
+            String QUALITATIVE = "qualitative";
             String LOGISTICS = "logistics";
             String STRATEGY = "strategy/drawings";
             String SUGGESTION = "strategy/suggestions";
@@ -206,6 +208,7 @@ public interface Constants {
                     MATCH_PILOT,
                     TEAM_PILOT,
                     CALC,
+                    QUALITATIVE,
                     LOGISTICS,
                     STRATEGY,
                     SUGGESTION,

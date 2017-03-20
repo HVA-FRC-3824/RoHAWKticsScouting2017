@@ -7,6 +7,8 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 
 public class TeamQualitativeData {
 
+    public int team_number;
+
     public QualitativeResult speed;
     public QualitativeResult torque;
     public QualitativeResult control;

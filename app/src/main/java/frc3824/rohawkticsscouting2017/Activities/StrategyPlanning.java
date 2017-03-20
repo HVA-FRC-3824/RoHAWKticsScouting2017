@@ -284,8 +284,6 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
                 }
                 strategy.name = imageName;
                 imageName += ".png";
-                strategy.width = saveImage.getWidth();
-                strategy.height = saveImage.getHeight();
                 FileOutputStream fos = null;
                 try {
                     fos = openFileOutput(imageName, Context.MODE_WORLD_WRITEABLE);
@@ -302,8 +300,6 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
                         Log.d(TAG, e.getMessage());
                     }
                 }
-
-                strategy.path_json = mDrawingView.toJson();
 
                 File saveFile = new File(StrategyPlanning.this.getFilesDir(), imageName);
                 if(saveFile.exists()) {
@@ -335,13 +331,13 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
             public void onClick(DialogInterface dialog, int i) {
                 Strategy strategy = mStrategies.get(i);
                 String imageName = strategy.name + ".png";
-                mCurrentStrategyName = strategy.name;
                 Log.d(TAG, imageName);
                 try {
                     Bitmap loadImage = BitmapFactory.decodeStream(openFileInput(imageName));
                     mDrawingView.load(loadImage.copy(Bitmap.Config.ARGB_8888, true));
+                    mCurrentStrategyName = strategy.name;
                 } catch (FileNotFoundException ex) {
-                    mDrawingView.load(strategy.width, strategy.height, strategy.path_json);
+                    Log.e(TAG, "Clicked on a strategy that is not local");
                 }
                 dialog.cancel();
             }

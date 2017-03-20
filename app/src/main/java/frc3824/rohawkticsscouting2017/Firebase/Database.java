@@ -185,8 +185,7 @@ public class Database {
         mReferences.get(Constants.Database_Lists.indices.SCHEDULE).child(String.valueOf(match.match_number)).setValue(match);
     }
 
-    public Match getMatch(int match_number)
-    {
+    public Match getMatch(int match_number) {
         return mMaps.get(Constants.Database_Lists.indices.SCHEDULE).get(String.valueOf(match_number)).getValue(Match.class);
     }
 
@@ -194,8 +193,7 @@ public class Database {
         mReferences.get(Constants.Database_Lists.indices.SCHEDULE).child(String.valueOf(match_number)).removeValue();
     }
 
-    public Map<Integer, Match> getSchedule()
-    {
+    public Map<Integer, Match> getSchedule() {
         Map<Integer, Match> schedule = new HashMap<>();
         for(Map.Entry<String, DataSnapshot> entry: mMaps.get(Constants.Database_Lists.indices.SCHEDULE).entrySet()){
             schedule.put(Integer.parseInt(entry.getKey()), entry.getValue().getValue(Match.class));
@@ -203,8 +201,7 @@ public class Database {
         return schedule;
     }
 
-    public int getNumberOfMatches()
-    {
+    public int getNumberOfMatches() {
         return mMaps.get(Constants.Database_Lists.indices.SCHEDULE).size();
     }
     //endregion
@@ -233,8 +230,7 @@ public class Database {
         mReferences.get(Constants.Database_Lists.indices.PIT).child(String.valueOf(teamPitData.team_number)).setValue(teamPitData);
     }
 
-    public TeamPitData getTeamPitData(int team_number)
-    {
+    public TeamPitData getTeamPitData(int team_number) {
         return mMaps.get(Constants.Database_Lists.indices.PIT).get(String.valueOf(team_number)).getValue(TeamPitData.class);
     }
 
@@ -303,6 +299,12 @@ public class Database {
     //region Calculated data
     public TeamCalculatedData getTeamCalculatedData(int team_number){
         return mMaps.get(Constants.Database_Lists.indices.CALC).get(team_number).getValue(TeamCalculatedData.class);
+    }
+    //endregion
+
+    //region Qualitative
+    public TeamQualitativeData getTeamQualitativeData(int team_number){
+        return mMaps.get(Constants.Database_Lists.indices.QUALITATIVE).get(String.valueOf(team_number)).getValue(TeamQualitativeData.class);
     }
     //endregion
 
@@ -490,6 +492,18 @@ public class Database {
         {
             team.third_pick = new TeamPickAbility();
             team.third_pick.team_number = team_number;
+        }
+
+        team.pilot = getTeamPilotData(team_number);
+        if(team.pilot == null){
+            team.pilot = new TeamPilotData();
+            team.pilot.team_number = team_number;
+        }
+
+        team.qualitative = getTeamQualitativeData(team_number);
+        if(team.qualitative == null) {
+            team.qualitative = new TeamQualitativeData();
+            team.qualitative.team_number = team_number;
         }
 
         return team;
