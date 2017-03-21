@@ -10,6 +10,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_Qualitative;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Qualitative;
@@ -32,6 +34,7 @@ public class SavableQualitative extends SavableView {
 
     private ArrayList<TextView> mTeamLabels;
     private ArrayList<Spinner> mSpinners;
+    private ArrayList<String> mTeamNumbers;
 
     public SavableQualitative(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -64,16 +67,18 @@ public class SavableQualitative extends SavableView {
     }
 
     public void setTeams(ArrayList<Integer> teams) {
+        mTeamNumbers = new ArrayList<>();
         for(int i = 0; i < teams.size(); i++){
             mTeamLabels.get(i).setText(String.valueOf(teams.get(i)));
+            mTeamNumbers.add(String.valueOf(teams.get(i)));
         }
     }
 
     @Override
     public String writeToMap(ScoutMap map) {
-        ArrayList<Integer> values = new ArrayList<>();
-        for(Spinner s: mSpinners){
-            values.add(s.getSelectedItemPosition() + 1);
+        Map<String, Integer> values = new HashMap<>();
+        for(int i = 0; i < mTeamNumbers.size(); i++){
+            values.put(mTeamNumbers.get(i), mSpinners.get(i).getSelectedItemPosition() + 1);
         }
         map.put(mKey, values);
         return "";
@@ -83,9 +88,9 @@ public class SavableQualitative extends SavableView {
     public String restoreFromMap(ScoutMap map) {
         if(map.contains(mKey)) {
             try {
-                ArrayList<Integer> values = (ArrayList<Integer>)map.getObject(mKey);
-                for(int i = 0; i < mSpinners.size(); i++){
-                    mSpinners.get(i).setSelection(values.get(i) - 1);
+                Map<String, Integer> values = (Map<String, Integer>)map.getObject(mKey);
+                for(int i = 0; i < mTeamNumbers.size(); i++){
+                    mSpinners.get(i).setSelection(values.get(mTeamNumbers.get(i)) - 1);
                 }
             } catch (ScoutValue.TypeException e) {
                 Log.e(TAG, e.getMessage());
