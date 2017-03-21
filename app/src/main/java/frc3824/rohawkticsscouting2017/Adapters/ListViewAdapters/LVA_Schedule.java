@@ -16,8 +16,8 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
- *         Created: 8/20/16
+ * @author frc3824
+ * Created: 8/20/16
  */
 public class LVA_Schedule extends ArrayAdapter<Integer> {
 

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.UploadableImage;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
@@ -30,7 +31,7 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
     private final static String TAG = "PitDataFragment";
 
     private int mTeamNumber;
-    private Map<String, String> mPictures;
+    private ArrayList<UploadableImage> mPictures;
     private int mCurrentPicture;
     private ImageView mImageView;
 
@@ -52,9 +53,9 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
 
             if (team.robot_pictures != null && team.robot_pictures.size() != 0) {
                 mImageView = (ImageView) view.findViewById(R.id.robot_picture);
-                displayPicture(team.robot_pictures.get(team.robot_picture_default), mImageView);
+                displayPicture(team.robot_pictures.get(team.robot_picture_default).filepath, mImageView);
                 mPictures = team.robot_pictures;
-                mCurrentPicture = new ArrayList<>(mPictures.keySet()).indexOf(team.robot_picture_default);
+                mCurrentPicture = team.robot_picture_default;
                 if(mCurrentPicture < 0 || mCurrentPicture >= team.robot_pictures.size())
                 {
                     mCurrentPicture = 0;
@@ -119,14 +120,14 @@ public class PitDataFragment extends Fragment implements View.OnClickListener{
                 if(mCurrentPicture < 0) {
                     mCurrentPicture += mPictures.size();
                 }
-                displayPicture(mPictures.get(new ArrayList<>(mPictures.keySet()).get(mCurrentPicture)), mImageView);
+                displayPicture(mPictures.get(mCurrentPicture).filepath, mImageView);
                 break;
             case R.id.right:
                 mCurrentPicture ++;
                 if(mCurrentPicture >= mPictures.size()) {
                     mCurrentPicture -= mPictures.size();
                 }
-                displayPicture(mPictures.get(new ArrayList<>(mPictures.keySet()).get(mCurrentPicture)), mImageView);
+                displayPicture(mPictures.get(mCurrentPicture).filepath, mImageView);
                 break;
         }
     }

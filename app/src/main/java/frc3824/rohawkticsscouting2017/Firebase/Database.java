@@ -150,27 +150,32 @@ public class Database {
             mReferences.get(i).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.v(TAG, String.format("%s.onChildAdded: %s", Constants.Database_Lists.children.LIST[j], dataSnapshot.getKey()));
                     mMaps.get(j).put(dataSnapshot.getKey(), dataSnapshot);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    Log.v(TAG, String.format("%s.onChildChanged: %s", Constants.Database_Lists.children.LIST[j], dataSnapshot.getKey()));
                     mMaps.get(j).put(dataSnapshot.getKey(), dataSnapshot);
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Log.v(TAG, String.format("%s.onChildRemoved: %s", Constants.Database_Lists.children.LIST[j], dataSnapshot.getKey()));
                     mMaps.get(j).remove(dataSnapshot.getKey());
 
                 }
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    Log.v(TAG, String.format("%s.onChildMoved: %s", Constants.Database_Lists.children.LIST[j], dataSnapshot.getKey()));
 
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
+                    Log.v(TAG, String.format("%s.onCancelled", Constants.Database_Lists.children.LIST[j]));
 
                 }
             });
@@ -212,7 +217,11 @@ public class Database {
     }
 
     public TeamMatchData getTeamMatchData(int match_number, int team_number) {
-        return mMaps.get(Constants.Database_Lists.indices.MATCH).get(String.format("%d_%d", match_number, team_number)).getValue(TeamMatchData.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.MATCH).get(String.format("%d_%d", match_number, team_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(TeamMatchData.class);
     }
 
     public ArrayList<TeamMatchData> getAllTeamMatchData(){
@@ -231,7 +240,11 @@ public class Database {
     }
 
     public TeamPitData getTeamPitData(int team_number) {
-        return mMaps.get(Constants.Database_Lists.indices.PIT).get(String.valueOf(team_number)).getValue(TeamPitData.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.PIT).get(String.valueOf(team_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(TeamPitData.class);
     }
 
     public ArrayList<TeamPitData> getAllTeamPitData(){
@@ -250,7 +263,11 @@ public class Database {
     }
 
     public SuperMatchData getSuperMatchData(int match_number) {
-        return mMaps.get(Constants.Database_Lists.indices.SUPER).get(String.valueOf(match_number)).getValue(SuperMatchData.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.SUPER).get(String.valueOf(match_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(SuperMatchData.class);
     }
 
     public ArrayList<SuperMatchData> getAllSuperMatchData() {
@@ -269,7 +286,11 @@ public class Database {
     }
 
     public TeamDTFeedback getTeamDTFeedback(int team_number) {
-        return mMaps.get(Constants.Database_Lists.indices.DT).get(String.valueOf(team_number)).getValue(TeamDTFeedback.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.DT).get(String.valueOf(team_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(TeamDTFeedback.class);
     }
 
     public ArrayList<TeamDTFeedback> getAllTeamDTFeedbacks() {
@@ -288,7 +309,11 @@ public class Database {
     }
 
     public TeamLogistics getTeamLogistics(int team_number) {
-        return mMaps.get(Constants.Database_Lists.indices.LOGISTICS).get(String.valueOf(team_number)).getValue(TeamLogistics.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.LOGISTICS).get(String.valueOf(team_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(TeamLogistics.class);
     }
 
     public void removeTeamLogistics(int team_number){
@@ -298,39 +323,64 @@ public class Database {
 
     //region Calculated data
     public TeamCalculatedData getTeamCalculatedData(int team_number){
-        return mMaps.get(Constants.Database_Lists.indices.CALC).get(team_number).getValue(TeamCalculatedData.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.CALC).get(team_number);
+        if(d == null){
+            return null;
+        }
+        return d.getValue(TeamCalculatedData.class);
     }
     //endregion
 
     //region Qualitative
     public TeamQualitativeData getTeamQualitativeData(int team_number){
-        return mMaps.get(Constants.Database_Lists.indices.QUALITATIVE).get(String.valueOf(team_number)).getValue(TeamQualitativeData.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.QUALITATIVE).get(String.valueOf(team_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(TeamQualitativeData.class);
     }
     //endregion
 
     //region Pilot Data
     public MatchPilotData getMatchPilotData(int match_number){
-        return mMaps.get(Constants.Database_Lists.indices.MATCH_PILOT).get(String.valueOf(match_number)).getValue(MatchPilotData.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.MATCH_PILOT).get(String.valueOf(match_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(MatchPilotData.class);
     }
 
     public TeamPilotData getTeamPilotData(int team_number){
-        return mMaps.get(Constants.Database_Lists.indices.TEAM_PILOT).get(String.valueOf(team_number)).getValue(TeamPilotData.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.TEAM_PILOT).get(String.valueOf(team_number));
+        if(d == null){
+            return null;
+        }
+        return d.getValue(TeamPilotData.class);
     }
     //endregion
 
     //region Pick List Data
 
     public TeamPickAbility getTeamPickAbility(int team_number, PickType pt){
+        DataSnapshot d = null;
+
         switch (pt){
             case FIRST:
-                return mMaps.get(Constants.Database_Lists.indices.FIRST_PICK).get(String.valueOf(team_number)).getValue(TeamPickAbility.class);
+                 d = mMaps.get(Constants.Database_Lists.indices.FIRST_PICK).get(String.valueOf(team_number));
+                break;
             case SECOND:
-                return mMaps.get(Constants.Database_Lists.indices.SECOND_PICK).get(String.valueOf(team_number)).getValue(TeamPickAbility.class);
+                d = mMaps.get(Constants.Database_Lists.indices.SECOND_PICK).get(String.valueOf(team_number));
+                break;
             case THIRD:
-                return mMaps.get(Constants.Database_Lists.indices.THIRD_PICK).get(String.valueOf(team_number)).getValue(TeamPickAbility.class);
+                d = mMaps.get(Constants.Database_Lists.indices.THIRD_PICK).get(String.valueOf(team_number));
+                break;
         }
 
-        return null;
+        if(d == null){
+            return null;
+        }
+
+        return d.getValue(TeamPickAbility.class);
     }
 
     public void setTeamPickAbility(TeamPickAbility teamPickAbility, PickType pt){
@@ -386,14 +436,22 @@ public class Database {
 
     //region Rankings
     public TeamRankingData getTeamRankingData(int team_number, RankingType rt){
+        DataSnapshot d = null;
+
         switch (rt){
             case CURRENT:
-                return mMaps.get(Constants.Database_Lists.indices.CURRENT_RANKING).get(String.valueOf(team_number)).getValue(TeamRankingData.class);
+                d = mMaps.get(Constants.Database_Lists.indices.CURRENT_RANKING).get(String.valueOf(team_number));
+                break;
             case PREDICTED:
-                return mMaps.get(Constants.Database_Lists.indices.PREDICTED_RANKING).get(String.valueOf(team_number)).getValue(TeamRankingData.class);
+                d = mMaps.get(Constants.Database_Lists.indices.PREDICTED_RANKING).get(String.valueOf(team_number));
+                break;
         }
 
-        return null;
+        if(d == null){
+            return null;
+        }
+
+        return d.getValue(TeamRankingData.class);
     }
 
     public ArrayList<TeamRankingData> getAllTeamRankingData(RankingType rt){

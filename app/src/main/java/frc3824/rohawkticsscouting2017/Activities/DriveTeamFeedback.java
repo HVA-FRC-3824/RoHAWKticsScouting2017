@@ -267,6 +267,7 @@ public class DriveTeamFeedback extends Activity {
             teamDTFeedback1.feedback = new HashMap<>();
         }
         teamDTFeedback1.feedback.put(mMatchNumber, mPartner1Note.getText().toString());
+        mDatabase.setTeamDTFeedback(teamDTFeedback1);
 
         TeamDTFeedback teamDTFeedback2 = mDatabase.getTeamDTFeedback(mPartner2);
         if(teamDTFeedback2 == null)
@@ -276,6 +277,7 @@ public class DriveTeamFeedback extends Activity {
             teamDTFeedback2.feedback = new HashMap<>();
         }
         teamDTFeedback2.feedback.put(mMatchNumber, mPartner2Note.getText().toString());
+        mDatabase.setTeamDTFeedback(teamDTFeedback2);
 
         Log.d(TAG, "Saving values");
 

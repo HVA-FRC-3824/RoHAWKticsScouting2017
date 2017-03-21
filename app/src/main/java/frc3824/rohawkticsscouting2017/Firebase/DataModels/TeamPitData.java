@@ -7,6 +7,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -32,8 +33,8 @@ public class TeamPitData {
     public long last_modified;
 
     // Robot Image
-    public String robot_picture_default;
-    public Map<String, String> robot_pictures;
+    public int robot_picture_default;
+    public ArrayList<UploadableImage> robot_pictures;
 
     // Dimensions
     public double weight;
@@ -54,7 +55,7 @@ public class TeamPitData {
     public String notes;
 
     public TeamPitData(){
-        robot_pictures = new HashMap<>();
+        robot_pictures = new ArrayList<>();
     }
 
     public TeamPitData(ScoutMap map) {
@@ -62,8 +63,8 @@ public class TeamPitData {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);
             scout_name = map.getString(Constants.Pit_Scouting.SCOUT_NAME);
 
-            robot_picture_default = map.getString(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
-            robot_pictures = (Map<String, String>)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
+            robot_picture_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
+            robot_pictures = (ArrayList<UploadableImage>)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
 
             width = map.getDouble(Constants.Pit_Scouting.Dimensions.WIDTH);
             length = map.getDouble(Constants.Pit_Scouting.Dimensions.LENGTH);

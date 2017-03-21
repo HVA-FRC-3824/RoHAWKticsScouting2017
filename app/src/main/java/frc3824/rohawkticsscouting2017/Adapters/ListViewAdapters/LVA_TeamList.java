@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Activities.PitScouting;
 import frc3824.rohawkticsscouting2017.Activities.TeamView;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -62,8 +63,13 @@ public class LVA_TeamList extends ArrayAdapter<Integer>{
 
         switch (mTeamListType){
             case PIT_SCOUT:
-                if(mDatabase.getTeamPitData(team_number) != null) {
-                    convertView.setBackgroundColor(Color.GREEN);
+                TeamPitData tpd = mDatabase.getTeamPitData(team_number);
+                if(tpd != null) {
+                    if(tpd.robot_pictures.size() > 0){
+                        convertView.setBackgroundColor(Color.GREEN);
+                    } else {
+                        convertView.setBackgroundColor(Color.YELLOW);
+                    }
                 } else {
                     convertView.setBackgroundColor(Color.RED);
                 }

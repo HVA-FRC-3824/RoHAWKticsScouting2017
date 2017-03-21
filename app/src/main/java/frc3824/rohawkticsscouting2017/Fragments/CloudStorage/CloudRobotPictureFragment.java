@@ -9,6 +9,7 @@ import java.util.Map;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CloudImage;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.UploadableImage;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
@@ -35,21 +36,21 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
             TeamPitData teamPitData = mDatabase.getTeamPitData(team_number);
             if(teamPitData == null)
                 continue;
-            for(Map.Entry<String, String> entry: teamPitData.robot_pictures.entrySet()) {
+            for(UploadableImage image: teamPitData.robot_pictures) {
                 CloudImage ci = new CloudImage();
 
                 ci.extra = String.valueOf(team_number);
                 ci.internet = internet;
 
-                if (new File(entry.getKey()).exists()) {
+                if (new File(image.filepath).exists()) {
                     ci.local = true;
                 }
-                ci.filepath = entry.getKey();
+                ci.filepath = image.filepath;
 
-                if(!entry.getValue().isEmpty()) {
+                if(!image.url.isEmpty()) {
                     ci.remote = true;
                 }
-                ci.url = entry.getValue();
+                ci.url = image.url;
 
 
                 mCIs.add(ci);

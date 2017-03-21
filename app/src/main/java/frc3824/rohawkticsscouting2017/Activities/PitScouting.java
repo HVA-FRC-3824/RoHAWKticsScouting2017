@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PitScoutDrawer;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.UploadableImage;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.R;
@@ -526,14 +527,13 @@ public class PitScouting extends Activity {
             // Change picture filename to use event id and team number
             if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURES)) {
                 try {
-                    Map<String, String> pictures = (Map<String, String>) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
-                    Map<String, String> new_picture_filepaths = new HashMap<>();
-                    ArrayList<String> picture_filepaths = new ArrayList<>(pictures.keySet());
-                    for (int i = 0; i < picture_filepaths.size(); i++) {
-                        String picture_filename = picture_filepaths.get(i);
-                        if (!picture_filename.isEmpty()) {
-                            File picture = new File(picture_filename);
-                            if (picture.exists() && picture.length() > 0) {
+                    ArrayList<UploadableImage> pictures = (ArrayList<UploadableImage>) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
+                    ArrayList<UploadableImage> new_picture_filepaths = new ArrayList<>();
+                    for (int i = 0; i < pictures.size(); i++) {
+                        UploadableImage picture = pictures.get(i);
+                        if (!picture.filepath.isEmpty()) {
+                            File f = new File(picture.filepath);
+                            if (f.exists() && f.length() > 0) {
                                 String newPathName = String.format("%s/robot_pictures/", mEventKey);
                                 File newPath = new File(getFilesDir(), newPathName);
                                 if (!newPath.exists()) {
@@ -541,9 +541,9 @@ public class PitScouting extends Activity {
                                 }
                                 File newPicture = new File(newPath, String.format("%d_%d.jpg", mTeamNumber, i));
                                 newPicture.delete();
-                                copy(picture, newPicture);
-                                picture.delete();
-                                new_picture_filepaths.put(newPicture.getAbsolutePath(), pictures.get(picture_filename));
+                                copy(f, newPicture);
+                                f.delete();
+                                new_picture_filepaths.add(new UploadableImage(newPicture.getAbsolutePath(), picture.url));
                             }
                         }
                     }
