@@ -190,8 +190,8 @@ public interface Constants {
             String LOGISTICS = "logistics";
             String STRATEGY = "strategy/drawings";
             String SUGGESTION = "strategy/suggestions";
-            String CURRENT_RANKING = "ranking/current";
-            String PREDICTED_RANKING = "ranking/predicted";
+            String CURRENT_RANKING = "rankings/current";
+            String PREDICTED_RANKING = "rankings/predicted";
             String FIRST_PICK = "pick/first";
             String SECOND_PICK = "pick/second";
             String THIRD_PICK = "pick/third";

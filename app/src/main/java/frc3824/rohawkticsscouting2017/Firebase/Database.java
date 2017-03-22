@@ -137,13 +137,22 @@ public class Database {
         if(eventKey == "" || mEventKey == eventKey)
             return;
 
-        mReferences.add(mReferences.get(0).child(eventKey));
+        DatabaseReference root = mReferences.get(0);
+        // Remove all references except root
+        mReferences.clear();
+        mReferences = new ArrayList<>();
+        mReferences.add(root);
+        mReferences.add(root.child(eventKey));
+        if(mMaps != null) {
+            mMaps.clear();
+        }
         mMaps = new ArrayList<>();
         // Placeholders for indices
         mMaps.add(new HashMap<String, DataSnapshot>());
         mMaps.add(new HashMap<String, DataSnapshot>());
 
         for(int i = 2; i < Constants.Database_Lists.indices.TOTAL_REFERENCES; i++){
+            Log.v(TAG, String.format("%d %s", i, Constants.Database_Lists.children.LIST[i]));
             mMaps.add(new HashMap<String, DataSnapshot>());
             mReferences.add(mReferences.get(Constants.Database_Lists.indices.EVENT).child(Constants.Database_Lists.children.LIST[i]));
             final int j = i;
@@ -413,7 +422,8 @@ public class Database {
         // Remove all teams that are not set to do not pick
         for(int i = 0; i < teams.size(); i++)
         {
-            if(!mMaps.get(Constants.Database_Lists.indices.FIRST_PICK).get(teams.get(i)).getValue(TeamPickAbility.class).dnp)
+            DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.FIRST_PICK).get(String.valueOf(teams.get(i)));
+            if(!d.getValue(TeamPickAbility.class).dnp)
             {
                 teams.remove(i);
                 i--;
@@ -607,7 +617,11 @@ public class Database {
     }
 
     public StrategySuggestion getStrategySuggestion(String key){
-        return mMaps.get(Constants.Database_Lists.indices.SUGGESTION).get(key).getValue(StrategySuggestion.class);
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.SUGGESTION).get(key);
+        if(d == null){
+            return null;
+        }
+        return d.getValue(StrategySuggestion.class);
     }
 
     public ArrayList<StrategySuggestion> getAllStrategySuggestions(){

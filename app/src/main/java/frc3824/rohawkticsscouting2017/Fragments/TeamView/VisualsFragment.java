@@ -764,9 +764,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mPilotLine.clear();
                 mPilotLine.setData(new LineData(mMatches, mPilotLifts));
                 mPilotLineY.setAxisMinValue(0);
-                mPilotLineY.setAxisMaxValue((int) mPilotLifts.getYMax() + 1);
-                mPilotLineY.setLabelCount((int) mPilotLifts.getYMax() + 2, true);
-                mPilotLineY.setValueFormatter(intYVF);
+
                 mPilotLine.notifyDataSetChanged();
                 mPilotLine.invalidate();
                 break;
@@ -774,8 +772,9 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mPilotLine.clear();
                 mPilotLine.setData(new LineData(mMatches, mPilotDrops));
                 mPilotLineY.setAxisMinValue(0);
-                mPilotLineY.setAxisMaxValue(100);
-                mPilotLineY.setValueFormatter(percentYVF);
+                mPilotLineY.setAxisMaxValue((int) mPilotDrops.getYMax() + 1);
+                mPilotLineY.setLabelCount((int) mPilotDrops.getYMax() + 2, true);
+                mPilotLineY.setValueFormatter(intYVF);
                 mPilotLine.notifyDataSetChanged();
                 mPilotLine.invalidate();
                 break;
@@ -783,9 +782,8 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mPilotLine.clear();
                 mPilotLine.setData(new LineData(mMatches, mPilotLiftPercentage));
                 mPilotLineY.setAxisMinValue(0);
-                mPilotLineY.setAxisMaxValue((int) mPilotLifts.getYMax() + 1);
-                mPilotLineY.setLabelCount((int) mPilotLifts.getYMax() + 2, true);
-                mPilotLineY.setValueFormatter(intYVF);
+                mPilotLineY.setAxisMaxValue(100);
+                mPilotLineY.setValueFormatter(percentYVF);
                 mPilotLine.notifyDataSetChanged();
                 mPilotLine.invalidate();
                 break;

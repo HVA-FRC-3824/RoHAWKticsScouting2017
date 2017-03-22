@@ -75,6 +75,13 @@ public class AllMatchDataFragment extends Fragment {
 
             ((TextView)endgame.findViewById(R.id.climb)).setText("N/A");
             ((TextView)endgame.findViewById(R.id.climb_time)).setText("N/A");
+
+            // Pilot
+            View pilot = mView.findViewById(R.id.pilot_body);
+            ((TextView)pilot.findViewById(R.id.rating)).setText("N/A");
+            ((TextView)pilot.findViewById(R.id.lifts)).setText("N/A");
+            ((TextView)pilot.findViewById(R.id.drops)).setText("N/A");
+            ((TextView)pilot.findViewById(R.id.lift_percentage)).setText("N/A");
         } else {
             // Points
             View points = mView.findViewById(R.id.points_body);

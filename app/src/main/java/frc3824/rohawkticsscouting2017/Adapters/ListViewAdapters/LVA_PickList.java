@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -173,6 +174,10 @@ public class LVA_PickList extends ArrayAdapter<TeamPickAbility>{
         // Get the dimensions of the View
         int targetW = 100;
         int targetH = 100;
+
+        if(!new File(filepath).exists()){
+            return;
+        }
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();

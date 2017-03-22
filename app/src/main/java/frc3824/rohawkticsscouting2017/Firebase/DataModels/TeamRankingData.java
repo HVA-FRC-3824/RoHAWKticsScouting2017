@@ -17,7 +17,7 @@ public class TeamRankingData {
 
     // Ranking Data
     public int rank;
-    public int RPs;
+    public float RPs;
     public int wins;
     public int ties;
     public int losses;
