@@ -89,6 +89,8 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
     private YAxis mClimbTimeY;
     private LineDataSet mClimbTimeData;
 
+    ArrayList<String> mPilotMatches;
+
     private PieChart mPilot;
     private PieDataSet mPilotData;
     private ArrayList<String> mPilotLabels;
@@ -269,7 +271,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         mPilotLine.getAxisRight().setEnabled(false);
         mPilotLine.setDoubleTapToZoomEnabled(false);
         mPilotLine.setPinchZoom(false);
-        mPilotLine.setData(new LineData(mMatches, mPilotLifts));
+        mPilotLine.setData(new LineData(mPilotMatches, mPilotLifts));
         //endregion
 
         ((RadioGroup)view.findViewById(R.id.gears_radio)).check(R.id.auto_gears_total);
@@ -525,7 +527,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
             }
         });
         for(TeamMatchData tmd: completed_matches){
-            if(tmd.endgame_climb == Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.SUCCESSFUL) {
+            if(tmd.endgame_climb.equals(Constants.Match_Scouting.Endgame.CLIMB_OPTIONS.SUCCESSFUL)) {
                 entries.add(new Entry((climb_time_options.indexOf(tmd.endgame_climb_time) + 1) * 5, i));
                 i++;
             } else {
@@ -578,6 +580,8 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         Database database = Database.getInstance();
 
+        mPilotMatches = new ArrayList<>();
+
         for(int i = 0; i < team.info.match_numbers.size(); i++){
             MatchPilotData mpd = database.getMatchPilotData(team.info.match_numbers.get(i));
             if(mpd == null){
@@ -588,7 +592,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                     lift_entries.add(new Entry(mtpd.lifts, i));
                     drop_entries.add(new Entry(mtpd.drops, i));
 
-                    float percentage = (float)mtpd.lifts / (float)(mtpd.lifts + mtpd.drops);
+                    float percentage = (float)mtpd.lifts / (float)(mtpd.lifts + mtpd.drops) * 100;
                     if(Float.isNaN(percentage)){
                         percentage = 0.0f;
                     }
@@ -597,6 +601,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                     break;
                 }
             }
+            mPilotMatches.add(String.format("M%d", mpd.match_number));
         }
 
         mPilotLifts = new LineDataSet(lift_entries, "Lifts");

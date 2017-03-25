@@ -9,7 +9,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -322,7 +324,14 @@ public class Database {
         if(d == null){
             return null;
         }
-        return d.getValue(TeamLogistics.class);
+        TeamLogistics tl = d.getValue(TeamLogistics.class);
+        tl.match_numbers.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return Integer.compare(o1, o2);
+            }
+        });
+        return tl;
     }
 
     public void removeTeamLogistics(int team_number){

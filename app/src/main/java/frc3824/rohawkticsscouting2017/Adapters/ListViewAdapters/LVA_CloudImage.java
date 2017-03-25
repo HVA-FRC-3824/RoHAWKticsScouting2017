@@ -175,7 +175,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                     switch (mImageType)
                     {
                         case Constants.Cloud.ROBOT_PICTURE:
-                            fileDownloadTask = mStorage.downloadRobotPicture(Integer.parseInt(ci.extra), ci.filepath);
+                            fileDownloadTask = mStorage.downloadRobotPicture( ci.filepath);
                             break;
                         case Constants.Cloud.STRATEGY:
                             fileDownloadTask = mStorage.downloadStrategyPicture(ci.extra, ci.filepath);

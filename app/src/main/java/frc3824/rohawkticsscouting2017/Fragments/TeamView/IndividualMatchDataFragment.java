@@ -205,7 +205,7 @@ public class IndividualMatchDataFragment extends Fragment{
                         percentage = 0.0f;
                     }
 
-                    ((TextView) pilot.findViewById(R.id.lift_percentage)).setText(String.format("%02.2f%%", percentage));
+                    ((TextView) pilot.findViewById(R.id.lift_percentage)).setText(String.format("%02.2f%%", percentage * 100));
                     break;
                 }
             }
