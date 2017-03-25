@@ -53,7 +53,7 @@ public class AllMatchDataFragment extends Fragment {
 
             ((TextView)auto_.findViewById(R.id.high_goal)).setText("N/A");
 
-            ((TextView)auto_.findViewById(R.id.high_goal)).setText("N/A");
+            ((TextView)auto_.findViewById(R.id.low_goal )).setText("N/A");
 
             ((TextView)auto_.findViewById(R.id.hoppers)).setText("N/A");
 

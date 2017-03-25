@@ -18,7 +18,7 @@ public interface Constants {
         - middle number is changed after events
         - left most number is changed after the season
     */
-    String VERSION = "2.1.0";
+    String VERSION = "2.1.1";
     int OUR_TEAM_NUMBER = 3824;
 
     interface Settings {
@@ -624,9 +624,10 @@ public interface Constants {
 
         interface Climb_Secondary_Options {
             String SUCCESSFUL_ATTEMPTS = "Successful Attempts";
+            String SUCCESS_PERCENTAGE = "Success Percentage";
             String TIME = "Time";
 
-            String[] OPTIONS = {SUCCESSFUL_ATTEMPTS, TIME};
+            String[] OPTIONS = {SUCCESSFUL_ATTEMPTS, SUCCESS_PERCENTAGE, TIME};
         }
 
         interface Pilot_Secondary_Options {

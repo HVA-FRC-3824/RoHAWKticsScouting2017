@@ -228,10 +228,10 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 lldChartSetup(main_dropdown_position, secondary_dropdown_position);
             }
         } else if(Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_dropdown_position] == Constants.Event_View.Main_Dropdown_Options.CLIMB) {
-            if (Constants.Event_View.Climb_Secondary_Options.OPTIONS[secondary_dropdown_position] == Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS) {
-                barChartSetup(main_dropdown_position, secondary_dropdown_position);
-            } else {
+            if (Constants.Event_View.Climb_Secondary_Options.OPTIONS[secondary_dropdown_position] == Constants.Event_View.Climb_Secondary_Options.TIME) {
                 lldChartSetup(main_dropdown_position, secondary_dropdown_position);
+            } else {
+                barChartSetup(main_dropdown_position, secondary_dropdown_position);
             }
         } else if(Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_dropdown_position] == Constants.Event_View.Main_Dropdown_Options.PILOT){
             if(Constants.Event_View.Pilot_Secondary_Options.OPTIONS[secondary_dropdown_position] == Constants.Event_View.Pilot_Secondary_Options.LIFT_PERCENTAGE) {
@@ -1244,6 +1244,9 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             case Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS:
                 entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.climb.success));
                 break;
+            case Constants.Event_View.Climb_Secondary_Options.SUCCESS_PERCENTAGE:
+                entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float)teamCalculatedData.climb.success_percentage * 100.0f));
+                break;
         }
     }
 
@@ -1260,6 +1263,10 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             case Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, (double)teamCalculatedData.climb.success);
+                break;
+            case Constants.Event_View.Climb_Secondary_Options.SUCCESS_PERCENTAGE:
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.climb.success_percentage);
                 break;
             case Constants.Event_View.Climb_Secondary_Options.TIME:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);

@@ -42,6 +42,10 @@ public class IndividualMatchDataFragment extends Fragment{
         // Points
         View points = view.findViewById(R.id.points_body);
 
+        if(mTmd == null)
+        {
+            return view;
+        }
 
         int auto_points = (mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction) +
                           (mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction) / 3;

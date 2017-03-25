@@ -325,12 +325,8 @@ public class Database {
             return null;
         }
         TeamLogistics tl = d.getValue(TeamLogistics.class);
-        tl.match_numbers.sort(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return Integer.compare(o1, o2);
-            }
-        });
+
+        Collections.sort(tl.match_numbers);
         return tl;
     }
 
@@ -341,7 +337,9 @@ public class Database {
 
     //region Calculated data
     public TeamCalculatedData getTeamCalculatedData(int team_number){
-        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.CALC).get(team_number);
+        Log.v(TAG, Constants.Database_Lists.children.LIST[Constants.Database_Lists.indices.CALC]);
+
+        DataSnapshot d = mMaps.get(Constants.Database_Lists.indices.CALC).get(String.valueOf(team_number));
         if(d == null){
             return null;
         }
