@@ -24,8 +24,7 @@ public class CloudStorage extends Activity {
     private FPA_CloudStorage mFPA;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud_storage);
 

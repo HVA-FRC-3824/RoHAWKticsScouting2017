@@ -51,7 +51,7 @@ public class MatchViewAllianceFragment extends Fragment{
     public void setMatchAlliance(int match_number, boolean blue){
         Database database = Database.getInstance();
         Match match = database.getMatch(match_number);
-        setMatchAlliance(match.teams, blue);
+        setMatchAlliance(match.team_numbers, blue);
     }
 
     public void setMatchAlliance(ArrayList<Integer> teams, boolean blue){

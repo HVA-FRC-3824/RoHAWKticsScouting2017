@@ -6,6 +6,9 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
@@ -30,9 +33,8 @@ public class TeamPitData {
     public long last_modified;
 
     // Robot Image
-    public int robot_image_default;
-    public ArrayList<String> robot_image_filepaths;
-    public ArrayList<String> robot_image_urls;
+    public int robot_picture_default;
+    public ArrayList<UploadableImage> robot_pictures;
 
     // Dimensions
     public double weight;
@@ -43,13 +45,17 @@ public class TeamPitData {
     // Miscellaneous
 
     public String programming_language;
+    public String drive_train;
+    public int cims;
+    public int max_hopper_load;
+    public String chosen_volume;
+
 
     // Notes
     public String notes;
 
     public TeamPitData(){
-        robot_image_filepaths = new ArrayList<>();
-        robot_image_urls = new ArrayList<>();
+        robot_pictures = new ArrayList<>();
     }
 
     public TeamPitData(ScoutMap map) {
@@ -57,14 +63,8 @@ public class TeamPitData {
             team_number = map.getInt(Constants.Intent_Extras.TEAM_NUMBER);
             scout_name = map.getString(Constants.Pit_Scouting.SCOUT_NAME);
 
-            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT)){
-                robot_image_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
-            }
-
-            robot_image_filepaths = (ArrayList)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-            if(map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_URLS)) {
-                robot_image_urls = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_URLS);
-            }
+            robot_picture_default = map.getInt(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT);
+            robot_pictures = (ArrayList<UploadableImage>)map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
 
             width = map.getDouble(Constants.Pit_Scouting.Dimensions.WIDTH);
             length = map.getDouble(Constants.Pit_Scouting.Dimensions.LENGTH);
@@ -72,6 +72,10 @@ public class TeamPitData {
             weight = map.getDouble(Constants.Pit_Scouting.Dimensions.WEIGHT);
 
             programming_language = map.getString(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE);
+            cims = map.getInt(Constants.Pit_Scouting.Miscellaneous.CIMS);
+            drive_train = map.getString(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN);
+            max_hopper_load = (int)map.getDouble(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD);
+            chosen_volume = map.getString(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME);
 
             notes = map.getString(Constants.Pit_Scouting.NOTES);
 
@@ -88,9 +92,8 @@ public class TeamPitData {
         map.put(Constants.Intent_Extras.TEAM_NUMBER, team_number);
         map.put(Constants.Pit_Scouting.SCOUT_NAME, scout_name);
 
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT, robot_image_default);
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, robot_image_filepaths);
-        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_URLS, robot_image_urls);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURE_DEFAULT, robot_picture_default);
+        map.put(Constants.Pit_Scouting.ROBOT_PICTURES, robot_pictures);
 
         map.put(Constants.Pit_Scouting.Dimensions.WIDTH, width);
         map.put(Constants.Pit_Scouting.Dimensions.LENGTH, length);
@@ -98,6 +101,10 @@ public class TeamPitData {
         map.put(Constants.Pit_Scouting.Dimensions.WEIGHT, weight);
 
         map.put(Constants.Pit_Scouting.Miscellaneous.PROGRAMMING_LANGUAGE, programming_language);
+        map.put(Constants.Pit_Scouting.Miscellaneous.DRIVE_TRAIN, drive_train);
+        map.put(Constants.Pit_Scouting.Miscellaneous.CIMS, cims);
+        map.put(Constants.Pit_Scouting.Miscellaneous.MAX_HOPPER_LOAD, (double)max_hopper_load);
+        map.put(Constants.Pit_Scouting.Miscellaneous.CHOSEN_VOLUME, chosen_volume);
 
         map.put(Constants.Pit_Scouting.NOTES, notes);
 

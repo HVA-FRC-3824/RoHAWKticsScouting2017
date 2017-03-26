@@ -13,7 +13,7 @@ import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/17/16
  */
 public class ScheduleFragment extends Fragment {
@@ -35,12 +35,12 @@ public class ScheduleFragment extends Fragment {
 
         ListView schedule = (ListView)view.findViewById(R.id.schedule);
 
-        Database database = Database.getInstance();
-        TeamLogistics info = database.getTeamLogistics(mTeamNumber);
+        TeamLogistics info = Database.getInstance().getTeamLogistics(mTeamNumber);
 
-        LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), info.match_numbers, mTeamNumber);
-
-        schedule.setAdapter(lva);
+        if(info != null) {
+            LVA_ScheduleFragment lva = new LVA_ScheduleFragment(getContext(), info.match_numbers, mTeamNumber);
+            schedule.setAdapter(lva);
+        }
 
         return view;
     }

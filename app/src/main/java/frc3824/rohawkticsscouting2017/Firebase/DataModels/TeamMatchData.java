@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -27,13 +28,12 @@ public class TeamMatchData {
     public String alliance_color;
     public int alliance_number;
     public String scout_name;
-    public long last_modified;
     public int total_points;
 
     // Autonomous
     public String auto_start_position;
     public boolean auto_baseline;
-    public Gears auto_gears;
+    public ArrayList<Gear> auto_gears;
     public int auto_high_goal_made;
     public int auto_high_goal_missed;
     public int auto_high_goal_correction;
@@ -44,7 +44,7 @@ public class TeamMatchData {
     public int auto_points;
 
     // Teleop
-    public Gears teleop_gears;
+    public ArrayList<Gear> teleop_gears;
     public int teleop_high_goal_made;
     public int teleop_high_goal_missed;
     public int teleop_high_goal_correction;
@@ -66,6 +66,13 @@ public class TeamMatchData {
     public boolean dq;
     public String notes;
 
+    public boolean tags_blocked_shots;
+    public boolean tags_pinned_robot;
+    public boolean tags_defended_loading_station;
+    public boolean tags_defended_airship;
+    public boolean tags_broke;
+    public boolean tags_dumped_all_hoppers;
+
     // Fouls
     public int fouls;
     public int tech_fouls;
@@ -73,8 +80,8 @@ public class TeamMatchData {
     public boolean red_card;
 
     public TeamMatchData() {
-        auto_gears = new Gears();
-        teleop_gears = new Gears();
+        auto_gears = new ArrayList<>();
+        teleop_gears = new ArrayList<>();
     }
 
     public TeamMatchData(ScoutMap map) {
@@ -88,14 +95,14 @@ public class TeamMatchData {
             // GAME SPECIFIC
             auto_start_position = map.getString(Constants.Match_Scouting.Autonomous.AUTO_START_POSITION);
             auto_baseline = map.getBoolean(Constants.Match_Scouting.Autonomous.AUTO_BASELINE);
-            auto_gears = (Gears)map.getObject(Constants.Match_Scouting.Autonomous.AUTO_GEARS);
+            auto_gears = (ArrayList<Gear>)map.getObject(Constants.Match_Scouting.Autonomous.AUTO_GEARS);
             auto_high_goal_made = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HIGH_GOAL_MADE);
             auto_high_goal_missed = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HIGH_GOAL_MISSED);
             auto_low_goal_made = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_LOW_GOAL_MADE);
             auto_low_goal_missed = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_LOW_GOAL_MISSED);
             auto_hoppers = map.getInt(Constants.Match_Scouting.Autonomous.AUTO_HOPPERS);
 
-            teleop_gears = (Gears)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_GEARS);
+            teleop_gears = (ArrayList<Gear>)map.getObject(Constants.Match_Scouting.Teleop.TELEOP_GEARS);
             teleop_high_goal_made = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MADE);
             teleop_high_goal_missed = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_HIGH_GOAL_MISSED);
             teleop_low_goal_made = map.getInt(Constants.Match_Scouting.Teleop.TELEOP_LOW_GOAL_MADE);
@@ -105,6 +112,14 @@ public class TeamMatchData {
 
             endgame_climb = map.getString(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB);
             endgame_climb_time = map.getString(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB_TIME);
+
+            tags_blocked_shots = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS);
+            tags_pinned_robot = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT);
+            tags_defended_loading_station = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION);
+            tags_defended_airship = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP);
+            tags_broke = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE);
+            tags_dumped_all_hoppers = map.getBoolean(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS);
+
             ////////////////
 
             fouls = map.getInt(Constants.Match_Scouting.Fouls.FOUL);
@@ -154,6 +169,15 @@ public class TeamMatchData {
 
         map.put(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB, endgame_climb);
         map.put(Constants.Match_Scouting.Endgame.ENDGAME_CLIMB_TIME, endgame_climb_time);
+
+
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS, tags_blocked_shots);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT, tags_pinned_robot);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION, tags_defended_loading_station);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP, tags_defended_airship);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE, tags_broke);
+        map.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS, tags_dumped_all_hoppers);
+
         ////////////////
 
         map.put(Constants.Match_Scouting.Fouls.FOUL, fouls);

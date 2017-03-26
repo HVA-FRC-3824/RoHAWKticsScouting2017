@@ -2,6 +2,8 @@ package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -36,6 +38,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
@@ -70,7 +73,6 @@ public class MatchScouting extends Activity{
 
     private String mAllianceColor;
     private int mAllianceNumber;
-    private String mLastScoutName;
     private String mScoutName;
     private boolean mAdmin;
 
@@ -89,6 +91,12 @@ public class MatchScouting extends Activity{
     private View mLogisticsScoutNameBackground;
     private TextView mLogisticsIncorrect;
 
+    private NotificationManager mNotificationManager;
+    protected Notification.Builder mDataTransferSuccessNotificationBuilder;
+    protected int mDataTransferSuccessNotificationId;
+    protected Notification.Builder mDataTransferFailureNotificationBuilder;
+    protected int mDataTransferFailureNotificationId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,16 +113,14 @@ public class MatchScouting extends Activity{
         mAllianceNumber = shared_preferences.getInt(Constants.Settings.ALLIANCE_NUMBER, -1);
         mServerType = shared_preferences.getString(Constants.Settings.SERVER_TYPE, "");
         mAdmin = shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.ADMIN);
-        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_MATCH_SCOUT, "");
-
 
         mDatabase = Database.getInstance();
 
         if (mMatchNumber > 0) {
             if (mAllianceColor.equals(Constants.Alliance_Colors.BLUE)) {
-                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(mAllianceNumber - 1);
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).team_numbers.get(mAllianceNumber - 1);
             } else {
-                mTeamNumber = mDatabase.getMatch(mMatchNumber).teams.get(mAllianceNumber + 2);
+                mTeamNumber = mDatabase.getMatch(mMatchNumber).team_numbers.get(mAllianceNumber + 2);
             }
 
             setTitle(String.format("Match Number: %d Team Number: %d", mMatchNumber, mTeamNumber));
@@ -122,7 +128,7 @@ public class MatchScouting extends Activity{
             mDrawerList = (ListView)findViewById(R.id.drawer_list);
             ArrayList<MatchNumberCheck> mncs = new ArrayList<>();
             for(int i = 1; i <= mDatabase.getNumberOfMatches(); i++){
-                if(mDatabase.getTeamMatchData(i,  mDatabase.getMatch(i).teams.get(mAllianceNumber - 1)) != null){
+                if(mDatabase.getTeamMatchData(i,  mDatabase.getMatch(i).team_numbers.get(mAllianceNumber - 1)) != null){
                     mncs.add(new MatchNumberCheck(i, true));
                 } else {
                     mncs.add(new MatchNumberCheck(i));
@@ -166,7 +172,7 @@ public class MatchScouting extends Activity{
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_match_logistics, null);
         ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Match Number: %d", mMatchNumber));
-
+        ((TextView)mLogisticsView.findViewById(R.id.team_number)).setText(String.format("Team Number: %d", mTeamNumber));
         mLogisticsAlliance = (TextView)mLogisticsView.findViewById(R.id.alliance);
         mLogisticsAlliance.setText(String.format("%s %d", mAllianceColor.equals(Constants.Alliance_Colors.BLUE) ? "Blue" : "Red", mAllianceNumber));
         if(mAllianceColor.equals(Constants.Alliance_Colors.BLUE)){
@@ -175,11 +181,8 @@ public class MatchScouting extends Activity{
             mLogisticsAlliance.setTextColor(Color.RED);
         }
         mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
-        if(!mLastScoutName.equals("")){
-            String[] arr = {mLastScoutName};
-            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-            mScoutNameTextView.setAdapter(aa);
-        }
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.MATCH_SCOUTS_LIST);
+        mScoutNameTextView.setAdapter(aa);
         builder.setView(mLogisticsView);
 
         mLogisticsIncorrect = (TextView)mLogisticsView.findViewById(R.id.incorrect);
@@ -197,23 +200,34 @@ public class MatchScouting extends Activity{
                     @Override
                     public void onClick(View view) {
                         mScoutName = mScoutNameTextView.getText().toString();
-                        if(mScoutName.equals("")){
+                        mScoutName = mScoutName.trim();
+                        mScoutName = mScoutName.replace("\n", "");
+                        Pattern p = Pattern.compile("[^a-zA-Z -]");
+                        boolean hasSpecialChar = p.matcher(mScoutName).find();
+                        if(mScoutName.isEmpty() || hasSpecialChar){
                             mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
                             mLogisticsIncorrect.setVisibility(View.VISIBLE);
                         } else {
-                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                            edit.putString(Constants.Settings.LAST_MATCH_SCOUT, mScoutName);
-                            edit.commit();
                             mLogisticsDialog.dismiss();
                         }
                     }
                 });
             }
         });
-        if(mScoutName == null || mScoutName.equals("")) {
+        if(mScoutName == null || mScoutName.isEmpty()) {
             mLogisticsDialog.show();
         }
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mDataTransferFailureNotificationBuilder = new Notification.Builder(this);
+        mDataTransferFailureNotificationId = Constants.Notifications.DATA_TRANSFER_FAILURE;
+        mDataTransferFailureNotificationBuilder.setSmallIcon(R.drawable.error_color);
+        mDataTransferFailureNotificationBuilder.setContentTitle("Data Transfer Failure!!!");
+        mDataTransferFailureNotificationBuilder.setContentText("Added to Queue");
 
+        mDataTransferSuccessNotificationBuilder = new Notification.Builder(this);
+        mDataTransferSuccessNotificationId = Constants.Notifications.DATA_TRANSFER_SUCCESS;
+        mDataTransferSuccessNotificationBuilder.setSmallIcon(R.drawable.ok_color);
+        mDataTransferFailureNotificationBuilder.setContentTitle("Data Transfer Success");
     }
 
     // TODO: Create option for admin to switch which alliance color and/or number
@@ -602,11 +616,13 @@ public class MatchScouting extends Activity{
             TeamMatchData teamMatchData = new TeamMatchData(map);
             mDatabase.setTeamMatchData(teamMatchData);
 
-            if(mServerType.equals(Constants.Server_Type.SOCKET)){
+            if(mServerType.equals(Constants.Settings.SERVER_USB)){
                 return socketVersion(teamMatchData);
-            } else {
+            } else if(mServerType.equals(Constants.Settings.SERVER_BLUETOOTH)){
                 return bluetoothVersion(teamMatchData);
             }
+
+            return null;
         }
 
         private Void socketVersion(TeamMatchData teamMatchData){
@@ -617,9 +633,9 @@ public class MatchScouting extends Activity{
                 SocketThread socketThread = new SocketThread(socket);
                 socketThread.start();
                 Gson gson = new GsonBuilder().create();
-                if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(teamMatchData))))
+                if(socketThread.write(String.format("%c%s", Constants.Comms.Message_Headers.MATCH_HEADER, gson.toJson(teamMatchData))))
                 {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                    publishProgress(Constants.Comms.Data_Transfer_Status.SUCCESS);
                     List<String> queuedString = queue.getQueueList();
                     queue.clear();
                     boolean queueEmpty = true;
@@ -630,13 +646,13 @@ public class MatchScouting extends Activity{
                             queueEmpty = false;
                             switch (s.charAt(0))
                             {
-                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                case Constants.Comms.Message_Headers.MATCH_HEADER:
                                     queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
                                     break;
-                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                case Constants.Comms.Message_Headers.SUPER_HEADER:
                                     queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
                                     break;
-                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                                case Constants.Comms.Message_Headers.FEEDBACK_HEADER:
                                     queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
                                     break;
                             }
@@ -644,12 +660,12 @@ public class MatchScouting extends Activity{
                     }
                     if(queueEmpty && queuedString.size() > 0)
                     {
-                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                        publishProgress(Constants.Comms.Data_Transfer_Status.QUEUE_EMPTIED);
                     }
                 }
                 else
                 {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    publishProgress(Constants.Comms.Data_Transfer_Status.FAILURE);
                     queue.add(teamMatchData);
                 }
                 socketThread.cancel();
@@ -667,7 +683,7 @@ public class MatchScouting extends Activity{
             if(bluetoothAdapter == null)
             {
                 queue.add(teamMatchData);
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
+                publishProgress(Constants.Comms.Data_Transfer_Status.NO_BLUETOOTH);
                 return null;
             }
 
@@ -684,7 +700,7 @@ public class MatchScouting extends Activity{
             {
                 String deviceName = device.getName();
                 Log.d(TAG, deviceName);
-                if(deviceName.equals(mServerType))
+                if(deviceName.equals(Constants.Comms.BLUETOOTH_SERVER))
                 {
                     server = device;
                     break;
@@ -693,7 +709,7 @@ public class MatchScouting extends Activity{
 
             if(server == null)
             {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
+                publishProgress(Constants.Comms.Data_Transfer_Status.SERVER_NOT_FOUND);
                 queue.add(teamMatchData);
                 return null;
             }
@@ -702,9 +718,9 @@ public class MatchScouting extends Activity{
             connectThread.start();
             while (!connectThread.isConnected());
             Gson gson = new GsonBuilder().create();
-            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.MATCH_HEADER, gson.toJson(teamMatchData))))
+            if(connectThread.write(String.format("%c%s", Constants.Comms.Message_Headers.MATCH_HEADER, gson.toJson(teamMatchData))))
             {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                publishProgress(Constants.Comms.Data_Transfer_Status.SUCCESS);
                 List<String> queuedString = queue.getQueueList();
                 queue.clear();
                 boolean queueEmpty = true;
@@ -715,13 +731,13 @@ public class MatchScouting extends Activity{
                         queueEmpty = false;
                         switch (s.charAt(0))
                         {
-                            case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                            case Constants.Comms.Message_Headers.MATCH_HEADER:
                                 queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
                                 break;
-                            case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                            case Constants.Comms.Message_Headers.SUPER_HEADER:
                                 queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
                                 break;
-                            case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                            case Constants.Comms.Message_Headers.FEEDBACK_HEADER:
                                 queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
                                 break;
                         }
@@ -729,12 +745,12 @@ public class MatchScouting extends Activity{
                 }
                 if(queueEmpty && queuedString.size() > 0)
                 {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                    publishProgress(Constants.Comms.Data_Transfer_Status.QUEUE_EMPTIED);
                 }
             }
             else
             {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                publishProgress(Constants.Comms.Data_Transfer_Status.FAILURE);
                 queue.add(teamMatchData);
             }
             connectThread.cancel();
@@ -747,23 +763,25 @@ public class MatchScouting extends Activity{
             AlertDialog.Builder builder = new AlertDialog.Builder(MatchScouting.this);
             switch (values[0])
             {
-                case Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH:
+                case Constants.Comms.Data_Transfer_Status.NO_BLUETOOTH:
                     builder.setTitle("No bluetooth on this device!!!");
                     builder.setIcon(getDrawable(R.drawable.bluetooth_2_color));
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED:
+                case Constants.Comms.Data_Transfer_Status.QUEUE_EMPTIED:
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND:
+                case Constants.Comms.Data_Transfer_Status.SERVER_NOT_FOUND:
                     builder.setTitle("Server not found");
                     builder.setIcon(getDrawable(R.drawable.error_color));
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.SUCCESS:
+                case Constants.Comms.Data_Transfer_Status.SUCCESS:
                     builder.setTitle("Data transfer successful");
                     builder.setIcon(getDrawable(R.drawable.ok_color));
+                    mNotificationManager.notify(mDataTransferSuccessNotificationId, mDataTransferSuccessNotificationBuilder.build());
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.FAILURE:
+                case Constants.Comms.Data_Transfer_Status.FAILURE:
                     builder.setTitle("Data transfer failure (Added to Queue)");
                     builder.setIcon(getDrawable(R.drawable.error_color));
+                    mNotificationManager.notify(mDataTransferFailureNotificationId, mDataTransferFailureNotificationBuilder.build());
                     break;
             }
             builder.show();

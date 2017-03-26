@@ -8,14 +8,14 @@ public class ScoutedMatchAccuracy {
 
     private final static String TAG = "ScoutedMatchAccuracy";
 
-    public long last_modified;
     public int match_number;
     public String alliance_color;
     public int alliance_number;
-    public int total_error;
-    public int auto_error;
-    public int teleop_error;
-    public int endgame_error;
+
+    public int auto_mobility_error;
+    public int auto_gear_error;
+    public int teleop_gear_error;
+    public int climb_error;
 
     public ScoutedMatchAccuracy(){
 

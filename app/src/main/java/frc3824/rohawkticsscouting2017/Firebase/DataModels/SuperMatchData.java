@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 import frc3824.rohawkticsscouting2017.Utilities.ScoutMap;
@@ -27,40 +29,52 @@ public class SuperMatchData {
     // Qualitative
 
     // Speed
-    public ArrayList<Integer> blue_speed;
-    public ArrayList<Integer> red_speed;
+    public Map<String, Integer> blue_speed;
+    public Map<String, Integer> red_speed;
 
     // Torque (Pushing Power)
-    public ArrayList<Integer> blue_torque;
-    public ArrayList<Integer> red_torque;
+    public Map<String, Integer> blue_torque;
+    public Map<String, Integer> red_torque;
 
     // Control
-    public ArrayList<Integer> blue_control;
-    public ArrayList<Integer> red_control;
+    public Map<String, Integer> blue_control;
+    public Map<String, Integer> red_control;
 
     // Defense
-    public ArrayList<Integer> blue_defense;
-    public ArrayList<Integer> red_defense;
+    public Map<String, Integer> blue_defense;
+    public Map<String, Integer> red_defense;
 
     //Notes
     public String notes;
 
-    public SuperMatchData() {}
+    public SuperMatchData() {
+        blue_speed = new HashMap<>();
+        red_speed = new HashMap<>();
+
+        blue_torque = new HashMap<>();
+        red_torque = new HashMap<>();
+
+        blue_control = new HashMap<>();
+        red_control = new HashMap<>();
+
+        blue_defense = new HashMap<>();
+        red_defense = new HashMap<>();
+    }
 
     public SuperMatchData(ScoutMap map) {
         try {
             match_number = map.getInt(Constants.Intent_Extras.MATCH_NUMBER);
             scout_name = map.getString(Constants.Super_Scouting.SCOUT_NAME);
 
-            blue_speed = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_SPEED);
-            blue_torque = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_TORQUE);
-            blue_control = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_CONTROL);
-            blue_defense = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_DEFENSE);
+            blue_speed = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_SPEED);
+            blue_torque = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_TORQUE);
+            blue_control = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_CONTROL);
+            blue_defense = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.BLUE_DEFENSE);
 
-            red_speed = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_SPEED);
-            red_torque = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_TORQUE);
-            red_control = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_CONTROL);
-            red_defense = (ArrayList<Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_DEFENSE);
+            red_speed = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_SPEED);
+            red_torque = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_TORQUE);
+            red_control = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_CONTROL);
+            red_defense = (Map<String, Integer>)map.getObject(Constants.Super_Scouting.Qualitative.RED_DEFENSE);
 
             notes = map.getString(Constants.Super_Scouting.NOTES);
 

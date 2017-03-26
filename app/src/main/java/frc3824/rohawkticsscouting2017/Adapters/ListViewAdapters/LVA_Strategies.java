@@ -17,8 +17,8 @@ import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.R;
 
 /**
- * @author Andrew Messing
- *         Created: 8/20/16
+ * @author frc3824
+ * Created: 8/20/16
  */
 public class LVA_Strategies extends ArrayAdapter<Strategy> {
 
@@ -46,11 +46,6 @@ public class LVA_Strategies extends ArrayAdapter<Strategy> {
         String strategyName = strategy.filepath.substring(strategy.filepath.lastIndexOf('/') + 1);
         strategyName = strategyName.substring(0, strategyName.lastIndexOf('.'));
 
-        if(!new File(strategy.filepath).exists())
-        {
-            return null;
-        }
-
         strategyNameTextView.setText(strategyName);
         displayPicture(image, strategy.filepath);
 
@@ -68,6 +63,10 @@ public class LVA_Strategies extends ArrayAdapter<Strategy> {
         int targetH = 100;
 
         File f = new File(filepath);
+
+        if(!f.exists()){
+            return;
+        }
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();

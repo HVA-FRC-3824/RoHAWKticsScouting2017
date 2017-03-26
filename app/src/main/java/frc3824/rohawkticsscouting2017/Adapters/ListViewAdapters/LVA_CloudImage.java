@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Strategy;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.UploadableImage;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
@@ -135,8 +136,12 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                                 switch (mImageType) {
                                     case Constants.Cloud.ROBOT_PICTURE:
                                         TeamPitData t = mDatabase.getTeamPitData(Integer.parseInt(ci.extra));
-                                        int index = t.robot_image_filepaths.indexOf(ci.filepath);
-                                        t.robot_image_urls.add(index, ci.url);
+                                        for(UploadableImage image: t.robot_pictures){
+                                            if(image.filepath.equals(ci.filepath)){
+                                                image.url = ci.url;
+                                                break;
+                                            }
+                                        }
                                         mDatabase.setTeamPitData(t);
                                         break;
                                     case Constants.Cloud.STRATEGY:
@@ -170,7 +175,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                     switch (mImageType)
                     {
                         case Constants.Cloud.ROBOT_PICTURE:
-                            fileDownloadTask = mStorage.downloadRobotPicture(Integer.parseInt(ci.extra), ci.filepath);
+                            fileDownloadTask = mStorage.downloadRobotPicture( ci.filepath);
                             break;
                         case Constants.Cloud.STRATEGY:
                             fileDownloadTask = mStorage.downloadStrategyPicture(ci.extra, ci.filepath);

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -74,6 +75,11 @@ public class LVA_PickList extends ArrayAdapter<TeamPickAbility>{
         ((TextView)convertView.findViewById(R.id.top_line)).setText(team.top_line);
         ((TextView)convertView.findViewById(R.id.second_line)).setText(team.second_line);
         ((TextView)convertView.findViewById(R.id.third_line)).setText(team.third_line);
+        if(team.fourth_line == null || team.fourth_line.isEmpty()){
+            convertView.findViewById(R.id.fourth_line).setVisibility(View.GONE);
+        } else {
+            ((TextView)convertView.findViewById(R.id.fourth_line)).setText(team.fourth_line);
+        }
 
         if(team.red_card)
         {
@@ -168,6 +174,10 @@ public class LVA_PickList extends ArrayAdapter<TeamPickAbility>{
         // Get the dimensions of the View
         int targetW = 100;
         int targetH = 100;
+
+        if(!new File(filepath).exists()){
+            return;
+        }
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();

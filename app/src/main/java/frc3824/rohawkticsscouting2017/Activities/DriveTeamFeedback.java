@@ -60,19 +60,19 @@ public class DriveTeamFeedback extends Activity {
             if (match.isBlue(mMatchNumber)) {
                 for(int i = 0; i < 3; i++)
                 {
-                    if(match.teams.get(i) == Constants.OUR_TEAM_NUMBER)
+                    if(match.team_numbers.get(i) == Constants.OUR_TEAM_NUMBER)
                     {
-                        mPartner1 = match.teams.get( (i + 1) % 3 );
-                        mPartner2 = match.teams.get( (i + 2) % 3 );
+                        mPartner1 = match.team_numbers.get( (i + 1) % 3 );
+                        mPartner2 = match.team_numbers.get( (i + 2) % 3 );
                     }
                 }
             } else {
                 for(int i = 0; i < 3; i++)
                 {
-                    if(match.teams.get(i + 3) == Constants.OUR_TEAM_NUMBER)
+                    if(match.team_numbers.get(i + 3) == Constants.OUR_TEAM_NUMBER)
                     {
-                        mPartner1 = match.teams.get( ((i + 1) % 3) + 3);
-                        mPartner2 = match.teams.get( ((i + 2) % 3) + 3);
+                        mPartner1 = match.team_numbers.get( ((i + 1) % 3) + 3);
+                        mPartner2 = match.team_numbers.get( ((i + 2) % 3) + 3);
                     }
                 }
             }
@@ -267,6 +267,7 @@ public class DriveTeamFeedback extends Activity {
             teamDTFeedback1.feedback = new HashMap<>();
         }
         teamDTFeedback1.feedback.put(mMatchNumber, mPartner1Note.getText().toString());
+        mDatabase.setTeamDTFeedback(teamDTFeedback1);
 
         TeamDTFeedback teamDTFeedback2 = mDatabase.getTeamDTFeedback(mPartner2);
         if(teamDTFeedback2 == null)
@@ -276,6 +277,7 @@ public class DriveTeamFeedback extends Activity {
             teamDTFeedback2.feedback = new HashMap<>();
         }
         teamDTFeedback2.feedback.put(mMatchNumber, mPartner2Note.getText().toString());
+        mDatabase.setTeamDTFeedback(teamDTFeedback2);
 
         Log.d(TAG, "Saving values");
 

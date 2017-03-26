@@ -32,11 +32,15 @@ import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_PitScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_PitScoutDrawer;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.UploadableImage;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.Fragments.ScoutFragment;
 import frc3824.rohawkticsscouting2017.R;
@@ -59,7 +63,6 @@ public class PitScouting extends Activity {
     private int mTeamNumber;
     private Database mDatabase;
     private String mEventKey;
-    private String mLastScoutName;
     private String mScoutName;
     private FPA_PitScouting mFPA;
 
@@ -92,7 +95,6 @@ public class PitScouting extends Activity {
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mEventKey = shared_preferences.getString(Constants.Settings.EVENT_KEY, "");
-        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_PIT_SCOUT, "");
 
         ArrayList<Integer> teams = mDatabase.getTeamNumbers();
         if (shared_preferences.getString(Constants.Settings.USER_TYPE, "").equals(Constants.User_Types.PIT_SCOUT)) {
@@ -141,14 +143,12 @@ public class PitScouting extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
+        //mLogisticsView.findViewById(R.id.match_number).setVisibility(View.GONE);
         ((TextView) mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Team Number: %d", mTeamNumber));
 
         mScoutNameTextView = (AutoCompleteTextView) mLogisticsView.findViewById(R.id.scout_name);
-        if (!mLastScoutName.equals("")) {
-            String[] arr = {mLastScoutName};
-            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-            mScoutNameTextView.setAdapter(aa);
-        }
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.PIT_SCOUTS_LIST);
+        mScoutNameTextView.setAdapter(aa);
         builder.setView(mLogisticsView);
 
         mLogisticsIncorrect = (TextView) mLogisticsView.findViewById(R.id.incorrect);
@@ -166,13 +166,14 @@ public class PitScouting extends Activity {
                     @Override
                     public void onClick(View view) {
                         mScoutName = mScoutNameTextView.getText().toString();
-                        if (mScoutName.equals("")) {
+                        mScoutName = mScoutName.trim();
+                        mScoutName = mScoutName.replace("\n", "");
+                        Pattern p = Pattern.compile("[^a-zA-Z -]");
+                        boolean hasSpecialChar = p.matcher(mScoutName).find();
+                        if(mScoutName.isEmpty() || hasSpecialChar){
                             mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
                             mLogisticsIncorrect.setVisibility(View.VISIBLE);
                         } else {
-                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                            edit.putString(Constants.Settings.LAST_PIT_SCOUT, mScoutName);
-                            edit.commit();
                             mLogisticsDialog.dismiss();
                         }
                     }
@@ -524,15 +525,15 @@ public class PitScouting extends Activity {
             map.put(Constants.Intent_Extras.TEAM_NUMBER, mTeamNumber);
             map.put(Constants.Pit_Scouting.SCOUT_NAME, mScoutName);
             // Change picture filename to use event id and team number
-            if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS)) {
+            if (map.contains(Constants.Pit_Scouting.ROBOT_PICTURES)) {
                 try {
-                    ArrayList<String> picture_filepaths = (ArrayList) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-                    ArrayList<String> new_picture_filepaths = new ArrayList<>();
-                    for (int i = 0; i < picture_filepaths.size(); i++) {
-                        String picture_filename = picture_filepaths.get(i);
-                        if (!picture_filename.equals("")) {
-                            File picture = new File(picture_filename);
-                            if (picture.exists() && picture.length() > 0) {
+                    ArrayList<UploadableImage> pictures = (ArrayList<UploadableImage>) map.getObject(Constants.Pit_Scouting.ROBOT_PICTURES);
+                    ArrayList<UploadableImage> new_picture_filepaths = new ArrayList<>();
+                    for (int i = 0; i < pictures.size(); i++) {
+                        UploadableImage picture = pictures.get(i);
+                        if (!picture.filepath.isEmpty()) {
+                            File f = new File(picture.filepath);
+                            if (f.exists() && f.length() > 0) {
                                 String newPathName = String.format("%s/robot_pictures/", mEventKey);
                                 File newPath = new File(getFilesDir(), newPathName);
                                 if (!newPath.exists()) {
@@ -540,16 +541,14 @@ public class PitScouting extends Activity {
                                 }
                                 File newPicture = new File(newPath, String.format("%d_%d.jpg", mTeamNumber, i));
                                 newPicture.delete();
-                                copy(picture, newPicture);
-                                picture.delete();
-                                new_picture_filepaths.add(newPicture.getAbsolutePath());
-                            } else {
-                                map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
+                                copy(f, newPicture);
+                                f.delete();
+                                new_picture_filepaths.add(new UploadableImage(newPicture.getAbsolutePath(), picture.url));
                             }
                         }
                     }
-                    map.remove(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS);
-                    map.put(Constants.Pit_Scouting.ROBOT_PICTURE_FILEPATHS, new_picture_filepaths);
+                    map.remove(Constants.Pit_Scouting.ROBOT_PICTURES);
+                    map.put(Constants.Pit_Scouting.ROBOT_PICTURES, new_picture_filepaths);
                 } catch (ScoutValue.TypeException | IOException e) {
                     Log.e(TAG, e.getMessage());
                 }

@@ -2,59 +2,101 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:padding="8dp"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/bright_blue"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Offense:"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:id="@+id/offense_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Defense:"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Offense"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="30sp" />
 
+            <TextView
+                android:id="@+id/offense_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/offense_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <LinearLayout
+            android:id="@+id/defense_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Defense"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/defense_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/defense_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="3dp"
-        android:layout_height="match_parent"
-        android:background="@color/black" />
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        android:layout_weight="1"
-        android:background="@color/bright_red"
-        android:orientation="vertical">
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:visibility="gone"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Offense:"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Defense:"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -4,13 +4,13 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CloudImage;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPitData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.UploadableImage;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
-
-import static frc3824.rohawkticsscouting2017.Utilities.Constants.Notifications.DOWNLOAD_ROBOT_PICTURES;
 
 /**
  * @author frc3824
@@ -36,26 +36,22 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
             TeamPitData teamPitData = mDatabase.getTeamPitData(team_number);
             if(teamPitData == null)
                 continue;
-            for(int i = 0; i < teamPitData.robot_image_filepaths.size(); i++) {
+            for(UploadableImage image: teamPitData.robot_pictures) {
                 CloudImage ci = new CloudImage();
 
                 ci.extra = String.valueOf(team_number);
                 ci.internet = internet;
 
-                if (teamPitData.robot_image_filepaths != null && teamPitData.robot_image_filepaths.size() != 0) {
-
-                    if (new File(teamPitData.robot_image_filepaths.get(i)).exists()) {
-                        ci.local = true;
-                    }
-                    ci.filepath = teamPitData.robot_image_filepaths.get(i);
+                if (new File(image.filepath).exists()) {
+                    ci.local = true;
                 }
+                ci.filepath = image.filepath;
 
-                if (teamPitData.robot_image_urls != null && teamPitData.robot_image_urls.size() != 0) {
-                    if(!teamPitData.robot_image_urls.get(i).equals("")) {
-                        ci.remote = true;
-                    }
-                    ci.url = teamPitData.robot_image_urls.get(i);
+                if(!image.url.isEmpty()) {
+                    ci.remote = true;
                 }
+                ci.url = image.url;
+
 
                 mCIs.add(ci);
             }
@@ -64,7 +60,7 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
 
     protected void setupNotifications(){
         mUploadNotificationId = Constants.Notifications.UPLOAD_ROBOT_PICTURES;
-        mDownloadNotificationId = DOWNLOAD_ROBOT_PICTURES;
+        mDownloadNotificationId = Constants.Notifications.DOWNLOAD_ROBOT_PICTURES;
 
         mUploadNotificationBuilder.setContentTitle("Uploading Robot Pictures");
         mDownloadNotificationBuilder.setContentTitle("Downloading Robot Pictures");

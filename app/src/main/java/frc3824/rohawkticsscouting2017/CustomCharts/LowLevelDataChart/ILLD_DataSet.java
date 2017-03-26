@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet;
 
 /**
- * @author Andrew Messing
+ * @author frc3824
  * Created: 8/23/16
  */
 public interface ILLD_DataSet extends ILineScatterCandleRadarDataSet<LLD_Entry> {

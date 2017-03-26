@@ -105,10 +105,40 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/notes_label"
+            android:id="@+id/drive_train_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/programming_language_label"
+            android:layout_marginLeft="16dp"
+            android:text="Drive Train:"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/cims_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/drive_train_label"
+            android:layout_marginLeft="16dp"
+            android:text="CIMS:"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/max_hopper_load_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cims_label"
+            android:layout_marginLeft="16dp"
+            android:text="Max Hopper Load:"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/notes_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/max_hopper_load_label"
             android:layout_marginTop="16dp"
             android:text="Notes:"
             android:textColor="@color/black"
@@ -119,8 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/width_label"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/length_label"
+            android:layout_alignLeft="@+id/programming_language"
             android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -130,7 +159,7 @@
             android:id="@+id/width"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/length"
+            android:layout_alignLeft="@+id/programming_language"
             android:layout_below="@+id/dimensions_label"
             android:text=""
             android:textColor="@color/black"
@@ -140,7 +169,7 @@
             android:id="@+id/height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/length"
+            android:layout_alignLeft="@+id/programming_language"
             android:layout_below="@+id/length_label"
             android:text=""
             android:textColor="@color/black"
@@ -150,7 +179,7 @@
             android:id="@+id/weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/length"
+            android:layout_alignLeft="@+id/programming_language"
             android:layout_below="@+id/height_label"
             android:text=""
             android:textColor="@color/black"
@@ -163,6 +192,36 @@
             android:layout_below="@+id/misc_label"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/programming_language_label"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/drive_train"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/programming_language_label"
+            android:layout_alignLeft="@+id/programming_language"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/cims"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/drive_train_label"
+            android:layout_alignLeft="@+id/programming_language"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/max_hopper_load"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cims_label"
+            android:layout_alignLeft="@+id/programming_language"
             android:text=""
             android:textColor="@color/black"
             android:textSize="20sp" />

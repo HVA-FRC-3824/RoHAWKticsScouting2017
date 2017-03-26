@@ -1,7 +1,6 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,13 +15,11 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_EventViewDrawer;
@@ -36,6 +33,7 @@ import frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_Entry;
 import frc3824.rohawkticsscouting2017.CustomCharts.LowLevelDataChart.LLD_MarkerView;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.LowLevelStats;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamCalculatedData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamPilotData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -202,6 +200,12 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                                 Constants.Event_View.Climb_Secondary_Options.OPTIONS);
                         mSecondaryDropdown.setAdapter(mSecondaryAdapter);
                         break;
+                    case Constants.Event_View.Main_Dropdown_Options.PILOT:
+                        mSecondaryAdapter = new ArrayAdapter<>(this,
+                                android.R.layout.simple_dropdown_item_1line,
+                                Constants.Event_View.Pilot_Secondary_Options.OPTIONS);
+                        mSecondaryDropdown.setAdapter(mSecondaryAdapter);
+                        break;
                 }
                 break;
             case R.id.secondary_dropdown:
@@ -224,12 +228,18 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 lldChartSetup(main_dropdown_position, secondary_dropdown_position);
             }
         } else if(Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_dropdown_position] == Constants.Event_View.Main_Dropdown_Options.CLIMB) {
-            if(Constants.Event_View.Climb_Secondary_Options.OPTIONS[secondary_dropdown_position] == Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS){
+            if (Constants.Event_View.Climb_Secondary_Options.OPTIONS[secondary_dropdown_position] == Constants.Event_View.Climb_Secondary_Options.TIME) {
+                lldChartSetup(main_dropdown_position, secondary_dropdown_position);
+            } else {
+                barChartSetup(main_dropdown_position, secondary_dropdown_position);
+            }
+        } else if(Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_dropdown_position] == Constants.Event_View.Main_Dropdown_Options.PILOT){
+            if(Constants.Event_View.Pilot_Secondary_Options.OPTIONS[secondary_dropdown_position] == Constants.Event_View.Pilot_Secondary_Options.LIFT_PERCENTAGE) {
                 barChartSetup(main_dropdown_position, secondary_dropdown_position);
             } else {
                 lldChartSetup(main_dropdown_position, secondary_dropdown_position);
             }
-        }else {
+        } else {
             lldChartSetup(main_dropdown_position, secondary_dropdown_position);
         }
     }
@@ -243,6 +253,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         BarData data;
         entries = new ArrayList<>();
         mCurrentTeamNumbers = new ArrayList<>();
+        int x = 0;
         for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
@@ -252,16 +263,21 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_position]){
                     case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                        shootingSecondary1_bar(entries, i, teamCalculatedData, secondary_position);
+                        shootingSecondary1_bar(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.POST_MATCH:
-                        postMatchSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        postMatchSecondary1(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.CLIMB:
-                        climbSecondary1_bar(entries, i, teamCalculatedData, secondary_position);
+                        climbSecondary1_bar(entries, x, teamCalculatedData, secondary_position);
+                        break;
+                    case Constants.Event_View.Main_Dropdown_Options.PILOT:
+                        TeamPilotData teamPilotData = mDatabase.getTeamPilotData(teamCalculatedData.team_number);
+                        pilotSecondary1_bar(entries, x, teamPilotData, secondary_position);
                         break;
                 }
             }
+            x++;
         }
         dataset = new BarDataSet(entries, "");
         dataset.setDrawValues(false);
@@ -283,13 +299,17 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             if (teamCalculatedData != null) {
                 switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_position]){
                     case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                        shootingSecondary2_bar(sort_values, teamCalculatedData, secondary_position);
+                        shootingSecondary2(sort_values, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.POST_MATCH:
                         postMatchSecondary2(sort_values, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.CLIMB:
                         climbSecondary2(sort_values, teamCalculatedData, secondary_position);
+                        break;
+                    case Constants.Event_View.Main_Dropdown_Options.PILOT:
+                        TeamPilotData teamPilotData = mDatabase.getTeamPilotData(teamCalculatedData.team_number);
+                        pilotSecondary2(sort_values, teamPilotData, secondary_position);
                         break;
                 }
             }
@@ -298,17 +318,9 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         Collections.sort(mSortedTeamNumbers, new Comparator<Integer>() {
             @Override
             public int compare(Integer i1, Integer i2) {
-                return Double.compare(sort_values.get(i1), sort_values.get(i2));
+                return -Double.compare(sort_values.get(i1), sort_values.get(i2));
             }
         });
-
-
-        switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_position]){
-            case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                break;
-            case Constants.Event_View.Main_Dropdown_Options.POST_MATCH:
-                break;
-        }
     }
 
     private void lldChartSetup(int main_position, int secondary_position){
@@ -320,6 +332,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         LLD_Data data;
         entries = new ArrayList<>();
         mCurrentTeamNumbers = new ArrayList<>();
+        int x = 0;
         for (int i = 4; i < mTeamNumbersSelect.size(); i++) {
             if(!mTeamNumbersSelect.get(i).check){
                 continue;
@@ -329,22 +342,27 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 mCurrentTeamNumbers.add(String.valueOf(teamCalculatedData.team_number));
                 switch (Constants.Event_View.Main_Dropdown_Options.OPTIONS[main_position]){
                     case Constants.Event_View.Main_Dropdown_Options.POINTS:
-                        pointsSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        pointsSecondary1(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.GEARS:
-                        gearsSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        gearsSecondary1(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                        shootingSecondary1_lld(entries, i, teamCalculatedData, secondary_position);
+                        shootingSecondary1_lld(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.CLIMB:
-                        climbSecondary1_lld(entries, i, teamCalculatedData, secondary_position);
+                        climbSecondary1_lld(entries, x, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.FOULS:
-                        foulSecondary1(entries, i, teamCalculatedData, secondary_position);
+                        foulSecondary1(entries, x, teamCalculatedData, secondary_position);
+                        break;
+                    case Constants.Event_View.Main_Dropdown_Options.PILOT:
+                        TeamPilotData teamPilotData = mDatabase.getTeamPilotData(teamCalculatedData.team_number);
+                        pilotSecondary1_lld(entries, x, teamPilotData, secondary_position);
                         break;
                 }
             }
+            x++;
         }
         dataset = new LLD_DataSet(entries, "");
         data = new LLD_Data(mCurrentTeamNumbers, dataset);
@@ -371,7 +389,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                         gearsSecondary2(sort_values, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.SHOOTING:
-                        shootingSecondary2_lld(sort_values, teamCalculatedData, secondary_position);
+                        shootingSecondary2(sort_values, teamCalculatedData, secondary_position);
                         break;
                     case Constants.Event_View.Main_Dropdown_Options.CLIMB:
                         climbSecondary2(sort_values, teamCalculatedData, secondary_position);
@@ -379,15 +397,21 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                     case Constants.Event_View.Main_Dropdown_Options.FOULS:
                         foulSecondary2(sort_values, teamCalculatedData, secondary_position);
                         break;
+                    case Constants.Event_View.Main_Dropdown_Options.PILOT:
+                        TeamPilotData teamPilotData = mDatabase.getTeamPilotData(teamCalculatedData.team_number);
+                        pilotSecondary2(sort_values, teamPilotData, secondary_position);
+                        break;
                 }
             }
         }
         Collections.sort(mSortedTeamNumbers, new Comparator<Integer>() {
             @Override
             public int compare(Integer i1, Integer i2) {
-                return Double.compare(sort_values.get(i1), sort_values.get(i2));
+                return -Double.compare(sort_values.get(i1), sort_values.get(i2));
             }
         });
+
+        int breakpoint = 0;
     }
 
     //region Points
@@ -529,19 +553,19 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region DQ
             case Constants.Event_View.Post_Match_Secondary_Options.DQ:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.dq.total);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.dq.total);
                 break;
             //endregion
             //region No Show
             case Constants.Event_View.Post_Match_Secondary_Options.NO_SHOW:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.no_show.total);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.no_show.total);
                 break;
             //endregion
             //region Stopped Moving
             case Constants.Event_View.Post_Match_Secondary_Options.STOPPED_MOVING:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.stopped_moving.total);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.stopped_moving.total);
                 break;
             //endregion
         }
@@ -555,31 +579,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_PLACED:
                 //region Both Placed
-                lls.max = teamCalculatedData.auto_total_gears_placed.max + teamCalculatedData.teleop_total_gears_placed.max;
-                lls.min = teamCalculatedData.auto_total_gears_placed.min + teamCalculatedData.teleop_total_gears_placed.min;
-                lls.total = teamCalculatedData.auto_total_gears_placed.total + teamCalculatedData.teleop_total_gears_placed.total;
-                lls.average = teamCalculatedData.auto_total_gears_placed.average + teamCalculatedData.teleop_total_gears_placed.average;
-                lls.std = teamCalculatedData.auto_total_gears_placed.std + teamCalculatedData.teleop_total_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.total.placed.max + teamCalculatedData.teleop_gears.total.placed.max;
+                lls.min = teamCalculatedData.auto_gears.total.placed.min + teamCalculatedData.teleop_gears.total.placed.min;
+                lls.total = teamCalculatedData.auto_gears.total.placed.total + teamCalculatedData.teleop_gears.total.placed.total;
+                lls.average = teamCalculatedData.auto_gears.total.placed.average + teamCalculatedData.teleop_gears.total.placed.average;
+                lls.std = teamCalculatedData.auto_gears.total.placed.std + teamCalculatedData.teleop_gears.total.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_PLACED:
                 //region Auto Placed
-                lls.max = teamCalculatedData.auto_total_gears_placed.max;
-                lls.min = teamCalculatedData.auto_total_gears_placed.min;
-                lls.total = teamCalculatedData.auto_total_gears_placed.total;
-                lls.average = teamCalculatedData.auto_total_gears_placed.average;
-                lls.std = teamCalculatedData.auto_total_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.total.placed.max;
+                lls.min = teamCalculatedData.auto_gears.total.placed.min;
+                lls.total = teamCalculatedData.auto_gears.total.placed.total;
+                lls.average = teamCalculatedData.auto_gears.total.placed.average;
+                lls.std = teamCalculatedData.auto_gears.total.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_PLACED:
                 //region Teleop Placed
-                lls.max = teamCalculatedData.teleop_total_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_total_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_total_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_total_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_total_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.total.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.total.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.total.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.total.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.total.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -587,31 +611,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_DROPPED:
                 //region Both Dropped
-                lls.max = teamCalculatedData.auto_total_gears_dropped.max + teamCalculatedData.teleop_total_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_total_gears_dropped.min + teamCalculatedData.teleop_total_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_total_gears_dropped.total + teamCalculatedData.teleop_total_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_total_gears_dropped.average + teamCalculatedData.teleop_total_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_total_gears_dropped.std + teamCalculatedData.teleop_total_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.total.dropped.max + teamCalculatedData.teleop_gears.total.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.total.dropped.min + teamCalculatedData.teleop_gears.total.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.total.dropped.total + teamCalculatedData.teleop_gears.total.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.total.dropped.average + teamCalculatedData.teleop_gears.total.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.total.dropped.std + teamCalculatedData.teleop_gears.total.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_DROPPED:
                 //region Auto Dropped
-                lls.max = teamCalculatedData.auto_total_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_total_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_total_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_total_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_total_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.total.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.total.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.total.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.total.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.total.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_DROPPED:
                 //region Teleop Dropped
-                lls.max = teamCalculatedData.teleop_total_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_total_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_total_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_total_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_total_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.total.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.total.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.total.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.total.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.total.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -619,31 +643,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Near Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_NEAR_PLACED:
                 //region Both Near Placed
-                lls.max = teamCalculatedData.auto_near_gears_placed.max + teamCalculatedData.teleop_near_gears_placed.max;
-                lls.min = teamCalculatedData.auto_near_gears_placed.min + teamCalculatedData.teleop_near_gears_placed.min;
-                lls.total = teamCalculatedData.auto_near_gears_placed.total + teamCalculatedData.teleop_near_gears_placed.total;
-                lls.average = teamCalculatedData.auto_near_gears_placed.average + teamCalculatedData.teleop_near_gears_placed.average;
-                lls.std = teamCalculatedData.auto_near_gears_placed.std + teamCalculatedData.teleop_near_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.near.placed.max + teamCalculatedData.teleop_gears.near.placed.max;
+                lls.min = teamCalculatedData.auto_gears.near.placed.min + teamCalculatedData.teleop_gears.near.placed.min;
+                lls.total = teamCalculatedData.auto_gears.near.placed.total + teamCalculatedData.teleop_gears.near.placed.total;
+                lls.average = teamCalculatedData.auto_gears.near.placed.average + teamCalculatedData.teleop_gears.near.placed.average;
+                lls.std = teamCalculatedData.auto_gears.near.placed.std + teamCalculatedData.teleop_gears.near.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_NEAR_PLACED:
                 //region Auto Near Placed
-                lls.max = teamCalculatedData.auto_near_gears_placed.max;
-                lls.min = teamCalculatedData.auto_near_gears_placed.min;
-                lls.total = teamCalculatedData.auto_near_gears_placed.total;
-                lls.average = teamCalculatedData.auto_near_gears_placed.average;
-                lls.std = teamCalculatedData.auto_near_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.near.placed.max;
+                lls.min = teamCalculatedData.auto_gears.near.placed.min;
+                lls.total = teamCalculatedData.auto_gears.near.placed.total;
+                lls.average = teamCalculatedData.auto_gears.near.placed.average;
+                lls.std = teamCalculatedData.auto_gears.near.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_NEAR_PLACED:
                 //region Teleop Near Placed
-                lls.max = teamCalculatedData.teleop_near_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_near_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_near_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_near_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_near_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.near.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.near.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.near.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.near.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.near.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -651,31 +675,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Near Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_NEAR_DROPPED:
                 //region Both Near Dropped
-                lls.max = teamCalculatedData.auto_near_gears_dropped.max + teamCalculatedData.teleop_near_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_near_gears_dropped.min + teamCalculatedData.teleop_near_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_near_gears_dropped.total + teamCalculatedData.teleop_near_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_near_gears_dropped.average + teamCalculatedData.teleop_near_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_near_gears_dropped.std + teamCalculatedData.teleop_near_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.near.dropped.max + teamCalculatedData.teleop_gears.near.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.near.dropped.min + teamCalculatedData.teleop_gears.near.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.near.dropped.total + teamCalculatedData.teleop_gears.near.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.near.dropped.average + teamCalculatedData.teleop_gears.near.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.near.dropped.std + teamCalculatedData.teleop_gears.near.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_NEAR_DROPPED:
                 //region Auto Near Dropped
-                lls.max = teamCalculatedData.auto_near_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_near_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_near_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_near_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_near_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.near.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.near.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.near.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.near.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.near.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_NEAR_DROPPED:
                 //region Teleop Near Dropped
-                lls.max = teamCalculatedData.teleop_near_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_near_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_near_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_near_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_near_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.near.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.near.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.near.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.near.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.near.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -683,31 +707,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Center Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_CENTER_PLACED:
                 //region Both Center Placed
-                lls.max = teamCalculatedData.auto_center_gears_placed.max + teamCalculatedData.teleop_center_gears_placed.max;
-                lls.min = teamCalculatedData.auto_center_gears_placed.min + teamCalculatedData.teleop_center_gears_placed.min;
-                lls.total = teamCalculatedData.auto_center_gears_placed.total + teamCalculatedData.teleop_center_gears_placed.total;
-                lls.average = teamCalculatedData.auto_center_gears_placed.average + teamCalculatedData.teleop_center_gears_placed.average;
-                lls.std = teamCalculatedData.auto_center_gears_placed.std + teamCalculatedData.teleop_center_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.center.placed.max + teamCalculatedData.teleop_gears.center.placed.max;
+                lls.min = teamCalculatedData.auto_gears.center.placed.min + teamCalculatedData.teleop_gears.center.placed.min;
+                lls.total = teamCalculatedData.auto_gears.center.placed.total + teamCalculatedData.teleop_gears.center.placed.total;
+                lls.average = teamCalculatedData.auto_gears.center.placed.average + teamCalculatedData.teleop_gears.center.placed.average;
+                lls.std = teamCalculatedData.auto_gears.center.placed.std + teamCalculatedData.teleop_gears.center.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_CENTER_PLACED:
                 //region Auto Center Placed
-                lls.max = teamCalculatedData.auto_center_gears_placed.max;
-                lls.min = teamCalculatedData.auto_center_gears_placed.min;
-                lls.total = teamCalculatedData.auto_center_gears_placed.total;
-                lls.average = teamCalculatedData.auto_center_gears_placed.average;
-                lls.std = teamCalculatedData.auto_center_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.center.placed.max;
+                lls.min = teamCalculatedData.auto_gears.center.placed.min;
+                lls.total = teamCalculatedData.auto_gears.center.placed.total;
+                lls.average = teamCalculatedData.auto_gears.center.placed.average;
+                lls.std = teamCalculatedData.auto_gears.center.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_CENTER_PLACED:
                 //region Teleop Center Placed
-                lls.max = teamCalculatedData.teleop_center_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_center_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_center_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_center_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_center_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.center.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.center.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.center.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.center.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.center.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -715,31 +739,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Center Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_CENTER_DROPPED:
                 //region Both Center Dropped
-                lls.max = teamCalculatedData.auto_center_gears_dropped.max + teamCalculatedData.teleop_center_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_center_gears_dropped.min + teamCalculatedData.teleop_center_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_center_gears_dropped.total + teamCalculatedData.teleop_center_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_center_gears_dropped.average + teamCalculatedData.teleop_center_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_center_gears_dropped.std + teamCalculatedData.teleop_center_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.center.dropped.max + teamCalculatedData.teleop_gears.center.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.center.dropped.min + teamCalculatedData.teleop_gears.center.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.center.dropped.total + teamCalculatedData.teleop_gears.center.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.center.dropped.average + teamCalculatedData.teleop_gears.center.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.center.dropped.std + teamCalculatedData.teleop_gears.center.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_CENTER_DROPPED:
                 //region Auto Center Dropped
-                lls.max = teamCalculatedData.auto_center_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_center_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_center_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_center_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_center_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.center.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.center.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.center.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.center.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.center.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_CENTER_DROPPED:
                 //region Teleop Center Dropped
-                lls.max = teamCalculatedData.teleop_center_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_center_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_center_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_center_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_center_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.center.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.center.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.center.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.center.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.center.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -747,31 +771,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Far Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_FAR_PLACED:
                 //region Both Far Placed
-                lls.max = teamCalculatedData.auto_far_gears_placed.max + teamCalculatedData.teleop_far_gears_placed.max;
-                lls.min = teamCalculatedData.auto_far_gears_placed.min + teamCalculatedData.teleop_far_gears_placed.min;
-                lls.total = teamCalculatedData.auto_far_gears_placed.total + teamCalculatedData.teleop_far_gears_placed.total;
-                lls.average = teamCalculatedData.auto_far_gears_placed.average + teamCalculatedData.teleop_far_gears_placed.average;
-                lls.std = teamCalculatedData.auto_far_gears_placed.std + teamCalculatedData.teleop_far_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.far.placed.max + teamCalculatedData.teleop_gears.far.placed.max;
+                lls.min = teamCalculatedData.auto_gears.far.placed.min + teamCalculatedData.teleop_gears.far.placed.min;
+                lls.total = teamCalculatedData.auto_gears.far.placed.total + teamCalculatedData.teleop_gears.far.placed.total;
+                lls.average = teamCalculatedData.auto_gears.far.placed.average + teamCalculatedData.teleop_gears.far.placed.average;
+                lls.std = teamCalculatedData.auto_gears.far.placed.std + teamCalculatedData.teleop_gears.far.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_FAR_PLACED:
                 //region Auto Far Placed
-                lls.max = teamCalculatedData.auto_far_gears_placed.max;
-                lls.min = teamCalculatedData.auto_far_gears_placed.min;
-                lls.total = teamCalculatedData.auto_far_gears_placed.total;
-                lls.average = teamCalculatedData.auto_far_gears_placed.average;
-                lls.std = teamCalculatedData.auto_far_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.far.placed.max;
+                lls.min = teamCalculatedData.auto_gears.far.placed.min;
+                lls.total = teamCalculatedData.auto_gears.far.placed.total;
+                lls.average = teamCalculatedData.auto_gears.far.placed.average;
+                lls.std = teamCalculatedData.auto_gears.far.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_FAR_PLACED:
                 //region Teleop Far Placed
-                lls.max = teamCalculatedData.teleop_far_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_far_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_far_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_far_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_far_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.far.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.far.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.far.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.far.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.far.placed.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -779,31 +803,31 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Far Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_FAR_DROPPED:
                 //region Both Far Dropped
-                lls.max = teamCalculatedData.auto_far_gears_dropped.max + teamCalculatedData.teleop_far_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_far_gears_dropped.min + teamCalculatedData.teleop_far_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_far_gears_dropped.total + teamCalculatedData.teleop_far_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_far_gears_dropped.average + teamCalculatedData.teleop_far_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_far_gears_dropped.std + teamCalculatedData.teleop_far_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.far.dropped.max + teamCalculatedData.teleop_gears.far.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.far.dropped.min + teamCalculatedData.teleop_gears.far.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.far.dropped.total + teamCalculatedData.teleop_gears.far.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.far.dropped.average + teamCalculatedData.teleop_gears.far.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.far.dropped.std + teamCalculatedData.teleop_gears.far.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_FAR_DROPPED:
                 //region Auto Far Dropped
-                lls.max = teamCalculatedData.auto_far_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_far_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_far_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_far_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_far_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.far.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.far.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.far.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.far.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.far.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_FAR_DROPPED:
                 //region Teleop Far Dropped
-                lls.max = teamCalculatedData.teleop_far_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_far_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_far_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_far_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_far_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.far.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.far.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.far.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.far.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.far.dropped.std;
                 entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
                 break;
             //endregion
@@ -817,33 +841,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_PLACED:
                 //region Both Placed
-                lls.max = teamCalculatedData.auto_total_gears_placed.max + teamCalculatedData.teleop_total_gears_placed.max;
-                lls.min = teamCalculatedData.auto_total_gears_placed.min + teamCalculatedData.teleop_total_gears_placed.min;
-                lls.total = teamCalculatedData.auto_total_gears_placed.total + teamCalculatedData.teleop_total_gears_placed.total;
-                lls.average = teamCalculatedData.auto_total_gears_placed.average + teamCalculatedData.teleop_total_gears_placed.average;
-                lls.std = teamCalculatedData.auto_total_gears_placed.std + teamCalculatedData.teleop_total_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.total.placed.max + teamCalculatedData.teleop_gears.total.placed.max;
+                lls.min = teamCalculatedData.auto_gears.total.placed.min + teamCalculatedData.teleop_gears.total.placed.min;
+                lls.total = teamCalculatedData.auto_gears.total.placed.total + teamCalculatedData.teleop_gears.total.placed.total;
+                lls.average = teamCalculatedData.auto_gears.total.placed.average + teamCalculatedData.teleop_gears.total.placed.average;
+                lls.std = teamCalculatedData.auto_gears.total.placed.std + teamCalculatedData.teleop_gears.total.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_PLACED:
                 //region Auto Placed
-                lls.max = teamCalculatedData.auto_total_gears_placed.max;
-                lls.min = teamCalculatedData.auto_total_gears_placed.min;
-                lls.total = teamCalculatedData.auto_total_gears_placed.total;
-                lls.average = teamCalculatedData.auto_total_gears_placed.average;
-                lls.std = teamCalculatedData.auto_total_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.total.placed.max;
+                lls.min = teamCalculatedData.auto_gears.total.placed.min;
+                lls.total = teamCalculatedData.auto_gears.total.placed.total;
+                lls.average = teamCalculatedData.auto_gears.total.placed.average;
+                lls.std = teamCalculatedData.auto_gears.total.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_PLACED:
                 //region Teleop Placed
-                lls.max = teamCalculatedData.teleop_total_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_total_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_total_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_total_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_total_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.total.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.total.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.total.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.total.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.total.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -852,33 +876,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_DROPPED:
                 //region Both Dropped
-                lls.max = teamCalculatedData.auto_total_gears_dropped.max + teamCalculatedData.teleop_total_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_total_gears_dropped.min + teamCalculatedData.teleop_total_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_total_gears_dropped.total + teamCalculatedData.teleop_total_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_total_gears_dropped.average + teamCalculatedData.teleop_total_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_total_gears_dropped.std + teamCalculatedData.teleop_total_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.total.dropped.max + teamCalculatedData.teleop_gears.total.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.total.dropped.min + teamCalculatedData.teleop_gears.total.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.total.dropped.total + teamCalculatedData.teleop_gears.total.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.total.dropped.average + teamCalculatedData.teleop_gears.total.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.total.dropped.std + teamCalculatedData.teleop_gears.total.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_DROPPED:
                 //region Auto Dropped
-                lls.max = teamCalculatedData.auto_total_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_total_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_total_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_total_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_total_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.total.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.total.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.total.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.total.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.total.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_DROPPED:
                 //region Teleop Dropped
-                lls.max = teamCalculatedData.teleop_total_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_total_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_total_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_total_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_total_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.total.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.total.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.total.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.total.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.total.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -887,33 +911,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Near Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_NEAR_PLACED:
                 //region Both Near Placed
-                lls.max = teamCalculatedData.auto_near_gears_placed.max + teamCalculatedData.teleop_near_gears_placed.max;
-                lls.min = teamCalculatedData.auto_near_gears_placed.min + teamCalculatedData.teleop_near_gears_placed.min;
-                lls.total = teamCalculatedData.auto_near_gears_placed.total + teamCalculatedData.teleop_near_gears_placed.total;
-                lls.average = teamCalculatedData.auto_near_gears_placed.average + teamCalculatedData.teleop_near_gears_placed.average;
-                lls.std = teamCalculatedData.auto_near_gears_placed.std + teamCalculatedData.teleop_near_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.near.placed.max + teamCalculatedData.teleop_gears.near.placed.max;
+                lls.min = teamCalculatedData.auto_gears.near.placed.min + teamCalculatedData.teleop_gears.near.placed.min;
+                lls.total = teamCalculatedData.auto_gears.near.placed.total + teamCalculatedData.teleop_gears.near.placed.total;
+                lls.average = teamCalculatedData.auto_gears.near.placed.average + teamCalculatedData.teleop_gears.near.placed.average;
+                lls.std = teamCalculatedData.auto_gears.near.placed.std + teamCalculatedData.teleop_gears.near.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_NEAR_PLACED:
                 //region Auto Near Placed
-                lls.max = teamCalculatedData.auto_near_gears_placed.max;
-                lls.min = teamCalculatedData.auto_near_gears_placed.min;
-                lls.total = teamCalculatedData.auto_near_gears_placed.total;
-                lls.average = teamCalculatedData.auto_near_gears_placed.average;
-                lls.std = teamCalculatedData.auto_near_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.near.placed.max;
+                lls.min = teamCalculatedData.auto_gears.near.placed.min;
+                lls.total = teamCalculatedData.auto_gears.near.placed.total;
+                lls.average = teamCalculatedData.auto_gears.near.placed.average;
+                lls.std = teamCalculatedData.auto_gears.near.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_NEAR_PLACED:
                 //region Teleop Near Placed
-                lls.max = teamCalculatedData.teleop_near_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_near_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_near_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_near_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_near_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.near.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.near.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.near.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.near.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.near.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -922,33 +946,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Near Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_NEAR_DROPPED:
                 //region Both Near Dropped
-                lls.max = teamCalculatedData.auto_near_gears_dropped.max + teamCalculatedData.teleop_near_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_near_gears_dropped.min + teamCalculatedData.teleop_near_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_near_gears_dropped.total + teamCalculatedData.teleop_near_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_near_gears_dropped.average + teamCalculatedData.teleop_near_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_near_gears_dropped.std + teamCalculatedData.teleop_near_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.near.dropped.max + teamCalculatedData.teleop_gears.near.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.near.dropped.min + teamCalculatedData.teleop_gears.near.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.near.dropped.total + teamCalculatedData.teleop_gears.near.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.near.dropped.average + teamCalculatedData.teleop_gears.near.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.near.dropped.std + teamCalculatedData.teleop_gears.near.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_NEAR_DROPPED:
                 //region Auto Near Dropped
-                lls.max = teamCalculatedData.auto_near_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_near_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_near_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_near_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_near_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.near.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.near.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.near.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.near.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.near.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_NEAR_DROPPED:
                 //region Teleop Near Dropped
-                lls.max = teamCalculatedData.teleop_near_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_near_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_near_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_near_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_near_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.near.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.near.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.near.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.near.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.near.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -957,33 +981,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Center Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_CENTER_PLACED:
                 //region Both Center Placed
-                lls.max = teamCalculatedData.auto_center_gears_placed.max + teamCalculatedData.teleop_center_gears_placed.max;
-                lls.min = teamCalculatedData.auto_center_gears_placed.min + teamCalculatedData.teleop_center_gears_placed.min;
-                lls.total = teamCalculatedData.auto_center_gears_placed.total + teamCalculatedData.teleop_center_gears_placed.total;
-                lls.average = teamCalculatedData.auto_center_gears_placed.average + teamCalculatedData.teleop_center_gears_placed.average;
-                lls.std = teamCalculatedData.auto_center_gears_placed.std + teamCalculatedData.teleop_center_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.center.placed.max + teamCalculatedData.teleop_gears.center.placed.max;
+                lls.min = teamCalculatedData.auto_gears.center.placed.min + teamCalculatedData.teleop_gears.center.placed.min;
+                lls.total = teamCalculatedData.auto_gears.center.placed.total + teamCalculatedData.teleop_gears.center.placed.total;
+                lls.average = teamCalculatedData.auto_gears.center.placed.average + teamCalculatedData.teleop_gears.center.placed.average;
+                lls.std = teamCalculatedData.auto_gears.center.placed.std + teamCalculatedData.teleop_gears.center.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_CENTER_PLACED:
                 //region Auto Center Placed
-                lls.max = teamCalculatedData.auto_center_gears_placed.max;
-                lls.min = teamCalculatedData.auto_center_gears_placed.min;
-                lls.total = teamCalculatedData.auto_center_gears_placed.total;
-                lls.average = teamCalculatedData.auto_center_gears_placed.average;
-                lls.std = teamCalculatedData.auto_center_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.center.placed.max;
+                lls.min = teamCalculatedData.auto_gears.center.placed.min;
+                lls.total = teamCalculatedData.auto_gears.center.placed.total;
+                lls.average = teamCalculatedData.auto_gears.center.placed.average;
+                lls.std = teamCalculatedData.auto_gears.center.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_CENTER_PLACED:
                 //region Teleop Center Placed
-                lls.max = teamCalculatedData.teleop_center_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_center_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_center_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_center_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_center_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.center.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.center.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.center.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.center.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.center.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -992,33 +1016,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Center Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_CENTER_DROPPED:
                 //region Both Center Dropped
-                lls.max = teamCalculatedData.auto_center_gears_dropped.max + teamCalculatedData.teleop_center_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_center_gears_dropped.min + teamCalculatedData.teleop_center_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_center_gears_dropped.total + teamCalculatedData.teleop_center_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_center_gears_dropped.average + teamCalculatedData.teleop_center_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_center_gears_dropped.std + teamCalculatedData.teleop_center_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.center.dropped.max + teamCalculatedData.teleop_gears.center.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.center.dropped.min + teamCalculatedData.teleop_gears.center.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.center.dropped.total + teamCalculatedData.teleop_gears.center.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.center.dropped.average + teamCalculatedData.teleop_gears.center.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.center.dropped.std + teamCalculatedData.teleop_gears.center.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_CENTER_DROPPED:
                 //region Auto Center Dropped
-                lls.max = teamCalculatedData.auto_center_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_center_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_center_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_center_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_center_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.center.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.center.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.center.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.center.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.center.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_CENTER_DROPPED:
                 //region Teleop Center Dropped
-                lls.max = teamCalculatedData.teleop_center_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_center_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_center_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_center_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_center_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.center.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.center.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.center.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.center.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.center.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -1027,33 +1051,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Far Placed
             case Constants.Event_View.Gears_Secondary_Options.BOTH_FAR_PLACED:
                 //region Both Far Placed
-                lls.max = teamCalculatedData.auto_far_gears_placed.max + teamCalculatedData.teleop_far_gears_placed.max;
-                lls.min = teamCalculatedData.auto_far_gears_placed.min + teamCalculatedData.teleop_far_gears_placed.min;
-                lls.total = teamCalculatedData.auto_far_gears_placed.total + teamCalculatedData.teleop_far_gears_placed.total;
-                lls.average = teamCalculatedData.auto_far_gears_placed.average + teamCalculatedData.teleop_far_gears_placed.average;
-                lls.std = teamCalculatedData.auto_far_gears_placed.std + teamCalculatedData.teleop_far_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.far.placed.max + teamCalculatedData.teleop_gears.far.placed.max;
+                lls.min = teamCalculatedData.auto_gears.far.placed.min + teamCalculatedData.teleop_gears.far.placed.min;
+                lls.total = teamCalculatedData.auto_gears.far.placed.total + teamCalculatedData.teleop_gears.far.placed.total;
+                lls.average = teamCalculatedData.auto_gears.far.placed.average + teamCalculatedData.teleop_gears.far.placed.average;
+                lls.std = teamCalculatedData.auto_gears.far.placed.std + teamCalculatedData.teleop_gears.far.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_FAR_PLACED:
                 //region Auto Far Placed
-                lls.max = teamCalculatedData.auto_far_gears_placed.max;
-                lls.min = teamCalculatedData.auto_far_gears_placed.min;
-                lls.total = teamCalculatedData.auto_far_gears_placed.total;
-                lls.average = teamCalculatedData.auto_far_gears_placed.average;
-                lls.std = teamCalculatedData.auto_far_gears_placed.std;
+                lls.max = teamCalculatedData.auto_gears.far.placed.max;
+                lls.min = teamCalculatedData.auto_gears.far.placed.min;
+                lls.total = teamCalculatedData.auto_gears.far.placed.total;
+                lls.average = teamCalculatedData.auto_gears.far.placed.average;
+                lls.std = teamCalculatedData.auto_gears.far.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_FAR_PLACED:
                 //region Teleop Far Placed
-                lls.max = teamCalculatedData.teleop_far_gears_placed.max;
-                lls.min = teamCalculatedData.teleop_far_gears_placed.min;
-                lls.total = teamCalculatedData.teleop_far_gears_placed.total;
-                lls.average = teamCalculatedData.teleop_far_gears_placed.average;
-                lls.std = teamCalculatedData.teleop_far_gears_placed.std;
+                lls.max = teamCalculatedData.teleop_gears.far.placed.max;
+                lls.min = teamCalculatedData.teleop_gears.far.placed.min;
+                lls.total = teamCalculatedData.teleop_gears.far.placed.total;
+                lls.average = teamCalculatedData.teleop_gears.far.placed.average;
+                lls.std = teamCalculatedData.teleop_gears.far.placed.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -1062,33 +1086,33 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Far Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_FAR_DROPPED:
                 //region Both Far Dropped
-                lls.max = teamCalculatedData.auto_far_gears_dropped.max + teamCalculatedData.teleop_far_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_far_gears_dropped.min + teamCalculatedData.teleop_far_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_far_gears_dropped.total + teamCalculatedData.teleop_far_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_far_gears_dropped.average + teamCalculatedData.teleop_far_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_far_gears_dropped.std + teamCalculatedData.teleop_far_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.far.dropped.max + teamCalculatedData.teleop_gears.far.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.far.dropped.min + teamCalculatedData.teleop_gears.far.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.far.dropped.total + teamCalculatedData.teleop_gears.far.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.far.dropped.average + teamCalculatedData.teleop_gears.far.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.far.dropped.std + teamCalculatedData.teleop_gears.far.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_FAR_DROPPED:
                 //region Auto Far Dropped
-                lls.max = teamCalculatedData.auto_far_gears_dropped.max;
-                lls.min = teamCalculatedData.auto_far_gears_dropped.min;
-                lls.total = teamCalculatedData.auto_far_gears_dropped.total;
-                lls.average = teamCalculatedData.auto_far_gears_dropped.average;
-                lls.std = teamCalculatedData.auto_far_gears_dropped.std;
+                lls.max = teamCalculatedData.auto_gears.far.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.far.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.far.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.far.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.far.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_FAR_DROPPED:
                 //region Teleop Far Dropped
-                lls.max = teamCalculatedData.teleop_far_gears_dropped.max;
-                lls.min = teamCalculatedData.teleop_far_gears_dropped.min;
-                lls.total = teamCalculatedData.teleop_far_gears_dropped.total;
-                lls.average = teamCalculatedData.teleop_far_gears_dropped.average;
-                lls.std = teamCalculatedData.teleop_far_gears_dropped.std;
+                lls.max = teamCalculatedData.teleop_gears.far.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.far.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.far.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.far.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.far.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
                 sort_values.put(teamCalculatedData.team_number, lls.total);
                 break;
@@ -1103,51 +1127,80 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         switch (Constants.Event_View.Shooting_Secondary_Options.OPTIONS[position]){
             //region Auto High Made
             case Constants.Event_View.Shooting_Secondary_Options.AUTO_HIGH_MADE:
-                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.auto_high_goal_made.max, (float) teamCalculatedData.auto_high_goal_made.min, (float) teamCalculatedData.auto_high_goal_made.average, (float) teamCalculatedData.auto_high_goal_made.std));
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.auto_shooting.high.made.max, (float) teamCalculatedData.auto_shooting.high.made.min, (float) teamCalculatedData.auto_shooting.high.made.average, (float) teamCalculatedData.auto_shooting.high.made.std));
                 break;
             //endregion
             //region Auto Low Made
             case Constants.Event_View.Shooting_Secondary_Options.AUTO_LOW_MADE:
-                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.auto_low_goal_made.max, (float) teamCalculatedData.auto_low_goal_made.min, (float) teamCalculatedData.auto_low_goal_made.average, (float) teamCalculatedData.auto_low_goal_made.std));
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.auto_shooting.low.made.max, (float) teamCalculatedData.auto_shooting.low.made.min, (float) teamCalculatedData.auto_shooting.low.made.average, (float) teamCalculatedData.auto_shooting.low.made.std));
                 break;
             //endregion
             //region Teleop High Made
             case Constants.Event_View.Shooting_Secondary_Options.TELEOP_HIGH_MADE:
-                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.teleop_high_goal_made.max, (float) teamCalculatedData.teleop_high_goal_made.min, (float) teamCalculatedData.teleop_high_goal_made.average, (float) teamCalculatedData.teleop_high_goal_made.std));
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.teleop_shooting.high.made.max, (float) teamCalculatedData.teleop_shooting.high.made.min, (float) teamCalculatedData.teleop_shooting.high.made.average, (float) teamCalculatedData.teleop_shooting.high.made.std));
                 break;
             //endregion
             //region Teleop Low Made
             case Constants.Event_View.Shooting_Secondary_Options.TELEOP_LOW_MADE:
-                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.teleop_low_goal_made.max, (float) teamCalculatedData.teleop_low_goal_made.min, (float) teamCalculatedData.teleop_low_goal_made.average, (float) teamCalculatedData.teleop_low_goal_made.std));
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) teamCalculatedData.teleop_shooting.low.made.max, (float) teamCalculatedData.teleop_shooting.low.made.min, (float) teamCalculatedData.teleop_shooting.low.made.average, (float) teamCalculatedData.teleop_shooting.low.made.std));
                 break;
             //endregion
         }
     }
 
-    private void shootingSecondary2_lld(Map<Integer, Double> sort_values, TeamCalculatedData teamCalculatedData, int position){
+    private void shootingSecondary2(Map<Integer, Double> sort_values, TeamCalculatedData teamCalculatedData, int position){
+        double percent;
         switch (Constants.Event_View.Shooting_Secondary_Options.OPTIONS[position]){
             //region Auto High Made
             case Constants.Event_View.Shooting_Secondary_Options.AUTO_HIGH_MADE:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_high_goal_made.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_shooting.high.made.total);
                 break;
             //endregion
             //region Auto Low Made
             case Constants.Event_View.Shooting_Secondary_Options.AUTO_LOW_MADE:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_low_goal_made.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_shooting.low.made.total);
                 break;
             //endregion
             //region Teleop High Made
             case Constants.Event_View.Shooting_Secondary_Options.TELEOP_HIGH_MADE:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.teleop_high_goal_made.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.teleop_shooting.high.made.total);
                 break;
             //endregion
             //region Teleop Low Made
             case Constants.Event_View.Shooting_Secondary_Options.TELEOP_LOW_MADE:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.teleop_low_goal_made.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.teleop_shooting.low.made.total);
+                break;
+            //endregion
+            //region Auto High Percent
+            case Constants.Event_View.Shooting_Secondary_Options.AUTO_HIGH_PERCENT:
+                percent = (float)(teamCalculatedData.auto_shooting.high.made.total / (teamCalculatedData.auto_shooting.high.made.total + teamCalculatedData.auto_shooting.high.missed.total));
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, percent);
+                break;
+            //endregion
+            //region Auto Low Percent
+            case Constants.Event_View.Shooting_Secondary_Options.AUTO_LOW_PERCENT:
+                percent = (float)(teamCalculatedData.auto_shooting.low.made.total / (teamCalculatedData.auto_shooting.low.made.total + teamCalculatedData.auto_shooting.low.missed.total));
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, percent);
+                break;
+            //endregion
+            //region Teleop High Percent
+            case Constants.Event_View.Shooting_Secondary_Options.TELEOP_HIGH_PERCENT:
+                percent = (float)(teamCalculatedData.teleop_shooting.high.made.total / (teamCalculatedData.teleop_shooting.high.made.total + teamCalculatedData.teleop_shooting.high.missed.total));
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, percent);
+                break;
+            //endregion
+            //region Teleop Low Percent
+            case Constants.Event_View.Shooting_Secondary_Options.TELEOP_LOW_PERCENT:
+                percent = (float)(teamCalculatedData.teleop_shooting.low.made.total / (teamCalculatedData.teleop_shooting.low.made.total + teamCalculatedData.teleop_shooting.low.missed.total));
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, percent);
                 break;
             //endregion
         }
@@ -1158,71 +1211,41 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         switch (Constants.Event_View.Shooting_Secondary_Options.OPTIONS[position]){
             //region Auto High Percent
             case Constants.Event_View.Shooting_Secondary_Options.AUTO_HIGH_PERCENT:
-                percent = (float)(teamCalculatedData.auto_high_goal_made.total / (teamCalculatedData.auto_high_goal_made.total + teamCalculatedData.auto_high_goal_missed.total));
+                percent = (float)(teamCalculatedData.auto_shooting.high.made.total / (teamCalculatedData.auto_shooting.high.made.total + teamCalculatedData.auto_shooting.high.missed.total));
                 entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, percent));
                 break;
             //endregion
             //region Auto Low Percent
             case Constants.Event_View.Shooting_Secondary_Options.AUTO_LOW_PERCENT:
-                percent = (float)(teamCalculatedData.auto_low_goal_made.total / (teamCalculatedData.auto_low_goal_made.total + teamCalculatedData.auto_low_goal_missed.total));
+                percent = (float)(teamCalculatedData.auto_shooting.low.made.total / (teamCalculatedData.auto_shooting.low.made.total + teamCalculatedData.auto_shooting.low.missed.total));
                 entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, percent));
                 break;
             //endregion
             //region Teleop High Percent
             case Constants.Event_View.Shooting_Secondary_Options.TELEOP_HIGH_PERCENT:
-                percent = (float)(teamCalculatedData.teleop_high_goal_made.total / (teamCalculatedData.teleop_high_goal_made.total + teamCalculatedData.teleop_high_goal_missed.total));
+                percent = (float)(teamCalculatedData.teleop_shooting.high.made.total / (teamCalculatedData.teleop_shooting.high.made.total + teamCalculatedData.teleop_shooting.high.missed.total));
                 entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, percent));
                 break;
             //endregion
             //region Teleop Low Percent
             case Constants.Event_View.Shooting_Secondary_Options.TELEOP_LOW_PERCENT:
-                percent = (float)(teamCalculatedData.teleop_low_goal_made.total / (teamCalculatedData.teleop_low_goal_made.total + teamCalculatedData.teleop_low_goal_missed.total));
+                percent = (float)(teamCalculatedData.teleop_shooting.low.made.total / (teamCalculatedData.teleop_shooting.low.made.total + teamCalculatedData.teleop_shooting.low.missed.total));
                 entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, percent));
                 break;
             //endregion
         }
     }
 
-    private void shootingSecondary2_bar(Map<Integer, Double> sort_values, TeamCalculatedData teamCalculatedData, int position){
-        double percent;
-        switch (Constants.Event_View.Shooting_Secondary_Options.OPTIONS[position]){
-            //region Auto High Percent
-            case Constants.Event_View.Shooting_Secondary_Options.AUTO_HIGH_PERCENT:
-                percent = (float)(teamCalculatedData.auto_high_goal_made.total / (teamCalculatedData.auto_high_goal_made.total + teamCalculatedData.auto_high_goal_missed.total));
-                mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, percent);
-                break;
-            //endregion
-            //region Auto Low Percent
-            case Constants.Event_View.Shooting_Secondary_Options.AUTO_LOW_PERCENT:
-                percent = (float)(teamCalculatedData.auto_low_goal_made.total / (teamCalculatedData.auto_low_goal_made.total + teamCalculatedData.auto_low_goal_missed.total));
-                mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, percent);
-                break;
-            //endregion
-            //region Teleop High Percent
-            case Constants.Event_View.Shooting_Secondary_Options.TELEOP_HIGH_PERCENT:
-                percent = (float)(teamCalculatedData.teleop_high_goal_made.total / (teamCalculatedData.teleop_high_goal_made.total + teamCalculatedData.teleop_high_goal_missed.total));
-                mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, percent);
-                break;
-            //endregion
-            //region Teleop Low Percent
-            case Constants.Event_View.Shooting_Secondary_Options.TELEOP_LOW_PERCENT:
-                percent = (float)(teamCalculatedData.teleop_low_goal_made.total / (teamCalculatedData.teleop_low_goal_made.total + teamCalculatedData.teleop_low_goal_missed.total));
-                mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, percent);
-                break;
-            //endregion
-        }
-    }
     //endregion
 
     //region Climb
     private void climbSecondary1_bar(ArrayList<BarEntry> entries, int i, TeamCalculatedData teamCalculatedData, int position){
         switch (Constants.Event_View.Climb_Secondary_Options.OPTIONS[position]){
             case Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS:
-                entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.endgame_climb_success));
+                entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float) teamCalculatedData.climb.success));
+                break;
+            case Constants.Event_View.Climb_Secondary_Options.SUCCESS_PERCENTAGE:
+                entries.add(new BarEntryWithTeamNumber(i, teamCalculatedData.team_number, (float)teamCalculatedData.climb.success_percentage * 100.0f));
                 break;
         }
     }
@@ -1230,7 +1253,7 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
     private void climbSecondary1_lld(ArrayList<LLD_Entry> entries, int i, TeamCalculatedData teamCalculatedData, int position) {
         switch (Constants.Event_View.Climb_Secondary_Options.OPTIONS[position]){
             case Constants.Event_View.Climb_Secondary_Options.TIME:
-                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float)teamCalculatedData.endgame_climb_time.max, (float)teamCalculatedData.endgame_climb_time.min, (float)teamCalculatedData.endgame_climb_time.average, (float)teamCalculatedData.endgame_climb_time.std));
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float)teamCalculatedData.climb.time.max, (float)teamCalculatedData.climb.time.min, (float)teamCalculatedData.climb.time.average, (float)teamCalculatedData.climb.time.std));
                 break;
         }
     }
@@ -1239,11 +1262,69 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
         switch (Constants.Event_View.Climb_Secondary_Options.OPTIONS[position]){
             case Constants.Event_View.Climb_Secondary_Options.SUCCESSFUL_ATTEMPTS:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, (double)teamCalculatedData.endgame_climb_success);
+                sort_values.put(teamCalculatedData.team_number, (double)teamCalculatedData.climb.success);
+                break;
+            case Constants.Event_View.Climb_Secondary_Options.SUCCESS_PERCENTAGE:
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.climb.success_percentage);
                 break;
             case Constants.Event_View.Climb_Secondary_Options.TIME:
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.endgame_climb_time.average);
+                sort_values.put(teamCalculatedData.team_number, -teamCalculatedData.climb.time.average);
+                break;
+        }
+    }
+    //endregion
+
+    //region Pilot
+    private void pilotSecondary1_lld(ArrayList<LLD_Entry> entries, int i, TeamPilotData teamPilotData, int position){
+        switch (Constants.Event_View.Pilot_Secondary_Options.OPTIONS[position]){
+            case Constants.Event_View.Pilot_Secondary_Options.RATING:
+                entries.add(new LLD_Entry(i, teamPilotData.team_number, (float)teamPilotData.rating.max, (float)teamPilotData.rating.min, (float)teamPilotData.rating.average, (float)teamPilotData.rating.std));
+                break;
+            case Constants.Event_View.Pilot_Secondary_Options.LIFTS:
+                entries.add(new LLD_Entry(i, teamPilotData.team_number, (float)teamPilotData.lifts.max, (float)teamPilotData.lifts.min, (float)teamPilotData.lifts.average, (float)teamPilotData.lifts.std));
+                break;
+            case Constants.Event_View.Pilot_Secondary_Options.DROPS:
+                entries.add(new LLD_Entry(i, teamPilotData.team_number, (float)teamPilotData.drops.max, (float)teamPilotData.drops.min, (float)teamPilotData.drops.average, (float)teamPilotData.drops.std));
+                break;
+        }
+    }
+
+    private void pilotSecondary1_bar(ArrayList<BarEntry> entries, int i, TeamPilotData teamPilotData, int position){
+        switch (Constants.Event_View.Pilot_Secondary_Options.OPTIONS[position]){
+            case Constants.Event_View.Pilot_Secondary_Options.LIFT_PERCENTAGE:
+                double percentage = teamPilotData.lifts.average / (teamPilotData.lifts.average + teamPilotData.drops.average);
+                if(Double.isNaN(percentage)){
+                    percentage = 0.0;
+                }
+                entries.add(new BarEntryWithTeamNumber(i, teamPilotData.team_number, (float)percentage));
+                break;
+        }
+    }
+
+    private void pilotSecondary2(Map<Integer, Double> sort_values, TeamPilotData teamPilotData, int position){
+        switch (Constants.Event_View.Pilot_Secondary_Options.OPTIONS[position]){
+            case Constants.Event_View.Pilot_Secondary_Options.RATING:
+                mSortedTeamNumbers.add(teamPilotData.team_number);
+                sort_values.put(teamPilotData.team_number, teamPilotData.rating.average);
+                break;
+            case Constants.Event_View.Pilot_Secondary_Options.LIFTS:
+                mSortedTeamNumbers.add(teamPilotData.team_number);
+                sort_values.put(teamPilotData.team_number, teamPilotData.lifts.average);
+                break;
+            case Constants.Event_View.Pilot_Secondary_Options.DROPS:
+                mSortedTeamNumbers.add(teamPilotData.team_number);
+                // Fewer drops is better
+                sort_values.put(teamPilotData.team_number, -teamPilotData.drops.average);
+                break;
+            case Constants.Event_View.Pilot_Secondary_Options.LIFT_PERCENTAGE:
+                mSortedTeamNumbers.add(teamPilotData.team_number);
+                double percentage = teamPilotData.lifts.average / (teamPilotData.lifts.average + teamPilotData.drops.average);
+                if(Double.isNaN(percentage)){
+                    percentage = 0.0;
+                }
+                sort_values.put(teamPilotData.team_number, percentage);
                 break;
         }
     }

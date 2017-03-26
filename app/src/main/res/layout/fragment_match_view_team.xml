@@ -1,64 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/team_number"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Team Number"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/team_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Team Number"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/number_of_matches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="# Of Matches"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Number Of Matches"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/gears"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Gears"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/num_matches"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="# of Matches"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/climbing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Climbing"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Auto"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/fuel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Fuel\n"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Teleop"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/pilot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Pilot"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="End Game"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/defense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Defense"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/driver_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Driver Control"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-    </LinearLayout>
-</ScrollView>
+    <TextView
+        android:id="@+id/torque"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Torque"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Speed"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Details"
+        android:visibility="invisible" />
+</LinearLayout>

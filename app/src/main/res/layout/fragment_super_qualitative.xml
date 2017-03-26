@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:key="blue_torque"
-            app:label="Blue Torque" />
+            app:label="Blue Torque (Pushing)" />
 
         <View
             android:layout_width="1dp"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:key="red_torque"
-            app:label="Red Torque" />
+            app:label="Red Torque (Pushing)" />
 
         <View
             android:layout_width="1dp"

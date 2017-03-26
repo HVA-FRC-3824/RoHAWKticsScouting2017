@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import frc3824.rohawkticsscouting2017.Activities.StrategyPlanning;
@@ -68,7 +69,6 @@ public class LVA_StrategyUploadDownload extends ArrayAdapter<Strategy> {
             convertView.findViewById(R.id.upload).setVisibility(View.GONE);
             convertView.findViewById(R.id.download).setVisibility(View.GONE);
             final ImageView image = (ImageView) convertView.findViewById(R.id.image);
-            strategy.create(mContext);
             displayPicture(image, strategy.filepath);
 
 
@@ -98,6 +98,12 @@ public class LVA_StrategyUploadDownload extends ArrayAdapter<Strategy> {
         // Get the dimensions of the View
         int targetW = 100;
         int targetH = 100;
+
+        File f = new File(filepath);
+
+        if(!f.exists()){
+            return;
+        }
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();

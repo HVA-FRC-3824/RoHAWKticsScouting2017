@@ -1,5 +1,7 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels;
 
+import java.util.Map;
+
 /**
  * @author frc3824
  * Created: 9/6/16
@@ -23,6 +25,7 @@ public class NoteView {
     public int match_number;
     public int team_number;
     public String note;
+    public Map<String, Boolean> tags;
 
     public static String toString(NoteType nt) {
        switch (nt)

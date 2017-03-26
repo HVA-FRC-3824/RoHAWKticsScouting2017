@@ -64,10 +64,10 @@ public class LVA_ScheduleFragment extends ArrayAdapter<Integer> {
         teamTextViews[Constants.Match_Indices.RED2] = (TextView)convertView.findViewById(R.id.red_2);
         teamTextViews[Constants.Match_Indices.RED3] = (TextView)convertView.findViewById(R.id.red_3);
 
-        for(int i = 0; i < match.teams.size(); i++)
+        for(int i = 0; i < match.team_numbers.size(); i++)
         {
-            teamTextViews[i].setText(String.valueOf(match.teams.get(i)));
-            if(mTeamNumber == match.teams.get(i))
+            teamTextViews[i].setText(String.valueOf(match.team_numbers.get(i)));
+            if(mTeamNumber == match.team_numbers.get(i))
             {
                 teamTextViews[i].setBackgroundColor(Color.YELLOW);
             }

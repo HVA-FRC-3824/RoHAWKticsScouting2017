@@ -103,8 +103,7 @@ public class FPA_SuperScouting extends FragmentPagerAdapter {
      *  Gets a list of all the scout fragments
      * @return list of all the scout fragments
      */
-    public List<ScoutFragment> getAllFragments()
-    {
+    public List<ScoutFragment> getAllFragments() {
         List<ScoutFragment> list = new ArrayList<>();
         for(Map.Entry<Integer, ScoutFragment> entry: mFragments.entrySet())
         {

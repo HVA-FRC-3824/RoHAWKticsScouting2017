@@ -13,36 +13,36 @@
         android:id="@+id/post_dq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="post_dq"
+        app:key="dq"
         app:label="DQed" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/post_stopped"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="post_stopped"
+        app:key="stopped_moving"
         app:label="Stopped Moving" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableCheckbox
         android:id="@+id/post_no_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="post_no_show"
+        app:key="no_show"
         app:label="No Show" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableEditText
         android:id="@+id/post_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:key="post_notes"
+        app:key="notes"
         app:label="Notes" />
 
     <frc3824.rohawkticsscouting2017.Views.SavableTags
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/post_tags"
-        app:key="post_tags"
-        app:keys="@array/post_tags_keys"
-        app:labels="@array/post_tags_labels"/>
+        android:id="@+id/tags"
+        app:key="tags"
+        app:keys="@array/tags_keys"
+        app:labels="@array/tags_labels"/>
 </LinearLayout>
 </ScrollView>

@@ -8,9 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
 import frc3824.rohawkticsscouting2017.R;
+import frc3824.rohawkticsscouting2017.Utilities.Constants;
+
+import static frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView.NoteType.MATCH;
 
 /**
  * @author frc3824
@@ -23,10 +28,18 @@ public class LVA_NotesView extends ArrayAdapter<NoteView> {
     private final static String TAG = "LVA_NotesView";
 
     private ArrayList<NoteView> mNotes;
+    private Map<String, String> mDisplayTags;
 
     public LVA_NotesView(Context context, ArrayList<NoteView> objects) {
         super(context, R.layout.list_item_note, objects);
         mNotes = objects;
+        mDisplayTags = new HashMap<>();
+        mDisplayTags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BLOCK_SHOTS, "Blocked Shots");
+        mDisplayTags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.PINNED_ROBOT, "Pinned Robot" );
+        mDisplayTags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_LOADING_STATION, "Defended Loading Station");
+        mDisplayTags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DEFENDED_AIRSHIP, "Defended Airship");
+        mDisplayTags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.BROKE, "Broke");
+        mDisplayTags.put(Constants.Match_Scouting.PostMatch.TAGS + Constants.Match_Scouting.PostMatch.Tags.DUMPED_ALL_HOPPERS, "Dumped all hoppers");
     }
 
     @Override
@@ -44,11 +57,32 @@ public class LVA_NotesView extends ArrayAdapter<NoteView> {
         TextView matchNumber = (TextView) convertView.findViewById(R.id.match_number);
         matchNumber.setText(String.valueOf(nv.match_number));
 
-        TextView teamNumber = (TextView) convertView.findViewById(R.id.team_number);
-        teamNumber.setText(String.valueOf(nv.team_number));
+        if(nv.note_type == MATCH) {
+            TextView teamNumber = (TextView) convertView.findViewById(R.id.team_number);
+            teamNumber.setText(String.valueOf(nv.team_number));
+        }
 
         TextView note = (TextView) convertView.findViewById(R.id.note);
         note.setText(nv.note);
+
+        String keywords = "Tags: ";
+
+        if(nv.note_type == MATCH) {
+            for (Map.Entry<String, Boolean> entry : nv.tags.entrySet()) {
+                if (entry.getValue()) {
+                    keywords += mDisplayTags.get(entry.getKey()) + ", ";
+                }
+            }
+        }
+        keywords = keywords.substring(0, keywords.length() - 2);
+
+        if(keywords.length() == 4)
+        {
+            keywords = "";
+        }
+
+        TextView tags = (TextView) convertView.findViewById(R.id.tags);
+        tags.setText(keywords);
 
         return convertView;
     }

@@ -195,24 +195,6 @@
                 app:text="Save"
                 app:textSize="10sp" />
 
-            <frc3824.rohawkticsscouting2017.Views.ImageTextButton
-                android:id="@+id/pull_event_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@color/navy_blue"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                app:src="@drawable/download_from_cloud_color"
-                app:text="Pull event info"
-                app:textSize="10sp" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

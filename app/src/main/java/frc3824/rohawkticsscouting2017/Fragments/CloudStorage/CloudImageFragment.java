@@ -34,8 +34,8 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
- *         Created: 10/8/16
+ * @author frc3824
+ * Created: 10/8/16
  */
 public class CloudImageFragment extends Fragment implements View.OnClickListener {
 

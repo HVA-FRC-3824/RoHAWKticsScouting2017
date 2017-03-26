@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gear;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gears;
-import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchPilotData;
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchTeamPilotData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamLogistics;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.TeamMatchData;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -33,6 +32,8 @@ public class IndividualMatchDataFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_view_individual_match_data, container, false);
 
+        //Remove Asterisk from start position header
+        ((TextView)view.findViewById(R.id.auto_header).findViewById(R.id.start_position)).setText("Start Position");
 
         if(mSurrogate){
             view.findViewById(R.id.surrogate_text).setVisibility(View.VISIBLE);
@@ -41,6 +42,10 @@ public class IndividualMatchDataFragment extends Fragment{
         // Points
         View points = view.findViewById(R.id.points_body);
 
+        if(mTmd == null)
+        {
+            return view;
+        }
 
         int auto_points = (mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction) +
                           (mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction) / 3;
@@ -120,12 +125,22 @@ public class IndividualMatchDataFragment extends Fragment{
 
         float percent = ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction)) /
                 ((float)(mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction + mTmd.auto_high_goal_missed));
-        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+
+        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.auto_high_goal_made + mTmd.auto_high_goal_correction, mTmd.auto_high_goal_missed, percent));
 
         percent = ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction)) /
                 ((float)(mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction + mTmd.auto_low_goal_missed));
-        ((TextView)auto_.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+
+        ((TextView)auto_.findViewById(R.id.low_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.auto_low_goal_made + mTmd.auto_low_goal_correction, mTmd.auto_low_goal_missed, percent));
         
         ((TextView)auto_.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.auto_hoppers));
@@ -155,12 +170,18 @@ public class IndividualMatchDataFragment extends Fragment{
 
         percent = ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction)) /
                 ((float)(mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction + mTmd.teleop_high_goal_missed));
-        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.teleop_high_goal_made + mTmd.teleop_high_goal_correction, mTmd.teleop_high_goal_missed, percent));
 
         percent = ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction)) /
                 ((float)(mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction + mTmd.teleop_low_goal_missed));
-        ((TextView)teleop.findViewById(R.id.high_goal)).setText(String.format("%d / %d (%0.2f%%)",
+        if(Float.isNaN(percent)){
+            percent = 0;
+        }
+        ((TextView)teleop.findViewById(R.id.low_goal)).setText(String.format("%d / %d (%02.2f%%)",
                 mTmd.teleop_low_goal_made + mTmd.teleop_low_goal_correction, mTmd.teleop_low_goal_missed, percent));
 
         ((TextView)teleop.findViewById(R.id.hoppers)).setText(String.valueOf(mTmd.teleop_hoppers));
@@ -172,6 +193,33 @@ public class IndividualMatchDataFragment extends Fragment{
         ((TextView)endgame.findViewById(R.id.climb)).setText(mTmd.endgame_climb);
         ((TextView)endgame.findViewById(R.id.climb_time)).setText(mTmd.endgame_climb_time);
 
+        //Pilot
+        View pilot = view.findViewById(R.id.pilot_body);
+
+        MatchPilotData mpd = Database.getInstance().getMatchPilotData(mTmd.match_number);
+        if(mpd != null) {
+            for (MatchTeamPilotData mtpd : mpd.teams) {
+                if (mtpd.team_number == mTmd.team_number) {
+                    ((TextView) pilot.findViewById(R.id.rating)).setText(String.valueOf(mtpd.rating.charAt(0)));
+                    ((TextView) pilot.findViewById(R.id.lifts)).setText(String.valueOf(mtpd.lifts));
+                    ((TextView) pilot.findViewById(R.id.drops)).setText(String.valueOf(mtpd.drops));
+
+                    float percentage = (float) mtpd.lifts / (float) (mtpd.lifts + mtpd.drops);
+                    if (Float.isNaN(percentage)) {
+                        percentage = 0.0f;
+                    }
+
+                    ((TextView) pilot.findViewById(R.id.lift_percentage)).setText(String.format("%02.2f%%", percentage * 100));
+                    break;
+                }
+            }
+        } else {
+            ((TextView) pilot.findViewById(R.id.rating)).setText("N/A");
+            ((TextView) pilot.findViewById(R.id.lifts)).setText("N/A");
+            ((TextView) pilot.findViewById(R.id.drops)).setText("N/A");
+            ((TextView) pilot.findViewById(R.id.lift_percentage)).setText("N/A");
+        }
+
         return view;
     }
 
@@ -179,7 +227,7 @@ public class IndividualMatchDataFragment extends Fragment{
 
         TeamLogistics tl = Database.getInstance().getTeamLogistics(team_number);
         int match_number = tl.match_numbers.get(position);
-        mTmd = Database.getInstance().getTeamMatchData(match_number,team_number);
+        mTmd = Database.getInstance().getTeamMatchData(match_number, team_number);
         mSurrogate = match_number == tl.surrogate_match_number;
     }
 }

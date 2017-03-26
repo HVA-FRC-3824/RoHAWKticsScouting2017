@@ -2,6 +2,8 @@ package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -36,6 +38,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_SuperScouting;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_MatchScoutDrawer;
@@ -70,7 +73,6 @@ public class SuperScouting extends Activity{
 
     private FPA_SuperScouting mFPA;
     private String mServerType;
-    private String mLastScoutName;
     private String mScoutName;
 
     private ListView mDrawerList;
@@ -81,6 +83,12 @@ public class SuperScouting extends Activity{
     private AutoCompleteTextView mScoutNameTextView;
     private View mLogisticsScoutNameBackground;
     private TextView mLogisticsIncorrect;
+
+    private NotificationManager mNotificationManager;
+    protected Notification.Builder mDataTransferSuccessNotificationBuilder;
+    protected int mDataTransferSuccessNotificationId;
+    protected Notification.Builder mDataTransferFailureNotificationBuilder;
+    protected int mDataTransferFailureNotificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +103,6 @@ public class SuperScouting extends Activity{
 
         SharedPreferences shared_preferences = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE);
         mServerType = shared_preferences.getString(Constants.Settings.SERVER_TYPE, "");
-        mLastScoutName = shared_preferences.getString(Constants.Settings.LAST_SUPER_SCOUT, "");
-
 
         mDatabase = Database.getInstance();
 
@@ -137,7 +143,6 @@ public class SuperScouting extends Activity{
         // Set the off screen page limit to more than the number of fragments
         viewPager.setOffscreenPageLimit(mFPA.getCount());
 
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
@@ -147,13 +152,11 @@ public class SuperScouting extends Activity{
 
         mLogisticsView = LayoutInflater.from(this).inflate(R.layout.dialog_super_logistics, null);
         ((TextView)mLogisticsView.findViewById(R.id.match_number)).setText(String.format("Match Number: %d", mMatchNumber));
+        //mLogisticsView.findViewById(R.id.match_number).setVisibility(View.GONE);
 
         mScoutNameTextView = (AutoCompleteTextView)mLogisticsView.findViewById(R.id.scout_name);
-        if(!mLastScoutName.equals("")){
-            String[] arr = {mLastScoutName};
-            ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arr);
-            mScoutNameTextView.setAdapter(aa);
-        }
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Constants.Settings.SUPER_SCOUTS_LIST);
+        mScoutNameTextView.setAdapter(aa);
         builder.setView(mLogisticsView);
 
         mLogisticsIncorrect = (TextView)mLogisticsView.findViewById(R.id.incorrect);
@@ -171,13 +174,14 @@ public class SuperScouting extends Activity{
                     @Override
                     public void onClick(View view) {
                         mScoutName = mScoutNameTextView.getText().toString();
-                        if(mScoutName.equals("")){
+                        mScoutName = mScoutName.trim();
+                        mScoutName = mScoutName.replace("\n", "");
+                        Pattern p = Pattern.compile("[^a-zA-Z -]");
+                        boolean hasSpecialChar = p.matcher(mScoutName).find();
+                        if(mScoutName.isEmpty() || hasSpecialChar){
                             mLogisticsScoutNameBackground.setBackgroundColor(Color.RED);
                             mLogisticsIncorrect.setVisibility(View.VISIBLE);
                         } else {
-                            SharedPreferences.Editor edit = getSharedPreferences(Constants.APP_DATA, Context.MODE_PRIVATE).edit();
-                            edit.putString(Constants.Settings.LAST_SUPER_SCOUT, mScoutName);
-                            edit.commit();
                             mLogisticsDialog.dismiss();
                         }
                     }
@@ -187,6 +191,18 @@ public class SuperScouting extends Activity{
         if(mScoutName == null || mScoutName.equals("")) {
             mLogisticsDialog.show();
         }
+
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mDataTransferFailureNotificationBuilder = new Notification.Builder(this);
+        mDataTransferFailureNotificationId = Constants.Notifications.DATA_TRANSFER_FAILURE;
+        mDataTransferFailureNotificationBuilder.setSmallIcon(R.drawable.error_color);
+        mDataTransferFailureNotificationBuilder.setContentTitle("Data Transfer Failure!!!");
+        mDataTransferFailureNotificationBuilder.setContentText("Added to Queue");
+
+        mDataTransferSuccessNotificationBuilder = new Notification.Builder(this);
+        mDataTransferSuccessNotificationId = Constants.Notifications.DATA_TRANSFER_SUCCESS;
+        mDataTransferSuccessNotificationBuilder.setSmallIcon(R.drawable.ok_color);
+        mDataTransferSuccessNotificationBuilder.setContentTitle("Data Transfer Success");
     }
 
     /**
@@ -560,12 +576,13 @@ public class SuperScouting extends Activity{
             SuperMatchData superMatchData = new SuperMatchData(map);
             mDatabase.setSuperMatchData(superMatchData);
 
-            if (mServerType.equals(Constants.Server_Type.SOCKET)) {
+            if (mServerType.equals(Constants.Settings.SERVER_USB)) {
                 return socketVersion(superMatchData);
-            } else {
+            } else if(mServerType.equals(Constants.Settings.SERVER_BLUETOOTH)){
                 return bluetoothVersion(superMatchData);
             }
 
+            return null;
         }
 
         private Void socketVersion(SuperMatchData superMatchData) {
@@ -576,9 +593,9 @@ public class SuperScouting extends Activity{
                 SocketThread socketThread = new SocketThread(socket);
                 socketThread.start();
                 Gson gson = new GsonBuilder().create();
-                if(socketThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(superMatchData))))
+                if(socketThread.write(String.format("%c%s", Constants.Comms.Message_Headers.SUPER_HEADER, gson.toJson(superMatchData))))
                 {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                    publishProgress(Constants.Comms.Data_Transfer_Status.SUCCESS);
                     List<String> queuedString = queue.getQueueList();
                     queue.clear();
                     boolean queueEmpty = true;
@@ -589,13 +606,13 @@ public class SuperScouting extends Activity{
                             queueEmpty = false;
                             switch (s.charAt(0))
                             {
-                                case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                                case Constants.Comms.Message_Headers.MATCH_HEADER:
                                     queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
                                     break;
-                                case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                                case Constants.Comms.Message_Headers.SUPER_HEADER:
                                     queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
                                     break;
-                                case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                                case Constants.Comms.Message_Headers.FEEDBACK_HEADER:
                                     queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
                                     break;
                             }
@@ -603,12 +620,12 @@ public class SuperScouting extends Activity{
                     }
                     if(queueEmpty && queuedString.size() > 0)
                     {
-                        publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                        publishProgress(Constants.Comms.Data_Transfer_Status.QUEUE_EMPTIED);
                     }
                 }
                 else
                 {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                    publishProgress(Constants.Comms.Data_Transfer_Status.FAILURE);
                     queue.add(superMatchData);
                 }
                 socketThread.cancel();
@@ -626,7 +643,7 @@ public class SuperScouting extends Activity{
             if(bluetoothAdapter == null)
             {
                 queue.add(superMatchData);
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH);
+                publishProgress(Constants.Comms.Data_Transfer_Status.NO_BLUETOOTH);
                 return null;
             }
 
@@ -642,7 +659,7 @@ public class SuperScouting extends Activity{
             for(BluetoothDevice device: devices)
             {
                 String deviceName = device.getName();
-                if(deviceName.equals(mServerType))
+                if(deviceName.equals(Constants.Comms.BLUETOOTH_SERVER))
                 {
                     server = device;
                     break;
@@ -651,7 +668,7 @@ public class SuperScouting extends Activity{
 
             if(server == null)
             {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND);
+                publishProgress(Constants.Comms.Data_Transfer_Status.SERVER_NOT_FOUND);
                 queue.add(superMatchData);
                 return null;
             }
@@ -660,9 +677,9 @@ public class SuperScouting extends Activity{
             connectThread.start();
             while (!connectThread.isConnected());
             Gson gson = new GsonBuilder().create();
-            if(connectThread.write(String.format("%c%s",Constants.Bluetooth.Message_Headers.SUPER_HEADER, gson.toJson(superMatchData))))
+            if(connectThread.write(String.format("%c%s", Constants.Comms.Message_Headers.SUPER_HEADER, gson.toJson(superMatchData))))
             {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.SUCCESS);
+                publishProgress(Constants.Comms.Data_Transfer_Status.SUCCESS);
                 List<String> queuedString = queue.getQueueList();
                 queue.clear();
                 boolean queueEmpty = true;
@@ -674,13 +691,13 @@ public class SuperScouting extends Activity{
                         queueEmpty = false;
                         switch (s.charAt(0))
                         {
-                            case Constants.Bluetooth.Message_Headers.MATCH_HEADER:
+                            case Constants.Comms.Message_Headers.MATCH_HEADER:
                                 queue.add(gson.fromJson(s.substring(1), TeamMatchData.class));
                                 break;
-                            case Constants.Bluetooth.Message_Headers.SUPER_HEADER:
+                            case Constants.Comms.Message_Headers.SUPER_HEADER:
                                 queue.add(gson.fromJson(s.substring(1), SuperMatchData.class));
                                 break;
-                            case Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER:
+                            case Constants.Comms.Message_Headers.FEEDBACK_HEADER:
                                 queue.add(gson.fromJson(s.substring(1), TeamDTFeedback.class));
                                 break;
                         }
@@ -688,12 +705,12 @@ public class SuperScouting extends Activity{
                 }
                 if(queueEmpty && queuedString.size() > 0)
                 {
-                    publishProgress(Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED);
+                    publishProgress(Constants.Comms.Data_Transfer_Status.QUEUE_EMPTIED);
                 }
             }
             else
             {
-                publishProgress(Constants.Bluetooth.Data_Transfer_Status.FAILURE);
+                publishProgress(Constants.Comms.Data_Transfer_Status.FAILURE);
                 queue.add(superMatchData);
             }
             connectThread.cancel();
@@ -706,23 +723,25 @@ public class SuperScouting extends Activity{
             AlertDialog.Builder builder = new AlertDialog.Builder(SuperScouting.this);
             switch (values[0])
             {
-                case Constants.Bluetooth.Data_Transfer_Status.NO_BLUETOOTH:
+                case Constants.Comms.Data_Transfer_Status.NO_BLUETOOTH:
                     builder.setTitle("No bluetooth on this device!!!");
                     builder.setIcon(getDrawable(R.drawable.bluetooth_2_color));
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.QUEUE_EMPTIED:
+                case Constants.Comms.Data_Transfer_Status.QUEUE_EMPTIED:
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.SERVER_NOT_FOUND:
+                case Constants.Comms.Data_Transfer_Status.SERVER_NOT_FOUND:
                     builder.setTitle("Server not found");
                     builder.setIcon(getDrawable(R.drawable.error_color));
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.SUCCESS:
+                case Constants.Comms.Data_Transfer_Status.SUCCESS:
                     builder.setTitle("Data transfer successful");
                     builder.setIcon(getDrawable(R.drawable.ok_color));
+                    mNotificationManager.notify(mDataTransferSuccessNotificationId, mDataTransferSuccessNotificationBuilder.build());
                     break;
-                case Constants.Bluetooth.Data_Transfer_Status.FAILURE:
+                case Constants.Comms.Data_Transfer_Status.FAILURE:
                     builder.setTitle("Data transfer failure (Added to Queue)");
                     builder.setIcon(getDrawable(R.drawable.error_color));
+                    mNotificationManager.notify(mDataTransferFailureNotificationId, mDataTransferFailureNotificationBuilder.build());
                     break;
             }
             builder.show();

@@ -51,7 +51,7 @@ public class LVA_PitScoutDrawer extends ArrayAdapter<Integer> {
         if(teamPitData != null){
             convertView.setBackgroundColor(Color.GREEN);
 
-            if(teamPitData.robot_image_filepaths.size() != 0){
+            if(teamPitData.robot_pictures.size() != 0){
                 convertView.findViewById(R.id.image).setVisibility(View.VISIBLE);
             } else {
                 convertView.findViewById(R.id.image).setVisibility(View.GONE);

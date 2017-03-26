@@ -1,68 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:text="Points"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <include
-        layout="@layout/list_item_points"
-        android:id="@+id/points_header"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Points"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-    <include
-        layout="@layout/list_item_points"
-        android:id="@+id/points_body"/>
+        <include
+            android:id="@+id/points_header"
+            layout="@layout/list_item_points" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:text="Auto"/>
+        <include
+            android:id="@+id/points_body"
+            layout="@layout/list_item_points" />
 
-    <include
-        layout="@layout/list_item_auto"
-        android:id="@+id/auto_header"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auto"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-    <include
-        layout="@layout/list_item_auto"
-        android:id="@+id/auto_body"/>
+        <include
+            android:id="@+id/auto_header"
+            layout="@layout/list_item_auto" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:text="Teleop"/>
+        <include
+            android:id="@+id/auto_body"
+            layout="@layout/list_item_auto" />
 
-    <include
-        layout="@layout/list_item_teleop"
-        android:id="@+id/teleop_header"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="*** Near / Center / Far"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
 
-    <include
-        layout="@layout/list_item_teleop"
-        android:id="@+id/teleop_body"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teleop"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:text="Endgame"/>
+        <include
+            android:id="@+id/teleop_header"
+            layout="@layout/list_item_teleop" />
 
-    <include
-        layout="@layout/list_item_endgame"
-        android:id="@+id/endgame_header"/>
+        <include
+            android:id="@+id/teleop_body"
+            layout="@layout/list_item_teleop" />
 
-    <include
-        layout="@layout/list_item_endgame"
-        android:id="@+id/endgame_body"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Near / Center / Far / Total | Placed (Dropped)"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="** Made / Missed ( Percent )"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Endgame"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <include
+            android:id="@+id/endgame_header"
+            layout="@layout/list_item_endgame" />
+
+        <include
+            android:id="@+id/endgame_body"
+            layout="@layout/list_item_endgame" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pilot"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <include
+            android:id="@+id/pilot_header"
+            layout="@layout/list_item_pilot" />
+
+        <include
+            android:id="@+id/pilot_body"
+            layout="@layout/list_item_pilot" />
+
+    </LinearLayout>
+</ScrollView>

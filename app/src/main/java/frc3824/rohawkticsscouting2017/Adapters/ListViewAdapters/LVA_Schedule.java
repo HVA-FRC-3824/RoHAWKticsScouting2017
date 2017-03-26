@@ -16,8 +16,8 @@ import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
 
 /**
- * @author Andrew Messing
- *         Created: 8/20/16
+ * @author frc3824
+ * Created: 8/20/16
  */
 public class LVA_Schedule extends ArrayAdapter<Integer> {
 
@@ -91,8 +91,8 @@ public class LVA_Schedule extends ArrayAdapter<Integer> {
             teamTextViews[Constants.Match_Indices.RED2] = (TextView) convertView.findViewById(R.id.red2);
             teamTextViews[Constants.Match_Indices.RED3] = (TextView) convertView.findViewById(R.id.red3);
 
-            for (int i = 0; i < match.teams.size(); i++) {
-                int team_number = match.teams.get(i);
+            for (int i = 0; i < match.team_numbers.size(); i++) {
+                int team_number = match.team_numbers.get(i);
                 teamTextViews[i].setText(String.valueOf(team_number));
                 if (team_number == Constants.OUR_TEAM_NUMBER) {
                     teamTextViews[i].setBackgroundColor(Color.YELLOW);

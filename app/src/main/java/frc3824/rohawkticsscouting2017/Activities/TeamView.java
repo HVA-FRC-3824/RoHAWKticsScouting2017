@@ -132,7 +132,7 @@ public class TeamView extends Activity {
                 startActivity(intent);
                 break;
             case R.id.team_list:
-                intent = new Intent(this, TeamView.class);
+                intent = new Intent(this, TeamList.class);
                 intent.putExtra(Constants.Intent_Extras.NEXT_PAGE, Constants.Intent_Extras.TEAM_VIEWING);
                 startActivity(intent);
                 break;

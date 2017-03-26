@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="8dp">
 
     <ImageView
@@ -20,7 +20,7 @@
         android:layout_toRightOf="@id/robot_picture"
         android:text="Team Number"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/nickname"
@@ -35,35 +35,33 @@
         android:text="Nickname"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/top_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/team_number"
-        android:layout_alignParentTop="true"
-        android:layout_alignTop="@id/team_number"
+        android:layout_below="@id/team_number"
         android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@id/nickname"
+        android:layout_alignLeft="@id/team_number"
         android:gravity="center"
         android:text="Top Line"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/second_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/team_number"
-        android:layout_below="@id/team_number"
+        android:layout_below="@id/top_line"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="Second Line"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/third_line"
@@ -73,10 +71,23 @@
         android:layout_below="@+id/second_line"
         android:layout_marginTop="4dp"
         android:gravity="center"
+        android:text="Third Line"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/fourth_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/team_number"
+        android:layout_below="@+id/third_line"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
         android:text="Bottom Line"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/view_button"

@@ -58,15 +58,15 @@ public class MessageQueue {
         List<String> rv = new ArrayList<>();
         Gson mGson = new GsonBuilder().create();
         for(TeamMatchData teamMatchData : mTeamMatchDatas) {
-            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.MATCH_HEADER, mGson.toJson(teamMatchData)));
+            rv.add(String.format("%c%s", Constants.Comms.Message_Headers.MATCH_HEADER, mGson.toJson(teamMatchData)));
         }
 
         for(SuperMatchData superMatchData : mSuperMatchDatas) {
-            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.SUPER_HEADER, mGson.toJson(superMatchData)));
+            rv.add(String.format("%c%s", Constants.Comms.Message_Headers.SUPER_HEADER, mGson.toJson(superMatchData)));
         }
 
         for(TeamDTFeedback teamDTFeedback : mTeamDTFeedbacks) {
-            rv.add(String.format("%c%s", Constants.Bluetooth.Message_Headers.FEEDBACK_HEADER, mGson.toJson(teamDTFeedback)));
+            rv.add(String.format("%c%s", Constants.Comms.Message_Headers.FEEDBACK_HEADER, mGson.toJson(teamDTFeedback)));
         }
 
         return rv;

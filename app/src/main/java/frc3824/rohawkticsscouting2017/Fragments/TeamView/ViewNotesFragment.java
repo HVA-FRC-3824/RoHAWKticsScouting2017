@@ -20,7 +20,7 @@ import frc3824.rohawkticsscouting2017.R;
  * @author frc3824
  * Created: 8/17/16
  *
- * The fragment that displays all the notes (except pit notes) for a specific team
+ * The fragment that displays all the notes (except pit notes) for a specific team_number
  */
 public class ViewNotesFragment extends Fragment{
 
@@ -49,11 +49,11 @@ public class ViewNotesFragment extends Fragment{
         String superNotesText = "";
         for(int matchNumber : team.info.match_numbers) {
             TeamMatchData tm = database.getTeamMatchData(matchNumber, mTeamNumber);
-            if(tm != null && tm.notes != null && tm.notes.equals("")) {
+            if(tm != null && tm.notes != null && !tm.notes.equals("")) {
                 matchNotesText += String.format("Match %d:\n\t%s\n", matchNumber, tm.notes);
             }
             SuperMatchData sm = database.getSuperMatchData(matchNumber);
-            if(sm != null && sm.notes != null && sm.notes.equals("")) {
+            if(sm != null && sm.notes != null && !sm.notes.equals("")) {
                 superNotesText += String.format("Match %d:\n\t%s\n", matchNumber, sm.notes);
             }
         }

@@ -72,21 +72,6 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
         findViewById(R.id.open_btn).setOnClickListener(this);
 
         mDrawingView.setBrushSize(mExtraSmallBrush);
-
-        Bundle extras = getIntent().getExtras();
-        if(extras != null && extras.containsKey(Constants.Intent_Extras.MATCH_PLAN_NAME)){
-            mCurrentStrategyName = extras.getString(Constants.Intent_Extras.MATCH_PLAN_NAME);
-            String imageName = mCurrentStrategyName + ".png";
-            Log.d(TAG, mCurrentStrategyName);
-            Log.d(TAG, imageName);
-            try {
-                Bitmap loadImage = BitmapFactory.decodeStream(openFileInput(imageName));
-                mDrawingView.load(loadImage.copy(Bitmap.Config.ARGB_8888, true));
-                mDrawingView.invalidate();
-            } catch (FileNotFoundException ex) {
-                Log.d(TAG, ex.getMessage());
-            }
-        }
     }
 
     /**
@@ -316,8 +301,6 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
                     }
                 }
 
-                strategy.path_json = mDrawingView.toJson();
-
                 File saveFile = new File(StrategyPlanning.this.getFilesDir(), imageName);
                 if(saveFile.exists()) {
                     strategy.filepath = saveFile.getAbsolutePath();
@@ -346,14 +329,15 @@ public class StrategyPlanning extends Activity implements View.OnClickListener{
         openDialog.setAdapter(lva, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                String imageName = mStrategies.get(i).name + ".png";
-                mCurrentStrategyName = mStrategies.get(i).name;
+                Strategy strategy = mStrategies.get(i);
+                String imageName = strategy.name + ".png";
                 Log.d(TAG, imageName);
                 try {
                     Bitmap loadImage = BitmapFactory.decodeStream(openFileInput(imageName));
                     mDrawingView.load(loadImage.copy(Bitmap.Config.ARGB_8888, true));
+                    mCurrentStrategyName = strategy.name;
                 } catch (FileNotFoundException ex) {
-                    Log.d(TAG, ex.getMessage());
+                    Log.e(TAG, "Clicked on a strategy that is not local");
                 }
                 dialog.cancel();
             }

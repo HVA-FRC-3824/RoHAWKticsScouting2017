@@ -1,5 +1,6 @@
 package frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,7 +31,7 @@ import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
 
 /**
  * @author frc3824
- *         Created: 10/10/16
+ * Created: 10/10/16
  */
 public class LVA_MatchList extends ArrayAdapter<Integer> {
     private final static String TAG = "LVA_MatchList";
@@ -126,7 +127,7 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
 
 
                 Button b1 = (Button) convertView.findViewById(R.id.blue1);
-                b1.setText(String.format("Blue 1: %d", match.teams.get(0)));
+                b1.setText(String.format("Blue 1: %d", match.team_numbers.get(0)));
                 b1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -141,7 +142,7 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
                 });
 
                 Button b2 = (Button) convertView.findViewById(R.id.blue2);
-                b2.setText(String.format("Blue 2: %d", match.teams.get(1)));
+                b2.setText(String.format("Blue 2: %d", match.team_numbers.get(1)));
                 b2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -156,7 +157,7 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
                 });
 
                 Button b3 = (Button) convertView.findViewById(R.id.blue3);
-                b3.setText(String.format("Blue 3: %d", match.teams.get(2)));
+                b3.setText(String.format("Blue 3: %d", match.team_numbers.get(2)));
                 b3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -171,7 +172,7 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
                 });
 
                 Button r1 = (Button) convertView.findViewById(R.id.red1);
-                r1.setText(String.format("Red 1: %d", match.teams.get(3)));
+                r1.setText(String.format("Red 1: %d", match.team_numbers.get(3)));
                 r1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -186,7 +187,7 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
                 });
 
                 Button r2 = (Button) convertView.findViewById(R.id.red2);
-                r2.setText(String.format("Red 2: %d", match.teams.get(4)));
+                r2.setText(String.format("Red 2: %d", match.team_numbers.get(4)));
                 r2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -201,7 +202,7 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
                 });
 
                 Button r3 = (Button) convertView.findViewById(R.id.red3);
-                r3.setText(String.format("Red 3: %d", match.teams.get(5)));
+                r3.setText(String.format("Red 3: %d", match.team_numbers.get(5)));
                 r3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -234,10 +235,10 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
                         if (mAllianceColor.equals(Constants.Alliance_Colors.BLUE)) {
                             convertView.setBackgroundColor(Color.BLUE);
                             txt1.setTextColor(Color.WHITE);
-                            team_number = match.teams.get(mAllianceNumber - 1);
+                            team_number = match.team_numbers.get(mAllianceNumber - 1);
                         } else {
                             convertView.setBackgroundColor(Color.RED);
-                            team_number = match.teams.get(mAllianceNumber + 2);
+                            team_number = match.team_numbers.get(mAllianceNumber + 2);
                         }
                         txt1.setText(String.format("Match: %d - Team: %d", match_number, team_number));
                     }
@@ -267,22 +268,40 @@ public class LVA_MatchList extends ArrayAdapter<Integer> {
                         public void onClick(View view) {
                             Intent intent = new Intent(mContext, SuperScouting.class);
                             intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                            builder.setView(R.layout.dialog_custom_match);
                             mContext.startActivity(intent);
                         }
                     });
                     break;
                 case MATCH_VIEW:
-                    convertView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.navy_blue));
-                    txt1.setTextColor(Color.WHITE);
-                    txt1.setText(String.format("Match: %d", match_number));
-                    convertView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(mContext, MatchView.class);
-                            intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
-                            mContext.startActivity(intent);
-                        }
-                    });
+                    if(match_number == -1)
+                    {
+                        convertView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.navy_blue));
+                        txt1.setTextColor(Color.WHITE);
+                        txt1.setText(String.format("Custom Match", match_number));
+                        convertView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(mContext, MatchView.class);
+                                intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+                                mContext.startActivity(intent);
+                            }
+                        });
+
+                    } else {
+                        convertView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.navy_blue));
+                        txt1.setTextColor(Color.WHITE);
+                        txt1.setText(String.format("Match: %d", match_number));
+                        convertView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(mContext, MatchView.class);
+                                intent.putExtra(Constants.Intent_Extras.MATCH_NUMBER, match_number);
+                                mContext.startActivity(intent);
+                                }
+                        });
+                    }
                     break;
                 case DRIVE_TEAM_FEEDBACK:
                     Match match = mDatabase.getMatch(match_number);

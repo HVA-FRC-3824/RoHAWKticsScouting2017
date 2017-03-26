@@ -78,18 +78,21 @@ public class Storage {
         return fileRef.putFile(uri);
     }
 
-    public FileDownloadTask downloadRobotPicture(int team_number, String filepath) {
-        return downloadRobotPicture(team_number, new File(filepath));
+    public FileDownloadTask downloadRobotPicture(String filepath) {
+        return downloadRobotPicture(new File(filepath));
     }
 
-    public FileDownloadTask downloadRobotPicture(int team_number, File file) {
+    public FileDownloadTask downloadRobotPicture(File file) {
         File parent = file.getParentFile();
         if (!parent.exists()) {
             boolean madeParent = parent.mkdirs();
             Log.d(TAG, String.valueOf(madeParent));
         }
 
-        return mRobotImagesRef.child(String.format("%d.jpg", team_number)).getFile(file);
+        Uri uri = Uri.fromFile(file);
+        StorageReference fileRef = mRobotImagesRef.child(uri.getLastPathSegment());
+
+        return fileRef.getFile(uri);
     }
     //endregion
 

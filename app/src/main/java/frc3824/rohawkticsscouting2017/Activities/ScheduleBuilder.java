@@ -78,7 +78,7 @@ public class ScheduleBuilder extends Activity implements View.OnClickListener, D
                 {
                     teams.add(Integer.parseInt(edits.get(j).getText().toString()));
                 }
-                match.teams = teams;
+                match.team_numbers = teams;
                 mMatches.add(match);
                 mDatabase.setMatch(match);
                 mLVA.notifyDataSetChanged();

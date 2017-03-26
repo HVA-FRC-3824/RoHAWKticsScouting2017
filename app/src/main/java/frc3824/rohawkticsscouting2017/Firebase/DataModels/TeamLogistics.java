@@ -9,7 +9,7 @@ import java.util.List;
  * @author frc3824
  * Created: 8/21/16
  *
- * Logistical information about a specific team
+ * Logistical information about a specific team_number
  */
 @IgnoreExtraProperties
 public class TeamLogistics {
