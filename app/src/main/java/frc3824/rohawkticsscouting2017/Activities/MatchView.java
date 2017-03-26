@@ -1,19 +1,28 @@
 package frc3824.rohawkticsscouting2017.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toolbar;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import frc3824.rohawkticsscouting2017.Adapters.FragmentPagerAdapters.FPA_MatchView;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
@@ -31,6 +40,11 @@ public class MatchView extends Activity {
     private final static String TAG = "MatchView";
     private int mMatchNumber;
 
+    private AlertDialog mTeamsDialog;
+    private View mTeamsView;
+    private ArrayList<AutoCompleteTextView> mTeams;
+    private ArrayList<Integer> mTeamNumbers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +57,7 @@ public class MatchView extends Activity {
 
         mMatchNumber = extras.getInt(Constants.Intent_Extras.MATCH_NUMBER, -1);
 
-        ViewPager viewPager = (ViewPager)findViewById(R.id.view_pager);
+        final ViewPager viewPager = (ViewPager)findViewById(R.id.view_pager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabTextColors(Color.WHITE, Color.GREEN);
         tabLayout.setSelectedTabIndicatorColor(Color.GREEN);
@@ -51,17 +65,56 @@ public class MatchView extends Activity {
         if(mMatchNumber == -1)
         {
             setTitle("Custom Match");
-            ArrayList<Integer> teams = new ArrayList<>();
-            teams.add(extras.getInt(Constants.Intent_Extras.BLUE1,-1));
-            teams.add(extras.getInt(Constants.Intent_Extras.BLUE2,-1));
-            teams.add(extras.getInt(Constants.Intent_Extras.BLUE3,-1));
-            teams.add(extras.getInt(Constants.Intent_Extras.RED1,-1));
-            teams.add(extras.getInt(Constants.Intent_Extras.RED2,-1));
-            teams.add(extras.getInt(Constants.Intent_Extras.RED3,-1));
 
-            FPA_MatchView fpa = new FPA_MatchView(getFragmentManager(), teams);
-            viewPager.setAdapter(fpa);
-            viewPager.setOffscreenPageLimit(fpa.getCount());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            mTeamsView = LayoutInflater.from(this).inflate(R.layout.dialog_custom_match, null);
+            mTeams = new ArrayList<>();
+            mTeams.add((AutoCompleteTextView)mTeamsView.findViewById(R.id.blue1));
+            mTeams.add((AutoCompleteTextView)mTeamsView.findViewById(R.id.blue2));
+            mTeams.add((AutoCompleteTextView)mTeamsView.findViewById(R.id.blue3));
+            mTeams.add((AutoCompleteTextView)mTeamsView.findViewById(R.id.red1));
+            mTeams.add((AutoCompleteTextView)mTeamsView.findViewById(R.id.red2));
+            mTeams.add((AutoCompleteTextView)mTeamsView.findViewById(R.id.red3));
+
+            ArrayList<String> team_numbers = new ArrayList<>();
+
+            for(int team_number: Database.getInstance().getTeamNumbers()){
+                team_numbers.add(String.valueOf(team_number));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, team_numbers);
+
+            for(AutoCompleteTextView team: mTeams){
+                team.setAdapter(adapter);
+            }
+            builder.setView(mTeamsView);
+
+            mTeamNumbers = new ArrayList<>();
+
+            builder.setPositiveButton("Ok", null);
+            builder.setCancelable(false);
+            mTeamsDialog = builder.create();
+            mTeamsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                    b.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+                            for(AutoCompleteTextView team: mTeams){
+                                mTeamNumbers.add(Integer.parseInt(team.getText().toString()));
+                            }
+                            FPA_MatchView fpa = new FPA_MatchView(getFragmentManager(), mTeamNumbers);
+                            viewPager.setAdapter(fpa);
+                            viewPager.setOffscreenPageLimit(fpa.getCount());
+                            mTeamsDialog.dismiss();
+                        }
+                    });
+                }
+            });
+            mTeamsDialog.show();
+
         }
         else
         {
