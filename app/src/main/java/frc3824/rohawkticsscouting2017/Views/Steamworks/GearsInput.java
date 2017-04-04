@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,7 +30,7 @@ import frc3824.rohawkticsscouting2017.Views.SavableView;
  * @author frc3824
  * Created: 1/14/17
  */
-public class GearsInput extends SavableView implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class GearsInput extends SavableView implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
     private final static String TAG = "Gears";
     private RadioGroup numGears;
@@ -60,6 +61,7 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, Constants.Match_Scouting.Custom.Gears.LOCATIONS);
         mLocation.setAdapter(arrayAdapter);
+        mLocation.setOnItemSelectedListener(this);
         mLocationList = Arrays.asList(Constants.Match_Scouting.Custom.Gears.LOCATIONS);
 
         mGears = new ArrayList<>();
@@ -185,6 +187,9 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
                     mDropped.setChecked(false);
                     add.setVisibility(VISIBLE);
                     edit.setVisibility(GONE);
+                    if(lastRadio == 1){
+                        delete.setVisibility(GONE);
+                    }
                 }
                 break;
         }
@@ -210,5 +215,23 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
             edit.setVisibility(VISIBLE);
             delete.setVisibility(VISIBLE);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(mLocationList.get(position) == Constants.Match_Scouting.Custom.Gears.LOADING_ZONE){
+            mPlaced.setEnabled(false);
+            mPlaced.setChecked(false);
+            mDropped.setEnabled(false);
+            mDropped.setChecked(true);
+        } else {
+            mPlaced.setEnabled(true);
+            mDropped.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

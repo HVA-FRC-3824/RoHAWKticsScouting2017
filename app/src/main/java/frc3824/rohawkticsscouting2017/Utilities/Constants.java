@@ -311,7 +311,8 @@ public interface Constants {
                 String FAR = "far";
                 String CENTER = "center";
                 String NEAR = "near";
-                String[] LOCATIONS = {FAR, CENTER, NEAR};
+                String LOADING_ZONE = "loading zone";
+                String[] LOCATIONS = {FAR, CENTER, NEAR, LOADING_ZONE};
             }
         }
     }
