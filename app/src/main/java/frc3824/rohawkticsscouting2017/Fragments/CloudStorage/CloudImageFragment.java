@@ -58,6 +58,11 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
     protected int mUploadNotificationId;
     protected Notification.Builder mDownloadNotificationBuilder;
     protected int mDownloadNotificationId;
+
+    protected int mPictureType;
+
+    private int green;
+    private int red;
     //endregion
 
     public  CloudImageFragment() {}
@@ -66,6 +71,9 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_cloud_robot_picture, container, false);
 
         mContext = getContext();
+
+        green = Color.rgb(0, 153, 0);
+        red = Color.RED;
 
         ListView listView = (ListView)view.findViewById(R.id.file_list);
 
@@ -115,7 +123,7 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
             mUploadAllProgressBar.setVisibility(View.GONE);
             mUploadAllProgressBar.setProgress(0);
             mUploadAllMessage.setText("Upload All Success");
-            mUploadAllMessage.setTextColor(Color.GREEN);
+            mUploadAllMessage.setTextColor(green);
             mUploadAllMessage.setVisibility(View.VISIBLE);
             mUploadNotificationBuilder.setContentText("Upload Complete");
             mUploadNotificationBuilder.setProgress(0, 0, false);
@@ -125,7 +133,16 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
 
         CloudImage cloudImage = mCIs.get(i);
         if(cloudImage.local && cloudImage.internet) {
-            UploadTask uploadTask = mStorage.uploadStrategyPicture(cloudImage.filepath);
+
+            UploadTask uploadTask;
+            if(mPictureType == Constants.Cloud.STRATEGY) {
+                uploadTask = mStorage.uploadStrategyPicture(cloudImage.filepath);
+            } else if(mPictureType == Constants.Cloud.ROBOT_PICTURE){
+                uploadTask = mStorage.uploadRobotPicture(cloudImage.filepath);
+            } else {
+                Log.e(TAG, "Unknown image type");
+                return;
+            }
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -140,7 +157,7 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
                 public void onFailure(@NonNull Exception e) {
                     Log.e(TAG, "Upload Failure");
                     mUploadAllMessage.setText("Upload Failure");
-                    mUploadAllMessage.setTextColor(Color.RED);
+                    mUploadAllMessage.setTextColor(red);
                     mUploadAllMessage.setVisibility(View.VISIBLE);
                 }
             });
@@ -157,7 +174,7 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
             mDownloadAllProgressBar.setVisibility(View.GONE);
             mDownloadAllProgressBar.setProgress(0);
             mDownloadAllMessage.setText("Download All Success");
-            mDownloadAllMessage.setTextColor(Color.GREEN);
+            mDownloadAllMessage.setTextColor(green);
             mDownloadAllMessage.setVisibility(View.VISIBLE);
             mDownloadNotificationBuilder.setContentText("Download Complete");
             mDownloadNotificationBuilder.setProgress(0, 0, false);
@@ -167,7 +184,16 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
 
         CloudImage cloudImage = mCIs.get(i);
         if(cloudImage.remote && cloudImage.internet) {
-            FileDownloadTask fileDownloadTask = mStorage.downloadStrategyPicture(cloudImage.extra, cloudImage.filepath);
+
+            FileDownloadTask fileDownloadTask;
+            if(mPictureType == Constants.Cloud.STRATEGY) {
+                fileDownloadTask = mStorage.downloadStrategyPicture(cloudImage.extra, cloudImage.filepath);
+            } else if(mPictureType == Constants.Cloud.ROBOT_PICTURE){
+                fileDownloadTask = mStorage.downloadRobotPicture(cloudImage.filepath);
+            } else {
+                Log.e(TAG, "Unknown image type");
+                return;
+            }
             fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -182,7 +208,7 @@ public class CloudImageFragment extends Fragment implements View.OnClickListener
                 public void onFailure(@NonNull Exception e) {
                     Log.e(TAG, "Download Failure");
                     mDownloadAllMessage.setText("Download Failure");
-                    mDownloadAllMessage.setTextColor(Color.RED);
+                    mDownloadAllMessage.setTextColor(red);
                     mDownloadAllMessage.setVisibility(View.VISIBLE);
                 }
             });

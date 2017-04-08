@@ -17,7 +17,7 @@ public class Strategy {
     public long last_modified;
     public String name;
     public String filepath;
-    public String url;
+    public boolean remote;
 
     public Strategy() {}
 }

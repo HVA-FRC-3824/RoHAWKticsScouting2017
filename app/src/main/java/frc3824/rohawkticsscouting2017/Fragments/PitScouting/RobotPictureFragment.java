@@ -128,6 +128,10 @@ public class RobotPictureFragment extends ScoutFragment implements View.OnClickL
                         } else {
                             mNeedToDownload.setVisibility(View.VISIBLE);
                         }
+                        mLeftButton.setEnabled(true);
+                        mRightButton.setEnabled(true);
+                        mDeleteButton.setVisibility(View.VISIBLE);
+                        mSetDefaultButton.setVisibility(View.VISIBLE);
                     }
                 } catch (ScoutValue.TypeException e) {
                     e.printStackTrace();
