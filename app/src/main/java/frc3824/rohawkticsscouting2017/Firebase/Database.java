@@ -1,5 +1,8 @@
 package frc3824.rohawkticsscouting2017.Firebase;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -7,6 +10,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.NoteView;
+import frc3824.rohawkticsscouting2017.AppContext;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Match;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchPilotData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.ScoutAccuracy;
@@ -47,9 +52,14 @@ public class Database {
 
     private final static String TAG = "Database";
 
+    private Context mContext;
+
     private FirebaseDatabase mFirebaseDatabase;
 
     private ArrayList< DatabaseReference> mReferences;
+
+    private DatabaseReference mConnectionRef;
+    private static boolean mConnected;
 
     private String mEventKey;
 
@@ -81,6 +91,15 @@ public class Database {
         return  mSingleton;
     }
 
+    public static Database getInstance(Context context){
+        if(mSingleton == null)
+        {
+            mSingleton = new Database(context);
+        }
+
+        return  mSingleton;
+    }
+
     public static Database getInstance() {
         if(mSingleton == null)
         {
@@ -88,6 +107,12 @@ public class Database {
         }
 
         return  mSingleton;
+    }
+
+    private Database(Context context){
+        this();
+        mContext = context;
+
     }
 
     private Database() {
@@ -128,7 +153,33 @@ public class Database {
                 Log.v(TAG, "onCancelled");
             }
         });
+
+        mContext = AppContext.getDefaultContext();
+
+        mConnectionRef = mReferences.get(Constants.Database_Lists.indices.ROOT).child(".info/connected");
+        mConnectionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                mConnected = snapshot.getValue(Boolean.class);
+                Intent intent;
+                if (mConnected) {
+                    Log.d(TAG, "connected");
+                    intent = new Intent(DatabaseConnectionStatusBroadcastReceiver.ACTION_DATABASE_CONNECTED);
+                } else {
+                    Log.d(TAG, "disconnected");
+                    intent = new Intent(DatabaseConnectionStatusBroadcastReceiver.ACTION_DATABASE_DISCONNECTED);
+                }
+                mContext.sendBroadcast(intent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e(TAG, "Connection listener was cancelled");
+            }
+        });
     }
+
+    public static boolean getConnection() { return mConnected; }
 
     public static Set<String> getEvents()
     {
@@ -150,8 +201,8 @@ public class Database {
         }
         mMaps = new ArrayList<>();
         // Placeholders for indices
-        mMaps.add(new HashMap<String, DataSnapshot>());
-        mMaps.add(new HashMap<String, DataSnapshot>());
+        mMaps.add(new HashMap<String, DataSnapshot>()); // Root
+        mMaps.add(new HashMap<String, DataSnapshot>()); // Event
 
         for(int i = 2; i < Constants.Database_Lists.indices.TOTAL_REFERENCES; i++){
             Log.v(TAG, String.format("%d %s", i, Constants.Database_Lists.children.LIST[i]));
