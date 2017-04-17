@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import frc3824.rohawkticsscouting2017.Firebase.DataModels.Gear;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchPilotData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.MatchTeamPilotData;
 import frc3824.rohawkticsscouting2017.Firebase.DataModels.Team;
@@ -60,6 +61,26 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
     private RadarDataSet mAutoGearsAverage;
     private RadarDataSet mTeleopGearsTotal;
     private RadarDataSet mTeleopGearsAverage;
+
+    private LineChart mGearsLine;
+    private YAxis mGearsLineY;
+    private LineDataSet mAutoGearsTotalPlaced;
+    private LineDataSet mAutoGearsNearPlaced;
+    private LineDataSet mAutoGearsCenterPlaced;
+    private LineDataSet mAutoGearsFarPlaced;
+    private LineDataSet mAutoGearsTotalDropped;
+    private LineDataSet mAutoGearsNearDropped;
+    private LineDataSet mAutoGearsCenterDropped;
+    private LineDataSet mAutoGearsFarDropped;
+    private LineDataSet mTeleopGearsTotalPlaced;
+    private LineDataSet mTeleopGearsNearPlaced;
+    private LineDataSet mTeleopGearsCenterPlaced;
+    private LineDataSet mTeleopGearsFarPlaced;
+    private LineDataSet mTeleopGearsTotalDropped;
+    private LineDataSet mTeleopGearsNearDropped;
+    private LineDataSet mTeleopGearsCenterDropped;
+    private LineDataSet mTeleopGearsFarDropped;
+    private LineDataSet mTeleopGearsLoadingStationDropped;
 
     private ArrayList<String> mMatches;
 
@@ -174,13 +195,38 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         mGearsY.setLabelCount((int) mAutoGearsTotal.getYMax() + 2, true);
         mGears.notifyDataSetChanged();
         mGears.invalidate();
+
+        mGearsLine = (LineChart) view.findViewById(R.id.gears_line);
+        mGearsLine.getLegend().setEnabled(false);
+        mGearsLine.setDescription("");
+        XAxis xAxis = mGearsLine.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setAvoidFirstLastClipping(true);
+        mGearsLineY = mGearsLine.getAxisLeft();
+        mGearsLineY.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        mGearsLine.getAxisRight().setEnabled(false);
+        mGearsLine.setDoubleTapToZoomEnabled(false);
+        mGearsLine.setPinchZoom(false);
+        setupGearsLineData(team);
+        mGearsLine.clear();
+        LineData lineData = new LineData(mMatches);
+        lineData.addDataSet(mAutoGearsTotalPlaced);
+        lineData.addDataSet(mTeleopGearsTotalPlaced);
+        mGearsLine.setData(lineData);
+        mGearsLineY.setAxisMinValue(0);
+        mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsTotalPlaced.getYMax(), mTeleopGearsTotalPlaced.getYMax())  + 1);
+        mGearsLineY.setLabelCount((int) Math.max(mAutoGearsTotalPlaced.getYMax(), mTeleopGearsTotalPlaced.getYMax()) + 2, true);
+        mGearsLineY.setValueFormatter(intYVF);
+        mGearsLine.notifyDataSetChanged();
+        mGearsLine.invalidate();
+
         //endregion
 
         //region Shooting
         mShooting = (LineChart)view.findViewById(R.id.shooting);
         mShooting.getLegend().setEnabled(false);
         mShooting.setDescription("");
-        XAxis xAxis = mShooting.getXAxis();
+        xAxis = mShooting.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAvoidFirstLastClipping(true);
         mShootingY = mShooting.getAxisLeft();
@@ -276,6 +322,8 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
 
         ((RadioGroup)view.findViewById(R.id.gears_radio)).check(R.id.auto_gears_total);
         ((RadioGroup)view.findViewById(R.id.gears_radio)).setOnCheckedChangeListener(this);
+        ((RadioGroup)view.findViewById(R.id.gears_line_radio)).check(R.id.total_placed);
+        ((RadioGroup)view.findViewById(R.id.gears_line_radio)).setOnCheckedChangeListener(this);
         ((RadioGroup)view.findViewById(R.id.shooting_radio)).check(R.id.auto_high_made);
         ((RadioGroup)view.findViewById(R.id.shooting_radio)).setOnCheckedChangeListener(this);
         ((RadioGroup)view.findViewById(R.id.hoppers_radio)).check(R.id.both_hoppers);
@@ -302,6 +350,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         entries.add(new Entry((float)team.calc.auto_gears.center.dropped.total, 3));
         entries.add(new Entry((float)team.calc.auto_gears.far.placed.total, 4));
         entries.add(new Entry((float)team.calc.auto_gears.far.dropped.total, 5));
+        entries.add(new Entry((float)team.calc.auto_gears.loading_station.dropped.total, 6));
         mAutoGearsTotal = new RadarDataSet(entries, "Auto Total");
         mAutoGearsTotal.setColor(Color.RED);
         mAutoGearsTotal.setValueFormatter(intVF);
@@ -313,6 +362,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         entries.add(new Entry((float)team.calc.auto_gears.center.dropped.average, 3));
         entries.add(new Entry((float)team.calc.auto_gears.far.placed.average, 4));
         entries.add(new Entry((float)team.calc.auto_gears.far.dropped.average, 5));
+        entries.add(new Entry((float)team.calc.auto_gears.loading_station.dropped.average, 6));
         mAutoGearsAverage = new RadarDataSet(entries, "Auto Avg");
         mAutoGearsAverage.setColor(Color.RED);
         mAutoGearsAverage.setValueFormatter(intVF);
@@ -324,6 +374,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         entries.add(new Entry((float)team.calc.teleop_gears.center.dropped.total, 3));
         entries.add(new Entry((float)team.calc.teleop_gears.far.placed.total, 4));
         entries.add(new Entry((float)team.calc.teleop_gears.far.dropped.total, 5));
+        entries.add(new Entry((float)team.calc.teleop_gears.loading_station.dropped.total, 6));
         mTeleopGearsTotal = new RadarDataSet(entries, "Teleop Total");
         mTeleopGearsTotal.setColor(Color.RED);
         mTeleopGearsTotal.setValueFormatter(intVF);
@@ -335,9 +386,225 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
         entries.add(new Entry((float)team.calc.teleop_gears.center.dropped.average, 3));
         entries.add(new Entry((float)team.calc.teleop_gears.far.placed.average, 4));
         entries.add(new Entry((float)team.calc.teleop_gears.far.dropped.average, 5));
+        entries.add(new Entry((float)team.calc.teleop_gears.loading_station.dropped.average, 6));
         mTeleopGearsAverage = new RadarDataSet(entries, "Teleop Avg");
         mTeleopGearsAverage.setColor(Color.RED);
         mTeleopGearsAverage.setValueFormatter(intVF);
+    }
+
+    /**
+     * Setup all the data for the gears line chart
+     */
+    private void setupGearsLineData(Team team){
+        ArrayList<Entry> auto_total_placed = new ArrayList<>();
+        ArrayList<Entry> auto_near_placed = new ArrayList<>();
+        ArrayList<Entry> auto_center_placed = new ArrayList<>();
+        ArrayList<Entry> auto_far_placed = new ArrayList<>();
+        ArrayList<Entry> auto_total_dropped = new ArrayList<>();
+        ArrayList<Entry> auto_near_dropped = new ArrayList<>();
+        ArrayList<Entry> auto_center_dropped = new ArrayList<>();
+        ArrayList<Entry> auto_far_dropped = new ArrayList<>();
+        ArrayList<Entry> auto_loading_station_dropped = new ArrayList<>();
+        ArrayList<Entry> teleop_total_placed = new ArrayList<>();
+        ArrayList<Entry> teleop_near_placed = new ArrayList<>();
+        ArrayList<Entry> teleop_center_placed = new ArrayList<>();
+        ArrayList<Entry> teleop_far_placed = new ArrayList<>();
+        ArrayList<Entry> teleop_total_dropped = new ArrayList<>();
+        ArrayList<Entry> teleop_near_dropped = new ArrayList<>();
+        ArrayList<Entry> teleop_center_dropped = new ArrayList<>();
+        ArrayList<Entry> teleop_far_dropped = new ArrayList<>();
+        ArrayList<Entry> teleop_loading_station_dropped = new ArrayList<>();
+        int i = 0;
+        List<TeamMatchData> completed_matches = new ArrayList(team.completed_matches.values());
+        Collections.sort(completed_matches, new Comparator<TeamMatchData>() {
+            @Override
+            public int compare(TeamMatchData o1, TeamMatchData o2) {
+                return Integer.compare(o1.match_number, o2.match_number);
+            }
+        });
+
+        for(TeamMatchData tmd: completed_matches){
+            int auto_total_placed_tmd = 0;
+            int auto_near_placed_tmd = 0;
+            int auto_center_placed_tmd = 0;
+            int auto_far_placed_tmd = 0;
+            int auto_total_dropped_tmd = 0;
+            int auto_near_dropped_tmd = 0;
+            int auto_center_dropped_tmd = 0;
+            int auto_far_dropped_tmd = 0;
+            for(Gear gear: tmd.auto_gears) {
+                if(gear.placed){
+                    switch (gear.location){
+                        case Constants.Match_Scouting.Custom.Gears.NEAR:
+                            auto_near_placed_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.CENTER:
+                            auto_center_placed_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.FAR:
+                            auto_far_placed_tmd ++;
+                            break;
+                    }
+                    auto_total_placed_tmd ++;
+                } else {
+                    switch (gear.location){
+                        case Constants.Match_Scouting.Custom.Gears.NEAR:
+                            auto_near_dropped_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.CENTER:
+                            auto_center_dropped_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.FAR:
+                            auto_far_dropped_tmd ++;
+                            break;
+                    }
+                    auto_total_dropped_tmd ++;
+                }
+            }
+            auto_total_placed.add(new Entry(auto_total_placed_tmd, i));
+            auto_near_placed.add(new Entry(auto_near_placed_tmd, i));
+            auto_center_placed.add(new Entry(auto_center_placed_tmd, i));
+            auto_far_placed.add(new Entry(auto_far_placed_tmd, i));
+            auto_total_dropped.add(new Entry(auto_total_dropped_tmd, i));
+            auto_near_dropped.add(new Entry(auto_near_dropped_tmd, i));
+            auto_center_dropped.add(new Entry(auto_center_dropped_tmd, i));
+            auto_far_dropped.add(new Entry(auto_far_dropped_tmd, i));
+
+            int teleop_total_placed_tmd = 0;
+            int teleop_near_placed_tmd = 0;
+            int teleop_center_placed_tmd = 0;
+            int teleop_far_placed_tmd = 0;
+            int teleop_total_dropped_tmd = 0;
+            int teleop_near_dropped_tmd = 0;
+            int teleop_center_dropped_tmd = 0;
+            int teleop_far_dropped_tmd = 0;
+            int teleop_loading_station_dropped_tmd = 0;
+            
+            for(Gear gear: tmd.teleop_gears) {
+                if(gear.placed){
+                    switch (gear.location){
+                        case Constants.Match_Scouting.Custom.Gears.NEAR:
+                            teleop_near_placed_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.CENTER:
+                            teleop_center_placed_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.FAR:
+                            teleop_far_placed_tmd ++;
+                            break;
+                    }
+                    teleop_total_placed_tmd ++;
+                } else {
+                    switch (gear.location){
+                        case Constants.Match_Scouting.Custom.Gears.NEAR:
+                            teleop_near_dropped_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.CENTER:
+                            teleop_center_dropped_tmd ++;
+                            break;
+                        case Constants.Match_Scouting.Custom.Gears.FAR:
+                            teleop_far_dropped_tmd ++;
+                            break;
+                    }
+                    teleop_total_dropped_tmd ++;
+                }
+            }
+            teleop_total_placed.add(new Entry(teleop_total_placed_tmd, i));
+            teleop_near_placed.add(new Entry(teleop_near_placed_tmd, i));
+            teleop_center_placed.add(new Entry(teleop_center_placed_tmd, i));
+            teleop_far_placed.add(new Entry(teleop_far_placed_tmd, i));
+            teleop_total_dropped.add(new Entry(teleop_total_dropped_tmd, i));
+            teleop_near_dropped.add(new Entry(teleop_near_dropped_tmd, i));
+            teleop_center_dropped.add(new Entry(teleop_center_dropped_tmd, i));
+            teleop_far_dropped.add(new Entry(teleop_far_dropped_tmd, i));
+            teleop_loading_station_dropped.add(new Entry(teleop_loading_station_dropped_tmd, i));
+            i++;
+        }
+
+        mAutoGearsTotalPlaced = new LineDataSet(auto_total_placed, "Auto Total Placed");
+        mAutoGearsTotalPlaced.setColor(Color.RED);
+        mAutoGearsTotalPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsTotalPlaced.setValueFormatter(intVF);
+
+        mTeleopGearsTotalPlaced = new LineDataSet(teleop_total_placed, "Teleop Total Placed");
+        mTeleopGearsTotalPlaced.setColor(Color.GREEN);
+        mTeleopGearsTotalPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsTotalPlaced.setValueFormatter(intVF);
+
+        mAutoGearsNearPlaced = new LineDataSet(auto_near_placed, "Auto Near Placed");
+        mAutoGearsNearPlaced.setColor(Color.RED);
+        mAutoGearsNearPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsNearPlaced.setValueFormatter(intVF);
+
+        mTeleopGearsNearPlaced = new LineDataSet(teleop_near_placed, "Teleop Near Placed");
+        mTeleopGearsNearPlaced.setColor(Color.GREEN);
+        mTeleopGearsNearPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsNearPlaced.setValueFormatter(intVF);
+
+        mAutoGearsCenterPlaced = new LineDataSet(auto_center_placed, "Auto Center Placed");
+        mAutoGearsCenterPlaced.setColor(Color.RED);
+        mAutoGearsCenterPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsCenterPlaced.setValueFormatter(intVF);
+
+        mTeleopGearsCenterPlaced = new LineDataSet(teleop_center_placed, "Teleop Center Placed");
+        mTeleopGearsCenterPlaced.setColor(Color.GREEN);
+        mTeleopGearsCenterPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsCenterPlaced.setValueFormatter(intVF);
+
+        mAutoGearsFarPlaced = new LineDataSet(auto_far_placed, "Auto Far Placed");
+        mAutoGearsFarPlaced.setColor(Color.RED);
+        mAutoGearsFarPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsFarPlaced.setValueFormatter(intVF);
+
+        mTeleopGearsFarPlaced = new LineDataSet(teleop_far_placed, "Teleop Far Placed");
+        mTeleopGearsFarPlaced.setColor(Color.GREEN);
+        mTeleopGearsFarPlaced.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsFarPlaced.setValueFormatter(intVF);
+
+        mAutoGearsTotalDropped = new LineDataSet(auto_total_dropped, "Auto Total Dropped");
+        mAutoGearsTotalDropped.setColor(Color.RED);
+        mAutoGearsTotalDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsTotalDropped.setValueFormatter(intVF);
+
+        mTeleopGearsTotalDropped = new LineDataSet(teleop_total_dropped, "Teleop Total Dropped");
+        mTeleopGearsTotalDropped.setColor(Color.GREEN);
+        mTeleopGearsTotalDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsTotalDropped.setValueFormatter(intVF);
+
+        mAutoGearsNearDropped = new LineDataSet(auto_near_dropped, "Auto Near Dropped");
+        mAutoGearsNearDropped.setColor(Color.RED);
+        mAutoGearsNearDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsNearDropped.setValueFormatter(intVF);
+
+        mTeleopGearsNearDropped = new LineDataSet(teleop_near_dropped, "Teleop Near Dropped");
+        mTeleopGearsNearDropped.setColor(Color.GREEN);
+        mTeleopGearsNearDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsNearDropped.setValueFormatter(intVF);
+
+        mAutoGearsCenterDropped = new LineDataSet(auto_center_dropped, "Auto Center Dropped");
+        mAutoGearsCenterDropped.setColor(Color.RED);
+        mAutoGearsCenterDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsCenterDropped.setValueFormatter(intVF);
+
+        mTeleopGearsCenterDropped = new LineDataSet(teleop_center_dropped, "Teleop Center Dropped");
+        mTeleopGearsCenterDropped.setColor(Color.GREEN);
+        mTeleopGearsCenterDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsCenterDropped.setValueFormatter(intVF);
+
+        mAutoGearsFarDropped = new LineDataSet(auto_far_dropped, "Auto Far Dropped");
+        mAutoGearsFarDropped.setColor(Color.RED);
+        mAutoGearsFarDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mAutoGearsFarDropped.setValueFormatter(intVF);
+
+        mTeleopGearsFarDropped = new LineDataSet(teleop_far_dropped, "Teleop Far Dropped");
+        mTeleopGearsFarDropped.setColor(Color.GREEN);
+        mTeleopGearsFarDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsFarDropped.setValueFormatter(intVF);
+
+        mTeleopGearsLoadingStationDropped = new LineDataSet(teleop_loading_station_dropped, "Teleop Loading Station Dropped");
+        mTeleopGearsLoadingStationDropped.setColor(Color.GREEN);
+        mTeleopGearsLoadingStationDropped.setAxisDependency(YAxis.AxisDependency.LEFT);
+        mTeleopGearsLoadingStationDropped.setValueFormatter(intVF);
     }
 
     /**
@@ -622,6 +889,7 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        LineData lineData;
         switch (checkedId){
             case R.id.auto_gears_total:
                 mGears.setData(new RadarData(Constants.Team_View.Gear_Options.LIST, mAutoGearsTotal));
@@ -769,7 +1037,9 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mPilotLine.clear();
                 mPilotLine.setData(new LineData(mMatches, mPilotLifts));
                 mPilotLineY.setAxisMinValue(0);
-
+                mPilotLineY.setAxisMaxValue((int) mPilotLifts.getYMax() + 1);
+                mPilotLineY.setLabelCount((int) mPilotLifts.getYMax() + 2, true);
+                mPilotLineY.setValueFormatter(intYVF);
                 mPilotLine.notifyDataSetChanged();
                 mPilotLine.invalidate();
                 break;
@@ -791,6 +1061,122 @@ public class VisualsFragment extends Fragment implements RadioGroup.OnCheckedCha
                 mPilotLineY.setValueFormatter(percentYVF);
                 mPilotLine.notifyDataSetChanged();
                 mPilotLine.invalidate();
+                break;
+            case R.id.total_placed:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsTotalPlaced);
+                lineData.addDataSet(mTeleopGearsTotalPlaced);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsTotalPlaced.getYMax(), mTeleopGearsTotalPlaced.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsTotalPlaced.getYMax(), mTeleopGearsTotalPlaced.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.near_placed:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsNearPlaced);
+                lineData.addDataSet(mTeleopGearsNearPlaced);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsNearPlaced.getYMax(), mTeleopGearsNearPlaced.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsNearPlaced.getYMax(), mTeleopGearsNearPlaced.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.center_placed:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsCenterPlaced);
+                lineData.addDataSet(mTeleopGearsCenterPlaced);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsCenterPlaced.getYMax(), mTeleopGearsCenterPlaced.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsCenterPlaced.getYMax(), mTeleopGearsCenterPlaced.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.far_placed:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsFarPlaced);
+                lineData.addDataSet(mTeleopGearsFarPlaced);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsFarPlaced.getYMax(), mTeleopGearsFarPlaced.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsFarPlaced.getYMax(), mTeleopGearsFarPlaced.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.total_dropped:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsTotalDropped);
+                lineData.addDataSet(mTeleopGearsTotalDropped);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsTotalDropped.getYMax(), mTeleopGearsTotalDropped.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsTotalDropped.getYMax(), mTeleopGearsTotalDropped.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.near_dropped:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsNearDropped);
+                lineData.addDataSet(mTeleopGearsNearDropped);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsNearDropped.getYMax(), mTeleopGearsNearDropped.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsNearDropped.getYMax(), mTeleopGearsNearDropped.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.center_dropped:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsCenterDropped);
+                lineData.addDataSet(mTeleopGearsCenterDropped);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsCenterDropped.getYMax(), mTeleopGearsCenterDropped.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsCenterDropped.getYMax(), mTeleopGearsCenterDropped.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.far_dropped:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mAutoGearsFarDropped);
+                lineData.addDataSet(mTeleopGearsFarDropped);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) Math.max(mAutoGearsFarDropped.getYMax(), mTeleopGearsFarDropped.getYMax())  + 1);
+                mGearsLineY.setLabelCount((int) Math.max(mAutoGearsFarDropped.getYMax(), mTeleopGearsFarDropped.getYMax()) + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
+                break;
+            case R.id.loading_station_dropped:
+                mGearsLine.clear();
+                lineData = new LineData(mMatches);
+                lineData.addDataSet(mTeleopGearsLoadingStationDropped);
+                mGearsLine.setData(lineData);
+                mGearsLineY.setAxisMinValue(0);
+                mGearsLineY.setAxisMaxValue((int) mTeleopGearsLoadingStationDropped.getYMax()  + 1);
+                mGearsLineY.setLabelCount((int) mTeleopGearsLoadingStationDropped.getYMax() + 2, true);
+                mGearsLineY.setValueFormatter(intYVF);
+                mGearsLine.notifyDataSetChanged();
+                mGearsLine.invalidate();
                 break;
         }
     }

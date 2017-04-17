@@ -76,6 +76,9 @@ public interface Constants {
             "Michael Williamson",
             "Jovi Yoshioka",
             "Jacob Cresci",
+            "Hutch Peter",
+            "Mason Etchinaw",
+            "Ryan Bowen",
             "Steven Busby",
             "Philip Hicks",
             "Abigail Bradfield"
@@ -311,8 +314,8 @@ public interface Constants {
                 String FAR = "far";
                 String CENTER = "center";
                 String NEAR = "near";
-                String LOADING_ZONE = "loading zone";
-                String[] LOCATIONS = {FAR, CENTER, NEAR, LOADING_ZONE};
+                String LOADING_STATION = "loading station";
+                String[] LOCATIONS = {FAR, CENTER, NEAR, LOADING_STATION};
             }
         }
     }
@@ -480,7 +483,8 @@ public interface Constants {
             String CENTER_DROPPED = "Center - Dropped";
             String FAR_PLACED = "Far - Placed";
             String FAR_DROPPED = "Far - Dropped";
-            String[] LIST = {NEAR_PLACED, NEAR_DROPPED, CENTER_PLACED, CENTER_DROPPED, FAR_PLACED, FAR_DROPPED};
+            String LOADING_STATION_DROPPED = "Loading Station - Dropped";
+            String[] LIST = {NEAR_PLACED, NEAR_DROPPED, CENTER_PLACED, CENTER_DROPPED, FAR_PLACED, FAR_DROPPED, LOADING_STATION_DROPPED};
         }
 
         interface Climb_Options {
@@ -558,6 +562,7 @@ public interface Constants {
             String NEAR = "Near ";
             String CENTER = "Center ";
             String FAR = "Far ";
+            String LOADING_STATION = "Loading Station";
             
             String PLACED = "Placed";
             String DROPPED = "Dropped";
@@ -594,6 +599,10 @@ public interface Constants {
             String AUTO_FAR_DROPPED = AUTO + FAR + DROPPED;
             String TELEOP_FAR_DROPPED = TELEOP + FAR + DROPPED;
 
+            String BOTH_LOADING_STATION_DROPPED = BOTH + LOADING_STATION + DROPPED;
+            String AUTO_LOADING_STATION_DROPPED = AUTO + LOADING_STATION + DROPPED;
+            String TELEOP_LOADING_STATION_DROPPED = TELEOP + LOADING_STATION + DROPPED;
+
             String[] OPTIONS = {
                                 BOTH_PLACED, AUTO_PLACED, TELEOP_PLACED,
                                 BOTH_DROPPED, AUTO_DROPPED, TELEOP_DROPPED,
@@ -602,7 +611,8 @@ public interface Constants {
                                 BOTH_FAR_PLACED, AUTO_FAR_PLACED, TELEOP_FAR_PLACED,
                                 BOTH_NEAR_DROPPED, AUTO_NEAR_DROPPED, TELEOP_NEAR_DROPPED,
                                 BOTH_CENTER_DROPPED, AUTO_CENTER_DROPPED, TELEOP_CENTER_DROPPED,
-                                BOTH_FAR_DROPPED, AUTO_FAR_DROPPED, TELEOP_FAR_DROPPED
+                                BOTH_FAR_DROPPED, AUTO_FAR_DROPPED, TELEOP_FAR_DROPPED,
+                                BOTH_LOADING_STATION_DROPPED, AUTO_LOADING_STATION_DROPPED, TELEOP_LOADING_STATION_DROPPED
                                 };
         }
 

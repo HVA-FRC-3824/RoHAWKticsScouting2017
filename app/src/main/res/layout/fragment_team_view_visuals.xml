@@ -26,7 +26,7 @@
             <com.github.mikephil.charting.charts.RadarChart
                 android:id="@+id/gears"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
+                android:layout_height="400dp"
                 android:layout_weight=".8" />
 
             <RadioGroup
@@ -67,6 +67,94 @@
             </RadioGroup>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_margin="10dp"
+                android:layout_weight=".8"
+                android:padding="10dp"
+                android:id="@+id/gears_line"/>
+
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:orientation="vertical"
+                android:id="@+id/gears_line_radio">
+
+                <RadioButton
+                    android:id="@+id/total_placed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Total Placed" />
+
+                <RadioButton
+                    android:id="@+id/near_placed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Near Placed" />
+
+                <RadioButton
+                    android:id="@+id/center_placed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Center Placed" />
+
+                <RadioButton
+                    android:id="@+id/far_placed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Far Placed" />
+
+                <RadioButton
+                    android:id="@+id/total_dropped"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Total Dropped" />
+
+                <RadioButton
+                    android:id="@+id/near_dropped"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Near Dropped" />
+
+                <RadioButton
+                    android:id="@+id/center_dropped"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Center Dropped" />
+
+                <RadioButton
+                    android:id="@+id/far_dropped"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Far Dropped" />
+
+                <RadioButton
+                    android:id="@+id/loading_station_dropped"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="Loading Station Dropped" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+
 
         <TextView
             android:layout_width="match_parent"

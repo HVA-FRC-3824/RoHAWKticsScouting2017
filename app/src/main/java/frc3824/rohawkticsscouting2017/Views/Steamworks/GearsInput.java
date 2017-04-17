@@ -219,7 +219,7 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(mLocationList.get(position) == Constants.Match_Scouting.Custom.Gears.LOADING_ZONE){
+        if(mLocationList.get(position) == Constants.Match_Scouting.Custom.Gears.LOADING_STATION){
             mPlaced.setEnabled(false);
             mPlaced.setChecked(false);
             mDropped.setEnabled(false);
@@ -227,6 +227,7 @@ public class GearsInput extends SavableView implements View.OnClickListener, Rad
         } else {
             mPlaced.setEnabled(true);
             mDropped.setEnabled(true);
+            mDropped.setChecked(false);
         }
     }
 

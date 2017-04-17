@@ -11,12 +11,14 @@ public class GearResults {
     public GearLocationResults near;
     public GearLocationResults center;
     public GearLocationResults far;
+    public GearLocationResults loading_station;
 
     public GearResults(){
         total = new GearLocationResults();
         near = new GearLocationResults();
         center = new GearLocationResults();
         far = new GearLocationResults();
+        loading_station = new GearLocationResults();
     }
 
 }

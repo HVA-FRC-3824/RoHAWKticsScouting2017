@@ -832,6 +832,38 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
                 break;
             //endregion
             //endregion
+            //region Loading Station Dropped
+            case Constants.Event_View.Gears_Secondary_Options.BOTH_LOADING_STATION_DROPPED:
+                //region Both Loading Station Dropped
+                lls.max = teamCalculatedData.auto_gears.loading_station.dropped.max + teamCalculatedData.teleop_gears.loading_station.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.loading_station.dropped.min + teamCalculatedData.teleop_gears.loading_station.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.loading_station.dropped.total + teamCalculatedData.teleop_gears.loading_station.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.loading_station.dropped.average + teamCalculatedData.teleop_gears.loading_station.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.loading_station.dropped.std + teamCalculatedData.teleop_gears.loading_station.dropped.std;
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
+                break;
+                //endregion
+            case Constants.Event_View.Gears_Secondary_Options.AUTO_LOADING_STATION_DROPPED:
+                //region Auto Loading Station Dropped
+                lls.max = teamCalculatedData.auto_gears.loading_station.dropped.max;
+                lls.min = teamCalculatedData.auto_gears.loading_station.dropped.min;
+                lls.total = teamCalculatedData.auto_gears.loading_station.dropped.total;
+                lls.average = teamCalculatedData.auto_gears.loading_station.dropped.average;
+                lls.std = teamCalculatedData.auto_gears.loading_station.dropped.std;
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
+                break;
+                //endregion
+            case Constants.Event_View.Gears_Secondary_Options.TELEOP_LOADING_STATION_DROPPED:
+                //region Teleop Loading Station Dropped
+                lls.max = teamCalculatedData.teleop_gears.loading_station.dropped.max;
+                lls.min = teamCalculatedData.teleop_gears.loading_station.dropped.min;
+                lls.total = teamCalculatedData.teleop_gears.loading_station.dropped.total;
+                lls.average = teamCalculatedData.teleop_gears.loading_station.dropped.average;
+                lls.std = teamCalculatedData.teleop_gears.loading_station.dropped.std;
+                entries.add(new LLD_Entry(i, teamCalculatedData.team_number, (float) lls.max, (float) lls.min, (float) lls.average, (float) lls.std));
+                break;
+                //endregion
+            //endregion
         }
     }
 
@@ -1086,35 +1118,40 @@ public class EventView extends Activity implements AdapterView.OnItemSelectedLis
             //region Far Dropped
             case Constants.Event_View.Gears_Secondary_Options.BOTH_FAR_DROPPED:
                 //region Both Far Dropped
-                lls.max = teamCalculatedData.auto_gears.far.dropped.max + teamCalculatedData.teleop_gears.far.dropped.max;
-                lls.min = teamCalculatedData.auto_gears.far.dropped.min + teamCalculatedData.teleop_gears.far.dropped.min;
-                lls.total = teamCalculatedData.auto_gears.far.dropped.total + teamCalculatedData.teleop_gears.far.dropped.total;
-                lls.average = teamCalculatedData.auto_gears.far.dropped.average + teamCalculatedData.teleop_gears.far.dropped.average;
-                lls.std = teamCalculatedData.auto_gears.far.dropped.std + teamCalculatedData.teleop_gears.far.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, lls.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_gears.far.dropped.total + teamCalculatedData.teleop_gears.far.dropped.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.AUTO_FAR_DROPPED:
                 //region Auto Far Dropped
-                lls.max = teamCalculatedData.auto_gears.far.dropped.max;
-                lls.min = teamCalculatedData.auto_gears.far.dropped.min;
-                lls.total = teamCalculatedData.auto_gears.far.dropped.total;
-                lls.average = teamCalculatedData.auto_gears.far.dropped.average;
-                lls.std = teamCalculatedData.auto_gears.far.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, lls.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_gears.far.dropped.total);
                 break;
             //endregion
             case Constants.Event_View.Gears_Secondary_Options.TELEOP_FAR_DROPPED:
                 //region Teleop Far Dropped
-                lls.max = teamCalculatedData.teleop_gears.far.dropped.max;
-                lls.min = teamCalculatedData.teleop_gears.far.dropped.min;
-                lls.total = teamCalculatedData.teleop_gears.far.dropped.total;
-                lls.average = teamCalculatedData.teleop_gears.far.dropped.average;
-                lls.std = teamCalculatedData.teleop_gears.far.dropped.std;
                 mSortedTeamNumbers.add(teamCalculatedData.team_number);
-                sort_values.put(teamCalculatedData.team_number, lls.total);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.teleop_gears.far.dropped.total);
+                break;
+            //endregion
+            //endregion
+            //region Loading Station Dropped
+            case Constants.Event_View.Gears_Secondary_Options.BOTH_LOADING_STATION_DROPPED:
+                //region Both Loading Station Dropped
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_gears.loading_station.dropped.total + teamCalculatedData.teleop_gears.loading_station.dropped.total);
+                break;
+            //endregion
+            case Constants.Event_View.Gears_Secondary_Options.AUTO_LOADING_STATION_DROPPED:
+                //region Auto Loading Station Dropped
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.auto_gears.loading_station.dropped.total);
+                break;
+            //endregion
+            case Constants.Event_View.Gears_Secondary_Options.TELEOP_LOADING_STATION_DROPPED:
+                //region Teleop Loading Station Dropped
+                mSortedTeamNumbers.add(teamCalculatedData.team_number);
+                sort_values.put(teamCalculatedData.team_number, teamCalculatedData.teleop_gears.loading_station.dropped.total);
                 break;
             //endregion
             //endregion
