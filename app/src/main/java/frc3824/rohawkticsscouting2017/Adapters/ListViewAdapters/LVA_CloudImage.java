@@ -126,19 +126,18 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Log.d(TAG, "Upload success");
                                 message.setText("Upload success");
-                                message.setTextColor(Color.GREEN);
+                                message.setTextColor(Color.rgb(0, 153, 0));
                                 message.setVisibility(View.VISIBLE);
                                 progressBar.setVisibility(View.GONE);
 
                                 ci.remote = true;
-                                ci.url = taskSnapshot.getDownloadUrl().getPath();
 
                                 switch (mImageType) {
                                     case Constants.Cloud.ROBOT_PICTURE:
                                         TeamPitData t = mDatabase.getTeamPitData(Integer.parseInt(ci.extra));
                                         for(UploadableImage image: t.robot_pictures){
                                             if(image.filepath.equals(ci.filepath)){
-                                                image.url = ci.url;
+                                                image.remote = ci.remote;
                                                 break;
                                             }
                                         }
@@ -146,12 +145,11 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                                         break;
                                     case Constants.Cloud.STRATEGY:
                                         Strategy s = mDatabase.getStrategy(ci.extra);
-                                        s.url = ci.url;
+                                        s.remote = ci.remote;
                                         mDatabase.setStrategy(s);
                                         break;
                                 }
 
-                                Log.d(TAG, ci.url);
                                 notifyDataSetChanged();
                             }
                         });
@@ -205,7 +203,7 @@ public class LVA_CloudImage extends ArrayAdapter<CloudImage> {
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             Log.d(TAG, "Download success");
                             message.setText("Download success");
-                            message.setTextColor(Color.GREEN);
+                            message.setTextColor(Color.rgb(0, 153, 0));
                             message.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
 

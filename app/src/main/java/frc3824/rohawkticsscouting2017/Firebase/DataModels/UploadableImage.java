@@ -8,19 +8,19 @@ package frc3824.rohawkticsscouting2017.Firebase.DataModels;
 public class UploadableImage {
 
     public String filepath;
-    public String url;
+    public boolean remote;
 
     public UploadableImage(){
         filepath = "";
-        url = "";
+        remote = false;
     }
 
     public UploadableImage(String filepath){
         this.filepath = filepath;
     }
 
-    public UploadableImage(String filepath, String url){
+    public UploadableImage(String filepath, boolean remote){
         this.filepath = filepath;
-        this.url = url;
+        this.remote = remote;
     }
 }

@@ -43,10 +43,7 @@ public class CloudStrategyFragment extends CloudImageFragment{
                 ci.filepath = strategy.filepath;
             }
 
-            if(strategy.url != null && !strategy.url.equals("")) {
-                ci.remote = true;
-                ci.url = strategy.url;
-            }
+            ci.remote = strategy.remote;
 
             mCIs.add(ci);
         }

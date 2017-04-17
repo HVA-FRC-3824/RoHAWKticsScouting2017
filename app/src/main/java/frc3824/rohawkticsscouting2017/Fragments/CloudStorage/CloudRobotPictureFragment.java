@@ -4,7 +4,6 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
 
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.LVA_CloudImage;
 import frc3824.rohawkticsscouting2017.Adapters.ListViewAdapters.ListItemModels.CloudImage;
@@ -26,7 +25,9 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
         ArrayList<Integer> teams = mDatabase.getTeamNumbers();
         getCloudImages(teams, internet);
 
-        LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs, Constants.Cloud.ROBOT_PICTURE);
+        mPictureType = Constants.Cloud.ROBOT_PICTURE;
+
+        LVA_CloudImage lva = new LVA_CloudImage(mContext, mCIs, mPictureType);
         listView.setAdapter(lva);
     }
 
@@ -47,11 +48,7 @@ public class CloudRobotPictureFragment extends CloudImageFragment{
                 }
                 ci.filepath = image.filepath;
 
-                if(!image.url.isEmpty()) {
-                    ci.remote = true;
-                }
-                ci.url = image.url;
-
+                ci.remote = image.remote;
 
                 mCIs.add(ci);
             }

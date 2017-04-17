@@ -13,7 +13,6 @@ public class CloudImage {
     public String extra;
 
     public String filepath;
-    public String url;
 
     public boolean local;
     public boolean remote;
