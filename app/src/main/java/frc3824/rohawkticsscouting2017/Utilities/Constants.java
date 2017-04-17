@@ -18,7 +18,7 @@ public interface Constants {
         - middle number is changed after events
         - left most number is changed after the season
     */
-    String VERSION = "2.1.1";
+    String VERSION = "2.2.0";
     int OUR_TEAM_NUMBER = 3824;
 
     interface Settings {

@@ -19,6 +19,7 @@
 
 
     <application
+        android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="RScout"

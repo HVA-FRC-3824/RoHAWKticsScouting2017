@@ -59,7 +59,7 @@ public class SavableQualitative extends SavableView {
         mSpinners.add((Spinner)findViewById(R.id.team2));
         mSpinners.add((Spinner)findViewById(R.id.team3));
 
-        String values[] = new String[]{"1", "2", "3"};
+        String values[] = new String[]{"3", "2", "1"};
 
         for(Spinner s: mSpinners){
             s.setAdapter(new ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, values));

@@ -387,5 +387,11 @@
             app:text="Settings"
             app:textColor="@color/white"
             app:textSize="10sp" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/connection_sync_black"
+            android:id="@+id/database_connection"/>
     </LinearLayout>
 </ScrollView>

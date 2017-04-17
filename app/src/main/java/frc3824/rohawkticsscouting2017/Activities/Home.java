@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -25,7 +26,9 @@ import java.util.Set;
 import frc3824.rohawkticsscouting2017.Comms.MessageQueue;
 import frc3824.rohawkticsscouting2017.Comms.ConnectThread;
 import frc3824.rohawkticsscouting2017.Comms.SocketThread;
+import frc3824.rohawkticsscouting2017.Firebase.DatabaseConnectionStateListener;
 import frc3824.rohawkticsscouting2017.Firebase.Database;
+import frc3824.rohawkticsscouting2017.Firebase.DatabaseConnectionStatusBroadcastReceiver;
 import frc3824.rohawkticsscouting2017.Firebase.Storage;
 import frc3824.rohawkticsscouting2017.R;
 import frc3824.rohawkticsscouting2017.Utilities.Constants;
@@ -38,7 +41,7 @@ import frc3824.rohawkticsscouting2017.Views.ImageTextButton;
  * Home page for the app that allows the user to reach all other areas of the app. Display specific
  * buttons based on the user's type (Match Scout, Pit Scout, etc).
  */
-public class Home extends Activity implements View.OnClickListener{
+public class Home extends Activity implements View.OnClickListener, DatabaseConnectionStateListener {
 
     private static final String TAG = "Home";
 
@@ -57,6 +60,9 @@ public class Home extends Activity implements View.OnClickListener{
     private boolean mStrategyOpenButton;
     private boolean mPickListOpenButton;
     private boolean mAdminOpenButton;
+
+    private ImageView mDatabaseConnectionImage;
+    private DatabaseConnectionStatusBroadcastReceiver mDatabaseConnectionStatusBroadcastReceiver;
 
     /**
      *  Sets up what buttons to display on the home screen
@@ -104,6 +110,9 @@ public class Home extends Activity implements View.OnClickListener{
                 break;
         }
 
+        mDatabaseConnectionImage = (ImageView)findViewById(R.id.database_connection);
+        mDatabaseConnectionStatusBroadcastReceiver = new DatabaseConnectionStatusBroadcastReceiver(this, this);
+
         // Setup the database or reload it (to make the schedule and button list work)
         if(mEventKey != "") {
             mDatabase = Database.getInstance(mEventKey);
@@ -114,6 +123,18 @@ public class Home extends Activity implements View.OnClickListener{
             Database.getInstance();
             Storage.getInstance();
         }
+
+        if(Database.getConnection()){
+            databaseConnected();
+        } else {
+            databaseDisconnected();
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(mDatabaseConnectionStatusBroadcastReceiver);
     }
 
     //region User Type Setups
@@ -461,6 +482,16 @@ public class Home extends Activity implements View.OnClickListener{
         Button button = (Button) findViewById(btn);
         button.setVisibility(View.VISIBLE);
         button.setOnClickListener(this);
+    }
+
+    @Override
+    public void databaseConnected() {
+        mDatabaseConnectionImage.setImageResource(R.drawable.connection_sync_color);
+    }
+
+    @Override
+    public void databaseDisconnected() {
+        mDatabaseConnectionImage.setImageResource(R.drawable.connection_sync_black);
     }
 
     /**
