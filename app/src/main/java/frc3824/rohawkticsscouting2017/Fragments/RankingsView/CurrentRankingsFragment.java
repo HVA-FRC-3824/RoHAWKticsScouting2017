@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class CurrentRankingsFragment extends Fragment {
 
         ArrayList<TeamRankingData> rankings = database.getAllTeamRankingData(Database.RankingType.CURRENT);
 
-        rankings.sort(new Comparator<TeamRankingData>() {
+        Collections.sort(rankings, new Comparator<TeamRankingData>() {
             @Override
             public int compare(TeamRankingData o1, TeamRankingData o2) {
                 int rp_compare = Float.compare(o1.RPs, o2.RPs);
